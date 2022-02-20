@@ -9,10 +9,11 @@ class MqttClient {
                 this.subscribe(topics);
             });
         }
+        
     }
 
     subscribe(topics) {
-        this.client.subscribe(topics, { qos: 1 }, function (err) {
+        this.client.subscribe(topics, { qos: 0 }, function (err) {
             if (err) console.log(err);
         });
     }

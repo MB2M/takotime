@@ -1,0 +1,486 @@
+{
+    "globals": {
+        "wodname": "wod MT2019 !",
+        "duration": 0,
+        "startTime": "",
+        "countdown": 5
+    },
+    "stations": [
+        {
+            "lane_number": 1,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.101",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "083af2b91d06",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "083af2b92e6a",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 2,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 2",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.102",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "083af2abac22",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "083af2b90606",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 3,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 3",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.103",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "083af2abac22",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "083af2b92e6a",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 4,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 4",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.104",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 5,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 5",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.105",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 6,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 6",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.106",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 7,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 7",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.107",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 8,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 8",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.108",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        },
+        {
+            "lane_number": 9,
+            "state": 0,
+            "use_count": true,
+            "athlete": "Jean do 9",
+            "category": "master 55+",
+            "currentWodPosition": {
+                "block": 0,
+                "round": 0,
+                "movement": 0,
+                "reps": 0,
+                "lastRoundPerBlock": [
+                    0
+                ],
+                "repsPerBlock": [
+                    0,
+                    0
+                ]
+            },
+            "configs": {
+                "station_ip": "192.168.3.109",
+                "devices": [
+                    {
+                        "role": "counter",
+                        "mac": "",
+                        "state": "disconnected",
+                        "btn_plus": "1",
+                        "btn_minus": "-1"
+                    },
+                    {
+                        "role": "board",
+                        "mac": "",
+                        "state": "disconnected",
+                        "screen_data": {}
+                    }
+                ]
+            },
+            "buzzerCheckPoints": {},
+            "finish": false,
+            "measurements": {},
+            "result": ""
+        }
+    ],
+    "workouts": [
+        {
+            "categories": [
+                "master 55+"
+            ],
+            "shortcut": {
+                "name": "A",
+                "method": "forTime",
+                "type": "normal",
+                "device": "buzzer",
+                "sources": [
+                    0,
+                    1
+                ]
+            },
+            "scoring": [
+                {
+                    "name": "partA",
+                    "method": "forTime",
+                    "type": "sum",
+                    "sources": [
+                        0,
+                        1
+                    ]
+                }
+            ],
+            "blocks": [
+                {
+                    "blockName": "A",
+                    "rounds": 1,
+                    "movements": [
+                        {
+                            "name": "T2B",
+                            "reps": 5
+                        }
+                    ]
+                },
+                {
+                    "blockName": "B",
+                    "rounds": 0,
+                    "movements": [
+                        {
+                            "name": "snatch",
+                            "reps": 1
+                        }
+                    ],
+                    "measurements": {
+                        "id": 0,
+                        "type": "amrap",
+                        "blocksId": [
+                            1
+                        ],
+                        "from": 0,
+                        "at": 1,
+                        "repsFrom": 0,
+                        "repsTot": -1,
+                        "device": "timer",
+                        "save": true
+                    }
+                },
+                {
+                    "blockName": "C",
+                    "rounds": 1,
+                    "movements": [
+                        {
+                            "name": "MU",
+                            "reps": 10
+                        }
+                    ]
+                },
+                {
+                    "blockName": "D",
+                    "rounds": 0,
+                    "movements": [
+                        {
+                            "name": "snatch",
+                            "reps": 1
+                        }
+                    ],
+                    "measurements": {
+                        "id": 1,
+                        "type": "amrap",
+                        "blocksId": [
+                            3
+                        ],
+                        "from": 1,
+                        "at": 2,
+                        "repsFrom": 0,
+                        "repsTot": -1,
+                        "device": "timer",
+                        "save": true
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,19 +1,73 @@
 interface Station {
     lane_number: number;
-    reps: number;
-    time: number;
     finish: boolean;
+    currentWodPosition: {
+        block: number;
+        round: number;
+        movement: number;
+        reps: number;
+        lastRoundPerBlock: number[];
+        repsPerBlock: number[];
+    };
+    measurements: {
+        [id: number]: InWodMeasurement;
+    };
+}
+
+interface InWodMeasurement {
+    value: number;
+    type: string;
 }
 
 interface Options {
-    duration: number,
-    startTime: Date
+    duration: number;
+    startTime: Date;
+    countdown: number;
 }
-
 
 interface WodData {
-    lane_number: number;
-    reps: number;
-    finish: boolean;
-    time: number;
+    topic: string;
+    data: {
+        state: number;
+        lane_number: number;
+        reps: number;
+        finish: boolean;
+        result: string;
+        totalRepsOfMovement: number;
+        currentMovement: string;
+        repsOfMovement: number;
+        nextMovementReps: number;
+        nextMovement: string;
+        now: number;
+        configs: object;
+        repsTime: { [number]: number };
+    };
 }
+
+interface WodBlock {
+    blockName: string;
+    rounds: number;
+    movements: {
+        name: string;
+        reps: number;
+        varEachRounds: number;
+    }[];
+    measurements: Measurement;
+}
+
+interface Measurement {
+    id: number;
+    type: "fortime" | "amrap";
+    blocksId: number[];
+    from: number;
+    at: number;
+    repsFrom: number;
+    repsTot: number;
+    device: "buzzer" | "timer" | "counter";
+    save: boolean;
+}
+
+type StationRanked = {
+    lane: number;
+    rank: (number | undefined)[];
+}[];

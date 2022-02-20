@@ -1,6 +1,7 @@
 .env
 /node_modules
 live*.json
+WODS*.json
 src/sub_*
 src/pub_*
 

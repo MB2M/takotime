@@ -11,7 +11,7 @@ class MqttClient {
     }
 
     connect(options: object) {
-        return mqtt.connect("mqtt://localhost:8081", options);
+        return mqtt.connect(process.env.BROKER_URI as string, options);
     }
 
     toggle(callback: any) {
@@ -25,7 +25,6 @@ class MqttClient {
             this.client.end(true, () => {
                 this.connected = false;
                 callback();
-                console.log("after CB");
             });
         }
     }

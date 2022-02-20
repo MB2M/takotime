@@ -1,35 +1,53 @@
 class BLEPeripheral {
-    constructor(peripheral, serviceUUID) {
+    constructor(peripheral, role, subscribeCallback) {
         this.peripheral = peripheral;
+        (this.role = role), (this.subscribeCallback = subscribeCallback);
     }
 
     async getCharac(serviceUUID) {
-        const service = (
-            await this.peripheral.discoverServicesAsync([serviceUUID])
-        )[0];
-        const charac = (await service.discoverCharacteristicsAsync())[0];
-        return charac;
+        try {
+            const service = (
+                await this.peripheral.discoverServicesAsync([serviceUUID])
+            )[0];
+            const charac = (await service.discoverCharacteristicsAsync())[0];
+            return charac;
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    subscribe(cb) {
-        this.charac.subscribe((error) => {
-            console.log("init subscribe");
-            this.charac.on("data", (data) => {
-                console.log(data.toString());
-                cb(data.toString());
+    subscribe() {
+        this.charac &&
+            this.charac.subscribe((error) => {
+                console.log("init subscribe");
+                this.charac.on("data", (data) => {
+                    console.log(data.toString());
+                    this.subscribeCallback(data.toString());
+                });
             });
-        });
     }
 
     async initAndSubscribe(serviceUUID, cb) {
-        await this.peripheral.connectAsync();
-        this.charac = await this.getCharac(serviceUUID);
-        this.subscribe(cb);
+        try {
+            await this.peripheral.connectAsync();
+            this.charac = await this.getCharac(serviceUUID);
+            this.subscribe();
+            return true;
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
     }
 
     async init(serviceUUID) {
-        await this.peripheral.connectAsync();
-        this.charac = await this.getCharac(serviceUUID);
+        try {
+            await this.peripheral.connectAsync();
+            this.charac = await this.getCharac(serviceUUID);
+            return true;
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
     }
 }
 

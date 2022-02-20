@@ -1,44 +1,68 @@
 import BaseLiveWod from "./BaseLiveWod.js";
 import { State } from "../../libs/State.js";
 
-class Amrap extends BaseLiveWod {
-    getRank() {
-        const stations: Station[] = this.db.getObject("/stations");
-        let stationRanked = {};
+// class Amrap extends BaseLiveWod {
+//     elements: Array<keyof WodData["data"]> = [
+//         "state",
+//         "reps",
+//         "finish",
+//         "result",
+//         "totalRepsOfMovement",
+//         "currentMovement",
+//         "repsOfMovement",
+//         "nextMovementReps",
+//         "nextMovement",
+//         "repsTime",
+//     ];
 
-        stations.forEach((s) => {
-            let count = 0;
-            for (let i = 0; i < stations.length; i++) {
-                if ((stations[i] || 0) > s.reps) {
-                    count++;
-                }
-            }
-            stationRanked = { ...stationRanked, [s.lane_number]: count + 1 };
-        });
+//     getWodRank() {
+//         const stations: Station[] = this.db.getObject("/stations");
+//         let stationRanked = {};
 
-        return stationRanked;
-    }
+//         stations.forEach((s) => {
+//             let count = 0;
+//             for (let i = 0; i < stations.length; i++) {
+//                 if ((stations[i] || 0) > s.reps) {
+//                     count++;
+//                 }
+//             }
+//             stationRanked = { ...stationRanked, [s.lane_number]: count + 1 };
+//         });
 
-    update(message: WodData): void {
-        const index = this.db.getIndex(
-            "/stations",
-            message.lane_number,
-            "lane_number"
-        );
-        this.db.push(`/stations[${index}]/reps`, message.reps);
-        this.db.push(`/stations[${index}]/finish`, message.finish);
-        this.db.push(`/stations[${index}]/time`, message.time);
-    }
+//         return stationRanked;
+//     }
 
-    start(options: Options): void {
-        this.db.push("/globals/duration", options.duration);
-        this.db.push("/globals/startTime", options.startTime);
+//     update(message: WodData): void {
+//         const index = this.db.getIndex(
+//             "/stations",
+//             message.data.lane_number,
+//             "lane_number"
+//         );
 
-        this.updateState(State.Cooldown);
-        this.launchTimer(options.duration, options.startTime);
+//         if (message.topic === "blePeripheral") {
+//             this.db.push(`/stations[${index}]/configs`, message.data.configs);
+//         }
 
-        this.emit("wodCooldown", options.startTime, options.duration);
-    }
-}
+//         if (message.topic === "reps") {
+//             this.elements.forEach((e) => {
+//                 this.db.push(
+//                     `/stations[${index}]/${e}`,
+//                     message.data[e],
+//                     false
+//                 );
+//             });
+//         }
+//     }
 
-export default Amrap;
+//     start(options: Options): void {
+//         this.db.push("/globals/duration", options.duration);
+//         this.db.push("/globals/startTime", options.startTime);
+
+//         this.updateState(State.Cooldown);
+//         this.launchTimer(options.duration, options.startTime);
+
+//         this.emit("wodCooldown", options.startTime, options.duration);
+//     }
+// }
+
+// export default Amrap;

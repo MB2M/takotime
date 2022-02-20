@@ -7,11 +7,13 @@ abstract class BaseLiveWod extends EventEmitter {
     db: JsonDB;
     state?: number;
     timeOuts?: NodeJS.Timeout[];
+    measurements: Array<Measurement>;
 
     constructor(db: JsonDB) {
         super();
         this.db = db;
         this.timeOuts = [];
+        this.measurements = this.getMeasurements();
     }
 
     updateState(state: State): void {
@@ -27,13 +29,13 @@ abstract class BaseLiveWod extends EventEmitter {
         this.clearAllTimeout();
         const startTiming = setTimeout(() => {
             this.updateState(State.Running);
-            console.log("wod start");
-            this.emit("wodStart", startTime, duration);
+            this.emit("wodUpdate", "start");
+            // this.emit("wodStart", startTime, duration);
             const finishTiming = setTimeout(() => {
                 this.updateState(State.Finished);
                 this.clearAllTimeout();
-                console.log("wod finish");
-                this.emit("wodFinish");
+                this.emit("wodUpdate", "finish");
+                // this.emit("wodFinish");
             }, duration * 60000);
             this.timeOuts?.push(finishTiming);
         }, startTime.getTime() - Date.now());
@@ -43,17 +45,54 @@ abstract class BaseLiveWod extends EventEmitter {
     reset(): void {
         this.clearAllTimeout();
         const modelDB = new JsonDB(
-            new Config("./liveconfig copy.json", true, true, "/")
+            new Config("./modelCurrentWod.json", true, true, "/")
         );
         const modelData = modelDB.getData("/");
-        this.db.push("/", modelData);
+        this.loadWod(modelData);
+    }
+
+    loadWod(data: any): void {
+        this.db.push("/", data);
 
         this.updateState(State.Loaded);
 
-        this.emit("wodReset");
+        this.emit("wodUpdate", "reset");
     }
 
-    abstract getRank(): object;
+    setWod(wod: any) {
+        if (this.state && [1, 2].includes(this.state)) {
+            throw ("Wod is running");
+        }
+
+        const modelDB = new JsonDB(
+            new Config("./modelCurrentWod.json", true, true, "/")
+        );
+        modelDB.push("/", wod);
+
+        this.loadWod(wod);
+    }
+
+    getMeasurements(): Measurement[] {
+        let measurements: Measurement[] = [];
+
+        for (let block of this.db.getObject<WodBlock[]>(
+            "/workouts[0]/blocks"
+        )) {
+            if (block.measurements) {
+                measurements.push(block.measurements);
+            }
+        }
+
+        return measurements;
+    }
+
+    validateWod(wod: any, cb: Function) {
+        if (!wod.globals) cb("wod globals missing");
+
+        if (!wod.workouts) cb("wod workouts missing");
+    }
+
+    abstract getWodRank(): StationRanked;
 
     abstract update(message: WodData): void;
 

@@ -10,10 +10,11 @@
     "license": "ISC",
     "type": "module",
     "dependencies": {
-        "dotenv": "^16.0.0",
         "@abandonware/noble": "^1.9.2-15",
+        "dotenv": "^16.0.0",
         "mqtt": "^4.3.5",
         "network": "^0.6.1",
-        "node-json-db": "^1.4.1"
+        "node-json-db": "^1.4.1",
+        "onoff": "^6.0.3"
     }
 }

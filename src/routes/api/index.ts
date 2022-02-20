@@ -4,11 +4,13 @@ import broker from "./broker.js";
 import login from "./login.js";
 import signup from "./signup.js";
 import switchStart from "./switchStart.js";
+import setWod from "./setWod.js"
 
 const api = express.Router();
 
-api.use("/broker", authenticateToken, broker);
+api.get("/broker", authenticateToken, broker);
 api.use("/login", login);
 api.use("/signup", signup);
-api.use("/switchStart", authenticateToken, switchStart);
+api.get("/switchStart", switchStart);
+api.post("/setWod", setWod)
 export default api;

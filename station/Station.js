@@ -1,154 +1,383 @@
 import { JsonDB } from "node-json-db";
 import { Config } from "node-json-db/dist/lib/JsonDBConfig.js";
 import MqttClient from "./utils/MqttClient.js";
-import BLEServices from "./utils/BTServices.js";
+import BLEServices from "./utils/BLEServices.js";
 import WodInterpreter from "./utils/workouts/WodInterpreter.js";
+import WodTimer from "./utils/WodTimer.js";
+import displayBuffer from "./utils/displayHelper.js";
+import onoff from "onoff";
+import { exec } from "child_process";
 
 class Station {
-    constructor(ip) {
+    constructor(ip, mqttUrl, mqttOptions, mqttTopics) {
         this.ip = ip;
-        this.bleServices = new BLEServices();
-        this.counter = {};
-        this.board = {};
-        this.db = new JsonDB(new Config("./livestation", true, true, "/"));
+        this.db = new JsonDB(new Config("./livestation", true, false, "/"));
         this.db.push("/", {});
+        this.mqttClient = new MqttClient(
+            mqttUrl,
+            {
+                ...mqttOptions,
+                clientId: ip,
+            },
+            mqttTopics
+        );
+        this.bleServices = new BLEServices();
+        this.wodInterpreter = new WodInterpreter();
+        this.timer = new WodTimer();
+        this.buzzer = new onoff.Gpio(18, "in", "falling", {
+            debounceTimeout: 10,
+        });
+        // this.resetScanBLE = new onoff.Gpio(24, "in", "falling", {
+        //     debounceTimeout: 10,
+        // });
     }
 
-    async getMqttClient(MQTT_URL, options) {
-        this.mqttClient = new MqttClient(MQTT_URL, options, [
-            "server/wodConfig",
-            "server/wodConfigUpdate",
-            "server/wodGlobals",
-        ]);
-        return this;
+    async initProcess() {
+        this.initWodInterpreterEventLister();
+        this.initBLEEventListener();
+        this.initTimerEventListener();
+        this.initButtons();
+        this.initMqttEventListener();
     }
 
-    initMqtt() {
-        this.mqttClient.client.on("message", async (topic, message) => {
-            //Only when the station connect for the first time
-            if (topic === "server/wodConfig") {
-                const json = JSON.parse(message.toString());
-                const data = this.updateDB(json);
-
-                this.bleServices.scan({
-                    counter: {
-                        id: data.stations.configs.counter.mac,
-                        cb: (value) => {
-                            this.publishData(value);
+    initWodInterpreterEventLister() {
+        this.wodInterpreter.on(
+            "checkpoint",
+            (measurement, isFinal, shortcut) => {
+                this.db.push(
+                    "/stations/measurements",
+                    {
+                        [measurement.measurementId]: {
+                            value: measurement.value,
+                            type: measurement.type,
+                            shortcut,
                         },
                     },
-                    board: { id: data.stations.configs.board.mac },
-                });
+                    false
+                );
 
-                this.wodInterpreter = new WodInterpreter(data.workouts);
+                if (isFinal) {
+                    this.wodFinish();
+                    this.timer.stopTimer();
+                } else {
+                    const currentWodPosition = this.db.getData(
+                        "/stations/currentWodPosition"
+                    );
+
+                    console.log(this.wodInterpreter.measurements);
+                    console.log(measurement.measurementId);
+
+                    const nextBlock =
+                        this.wodInterpreter.measurements[
+                            measurement.measurementId
+                        ].blocksId.at(-1) + 1;
+
+                    currentWodPosition.block = nextBlock;
+                    currentWodPosition.round = 0;
+                    currentWodPosition.movement = 0;
+                    currentWodPosition.reps = 0;
+
+                    this.wodInterpreter.pressCounter(
+                        Date.now(),
+                        Date.parse(this.db.getData("/globals/startTime")),
+                        measurement,
+                        currentWodPosition,
+                        0
+                    );
+
+                    this.db.save();
+
+                    this.updateBoard();
+                }
+
+                // TODO: SI TYPE EST CHECKPOINT
             }
+        );
+    }
 
-            if (topic === "server/wodConfigUpdate") {
-                const oldStations = this.db.getData("/stations");
+    initMqttEventListener() {
+        this.mqttClient.client.on("message", async (topic, message) => {
+            console.log("Topic Received:", topic);
 
+            if (
+                topic === "server/wodConfig" ||
+                topic === "server/wodConfigUpdate"
+            ) {
                 const json = JSON.parse(message.toString());
-                const data = this.updateDB(json);
+                const data = this.extractRelativesInfo(json);
+                this.updateDB(data);
 
-                let changed = false;
+                const devices = this.getRequiredDevices();
+                this.bleServices.connectTo(devices);
 
-                if (
-                    oldStations.configs.counter.mac !==
-                    data.stations.configs.counter.mac
-                ) {
-                    this.bleServices.disconnect("counter");
-                    changed = true;
+                try {
+                    this.wodInterpreter.load(this.db.getData("/workouts"));
+                    if (data.stations.state < 2) {
+                        this.wodInterpreter.getRepsInfo(
+                            data.stations.currentWodPosition
+                        );
+                        // save db
+                        this.db.save();
+                    }
+                } catch (err) {
+                    console.log("No workout to load");
                 }
 
-                if (
-                    oldStations.configs.board.mac !==
-                    data.stations.configs.board.mac
-                ) {
-                    this.bleServices.disconnect("board");
-                    changed = true;
+                if (data.globals.duration !== 0) {
+                    this.initTimer(json.globals);
+                } else {
+                    this.timer && this.timer.stopTimer();
+                    this.updateBoard();
                 }
-
-                if (changed) {
-                    this.bleServices.scan({
-                        counter: {
-                            id: data.stations.configs.counter.mac,
-                            cb: (value) => {
-                                this.publishData(value);
-                            },
-                        },
-                        board: { id: data.stations.configs.board.mac },
-                    });
-                }
-
-                this.wodInterpreter = new WodInterpreter(data.workouts);
             }
 
             if (topic === "server/wodGlobals") {
-                this.db.push("/globals", JSON.parse(message));
+                const json = JSON.parse(message);
+                if (this.isNewGlobals(json)) this.initTimer(json);
+                this.db.push("/globals", json);
+            }
+
+            if (topic === "server/scriptReset") {
+                if (this.ip === message.toString()) {
+                    exec("sudo systemctl restart station", function (msg) {
+                        console.log(msg);
+                    });
+                }
+            }
+
+            if (topic === "server/restartUpdate") {
+                if (this.ip === message.toString()) {
+                    exec(
+                        "git pull origin main && sudo systemctl restart station",
+                        function (msg) {
+                            console.log(msg);
+                        }
+                    );
+                }
             }
         });
     }
 
-    updateDB(json) {
+    initBLEEventListener() {
+        this.bleServices.on("stateChange", (device) => {
+            const state = device.peripheral.state;
+
+            const index = this.db.getIndex(
+                "/stations/configs/devices",
+                device.role,
+                "role"
+            );
+            // update DB
+            this.db.push(`/stations/configs/devices[${index}]/state`, state);
+            // send to server
+            this.sendToServer("blePeripheral");
+
+            this.updateBoard();
+        });
+    }
+
+    initTimerEventListener() {
+        this.timer.on("countdown", (value) => {
+            console.log("WOD COUNTDOWN TIMER");
+            try {
+                const station = this.db.getData("/stations");
+                if (station.state !== 1) this.changeState(1);
+            } finally {
+                this.updateBoard(value);
+            }
+        });
+
+        this.timer.on("wodStarted", () => {
+            console.log("WOD STARTED TIMER");
+            this.changeState(2);
+        });
+
+        this.timer.on("wodEnded", () => {
+            console.log("WOD ENDED TIMER");
+            this.changeState(3);
+        });
+
+        this.timer.on("timeCheckpoint", (checkpoint) => {
+            console.log("NEW CHECKPOINT: ", checkpoint);
+            this.wodInterpreter.checkpoint(
+                "timer",
+                this.db.getData("/stations/measurements"),
+                this.db.getData("/globals/startTime"),
+                checkpoint,
+                this.db.getData("/stations/currentWodPosition")
+            );
+        });
+    }
+
+    isNewGlobals(globals) {
+        try {
+            const actual = this.db.getData("/globals/startTime");
+            const actualStartTime = actual.startTime;
+            const actualDuration = actual.duration;
+            return (
+                actualStartTime !== globals.startTime ||
+                actualDuration !== globals.duration
+            );
+        } catch (err) {
+            return globals ? true : false;
+        }
+    }
+
+    initButtons() {
+        console.log("INIT BUZZER");
+        this.lastPush = 0;
+
+        this.buzzer.watch((err, value) => {
+            if (err) {
+                throw err;
+            }
+
+            if (this.db.getData("/stations/state") === 2) {
+                const now = Date.now();
+
+                if (now < this.lastPush + 20000) return;
+
+                this.lastPush = now;
+
+                this.wodInterpreter.pressBuzzer(
+                    now,
+                    Date.parse(this.db.getData("/globals/startTime")),
+                    this.db.getData("/stations/measurements"),
+                    this.db.getData("/stations/currentWodPosition")
+                );
+            }
+        });
+
+        // this.resetScanBLE.watch((err, value) => {
+        //     if (err) {
+        //         throw err;
+        //     }
+
+        //     this.bleServices.resetConnection();
+        // });
+
+        process.on("SIGINT", (_) => {
+            this.buzzer.unexport();
+            this.resetScanBLE.unexport();
+        });
+        console.log("BUZZER LOADED");
+    }
+
+    changeState(state) {
+        if (this.timer && state === 3) this.timer.stopTimer();
+
+        this.db.push("/stations/state", state);
+
+        //TODO: appeller un preparateur de message pour le serveur basé sur le state
+        // Pour l'instant  le message est de type reps
+
+        //Publish to server
+        this.sendToServer("reps");
+
+        //publish to screen
+        this.updateBoard();
+
+        // this.emit("newState", state);
+    }
+
+    wodFinish() {
+        const result = this.wodInterpreter.getFinalScore(
+            // this.db.getData("/stations/currentWodPosition"),
+            this.db.getData("/stations/measurements")
+        );
+
+        this.db.push("/stations/result", result);
+        this.changeState(3);
+    }
+
+    getRequiredDevices() {
+        const requiredDevices = this.db.getData("/stations/configs/devices");
+        return requiredDevices.map((d) => {
+            let callback = {};
+            if (d.role === "counter") {
+                callback = {
+                    cb: (value) => {
+                        this.publishData(value);
+                    },
+                };
+            }
+            return { role: d.role, id: d.mac, ...callback };
+        });
+    }
+
+    updateBoard(value) {
+        const board = this.bleServices.connectedDevices.find(
+            (d) => d.role === "board"
+        );
+
+        if (board && board.charac) {
+            board.charac.write(displayBuffer(this.db, { value: value }), true);
+        }
+    }
+
+    initTimer(json) {
+        const checkPointTime = this.wodInterpreter.getCheckpointTime();
+        this.timer.stopTimer();
+        this.timer.launchTimer(json.startTime, json.duration, checkPointTime);
+    }
+
+    sendToServer(topic) {
+        const station = this.db.getData("/stations");
+
+        this.mqttClient.client.publish(
+            "station/wodData",
+            JSON.stringify({ topic: topic, data: station }),
+            { qos: 1 }
+        );
+    }
+
+    extractRelativesInfo(json) {
         let myStation;
+        let myWorkout;
         for (const station of json.stations) {
             if (station.configs.station_ip === this.ip) {
                 myStation = station;
+                // myStation.state = json.globals.state;
             }
         }
+
         json.stations = myStation;
 
         if (myStation) {
             for (const workout of json.workouts) {
                 if (workout.categories.includes(myStation.category)) {
-                    json.workouts = workout;
+                    myWorkout = workout;
                 }
             }
         }
+        json.workouts = myWorkout;
 
-        if (myStation) this.db.push("/", json);
         return json;
     }
 
+    updateDB(json) {
+        this.db.push("/", json);
+    }
+
     publishData(buttonValue) {
-        if (this.db.getData("/globals/state") === 2) {
-            const station = this.db.getData("/stations");
-            const newreps = station.reps + parseInt(buttonValue);
-
-            let data = {
-                lane_number: station.lane_number,
-                finish: station.finish,
-                reps: newreps,
-                time: "",
-            };
-            // Save to db
-            this.db.push("/stations/reps", newreps);
-
-            //Publish to server
-            this.mqttClient.client.publish(
-                "station/wodData",
-                JSON.stringify(data),
-                {
-                    qos: 1,
-                }
+        if (this.db.getData("/stations/state") === 2) {
+            const station = this.db.getData("/stations/");
+            this.wodInterpreter.pressCounter(
+                Date.now(),
+                Date.parse(this.db.getData("/globals/startTime")),
+                station.measurements,
+                station.currentWodPosition,
+                parseInt(buttonValue)
             );
 
-            const movementInfos =
-                this.wodInterpreter.getCurrentRepsInfo(newreps);
+            // save db
+            this.db.save();
+
+            //Publish to server
+            this.sendToServer("reps");
 
             //publish to screen
-            this.bleServices.board.charac &&
-                this.bleServices.board.charac.write(
-                    Buffer.from(
-                        JSON.stringify({
-                            ...data,
-                            name: station.athlete,
-                            result: station.time,
-                            movement: `${movementInfos.totalRepsOfMovement} ${movementInfos.currentMovement}`,
-                            movement_reps: movementInfos.repsOfMovement,
-                        })
-                    ),
-                    true
-                );
+            this.updateBoard();
         }
     }
 }

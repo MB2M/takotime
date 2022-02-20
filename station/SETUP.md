@@ -16,19 +16,29 @@ Setup sd Card :
     ```
     https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#4-boot-ubuntu-server
 
+# change password
+
+    passwd
+
+# config GPIO 18 as PINUP
+
+sudo nano /boot/config.txt
+
+Add : gpio=18,24=pu
+
 # update/upgrade
 
-    sudo apt-get update
-    sudo apt-get upgrade
+    sudo apt update && sudo apt upgrade
 
-<!-- # setup wifi /etc/dhcpcd.conf
+# setup wifi /etc/dhcpcd.conf
 
+    sudo nano /etc/dhcpcd.conf
     interface wlan0
     static ip_address=192.168.3.10X
     static routers=192.168.3.1
     static domain_name_servers=192.168.3.1
 
-# install python
+<!-- # install python
 
     [link info](https://linuxize.com/post/how-to-install-python-3-9-on-debian-10/)
 
@@ -62,7 +72,7 @@ change user:
 
 # Install chrony
 
-    sudo apt-get install chrony
+    sudo apt install chrony -y
 
 ### config chrony
 
@@ -74,8 +84,8 @@ add following line:
 
 then run:
 
-    sudo systemctl enable chronyd.service
-    sudo systemctl start chronyd.service
+    sudo systemctl enable chrony
+    sudo systemctl start chrony
 
 reboot and run cmd to verify:
 
@@ -117,18 +127,75 @@ Reboot and run:
 
 # NEW VERSION
 
-sudo apt-get install libbluetooth-dev
-sudo apt-get install nodejs npm
-sudo apt-get install git-all
+> sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
 
-mkdir takotime
-git init
-git remote add -f origin https://github.com/MB2M/takotime.git
-git config core.sparseCheckout true
-echo "station/" >> .git/info/sparse-checkout
-git pull origin <BRANCH>
+> sudo su
 
-cd station
-npm install
+> curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 
-sudo node index.js
+> sudo su pi
+
+> sudo apt-get install -y nodejs git
+
+> mkdir takotime && cd takotime
+
+> git init
+
+> git remote add -f origin https://github.com/MB2M/takotime.git
+
+> git config core.sparseCheckout true
+
+> echo "station/" >> .git/info/sparse-checkout
+
+> git config pull.rebase true
+
+> git pull origin main
+
+> git checkout main
+
+> cd station; npm install
+
+> nano .env
+
+> cd takotime/station; git pull origin main && sudo node index.js
+
+## Setup systemd services
+
+### station.service
+
+>sudo nano /etc/systemd/system/station.service
+
+    [Unit]
+    Description=Station Service
+    Wants=network-online.target
+    After=network-online.target
+
+    [Service]
+    WorkingDirectory=/home/pi/takotime/station
+    ExecStartPre=sudo rm -f livestation.json
+    ExecStart=sudo /usr/bin/node index.js
+    Restart=on-failure
+    User=pi
+    Environment=PORT=3000
+
+    [Install]
+    WantedBy=multi-user.target
+
+### station_reload.service
+
+>sudo nano /etc/systemd/system/station_service
+
+    [Unit]
+    Description=Station Service
+    Wants=network-online.target
+    After=network-online.target
+
+    [Service]
+    WorkingDirectory=/home/pi/takotime/station
+    ExecStart=sudo /usr/bin/node buttonRestartScript.js
+    Restart=on-failure
+    User=pi
+    Environment=PORT=3000
+
+    [Install]
+    WantedBy=multi-user.target

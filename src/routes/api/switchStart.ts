@@ -7,7 +7,9 @@ const switchStart = (req: Request, res: Response) => {
     const liveWodManager = global.liveWodManager;
 
     if (action === "start") {
-        const startTime = new Date(Date.now() + countdown * 1000);
+        const startTime = new Date(
+            Math.floor((Date.now() + (countdown * 1000)) / 1000) * 1000
+        );
         try {
             liveWodManager.startWod({
                 duration: duration,

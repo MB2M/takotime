@@ -99,6 +99,7 @@ class LiveWodManager extends EventEmitter {
         });
         this.wod?.on("wodStart", () => {
             console.log("wod started");
+            this.sendToChannel("server/wodGlobals", "/globals");
             const rankInterval = setInterval(() => {
                 this.publishRank();
             }, 300);

@@ -1,6 +1,8 @@
 .env
 /node_modules
 live*.json
+src/sub_*
+src/pub_*
 
 ### Node ###
 # Logs

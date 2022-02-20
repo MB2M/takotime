@@ -87,64 +87,7 @@ class Station {
         });
     }
 
-<<<<<<< HEAD
-=======
-    init() {
-        noble.on("stateChange", async (state) => {
-            if (state === "poweredOn") {
-                await noble.startScanningAsync();
-            }
-        });
 
-        noble.on("discover", async (peripheral) => {
-            console.log("discover: ", peripheral.id);
-            if (peripheral.id === this.counterId) {
-                await noble.stopScanningAsync();
-                await peripheral.connectAsync();
-                this.counter = peripheral;
-                const service = (
-                    await peripheral.discoverServicesAsync([
-                        "364dff7c036546888146b1c0234e7ebb",
-                    ])
-                )[0];
-                const charac = (
-                    await service.discoverCharacteristicsAsync()
-                )[0];
-                charac.subscribe((error) => {
-                    console.log("init subscribe");
-                    charac.on("data", (data) => {
-                        this.publichData(data.toString());
-                    });
-                });
-                peripheral.once("disconnect", async () => {
-                    console.log("disconnected");
-                    await noble.startScanningAsync();
-                });
-                if (!this.board) await noble.startScanningAsync();
-            }
-            if (peripheral.id === this.boardId) {
-                await noble.stopScanningAsync();
-                await peripheral.connectAsync();
-                console.log("connected to board");
-                this.board = peripheral;
-                const service = (
-                    await peripheral.discoverServicesAsync([
-                        "60060b33e06546ab96d41be77c461ebb",
-                    ])
-                )[0];
-                this.counterCharac = (
-                    await service.discoverCharacteristicsAsync()
-                )[0];
-                peripheral.once("disconnect", async () => {
-                    console.log("disconnected");
-                    await noble.startScanningAsync();
-                });
-                if (!this.counter) await noble.startScanningAsync();
-            }
-        });
-    }
-
->>>>>>> parent of becc77e... up
     updateDB(json) {
         let myStation;
         for (const station of json.stations) {

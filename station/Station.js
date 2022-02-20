@@ -1,11 +1,8 @@
-// import mqttClient from "./mqttClient.js";
-import network from "network";
-// import noble from "@abandonware/noble";
 import { JsonDB } from "node-json-db";
 import { Config } from "node-json-db/dist/lib/JsonDBConfig.js";
 import MqttClient from "./utils/MqttClient.js";
-// import BLEPeripheral from "./BLEPeripheral.js";
 import BLEServices from "./utils/BTServices.js";
+import WodInterpreter from "./utils/workouts/WodInterpreter.js";
 
 class Station {
     constructor(ip) {
@@ -42,6 +39,8 @@ class Station {
                     },
                     board: { id: data.stations.configs.board.mac },
                 });
+
+                this.wodInterpreter = new WodInterpreter(data.workouts);
             }
 
             if (topic === "server/wodConfigUpdate") {
@@ -79,6 +78,8 @@ class Station {
                         board: { id: data.stations.configs.board.mac },
                     });
                 }
+
+                this.wodInterpreter = new WodInterpreter(data.workouts);
             }
 
             if (topic === "server/wodGlobals") {
@@ -86,7 +87,6 @@ class Station {
             }
         });
     }
-
 
     updateDB(json) {
         let myStation;
@@ -96,6 +96,15 @@ class Station {
             }
         }
         json.stations = myStation;
+
+        if (myStation) {
+            for (const workout of json.workouts) {
+                if (workout.categories.includes(myStation.category)) {
+                    json.workouts = workout;
+                }
+            }
+        }
+
         if (myStation) this.db.push("/", json);
         return json;
     }
@@ -111,9 +120,10 @@ class Station {
                 reps: newreps,
                 time: "",
             };
+            // Save to db
+            this.db.push("/stations/reps", newreps);
 
             //Publish to server
-            this.db.push("/stations/reps", newreps);
             this.mqttClient.client.publish(
                 "station/wodData",
                 JSON.stringify(data),
@@ -121,6 +131,9 @@ class Station {
                     qos: 1,
                 }
             );
+
+            const movementInfos =
+                this.wodInterpreter.getCurrentRepsInfo(newreps);
 
             //publish to screen
             this.bleServices.board.charac &&
@@ -130,6 +143,8 @@ class Station {
                             ...data,
                             name: station.athlete,
                             result: station.time,
+                            movement: `${movementInfos.totalRepsOfMovement} ${movementInfos.currentMovement}`,
+                            movement_reps: movementInfos.repsOfMovement,
                         })
                     ),
                     true

@@ -41,6 +41,7 @@ interface WodData {
         now: number;
         configs: object;
         repsTime: { [number]: number };
+        appVersion: string;
     };
 }
 

@@ -18,6 +18,8 @@ import {
     Box,
     CardActions,
     Drawer,
+    Chip,
+    Tooltip,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import useSWR from "swr";
@@ -48,12 +50,60 @@ type Globals = {
     countdown: number;
 };
 
+const toReadableTime = (timestamp: number) => {
+    const asDate = new Date(timestamp);
+    const hours = asDate.getUTCHours();
+    const minutes = asDate.getUTCMinutes();
+    const seconds = asDate.getUTCSeconds();
+    // const milli = asDate.getUTCMilliseconds();
+
+    return `${hours !== 0 ? hours + ":" : ""}${
+        minutes < 10 ? "0" + minutes : minutes
+    }:${seconds < 10 ? "0" + seconds : seconds}`;
+};
+
+const useChrono = (
+    timesync: timesync.TimeSync | undefined,
+    startTime: string | undefined,
+    duration: number | undefined
+    // isOn: boolean
+) => {
+    const [chrono, setChrono] = useState<number | string | null>(null);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout | undefined;
+        if (!startTime || startTime === "" || !timesync?.now()) {
+            setChrono(null);
+        } else {
+            timer = setInterval(() => {
+                const diff = timesync?.now() - Date.parse(startTime || "");
+                if (diff < 0) {
+                    setChrono(Math.trunc(diff / 1000));
+                } else {
+                    setChrono(
+                        toReadableTime(Math.min((duration || 0) * 60000, diff))
+                    );
+                }
+            }, 100);
+        }
+        return () => {
+            if (typeof timer !== "undefined") {
+                clearInterval(timer);
+            }
+        };
+    }, [timesync, startTime, duration]);
+
+    return chrono;
+};
+
 const Dashboard: NextPage = () => {
     const [stations, setStations] = useState<Station[]>([]);
     const [brokerClients, setBrokerClients] = useState<Broker>({});
     const [ranks, setRanks] = useState<StationRanked>([]);
     const [time, setTime] = useState<number>();
+    const [tSync, setTSync] = useState<timesync.TimeSync>();
     const [globals, setGlobals] = useState<Globals>();
+    const chrono = useChrono(tSync, globals?.startTime, globals?.duration);
     const [heatUpdateDrawerOpen, setHeatUpdateDrawerOpen] =
         useState<boolean>(false);
     const ws = useRef<WebSocket>();
@@ -85,12 +135,16 @@ const Dashboard: NextPage = () => {
             server: `http://${process.env.NEXT_PUBLIC_LIVE_API}/timesync`,
             interval: 100000,
         });
-        const serverT = setInterval(function () {
-            const now = ts.now();
-            setTime(now);
-        }, 300);
 
-        return () => clearInterval(serverT);
+        setTSync(ts);
+        // setTime(ts.now());
+
+        // const serverT = setInterval(function () {
+        //     const now = ts.now();
+        //     setTime(now);
+        // }, 300);
+
+        // return () => clearInterval(serverT);
     }, []);
 
     const sendMessage = (message: string) => {
@@ -143,25 +197,17 @@ const Dashboard: NextPage = () => {
             currentMovement: station.currentWodPosition.currentMovement,
             nextMovementReps: station.currentWodPosition.nextMovementReps,
             nextMovement: station.currentWodPosition.nextMovement,
+            appVersion: station.appVersion,
         };
     };
 
-    const toReadableTime = (timestamp: number) => {
-        const asDate = new Date(timestamp);
-        const hours = asDate.getUTCHours();
-        const minutes = asDate.getUTCMinutes();
-        const seconds = asDate.getUTCSeconds();
-        // const milli = asDate.getUTCMilliseconds();
-
-        return `${hours !== 0 ? hours + ":" : ""}${
-            minutes < 10 ? "0" + minutes : minutes
-        }:${seconds < 10 ? "0" + seconds : seconds}`;
-    };
-
     const getChrono = () => {
-        if (!globals?.startTime || globals?.startTime === "" || !time) return;
+        if (!globals?.startTime || globals?.startTime === "" || !tSync?.now())
+            return;
+        // if (!globals?.startTime || globals?.startTime === "" || !time) return;
 
-        const diff = time - Date.parse(globals?.startTime || "");
+        const diff = tSync.now() - Date.parse(globals?.startTime || "");
+        // const diff = time - Date.parse(globals?.startTime || "");
         if (diff < 0) {
             return Math.trunc(diff / 1000);
         } else {
@@ -230,7 +276,7 @@ const Dashboard: NextPage = () => {
                     <Grid item xs={12} lg={2}>
                         <TimerForm
                             startTime={globals?.startTime}
-                            chrono={getChrono()}
+                            chrono={chrono}
                         ></TimerForm>
                     </Grid>
                     <Grid item xs={12} lg={10}>
@@ -240,7 +286,12 @@ const Dashboard: NextPage = () => {
                                 return (
                                     <Grid key={i} item md={3}>
                                         <Card>
-                                            <Box sx={{ display: "flex" }}>
+                                            <Box
+                                                component="div"
+                                                sx={{
+                                                    display: "flex",
+                                                }}
+                                            >
                                                 <CardContent sx={{ p: 1 }}>
                                                     <Typography
                                                         gutterBottom
@@ -250,7 +301,9 @@ const Dashboard: NextPage = () => {
                                                         {data.lane}
                                                     </Typography>
                                                 </CardContent>
-                                                <CardContent sx={{ p: 1 }}>
+                                                <CardContent
+                                                    sx={{ p: 1, width: "100%" }}
+                                                >
                                                     <Box
                                                         sx={{
                                                             display: "flex",
@@ -258,13 +311,54 @@ const Dashboard: NextPage = () => {
                                                                 "column",
                                                         }}
                                                     >
-                                                        <Typography
-                                                            gutterBottom
-                                                            variant="h6"
-                                                            component="div"
+                                                        <Box
+                                                            sx={{
+                                                                display: "flex",
+                                                                justifyContent:
+                                                                    "space-between",
+                                                            }}
                                                         >
-                                                            {data.athlete}
-                                                        </Typography>
+                                                            <Typography
+                                                                gutterBottom
+                                                                variant="h6"
+                                                                component="div"
+                                                            >
+                                                                {data.athlete}
+                                                            </Typography>
+                                                            {data.appVersion && (
+                                                                <Tooltip
+                                                                    arrow
+                                                                    disableFocusListener
+                                                                    disableTouchListener
+                                                                    title={
+                                                                        <Button
+                                                                            size="small"
+                                                                            variant="text"
+                                                                            color="inherit"
+                                                                            onClick={() =>
+                                                                                handleRestartUpdate(
+                                                                                    s
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Update
+                                                                        </Button>
+                                                                    }
+                                                                >
+                                                                    <Chip
+                                                                        label={
+                                                                            data.appVersion
+                                                                        }
+                                                                        size="small"
+                                                                        variant="outlined"
+                                                                        color="info"
+                                                                        sx={{
+                                                                            ml: "auto",
+                                                                        }}
+                                                                    />
+                                                                </Tooltip>
+                                                            )}
+                                                        </Box>
                                                         <Typography
                                                             gutterBottom
                                                             variant="caption"
@@ -321,16 +415,7 @@ const Dashboard: NextPage = () => {
                                                     }
                                                     size="small"
                                                 >
-                                                    Restart Script
-                                                </Button>
-                                                <Button
-                                                    variant="outlined"
-                                                    onClick={() =>
-                                                        handleRestartUpdate(s)
-                                                    }
-                                                    size="small"
-                                                >
-                                                    Update and restart
+                                                    Restart
                                                 </Button>
                                             </CardActions>
                                         </Card>

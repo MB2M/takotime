@@ -7,6 +7,7 @@ import WodTimer from "./utils/WodTimer.js";
 import displayBuffer from "./utils/displayHelper.js";
 import onoff from "onoff";
 import { exec } from "child_process";
+import { loadJsonFileSync } from "load-json-file";
 
 class Station {
     constructor(ip, mqttUrl, mqttOptions, mqttTopics) {
@@ -105,6 +106,9 @@ class Station {
             ) {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
+                data.stations.appVersion =
+                    loadJsonFileSync("package.json").version;
+
                 this.updateDB(data);
 
                 const devices = this.getRequiredDevices();
@@ -323,6 +327,7 @@ class Station {
 
     sendToServer(topic) {
         const station = this.db.getData("/stations");
+        console.log("STATION:", station);
 
         this.mqttClient.client.publish(
             "station/wodData",

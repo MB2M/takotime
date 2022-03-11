@@ -6,7 +6,7 @@ const TimerForm = ({
     chrono,
 }: {
     startTime: string | undefined;
-    chrono: string | number | undefined;
+    chrono: string | number | null;
 }) => {
     const [duration, setDuration] = useState("");
     const [countdown, setCountdown] = useState("");
@@ -31,7 +31,9 @@ const TimerForm = ({
     };
 
     const handleReset = async () => {
-        await fetch(`http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=reset`);
+        await fetch(
+            `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=reset`
+        );
     };
 
     return (

@@ -170,6 +170,8 @@ class ForTime extends BaseLiveWod {
             "lane_number"
         );
 
+        this.db.push(`/stations[${index}]/appVersion`, message.data.appVersion);
+
         if (message.topic === "blePeripheral") {
             this.db.push(`/stations[${index}]/configs`, message.data.configs);
         }
@@ -196,7 +198,7 @@ class ForTime extends BaseLiveWod {
         this.updateState(State.Cooldown);
         this.launchTimer(options.duration, options.startTime);
 
-        this.emit("wodUpdate", "cooldown")
+        this.emit("wodUpdate", "cooldown");
         // this.emit("wodCooldown", options.startTime, options.duration);
     }
 }

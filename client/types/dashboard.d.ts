@@ -1,4 +1,5 @@
 type Station = {
+    appVersion: string;
     lane_number: number;
     athlete: string;
     category: string;

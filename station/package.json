@@ -1,6 +1,6 @@
 {
     "name": "station",
-    "version": "1.0.0",
+    "version": "0.1.1",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -12,6 +12,7 @@
     "dependencies": {
         "@abandonware/noble": "^1.9.2-15",
         "dotenv": "^16.0.0",
+        "load-json-file": "^7.0.1",
         "mqtt": "^4.3.5",
         "network": "^0.6.1",
         "node-json-db": "^1.4.1",

@@ -143,6 +143,7 @@ const Dashboard: NextPage = () => {
             currentMovement: station.currentWodPosition.currentMovement,
             nextMovementReps: station.currentWodPosition.nextMovementReps,
             nextMovement: station.currentWodPosition.nextMovement,
+            appVersion: station.appVersion,
         };
     };
 
@@ -332,6 +333,13 @@ const Dashboard: NextPage = () => {
                                                 >
                                                     Update and restart
                                                 </Button>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant="subtitle2"
+                                                    component="div"
+                                                >
+                                                    {data.appVersion}
+                                                </Typography>
                                             </CardActions>
                                         </Card>
                                     </Grid>

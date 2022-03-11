@@ -84,20 +84,8 @@ class BLEServices extends EventEmitter {
             this.connectedDevices.splice(i, 1);
         }
 
-        // this.connectedDevices.reverse().forEach((d, i, o) => {
-        // });
-
         scan && this.scan();
     }
-
-    // disconnect(peripheralType) {
-    //     this.connectedDevices.forEach((d, i, o) => {
-    //         if (d.type === peripheralType) {
-    //             d.peripheral.disconnect();
-    //             o.splice(i, 1);
-    //         }
-    //     });
-    // }
 
     arrayEquals(a1, a2) {
         const result = a2.filter((e) => {
@@ -120,10 +108,6 @@ class BLEServices extends EventEmitter {
             }
         }
 
-        // this.connectedDevices.forEach((d, i, o) => {
-        //     d.peripheral.disconnect();
-        //     o.splice(i, 1);
-        // });
         this.requiredPeripherals = devices;
 
         if (!this.allIsConnected()) {

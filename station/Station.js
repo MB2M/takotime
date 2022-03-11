@@ -7,6 +7,7 @@ import WodTimer from "./utils/WodTimer.js";
 import displayBuffer from "./utils/displayHelper.js";
 import onoff from "onoff";
 import { exec } from "child_process";
+import { pjson } from "./package.json";
 
 class Station {
     constructor(ip, mqttUrl, mqttOptions, mqttTopics) {
@@ -105,6 +106,7 @@ class Station {
             ) {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
+                data.appVersion = pjson.version;
                 this.updateDB(data);
 
                 const devices = this.getRequiredDevices();

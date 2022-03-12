@@ -199,7 +199,7 @@ class WodInterpreter extends EventEmitter {
                     currentWodPosition.block -= 1;
                     currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                         currentWodPosition.repsPerBlock,
-                        currentBlock,
+                        currentBlock - 1,
                         delta
                     );
                     // currentWodPosition.repsPerBlock[currentBlock - 1] += delta;

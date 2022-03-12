@@ -32,7 +32,7 @@ class WodInterpreter extends EventEmitter {
         console.log("reps per block:", repsPerBlock);
         console.log("currentblock:", currentBlock);
         console.log("delta:", delta);
-        
+
         if (!repsPerBlock[currentBlock]) {
             repsPerBlock.push(0);
             return this.updateRepsOfBlock(repsPerBlock, currentBlock, delta);
@@ -61,7 +61,7 @@ class WodInterpreter extends EventEmitter {
         //No movement change
         if (currentRep + delta >= 0 && currentRep + delta < maxReps) {
             currentWodPosition.reps += delta;
-            currentWodPosition.repsPerBlock = updateRepsOfBlock(
+            currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                 currentWodPosition.repsPerBlock,
                 currentBlock,
                 delta

@@ -37,8 +37,8 @@ class WodInterpreter extends EventEmitter {
             repsPerBlock.push(0);
             return this.updateRepsOfBlock(repsPerBlock, currentBlock, delta);
         }
-
-        return (repsPerBlock[currentBlock] += delta);
+        repsPerBlock[currentBlock] += delta;
+        return repsPerBlock;
     }
 
     deltaWodPosition(currentWodPosition, delta) {

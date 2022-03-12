@@ -76,7 +76,7 @@ class WodInterpreter extends EventEmitter {
             if (currentMovement + 1 < maxMovement) {
                 currentWodPosition.reps = 0;
                 currentWodPosition.movement += 1;
-                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                     currentWodPosition.repsPerBlock,
                     currentBlock,
                     delta
@@ -90,7 +90,7 @@ class WodInterpreter extends EventEmitter {
                 currentWodPosition.reps = 0;
                 currentWodPosition.movement = 0;
                 currentWodPosition.round += 1;
-                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                     currentWodPosition.repsPerBlock,
                     currentBlock,
                     delta
@@ -107,7 +107,7 @@ class WodInterpreter extends EventEmitter {
                     currentWodPosition.movement = 0;
                     currentWodPosition.round = 0;
                     currentWodPosition.block += 1;
-                    currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                    currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                         currentWodPosition.repsPerBlock,
                         currentBlock,
                         delta
@@ -128,7 +128,7 @@ class WodInterpreter extends EventEmitter {
                         (this.workout.blocks[currentBlock].movements.at(-1)
                             .varEachRounds || 0);
 
-                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                     currentWodPosition.repsPerBlock,
                     currentBlock,
                     delta
@@ -152,7 +152,7 @@ class WodInterpreter extends EventEmitter {
                         ].varEachRounds || 0) -
                     1;
                 currentWodPosition.movement -= 1;
-                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                     currentWodPosition.repsPerBlock,
                     currentBlock,
                     delta
@@ -171,7 +171,7 @@ class WodInterpreter extends EventEmitter {
                     1;
                 currentWodPosition.movement = maxMovement - 1;
                 currentWodPosition.round -= 1;
-                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                     currentWodPosition.repsPerBlock,
                     currentBlock,
                     delta
@@ -197,7 +197,7 @@ class WodInterpreter extends EventEmitter {
                     currentWodPosition.round =
                         this.workout.blocks[currentBlock - 1].rounds - 1;
                     currentWodPosition.block -= 1;
-                    currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                    currentWodPosition.repsPerBlock = this.updateRepsOfBlock(
                         currentWodPosition.repsPerBlock,
                         currentBlock,
                         delta

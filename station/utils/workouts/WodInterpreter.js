@@ -28,6 +28,15 @@ class WodInterpreter extends EventEmitter {
         this.shortcut = this.workout.shortcut;
     }
 
+    updateRepsOfBlock(repsPerBlock, currentBlock, delta) {
+        if (!repsPerBlock[currentBlock]) {
+            repsPerBlock.push(0);
+            return this.updateRepsOfBlock(repsPerBlock, currentBlock, delta);
+        }
+
+        return (repsPerBlock += delta);
+    }
+
     deltaWodPosition(currentWodPosition, delta) {
         if (delta < -1 || delta > 1) throw "bad delta value";
 
@@ -48,7 +57,12 @@ class WodInterpreter extends EventEmitter {
         //No movement change
         if (currentRep + delta >= 0 && currentRep + delta < maxReps) {
             currentWodPosition.reps += delta;
-            currentWodPosition.repsPerBlock[currentBlock] += delta;
+            currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                currentWodPosition.repsPerBlock,
+                currentBlock,
+                delta
+            );
+            // currentWodPosition.repsPerBlock[currentBlock] += delta;
             return currentWodPosition;
         }
 
@@ -58,7 +72,12 @@ class WodInterpreter extends EventEmitter {
             if (currentMovement + 1 < maxMovement) {
                 currentWodPosition.reps = 0;
                 currentWodPosition.movement += 1;
-                currentWodPosition.repsPerBlock[currentBlock] += delta;
+                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                    currentWodPosition.repsPerBlock,
+                    currentBlock,
+                    delta
+                );
+                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -67,7 +86,12 @@ class WodInterpreter extends EventEmitter {
                 currentWodPosition.reps = 0;
                 currentWodPosition.movement = 0;
                 currentWodPosition.round += 1;
-                currentWodPosition.repsPerBlock[currentBlock] += delta;
+                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                    currentWodPosition.repsPerBlock,
+                    currentBlock,
+                    delta
+                );
+                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -79,7 +103,12 @@ class WodInterpreter extends EventEmitter {
                     currentWodPosition.movement = 0;
                     currentWodPosition.round = 0;
                     currentWodPosition.block += 1;
-                    currentWodPosition.repsPerBlock[currentBlock] += delta;
+                    currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                        currentWodPosition.repsPerBlock,
+                        currentBlock,
+                        delta
+                    );
+                    // currentWodPosition.repsPerBlock[currentBlock] += delta;
                     return currentWodPosition;
                 }
             }
@@ -95,7 +124,12 @@ class WodInterpreter extends EventEmitter {
                         (this.workout.blocks[currentBlock].movements.at(-1)
                             .varEachRounds || 0);
 
-                currentWodPosition.repsPerBlock[currentBlock] += delta;
+                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                    currentWodPosition.repsPerBlock,
+                    currentBlock,
+                    delta
+                );
+                // currentWodPosition.repsPerBlock[currentBlock] += delta;
             }
             return currentWodPosition;
         }
@@ -114,7 +148,12 @@ class WodInterpreter extends EventEmitter {
                         ].varEachRounds || 0) -
                     1;
                 currentWodPosition.movement -= 1;
-                currentWodPosition.repsPerBlock[currentBlock] += delta;
+                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                    currentWodPosition.repsPerBlock,
+                    currentBlock,
+                    delta
+                );
+                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -128,7 +167,12 @@ class WodInterpreter extends EventEmitter {
                     1;
                 currentWodPosition.movement = maxMovement - 1;
                 currentWodPosition.round -= 1;
-                currentWodPosition.repsPerBlock[currentBlock] += delta;
+                currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                    currentWodPosition.repsPerBlock,
+                    currentBlock,
+                    delta
+                );
+                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -149,7 +193,12 @@ class WodInterpreter extends EventEmitter {
                     currentWodPosition.round =
                         this.workout.blocks[currentBlock - 1].rounds - 1;
                     currentWodPosition.block -= 1;
-                    currentWodPosition.repsPerBlock[currentBlock - 1] += delta;
+                    currentWodPosition.repsPerBlock = updateRepsOfBlock(
+                        currentWodPosition.repsPerBlock,
+                        currentBlock,
+                        delta
+                    );
+                    // currentWodPosition.repsPerBlock[currentBlock - 1] += delta;
                     return currentWodPosition;
                 }
             }

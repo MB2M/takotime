@@ -150,49 +150,6 @@ class LiveWodManager extends EventEmitter {
                     break;
             }
         });
-
-        // this.wod?.on("wodCooldown", () => {
-        //     console.log("cooldown");
-        //     this.sendToChannel("server/wodGlobals", "/globals");
-        //     this.mqttClient?.client.publish(
-        //         "server/chrono",
-        //         this.chronoData(),
-        //         {
-        //             qos: 1,
-        //         }
-        //     );
-        // });
-        // this.wod?.on("wodStart", () => {
-        //     console.log("wod started");
-        //     this.sendToChannel("server/wodGlobals", "/globals");
-        //     const rankInterval = setInterval(() => {
-        //         this.publishRank();
-        //     }, 300);
-        //     this.timeOuts?.push(rankInterval);
-        // });
-        // this.wod?.on("wodFinish", () => {
-        //     this.clearAlltimeout();
-        //     this.sendToChannel("server/wodGlobals", "/globals");
-        // });
-
-        // this.wod?.on("wodReset", () => {
-        //     console.log("wod reseted!!");
-        //     this.clearAlltimeout();
-        //     this.sendToChannel("server/wodConfigUpdate");
-        //     this.mqttClient?.client.publish(
-        //         "server/chrono",
-        //         this.chronoData(),
-        //         {
-        //             qos: 1,
-        //         }
-        //     );
-        // });
-
-        // this.on("resetWod", () => this.sendToChannel("server/wodConfigUpdate"));
-
-        // this.on("wodUpdate", () =>
-        //     this.sendToChannel("server/wodConfigUpdate")
-        // );
     }
 }
 

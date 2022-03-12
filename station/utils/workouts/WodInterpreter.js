@@ -29,6 +29,10 @@ class WodInterpreter extends EventEmitter {
     }
 
     updateRepsOfBlock(repsPerBlock, currentBlock, delta) {
+        console.log("reps per block:", repsPerBlock);
+        console.log("currentblock:", currentBlock);
+        console.log("delta:", delta);
+        
         if (!repsPerBlock[currentBlock]) {
             repsPerBlock.push(0);
             return this.updateRepsOfBlock(repsPerBlock, currentBlock, delta);

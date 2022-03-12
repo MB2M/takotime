@@ -33,7 +33,7 @@ class WodInterpreter extends EventEmitter {
         console.log("currentblock:", currentBlock);
         console.log("delta:", delta);
 
-        if (typeof repsPerBlock[currentBlock] !== "number") {
+        if (isNaN(repsPerBlock[currentBlock])) {
             repsPerBlock.push(0);
             return this.updateRepsOfBlock(repsPerBlock, currentBlock, delta);
         }

@@ -10,7 +10,8 @@ import { WodType } from "../libs/WodType.js";
 class LiveWodManager extends EventEmitter {
     mqttBroker?: MqttBroker;
     mqttClient?: MqttClient;
-    timeOuts?: NodeJS.Timeout[];
+    timeOuts: NodeJS.Timeout[];
+    deviceDb?: JsonDB;
     wod?: BaseLiveWod;
 
     constructor() {
@@ -80,7 +81,7 @@ class LiveWodManager extends EventEmitter {
                 qos: 1,
             });
         } catch (error) {
-            console.error();
+            console.error(error);
         }
     }
 

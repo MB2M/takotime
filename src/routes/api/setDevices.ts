@@ -1,23 +1,22 @@
 import { Request, Response } from "express";
 import Validator from "../../utils/livewod/Validator.js";
 
-const setWod = (req: Request, res: Response) => {
-    const wod = req.body.wod;
-    if (!wod) res.status(400).send("bad request");
+const setDevices = (req: Request, res: Response) => {
+    const devices = req.body;
 
     const liveWodManager = global.liveWodManager;
 
-    Validator.wod(wod, (error: string) => {
+    Validator.devices(devices, (error: string) => {
         if (error) return res.status(400).send(error);
     });
-    
+
     try {
-        liveWodManager.wod.setWod(wod)
+        liveWodManager.setDevices(devices);
     } catch (error) {
         return res.status(400).send(error);
     }
 
-    res.send("wod updated");
+    res.send("devices updated");
 };
 
-export default setWod;
+export default setDevices;

@@ -29,10 +29,6 @@ class WodInterpreter extends EventEmitter {
     }
 
     updateRepsOfBlock(repsPerBlock, currentBlock, delta) {
-        console.log("reps per block:", repsPerBlock);
-        console.log("currentblock:", currentBlock);
-        console.log("delta:", delta);
-
         if (isNaN(repsPerBlock[currentBlock])) {
             repsPerBlock.push(0);
             return this.updateRepsOfBlock(repsPerBlock, currentBlock, delta);
@@ -66,7 +62,6 @@ class WodInterpreter extends EventEmitter {
                 currentBlock,
                 delta
             );
-            // currentWodPosition.repsPerBlock[currentBlock] += delta;
             return currentWodPosition;
         }
 
@@ -81,7 +76,6 @@ class WodInterpreter extends EventEmitter {
                     currentBlock,
                     delta
                 );
-                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -95,7 +89,6 @@ class WodInterpreter extends EventEmitter {
                     currentBlock,
                     delta
                 );
-                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -112,7 +105,6 @@ class WodInterpreter extends EventEmitter {
                         currentBlock,
                         delta
                     );
-                    // currentWodPosition.repsPerBlock[currentBlock] += delta;
                     return currentWodPosition;
                 }
             }
@@ -133,7 +125,6 @@ class WodInterpreter extends EventEmitter {
                     currentBlock,
                     delta
                 );
-                // currentWodPosition.repsPerBlock[currentBlock] += delta;
             }
             return currentWodPosition;
         }
@@ -157,7 +148,6 @@ class WodInterpreter extends EventEmitter {
                     currentBlock,
                     delta
                 );
-                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -176,7 +166,6 @@ class WodInterpreter extends EventEmitter {
                     currentBlock,
                     delta
                 );
-                // currentWodPosition.repsPerBlock[currentBlock] += delta;
                 return currentWodPosition;
             }
 
@@ -202,13 +191,11 @@ class WodInterpreter extends EventEmitter {
                         currentBlock - 1,
                         delta
                     );
-                    // currentWodPosition.repsPerBlock[currentBlock - 1] += delta;
                     return currentWodPosition;
                 }
             }
 
             //end
-            // currentWodPosition.repsPerBlock[currentBlock] = 0;
             return currentWodPosition;
         }
     }
@@ -428,90 +415,6 @@ class WodInterpreter extends EventEmitter {
             currentWodPosition
         );
     }
-
-    // getFinalScore(currentWodPosition, measurements) {
-    //     let scores = [];
-
-    //     const shortcutScore = Object.values(measurements).find(
-    //         (m) => m.shortcut === true
-    //     );
-    //     if (shortcutScore) {
-    //         scores.push(this.toReadableTime(shortcutScore.value));
-    //     } else {
-    //         for (let score of this.scores) {
-    //             if (score.type === "normal") {
-    //                 console.log("SCORES SOURCE :", score.sources[0]);
-    //                 console.log("MEASUREMENTS :", measurements);
-    //                 if (measurements && measurements[score.sources[0]]) {
-    //                     if (score.method === "forTime") {
-    //                         if (
-    //                             measurements[score.sources[0]].type === "time"
-    //                         ) {
-    //                             scores.push(
-    //                                 this.toReadableTime(
-    //                                     measurements[score.sources[0]].value
-    //                                 )
-    //                             );
-    //                         }
-    //                         if (
-    //                             measurements[score.sources[0]].type === "reps"
-    //                         ) {
-    //                             scores.push(
-    //                                 `CAP + ${
-    //                                     measurements[score.sources[0]].value -
-    //                                     this.measurements[score.sources[0]]
-    //                                         .repsFrom
-    //                                 }`
-    //                             );
-    //                         }
-    //                     }
-    //                     if (score.method === "amrap") {
-    //                         scores.push(
-    //                             `${measurements[score.sources[0]].value} reps`
-    //                         );
-    //                     }
-    //                 } else {
-    //                     let reps = 0;
-    //                     this.measurements[score.sources[0]].blocksId.forEach(
-    //                         (blockId) => {
-    //                             reps +=
-    //                                 currentWodPosition.repsPerBlock[blockId] ||
-    //                                 0;
-    //                         }
-    //                     );
-    //                     console.log(reps);
-    //                     if (score.method === "forTime") {
-    //                         scores.push(
-    //                             `CAP + ${
-    //                                 reps -
-    //                                 this.measurements[score.sources[0]].repsFrom
-    //                             }`
-    //                         );
-    //                     }
-    //                     if (score.method === "amrap") {
-    //                         scores.push(`${reps} reps`);
-    //                     }
-    //                 }
-    //             }
-
-    //             if (score.type === "sum") {
-    //                 let sum = 0;
-    //                 for (let sourceId of score.sources) {
-    //                     sum += measurements[sourceId].value;
-    //                 }
-    //                 if (score.method === "forTime") {
-    //                     scores.push(this.toReadableTime(sum));
-    //                 }
-    //                 if (score.method === "amrap") {
-    //                     scores.push(`${sum} reps`);
-    //                 }
-    //                 console.log("SCORE SUM:", sum);
-    //             }
-    //         }
-    //     }
-
-    //     return `${scores.join("|")}|`;
-    // }
 
     getFinalScore(measurements) {
         let scores = [];

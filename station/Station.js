@@ -109,6 +109,17 @@ class Station {
                 data.stations.appVersion =
                     loadJsonFileSync("package.json").version;
 
+                // first time init
+                if (!data.stations.currentWodPosition) {
+                    data.currentWodPosition = {
+                        block: 0,
+                        round: 0,
+                        movement: 0,
+                        reps: 0,
+                        repsPerBlock: [],
+                    };
+                }
+
                 this.updateDB(data);
 
                 const devices = this.getRequiredDevices();

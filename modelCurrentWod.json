@@ -12,13 +12,6 @@
             "use_count": true,
             "athlete": "Elwe",
             "category": "master 55+",
-            "currentWodPosition": {
-                "block": 0,
-                "round": 0,
-                "movement": 0,
-                "reps": 0,
-                "repsPerBlock": []
-            },
             "configs": {
                 "station_ip": "192.168.3.101",
                 "devices": [
@@ -37,8 +30,6 @@
                     }
                 ]
             },
-            "buzzerCheckPoints": {},
-            "finish": false,
             "measurements": {},
             "result": ""
         },
@@ -48,13 +39,6 @@
             "use_count": true,
             "athlete": "Bruno",
             "category": "master 55+",
-            "currentWodPosition": {
-                "block": 0,
-                "round": 0,
-                "movement": 0,
-                "reps": 0,
-                "repsPerBlock": []
-            },
             "configs": {
                 "station_ip": "192.168.3.102",
                 "devices": [
@@ -73,8 +57,6 @@
                     }
                 ]
             },
-            "buzzerCheckPoints": {},
-            "finish": false,
             "measurements": {},
             "result": ""
         }

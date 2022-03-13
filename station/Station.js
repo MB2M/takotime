@@ -119,6 +119,9 @@ class Station {
                         repsPerBlock: [],
                     };
                 }
+                if (!data.stations.measurements) {
+                    data.stations.measurements = {};
+                }
 
                 this.updateDB(data);
 

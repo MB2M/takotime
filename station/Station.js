@@ -111,7 +111,7 @@ class Station {
 
                 // first time init
                 if (!data.stations.currentWodPosition) {
-                    data.currentWodPosition = {
+                    data.stations.currentWodPosition = {
                         block: 0,
                         round: 0,
                         movement: 0,

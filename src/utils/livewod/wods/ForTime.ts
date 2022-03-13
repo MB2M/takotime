@@ -44,27 +44,23 @@ class ForTime extends BaseLiveWod {
             if (!bMeasurement && aMeasurement) return -1;
 
             if (!aMeasurement && !bMeasurement) {
-                const aReps = a.currentWodPosition.repsPerBlock.reduce(
-                    (p, c, i) => {
+                const aReps =
+                    a.currentWodPosition?.repsPerBlock.reduce((p, c, i) => {
                         return this.measurements[
                             measurementId
                         ]?.blocksId.includes(i)
                             ? p + c
                             : p + 0;
-                    },
-                    0
-                );
+                    }, 0) || 0;
 
-                const bReps = b.currentWodPosition.repsPerBlock.reduce(
-                    (p, c, i) => {
+                const bReps =
+                    b.currentWodPosition?.repsPerBlock.reduce((p, c, i) => {
                         return this.measurements[
                             measurementId
                         ]?.blocksId.includes(i)
                             ? p + c
                             : p + 0;
-                    },
-                    0
-                );
+                    }, 0) || 0;
 
                 return bReps - aReps;
             }
@@ -132,26 +128,28 @@ class ForTime extends BaseLiveWod {
                 ) {
                     rank++;
                 } else {
-                    const reps = s.currentWodPosition.repsPerBlock.reduce(
-                        (p, c, i) => {
+                    const reps =
+                        s.currentWodPosition?.repsPerBlock.reduce((p, c, i) => {
                             return this.measurements[
                                 measurementId
                             ]?.blocksId.includes(i)
                                 ? p + c
                                 : p + 0;
-                        },
-                        0
-                    );
+                        }, 0) || 0;
 
-                    const previousStationReps = stations[
-                        i - 1
-                    ]?.currentWodPosition.repsPerBlock.reduce((p, c, i) => {
-                        return this.measurements[
-                            measurementId
-                        ]?.blocksId.includes(i)
-                            ? p + c
-                            : p + 0;
-                    }, 0);
+                    const previousStationReps =
+                        stations[
+                            i - 1
+                        ]?.currentWodPosition?.repsPerBlock.reduce(
+                            (p, c, i) => {
+                                return this.measurements[
+                                    measurementId
+                                ]?.blocksId.includes(i)
+                                    ? p + c
+                                    : p + 0;
+                            },
+                            0
+                        ) || 0;
                     if (reps !== previousStationReps) {
                         rank++;
                     }

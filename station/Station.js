@@ -121,9 +121,8 @@ class Station {
                     if (!data.stations.measurements) {
                         data.stations.measurements = {};
                     }
-
-                    this.updateDB(data);
                 }
+                this.updateDB(data);
 
                 const devices = this.getRequiredDevices();
                 console.log(devices);

@@ -19,8 +19,13 @@ const MONGO_AEDES_URL = process.env.MONGO_AEDES_URL as string;
 
 // livedata DB
 const db = new JsonDB(new Config("./liveconfig", true, false, "/"));
+const stationDevicesDb = new JsonDB(
+    new Config("./liveDevices", true, false, "/")
+);
+
 global.liveWodManager = new LiveWodManager();
 global.liveWodManager.initBroker(8081, MONGO_AEDES_URL, true);
+global.liveWodManager.setDevicesDb(stationDevicesDb);
 
 //MQTT Client
 const options = {
@@ -86,6 +91,7 @@ wss.on("connection", function connection(ws) {
     sendStationDataToAllClients();
     sendStationStatusToAllClients();
     sendGlobalsToAllClients();
+    sendStationDevicesToAllClients();
 });
 
 global.liveWodManager.wod.on("station/updated", () => {
@@ -97,6 +103,14 @@ global.liveWodManager.wod.on("wodUpdate", (type: string) => {
     if (type === "reset") {
         sendStationDataToAllClients();
     }
+});
+
+global.liveWodManager.on("setDevices", (type: string) => {
+    sendStationDevicesToAllClients();
+});
+
+global.liveWodManager.on("station/deviceUpdated", () => {
+    sendStationDevicesToAllClients();
 });
 
 global.liveWodManager.mqttBroker.socket.on("clientReady", (client: any) => {
@@ -115,6 +129,13 @@ const sendStationDataToAllClients = () => {
     sendToAllClients(
         "stationUpdate",
         global.liveWodManager.wod.db.getData("/stations")
+    );
+};
+
+const sendStationDevicesToAllClients = () => {
+    sendToAllClients(
+        "devicesConfig",
+        global.liveWodManager.stationDevicesDb.getData("/stationDevices")
     );
 };
 

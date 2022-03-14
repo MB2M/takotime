@@ -5,11 +5,7 @@ class Validator {
         if (!wod.workouts) cb("wod workouts missing");
     }
 
-    static devices(devices: any, cb: Function) {
-        if (!devices.globals) cb("devices globals missing");
-
-        if (!devices.stations) cb("devices stations missing");
-    }
+    static devices(devices: any, cb: Function) {}
 }
 
 export default Validator;

@@ -3,10 +3,10 @@ type Station = {
     lane_number: number;
     athlete: string;
     category: string;
-    configs: {
-        station_ip: string;
-        devices: { role: string; state: string }[];
-    };
+    // configs: {
+    //     station_ip: string;
+    //     devices: { role: string; state: string }[];
+    // };
     currentWodPosition: {
         repsPerBlock: Array<number>;
         repsOfMovement: number;
@@ -15,4 +15,17 @@ type Station = {
         nextMovementReps: number;
         nextMovement: string;
     };
+    result: string;
+};
+
+type StationDevices = {
+    lane_number: number;
+    station_ip: string;
+    devices: Device[];
+};
+
+type Device = {
+    role: string;
+    mac: string;
+    state: string;
 };

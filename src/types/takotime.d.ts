@@ -72,3 +72,16 @@ type StationRanked = {
     lane: number;
     rank: (number | undefined)[];
 }[];
+
+
+type StationDevices = {
+    lane_number: number;
+    station_ip: string;
+    devices: Device[];
+};
+
+type Device = {
+    role: string;
+    mac: string;
+    state: string;
+};

@@ -11,52 +11,14 @@
             "state": 0,
             "use_count": true,
             "athlete": "Elwe",
-            "category": "master 55+",
-            "configs": {
-                "station_ip": "192.168.3.101",
-                "devices": [
-                    {
-                        "role": "counter",
-                        "mac": "083af2b91d06",
-                        "state": "disconnected",
-                        "btn_plus": "1",
-                        "btn_minus": "-1"
-                    },
-                    {
-                        "role": "board",
-                        "mac": "083af2b92e6a",
-                        "state": "disconnected",
-                        "screen_data": {}
-                    }
-                ]
-            },
-            "result": ""
+            "category": "master 55+"
         },
         {
             "lane_number": 2,
             "state": 0,
             "use_count": true,
             "athlete": "Bruno",
-            "category": "master 55+",
-            "configs": {
-                "station_ip": "192.168.3.102",
-                "devices": [
-                    {
-                        "role": "counter",
-                        "mac": "083af2abac22",
-                        "state": "disconnected",
-                        "btn_plus": "1",
-                        "btn_minus": "-1"
-                    },
-                    {
-                        "role": "board",
-                        "mac": "083af2b90606",
-                        "state": "disconnected",
-                        "screen_data": {}
-                    }
-                ]
-            },
-            "result": ""
+            "category": "master 55+"
         }
     ],
     "workouts": [

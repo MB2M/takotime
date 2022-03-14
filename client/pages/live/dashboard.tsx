@@ -26,6 +26,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TimerForm from "../../components/TimerForm";
 import * as timesync from "timesync";
 import HeatUpdate from "../../components/HeatUpdate";
+import DevicesUpdate from "../../components/DevicesUpdate";
+import { ST } from "next/dist/shared/lib/utils";
 // import ntpClient from "ntp-client-promise";
 
 type Ranks = Array<number | undefined>;
@@ -97,6 +99,7 @@ const useChrono = (
 };
 
 const Dashboard: NextPage = () => {
+    const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
     const [stations, setStations] = useState<Station[]>([]);
     const [brokerClients, setBrokerClients] = useState<Broker>({});
     const [ranks, setRanks] = useState<StationRanked>([]);
@@ -105,6 +108,8 @@ const Dashboard: NextPage = () => {
     const [globals, setGlobals] = useState<Globals>();
     const chrono = useChrono(tSync, globals?.startTime, globals?.duration);
     const [heatUpdateDrawerOpen, setHeatUpdateDrawerOpen] =
+        useState<boolean>(false);
+    const [deviceConfigUpdateDrawerOpen, setDeviceConfigUpdateDrawerOpen] =
         useState<boolean>(false);
     const ws = useRef<WebSocket>();
 
@@ -124,6 +129,9 @@ const Dashboard: NextPage = () => {
                 break;
             case "globalsUpdate":
                 setGlobals(message);
+                break;
+            case "devicesConfig":
+                setStationDevices(message);
                 break;
             default:
                 break;
@@ -152,29 +160,45 @@ const Dashboard: NextPage = () => {
     };
 
     const handleScriptRestart = (station: Station) => {
-        sendMessage(
-            JSON.stringify({
-                topic: "client/scriptReset",
-                message: station.configs.station_ip,
-            })
+        const stationDevice = stationDevices.find(
+            (s) => s.lane_number === station.lane_number
         );
+
+        if (stationDevice)
+            sendMessage(
+                JSON.stringify({
+                    topic: "client/scriptReset",
+                    message: stationDevice.station_ip,
+                })
+            );
     };
 
     const handleRestartUpdate = (station: Station) => {
-        sendMessage(
-            JSON.stringify({
-                topic: "client/restartUpdate",
-                message: station.configs.station_ip,
-            })
+        const stationDevice = stationDevices.find(
+            (s) => s.lane_number === station.lane_number
         );
+
+        if (stationDevice)
+            sendMessage(
+                JSON.stringify({
+                    topic: "client/restartUpdate",
+                    message: stationDevice.station_ip,
+                })
+            );
     };
 
     const rowData = (station: Station) => {
+        const lane = station.lane_number;
+        console.log(stationDevices);
+        const stationDevice = stationDevices.find(
+            (s) => s.lane_number === lane
+        );
+        const stationIp = stationDevice?.station_ip;
         const stationConnected =
-            brokerClients[station.configs.station_ip] || false;
+            (stationIp && brokerClients[stationIp]) || false;
         const devicesConnected = !stationConnected
             ? null
-            : station.configs.devices.map((d) => {
+            : stationDevice?.devices.map((d) => {
                   return { name: d.role, connected: d.state === "connected" };
               });
 
@@ -186,18 +210,21 @@ const Dashboard: NextPage = () => {
             "n/a";
 
         return {
-            lane: station.lane_number,
+            lane,
             athlete: station.athlete,
+            ip: stationDevice?.station_ip,
             stationConnected,
             devicesConnected,
             reps: station.currentWodPosition?.repsPerBlock.join(" | "),
             rank,
             repsOfMovement: station.currentWodPosition?.repsOfMovement,
-            totalRepsOfMovement: station.currentWodPosition?.totalRepsOfMovement,
+            totalRepsOfMovement:
+                station.currentWodPosition?.totalRepsOfMovement,
             currentMovement: station.currentWodPosition?.currentMovement,
             nextMovementReps: station.currentWodPosition?.nextMovementReps,
             nextMovement: station.currentWodPosition?.nextMovement,
             appVersion: station.appVersion,
+            result: station.result,
         };
     };
 
@@ -232,6 +259,19 @@ const Dashboard: NextPage = () => {
             }
 
             setHeatUpdateDrawerOpen(open);
+        };
+
+    const toggleConfigDrawer =
+        (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+            if (
+                event.type === "keydown" &&
+                ((event as React.KeyboardEvent).key === "Tab" ||
+                    (event as React.KeyboardEvent).key === "Shift")
+            ) {
+                return;
+            }
+
+            setDeviceConfigUpdateDrawerOpen(open);
         };
 
     const handleAthleteChange = (
@@ -270,6 +310,25 @@ const Dashboard: NextPage = () => {
                     stations={stations}
                     // handleAthleteChange={handleAthleteChange}
                 ></HeatUpdate>
+            </Drawer>
+            <Button onClick={toggleConfigDrawer(true)}>
+                Update Device Config
+            </Button>
+            <Drawer
+                anchor="right"
+                open={deviceConfigUpdateDrawerOpen}
+                onClose={toggleConfigDrawer(false)}
+                sx={{
+                    "& .MuiDrawer-paper": {
+                        width: 0.5,
+                        boxSizing: "border-box",
+                    },
+                }}
+            >
+                <DevicesUpdate
+                    stationDevices={stationDevices}
+                    // handleAthleteChange={handleAthleteChange}
+                ></DevicesUpdate>
             </Drawer>
             <Container maxWidth="xl">
                 <Grid container spacing={2}>
@@ -324,6 +383,13 @@ const Dashboard: NextPage = () => {
                                                                 component="div"
                                                             >
                                                                 {data.athlete}
+                                                            </Typography>
+                                                            <Typography
+                                                                gutterBottom
+                                                                variant="caption"
+                                                                component="div"
+                                                            >
+                                                                {data.ip}
                                                             </Typography>
                                                             {data.appVersion && (
                                                                 <Tooltip
@@ -393,16 +459,22 @@ const Dashboard: NextPage = () => {
                                                         </Typography>
                                                         <Typography
                                                             gutterBottom
+                                                            variant="caption"
                                                             component="div"
                                                         >
-                                                            {data.rank}
+                                                            Rank: {data.rank}
                                                         </Typography>
                                                         <Typography
                                                             gutterBottom
                                                             variant="caption"
                                                             component="div"
                                                         >
-                                                            {`${data.repsOfMovement} / ${data.totalRepsOfMovement} ${data.currentMovement}`}
+                                                            {data.result
+                                                                ? data.result
+                                                                : !isNaN(
+                                                                      data.repsOfMovement
+                                                                  ) &&
+                                                                  `${data.repsOfMovement} / ${data.totalRepsOfMovement} ${data.currentMovement}`}
                                                         </Typography>
                                                     </Box>
                                                 </CardContent>

@@ -6,12 +6,13 @@ import { EventEmitter } from "events";
 import ForTime from "./wods/ForTime.js";
 import BaseLiveWod from "./wods/BaseLiveWod.js";
 import { WodType } from "../libs/WodType.js";
+import { messagePrefix } from "@ethersproject/hash";
 
 class LiveWodManager extends EventEmitter {
     mqttBroker?: MqttBroker;
     mqttClient?: MqttClient;
     timeOuts: NodeJS.Timeout[];
-    deviceDb?: JsonDB;
+    stationDevicesDb?: JsonDB;
     wod?: BaseLiveWod;
 
     constructor() {
@@ -51,18 +52,66 @@ class LiveWodManager extends EventEmitter {
             "subscribe",
             (subscriptions: Subscription[]) => {
                 if (subscriptions[0]?.topic === "server/wodConfig") {
-                    this.sendToChannel("server/wodConfig");
+                    this.sendFullConfig("server/wodConfig");
+                    // this.sendToChannel("server/wodConfig");
                 }
             }
         );
     }
+
+    sendFullConfig(channel: string) {
+        const msg = JSON.parse(JSON.stringify(this.wod?.db.getData("/")));
+
+        msg.stations = msg.stations.map((s: any) => {
+            const index = this.stationDevicesDb?.getIndex(
+                "/stationDevices",
+                s.lane_number,
+                "lane_number"
+            );
+
+            if (typeof index !== "undefined" && index > -1) {
+                const stationDevice = this.stationDevicesDb?.getData(
+                    `/stationDevices[${index}]`
+                );
+                s.configs = {
+                    station_ip: stationDevice?.station_ip,
+                    devices: stationDevice?.devices,
+                };
+            }
+            return s;
+        });
+
+        try {
+            this.mqttClient?.client.publish(channel, JSON.stringify(msg), {
+                qos: 1,
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     // subsribe to receive data from stations
     // call the updatedb if wod is running
     initDefaultMessageReceipt() {
         this.subscribeTopic("station/wodData");
         this.mqttClient?.client.on("message", (topic, message) => {
             if (topic === "station/wodData") {
-                this.wod?.update(JSON.parse(message.toString()));
+                const msg = JSON.parse(message.toString());
+                if (msg.topic === "blePeripheral") {
+                    const index = this.stationDevicesDb?.getIndex(
+                        "/stationDevices",
+                        msg.data.configs.station_ip,
+                        "station_ip"
+                    );
+
+                    this.stationDevicesDb?.push(
+                        `/stationDevices[${index}]/devices`,
+                        msg.data.configs.devices
+                    );
+                    this.emit("station/deviceUpdated");
+                } else {
+                    this.wod?.update(JSON.parse(message.toString()));
+                }
             }
         });
     }
@@ -151,6 +200,18 @@ class LiveWodManager extends EventEmitter {
                     break;
             }
         });
+    }
+
+    setDevicesDb(db: JsonDB): void {
+        this.stationDevicesDb = db;
+    }
+
+    setDevices(stationDevices: StationDevices[]) {
+        if (this.stationDevicesDb) {
+            this.stationDevicesDb.push("/stationDevices", stationDevices);
+        }
+        this.emit("setDevices");
+        this.sendFullConfig("server/wodConfigUpdate");
     }
 }
 

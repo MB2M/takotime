@@ -36,8 +36,10 @@ class ForTime extends BaseLiveWod {
         // let timeList: number[] = [];
 
         stations.sort((a, b) => {
-            const aMeasurement = a.measurements[measurementId];
-            const bMeasurement = b.measurements[measurementId];
+            const aMeasurement =
+                a.measurements && a.measurements[measurementId];
+            const bMeasurement =
+                b.measurements && b.measurements[measurementId];
 
             if (!aMeasurement && bMeasurement) return 1;
 
@@ -123,7 +125,9 @@ class ForTime extends BaseLiveWod {
                 stationRanked = { ...stationRanked, [s.lane_number]: rank };
             } else {
                 if (
+                    s.measurements &&
                     s.measurements[measurementId]?.value !==
+                        stations[i - 1]?.measurements &&
                     stations[i - 1]?.measurements[measurementId]?.value
                 ) {
                     rank++;

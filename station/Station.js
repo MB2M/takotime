@@ -28,9 +28,7 @@ class Station {
         this.buzzer = new onoff.Gpio(18, "in", "falling", {
             debounceTimeout: 10,
         });
-        // this.resetScanBLE = new onoff.Gpio(24, "in", "falling", {
-        //     debounceTimeout: 10,
-        // });
+        this.lastPush = 0;
     }
 
     async initProcess() {
@@ -106,6 +104,7 @@ class Station {
             ) {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
+                console.log(data)
                 data.stations.appVersion =
                     loadJsonFileSync("package.json").version;
 
@@ -243,7 +242,6 @@ class Station {
 
     initButtons() {
         console.log("INIT BUZZER");
-        this.lastPush = 0;
 
         this.buzzer.watch((err, value) => {
             if (err) {
@@ -265,14 +263,6 @@ class Station {
                 );
             }
         });
-
-        // this.resetScanBLE.watch((err, value) => {
-        //     if (err) {
-        //         throw err;
-        //     }
-
-        //     this.bleServices.resetConnection();
-        // });
 
         process.on("SIGINT", (_) => {
             this.buzzer.unexport();
@@ -354,7 +344,7 @@ class Station {
         let myStation;
         let myWorkout;
         for (const station of json.stations) {
-            if (station.configs.station_ip === this.ip) {
+            if (station.configs && station.configs.station_ip === this.ip) {
                 myStation = station;
                 // myStation.state = json.globals.state;
             }

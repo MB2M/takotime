@@ -104,27 +104,29 @@ class Station {
             ) {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
-                console.log(data)
-                data.stations.appVersion =
-                    loadJsonFileSync("package.json").version;
+                if (data.stations) {
+                    data.stations.appVersion =
+                        loadJsonFileSync("package.json").version;
 
-                // first time init
-                if (!data.stations.currentWodPosition) {
-                    data.stations.currentWodPosition = {
-                        block: 0,
-                        round: 0,
-                        movement: 0,
-                        reps: 0,
-                        repsPerBlock: [],
-                    };
-                }
-                if (!data.stations.measurements) {
-                    data.stations.measurements = {};
-                }
+                    // first time init
+                    if (!data.stations.currentWodPosition) {
+                        data.stations.currentWodPosition = {
+                            block: 0,
+                            round: 0,
+                            movement: 0,
+                            reps: 0,
+                            repsPerBlock: [],
+                        };
+                    }
+                    if (!data.stations.measurements) {
+                        data.stations.measurements = {};
+                    }
 
-                this.updateDB(data);
+                    this.updateDB(data);
+                }
 
                 const devices = this.getRequiredDevices();
+                console.log(devices);
                 this.bleServices.connectTo(devices);
 
                 try {

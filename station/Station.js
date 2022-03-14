@@ -301,18 +301,24 @@ class Station {
     }
 
     getRequiredDevices() {
-        const requiredDevices = this.db.getData("/stations/configs/devices");
-        return requiredDevices.map((d) => {
-            let callback = {};
-            if (d.role === "counter") {
-                callback = {
-                    cb: (value) => {
-                        this.publishData(value);
-                    },
-                };
-            }
-            return { role: d.role, id: d.mac, ...callback };
-        });
+        try {
+            const requiredDevices = this.db.getData(
+                "/stations/configs/devices"
+            );
+            return requiredDevices.map((d) => {
+                let callback = {};
+                if (d.role === "counter") {
+                    callback = {
+                        cb: (value) => {
+                            this.publishData(value);
+                        },
+                    };
+                }
+                return { role: d.role, id: d.mac, ...callback };
+            });
+        } catch {
+            return [];
+        }
     }
 
     updateBoard(value) {

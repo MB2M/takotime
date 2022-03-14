@@ -105,6 +105,7 @@ class Station {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
                 if (data.stations) {
+                    console.log("ezzrzertzer")
                     data.stations.appVersion =
                         loadJsonFileSync("package.json").version;
 

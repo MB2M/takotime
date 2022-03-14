@@ -179,16 +179,22 @@ class Station {
     initBLEEventListener() {
         this.bleServices.on("stateChange", (device) => {
             const state = device.peripheral.state;
-
-            const index = this.db.getIndex(
-                "/stations/configs/devices",
-                device.role,
-                "role"
-            );
-            // update DB
-            this.db.push(`/stations/configs/devices[${index}]/state`, state);
-            // send to server
-            this.sendToServer("blePeripheral");
+            try {
+                const index = this.db.getIndex(
+                    "/stations/configs/devices",
+                    device.role,
+                    "role"
+                );
+                // update DB
+                this.db.push(
+                    `/stations/configs/devices[${index}]/state`,
+                    state
+                );
+                // send to server
+                this.sendToServer("blePeripheral");
+            } catch {
+                console.error("can't update BLE status");
+            }
 
             this.updateBoard();
         });

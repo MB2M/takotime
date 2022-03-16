@@ -1,6 +1,6 @@
 {
     "globals": {
-        "wodname": "wod one !",
+        "wodname": "wod two !",
         "duration": 0,
         "startTime": "",
         "countdown": 5
@@ -37,9 +37,10 @@
                 },
                 {
                     "name": "partB",
-                    "method": "forTime",
-                    "type": "normal",
+                    "method": "amrap",
+                    "type": "sum",
                     "sources": [
+                        0,
                         1
                     ]
                 }
@@ -50,8 +51,36 @@
                     "rounds": 1,
                     "movements": [
                         {
-                            "name": "1500m Row",
+                            "name": "Clean",
                             "reps": 15
+                        },
+                        {
+                            "name": "Burpess Over @3",
+                            "reps": 15
+                        },
+                        {
+                            "name": "Front Squat",
+                            "reps": 12
+                        },
+                        {
+                            "name": "Burpess Over @3",
+                            "reps": 12
+                        },
+                        {
+                            "name": "Jerk",
+                            "reps": 9
+                        },
+                        {
+                            "name": "Burpess Over @3",
+                            "reps": 9
+                        },
+                        {
+                            "name": "Clean & Jerk",
+                            "reps": 6
+                        },
+                        {
+                            "name": "Burpess Over @3",
+                            "reps": 6
                         }
                     ],
                     "measurements": {
@@ -70,43 +99,25 @@
                 },
                 {
                     "blockName": "B",
-                    "rounds": 2,
+                    "rounds": 0,
                     "movements": [
                         {
-                            "name": "Pull Up @2",
-                            "reps": 15
-                        },
-                        {
-                            "name": "STOH @3",
-                            "reps": 15
-                        }
-                    ]
-                },
-                {
-                    "blockName": "C",
-                    "rounds": 2,
-                    "movements": [
-                        {
-                            "name": "T2B",
-                            "reps": 15
-                        },
-                        {
-                            "name": "STOH",
-                            "reps": 15
+                            "name": "Thrusters",
+                            "reps": 1
                         }
                     ],
                     "measurements": {
                         "id": 1,
-                        "type": "forTime",
+                        "type": "amrap",
                         "blocksId": [
-                            1,
-                            2
+                            0,
+                            1
                         ],
                         "from": 0,
                         "at": 1,
                         "repsFrom": 0,
                         "repsTot": 135,
-                        "device": "buzzer",
+                        "device": "timer",
                         "save": true
                     }
                 }

@@ -112,7 +112,10 @@ class WodInterpreter extends EventEmitter {
             //end of block
             if (
                 currentWodPosition.reps !==
-                this.workout.blocks[currentBlock].movements.at(-1).reps
+                this.workout.blocks[currentBlock].movements.at(-1).reps +
+                    currentRound *
+                        (this.workout.blocks[currentBlock].movements.at(-1)
+                            .varEachRounds || 0)
             ) {
                 currentWodPosition.reps =
                     this.workout.blocks[currentBlock].movements.at(-1).reps +

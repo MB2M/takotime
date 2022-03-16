@@ -27,7 +27,7 @@ const TimerForm = ({
     const handleStart = async () => {
         try {
             await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=start&duration=${duration}&countdown=${countdown}`
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=start&duration=${duration}&countdown=${countdown}`
             );
         } catch (error) {
             console.error(error);
@@ -37,7 +37,7 @@ const TimerForm = ({
     const handleReset = async () => {
         try {
             await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=reset`
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=reset`
             );
         } catch (error) {
             console.error(error);

@@ -85,7 +85,7 @@ const DevicesUpdate = ({
 
         try {
             const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/setDevices`,
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/setDevices`,
                 {
                     method: "POST",
                     headers: {

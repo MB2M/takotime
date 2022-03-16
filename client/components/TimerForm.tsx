@@ -25,15 +25,23 @@ const TimerForm = ({
     };
 
     const handleStart = async () => {
-        await fetch(
-            `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=start&duration=${duration}&countdown=${countdown}`
-        );
+        try {
+            await fetch(
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=start&duration=${duration}&countdown=${countdown}`
+            );
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleReset = async () => {
-        await fetch(
-            `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=reset`
-        );
+        try {
+            await fetch(
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/switchStart?action=reset`
+            );
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (

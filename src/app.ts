@@ -1,15 +1,20 @@
 import express from "express";
-import routes from "./routes/index.js";
-import mongoose from "mongoose";
+import liveRoutes from "./live/routes/index";
+// import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import * as dotenv from "dotenv";
 import { JsonDB } from "node-json-db";
-import { Config } from "node-json-db/dist/lib/JsonDBConfig.js";
-import LiveWodManager from "./utils/livewod/LiveWodManager.js";
-import ForTime from "./utils/livewod/wods/ForTime.js";
+import { Config } from "node-json-db/dist/lib/JsonDBConfig";
+import LiveWodManager from "./live/utils/livewod/LiveWodManager";
+import ForTime from "./live/utils/livewod/wods/ForTime";
 import WebSocket, { WebSocketServer } from "ws";
 import cors from "cors";
 import * as timesyncServer from "timesync/server/index.js";
+import dbConnect from "./config/dbConnect";
+import WebsocketSender from "./live/utils/livewod/WebsocketSender";
+import brokerSubscription from "./live/utils/eventListeners/brokerSubscriptions";
+import liveWodSubscription from "./live/utils/eventListeners/livewodSubscriptions";
+import wodSubscription from "./live/utils/eventListeners/wodSubscriptions";
 
 dotenv.config();
 
@@ -43,10 +48,8 @@ global.liveWodManager.initDefaultStationSub();
 global.liveWodManager.initDefaultMessageReceipt();
 global.liveWodManager.initDefaultManagerSub();
 
-// Mangoose connection
-mongoose.connect("mongodb://localhost/db", (err) => {
-    console.log(err ? "Error while DB connecting" : "Connected to mongoDB");
-});
+// Mangoose connection to MangoDB
+dbConnect();
 
 app.use(
     cors({
@@ -63,9 +66,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/timesync", timesyncServer.requestHandler);
 
 // Start App
-app.use("/", routes);
+app.use("/live", liveRoutes);
 const server = app.listen(port);
+
+// WEBSOCKET
 const wss = new WebSocketServer({ server });
+const sender = new WebsocketSender(wss);
+
+wodSubscription.load(global.liveWodManager.wod, sender);
+liveWodSubscription.load(global.liveWodManager, sender);
+brokerSubscription.load(global.liveWodManager.mqttBroker.socket, sender);
 
 wss.on("connection", function connection(ws) {
     ws.on("message", function message(data) {
@@ -88,84 +98,8 @@ wss.on("connection", function connection(ws) {
             );
         }
     });
-    sendStationDataToAllClients();
-    sendStationStatusToAllClients();
-    sendGlobalsToAllClients();
-    sendStationDevicesToAllClients();
+    sender.sendStationDataToAllClients();
+    sender.sendStationStatusToAllClients();
+    sender.sendGlobalsToAllClients();
+    sender.sendStationDevicesToAllClients();
 });
-
-global.liveWodManager.wod.on("station/updated", () => {
-    sendStationDataToAllClients();
-});
-
-global.liveWodManager.wod.on("wodUpdate", (type: string) => {
-    sendGlobalsToAllClients();
-    if (type === "reset") {
-        sendStationDataToAllClients();
-    }
-});
-
-global.liveWodManager.on("setDevices", (type: string) => {
-    sendStationDevicesToAllClients();
-});
-
-global.liveWodManager.on("station/deviceUpdated", () => {
-    sendStationDevicesToAllClients();
-});
-
-global.liveWodManager.mqttBroker.socket.on("clientReady", (client: any) => {
-    sendStationStatusToAllClients();
-});
-
-global.liveWodManager.mqttBroker.socket.on("clientDisconnect", () => {
-    sendStationStatusToAllClients();
-});
-
-global.liveWodManager.on("rank", (stationRanked: StationRanked) => {
-    sendToAllClients("rank", stationRanked || "");
-});
-
-const sendStationDataToAllClients = () => {
-    sendToAllClients(
-        "stationUpdate",
-        global.liveWodManager.wod.db.getData("/stations")
-    );
-};
-
-const sendStationDevicesToAllClients = () => {
-    sendToAllClients(
-        "devicesConfig",
-        global.liveWodManager.stationDevicesDb.getData("/stationDevices")
-    );
-};
-
-const sendGlobalsToAllClients = () => {
-    sendToAllClients(
-        "globalsUpdate",
-        global.liveWodManager.wod.db.getData("/globals")
-    );
-};
-
-const sendStationStatusToAllClients = () => {
-    let clients = {};
-    Object.entries(
-        global.liveWodManager.mqttBroker.socket.clients as object
-    ).forEach(([k, v]) => {
-        clients = { ...clients, [k]: v.connected };
-    });
-
-    sendToAllClients("brokerUpdate", clients);
-};
-
-const sendToAllClients = (topic: string, data: any) => {
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(
-                JSON.stringify({
-                    topic: topic,
-                    data: data,
-                })
-            );
-        }
-    });
-};

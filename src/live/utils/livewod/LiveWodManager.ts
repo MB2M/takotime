@@ -6,7 +6,6 @@ import { EventEmitter } from "events";
 import ForTime from "./wods/ForTime.js";
 import BaseLiveWod from "./wods/BaseLiveWod.js";
 import { WodType } from "../libs/WodType.js";
-import { messagePrefix } from "@ethersproject/hash";
 
 class LiveWodManager extends EventEmitter {
     mqttBroker?: MqttBroker;

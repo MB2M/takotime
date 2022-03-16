@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Validator from "../../utils/livewod/Validator.js";
+import Validator from "../../utils/livewod/Validator";
 
 const setDevices = (req: Request, res: Response) => {
     const devices = req.body;

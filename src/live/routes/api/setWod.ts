@@ -10,9 +10,9 @@ const setWod = (req: Request, res: Response) => {
     Validator.wod(wod, (error: string) => {
         if (error) return res.status(400).send(error);
     });
-    
+
     try {
-        liveWodManager.wod.setWod(wod)
+        liveWodManager.wod.setWod(wod);
     } catch (error) {
         return res.status(400).send(error);
     }

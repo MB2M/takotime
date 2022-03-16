@@ -83,19 +83,21 @@ const DevicesUpdate = ({
             };
         });
 
-        const response = await fetch(
-            `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/setDevices`,
-            {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            }
-        );
-
-        console.log(response);
+        try {
+            const response = await fetch(
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/api/setDevices`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                }
+            );
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleEditRowsModelChange = (model: GridEditRowsModel) => {

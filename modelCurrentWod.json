@@ -10,14 +10,14 @@
             "lane_number": 1,
             "state": 0,
             "use_count": true,
-            "athlete": "Elwe",
+            "athlete": "ligne 7",
             "category": "master 55+"
         },
         {
             "lane_number": 2,
             "state": 0,
             "use_count": true,
-            "athlete": "Bruno",
+            "athlete": "ligne 8",
             "category": "master 55+"
         }
     ],
@@ -26,23 +26,20 @@
             "categories": [
                 "master 55+"
             ],
-            "shortcut": {
-                "name": "A",
-                "method": "forTime",
-                "type": "normal",
-                "device": "buzzer",
-                "sources": [
-                    0,
-                    1
-                ]
-            },
             "scoring": [
                 {
                     "name": "partA",
                     "method": "forTime",
-                    "type": "sum",
+                    "type": "normal",
                     "sources": [
-                        0,
+                        0
+                    ]
+                },
+                {
+                    "name": "partB",
+                    "method": "forTime",
+                    "type": "normal",
+                    "sources": [
                         1
                     ]
                 }
@@ -53,64 +50,63 @@
                     "rounds": 1,
                     "movements": [
                         {
-                            "name": "T2B",
-                            "reps": 5
-                        }
-                    ]
-                },
-                {
-                    "blockName": "B",
-                    "rounds": 0,
-                    "movements": [
-                        {
-                            "name": "snatch",
-                            "reps": 1
+                            "name": "1500m Row",
+                            "reps": 15
                         }
                     ],
                     "measurements": {
                         "id": 0,
-                        "type": "amrap",
+                        "type": "forTime",
                         "blocksId": [
-                            1
+                            0
                         ],
                         "from": 0,
                         "at": 1,
                         "repsFrom": 0,
-                        "repsTot": -1,
-                        "device": "timer",
+                        "repsTot": 15,
+                        "device": "buzzer",
                         "save": true
                     }
                 },
                 {
-                    "blockName": "C",
-                    "rounds": 1,
+                    "blockName": "B",
+                    "rounds": 2,
                     "movements": [
                         {
-                            "name": "MU",
-                            "reps": 10
+                            "name": "Pull Up @2",
+                            "reps": 15
+                        },
+                        {
+                            "name": "STOH @3",
+                            "reps": 15
                         }
                     ]
                 },
                 {
-                    "blockName": "D",
-                    "rounds": 0,
+                    "blockName": "C",
+                    "rounds": 2,
                     "movements": [
                         {
-                            "name": "snatch",
-                            "reps": 1
+                            "name": "T2B",
+                            "reps": 15
+                        },
+                        {
+                            "name": "STOH",
+                            "reps": 15
                         }
                     ],
                     "measurements": {
                         "id": 1,
-                        "type": "amrap",
+                        "type": "forTime",
                         "blocksId": [
-                            3
+                            1,
+                            2
                         ],
-                        "from": 1,
-                        "at": 2,
+                        "from": 0,
+                        "at": 1,
                         "repsFrom": 0,
-                        "repsTot": -1,
-                        "device": "timer",
+                        "repsTot": 135,
+                        "device": "buzzer",
                         "save": true
                     }
                 }

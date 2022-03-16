@@ -4,12 +4,12 @@ const livewodSubscription = {
     load: (emitter: LiveWodManager, listener: any) => {
         emitter.on(
             "setDevices", () =>
-            listener.sendStationDevicesToAllClients
+            listener.sendStationDevicesToAllClients()
         );
 
         emitter.on(
             "station/deviceUpdated", () =>
-            listener.sendStationDevicesToAllClients
+            listener.sendStationDevicesToAllClients()
         );
 
         emitter.on("rank", (stationRanked: StationRanked) => {

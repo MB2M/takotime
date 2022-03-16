@@ -2,13 +2,11 @@ import { Aedes } from "aedes";
 
 const brokerSubscription = {
     load: (emitter: Aedes, listener: any) => {
-        emitter.on(
-            "clientReady", () => 
+        emitter.on("clientReady", () =>
             listener.sendStationStatusToAllClients()
         );
 
-        emitter.on(
-            "clientDisconnect", () =>
+        emitter.on("clientDisconnect", () =>
             listener.sendStationStatusToAllClients()
         );
     },

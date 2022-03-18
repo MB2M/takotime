@@ -11,8 +11,10 @@ import * as stationDevicesController from "../../controllers/stationDevicesContr
 const api = express.Router();
 
 api.route("/stationdevices")
-    .post(stationDevicesController.createOrUpdateDevice)
-    .get(stationDevicesController.getAllStationDevices);
+    .post(stationDevicesController.createDevice)
+    .patch(stationDevicesController.updateDevice)
+    .get(stationDevicesController.getAllStationDevices)
+    .delete(stationDevicesController.deleteDevice);
 api.get("/broker", authenticateToken, broker);
 api.use("/login", login);
 api.use("/signup", signup);

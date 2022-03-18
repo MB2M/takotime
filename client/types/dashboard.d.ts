@@ -19,8 +19,9 @@ type Station = {
 };
 
 type StationDevices = {
-    lane_number: number;
-    station_ip: string;
+    _id: string;
+    laneNumber: number;
+    ip: string;
     devices: Device[];
 };
 

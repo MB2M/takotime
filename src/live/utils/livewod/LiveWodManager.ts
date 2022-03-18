@@ -6,6 +6,7 @@ import { EventEmitter } from "events";
 import ForTime from "./wods/ForTime.js";
 import BaseLiveWod from "./wods/BaseLiveWod.js";
 import { WodType } from "../libs/WodType.js";
+import StationDevices from "../../models/StationDevices.js";
 
 class LiveWodManager extends EventEmitter {
     mqttBroker?: MqttBroker;
@@ -58,27 +59,43 @@ class LiveWodManager extends EventEmitter {
         );
     }
 
-    sendFullConfig(channel: string) {
+    async sendFullConfig(channel: string) {
         const msg = JSON.parse(JSON.stringify(this.wod?.db.getData("/")));
 
-        msg.stations = msg.stations.map((s: any) => {
-            const index = this.stationDevicesDb?.getIndex(
-                "/stationDevices",
-                s.lane_number,
-                "lane_number"
-            );
+        msg.stations = await Promise.all(
+            msg.stations.map(async (s: any) => {
+                const stationDevice = await StationDevices.findOne(
+                    { laneNumber: s.lane_number },
+                    "ip devices"
+                ).exec();
 
-            if (typeof index !== "undefined" && index > -1) {
-                const stationDevice = this.stationDevicesDb?.getData(
-                    `/stationDevices[${index}]`
-                );
-                s.configs = {
-                    station_ip: stationDevice?.station_ip,
-                    devices: stationDevice?.devices,
-                };
-            }
-            return s;
-        });
+                if (stationDevice) {
+                    s.configs = {
+                        station_ip: stationDevice.ip,
+                        devices: stationDevice.devices,
+                    };
+                }
+
+                // const index = this.stationDevicesDb?.getIndex(
+                //     "/stationDevices",
+                //     s.lane_number,
+                //     "lane_number"
+                // );
+
+                // if (typeof index !== "undefined" && index > -1) {
+                //     const stationDevice = this.stationDevicesDb?.getData(
+                //         `/stationDevices[${index}]`
+                //     );
+                //     s.configs = {
+                //         station_ip: stationDevice?.station_ip,
+                //         devices: stationDevice?.devices,
+                //     };
+                // }
+                return s;
+            })
+        );
+
+        console.log(msg);
 
         try {
             this.mqttClient?.client.publish(channel, JSON.stringify(msg), {
@@ -93,20 +110,32 @@ class LiveWodManager extends EventEmitter {
     // call the updatedb if wod is running
     initDefaultMessageReceipt() {
         this.subscribeTopic("station/wodData");
-        this.mqttClient?.client.on("message", (topic, message) => {
+        this.mqttClient?.client.on("message", async (topic, message) => {
             if (topic === "station/wodData") {
                 const msg = JSON.parse(message.toString());
-                if (msg.topic === "blePeripheral") {
-                    const index = this.stationDevicesDb?.getIndex(
-                        "/stationDevices",
-                        msg.data.configs.station_ip,
-                        "station_ip"
-                    );
 
-                    this.stationDevicesDb?.push(
-                        `/stationDevices[${index}]/devices`,
-                        msg.data.configs.devices
-                    );
+                if (msg.topic === "blePeripheral") {
+                    const stationDevice = await StationDevices.findOne(
+                        { ip: msg.data.configs.station_ip },
+                        "devices"
+                    ).exec();
+
+                    if (stationDevice) {
+                        console.log(msg.data.configs.devices);
+                        stationDevice.devices = msg.data.configs.devices;
+                        await stationDevice.save();
+                    }
+
+                    // const index = this.stationDevicesDb?.getIndex(
+                    //     "/stationDevices",
+                    //     msg.data.configs.station_ip,
+                    //     "station_ip"
+                    // );
+
+                    // this.stationDevicesDb?.push(
+                    //     `/stationDevices[${index}]/devices`,
+                    //     msg.data.configs.devices
+                    // );
                     this.emit("station/deviceUpdated");
                 } else {
                     this.wod?.update(JSON.parse(message.toString()));
@@ -186,7 +215,7 @@ class LiveWodManager extends EventEmitter {
                     break;
                 case "reset":
                     this.clearAlltimeout();
-                    this.sendToChannel("server/wodConfigUpdate");
+                    this.sendFullConfig("server/wodConfigUpdate");
                     this.mqttClient?.client.publish(
                         "server/chrono",
                         this.chronoData(),
@@ -205,10 +234,7 @@ class LiveWodManager extends EventEmitter {
         this.stationDevicesDb = db;
     }
 
-    setDevices(stationDevices: StationDevices[]) {
-        if (this.stationDevicesDb) {
-            this.stationDevicesDb.push("/stationDevices", stationDevices);
-        }
+    devicesSet() {
         this.emit("setDevices");
         this.sendFullConfig("server/wodConfigUpdate");
     }

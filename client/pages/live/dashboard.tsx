@@ -131,6 +131,7 @@ const Dashboard: NextPage = () => {
                 setGlobals(message);
                 break;
             case "devicesConfig":
+                console.log(message);
                 setStationDevices(message);
                 break;
             default:
@@ -161,44 +162,43 @@ const Dashboard: NextPage = () => {
 
     const handleScriptRestart = (station: Station) => {
         const stationDevice = stationDevices.find(
-            (s) => s.lane_number === station.lane_number
+            (s) => s.laneNumber === station.lane_number
         );
 
         if (stationDevice)
             sendMessage(
                 JSON.stringify({
                     topic: "client/scriptReset",
-                    message: stationDevice.station_ip,
+                    message: stationDevice.ip,
                 })
             );
     };
 
     const handleRestartUpdate = (station: Station) => {
         const stationDevice = stationDevices.find(
-            (s) => s.lane_number === station.lane_number
+            (s) => s.laneNumber === station.lane_number
         );
 
         if (stationDevice)
             sendMessage(
                 JSON.stringify({
                     topic: "client/restartUpdate",
-                    message: stationDevice.station_ip,
+                    message: stationDevice.ip,
                 })
             );
     };
 
     const rowData = (station: Station) => {
+        console.log(station);
         const lane = station.lane_number;
-        console.log(stationDevices);
-        const stationDevice = stationDevices.find(
-            (s) => s.lane_number === lane
-        );
-        const stationIp = stationDevice?.station_ip;
+        const stationDevice = stationDevices.find((s) => s.laneNumber === lane);
+        const stationIp = stationDevice?.ip;
         const stationConnected =
             (stationIp && brokerClients[stationIp]) || false;
         const devicesConnected = !stationConnected
             ? null
             : stationDevice?.devices.map((d) => {
+                console.log(d)
                   return { name: d.role, connected: d.state === "connected" };
               });
 
@@ -212,7 +212,7 @@ const Dashboard: NextPage = () => {
         return {
             lane,
             athlete: station.athlete,
-            ip: stationDevice?.station_ip,
+            ip: stationDevice?.ip,
             stationConnected,
             devicesConnected,
             reps: station.currentWodPosition?.repsPerBlock.join(" | "),
@@ -327,6 +327,7 @@ const Dashboard: NextPage = () => {
             >
                 <DevicesUpdate
                     stationDevices={stationDevices}
+                    setStationDevices={setStationDevices}
                     // handleAthleteChange={handleAthleteChange}
                 ></DevicesUpdate>
             </Drawer>

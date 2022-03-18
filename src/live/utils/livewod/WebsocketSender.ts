@@ -1,4 +1,5 @@
 import WebSocket from "ws";
+import StationDevices from "../../models/StationDevices";
 
 class WebsocketSender {
     wss: WebSocket.Server<WebSocket.WebSocket>;
@@ -27,11 +28,16 @@ class WebsocketSender {
         );
     }
 
-    sendStationDevicesToAllClients() {
-        this.sendToAllClients(
-            "devicesConfig",
-            global.liveWodManager.stationDevicesDb.getData("/stationDevices")
-        );
+    // sendStationDevicesToAllClients() {
+    //     this.sendToAllClients(
+    //         "devicesConfig",
+    //         global.liveWodManager.stationDevicesDb.getData("/stationDevices")
+    //     );
+    // }
+
+    async sendStationDevicesToAllClients() {
+        const stationDevices = await StationDevices.find().exec();
+        this.sendToAllClients("devicesConfig", stationDevices);
     }
 
     sendGlobalsToAllClients() {

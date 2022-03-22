@@ -127,10 +127,10 @@ class Station {
                 try {
                     this.wodInterpreter.load(this.db.getData("/workouts"));
                     if (data.stations.dynamics.state < 2) {
+                        console.log("STATE:", data.stations.dynamics);
                         this.wodInterpreter.getRepsInfo(
                             data.stations.dynamics.currentWodPosition
                         );
-                        console.log("STATE:", data.stations.dynamics.state);
                         // save db
                         this.db.save();
                     }

@@ -1,26 +1,4 @@
 {
-    "globals": {
-        "wodname": "wod one !",
-        "duration": 0,
-        "startTime": "",
-        "countdown": 5
-    },
-    "stations": [
-        {
-            "lane_number": 1,
-            "state": 0,
-            "use_count": true,
-            "athlete": "ligne 7",
-            "category": "master 55+"
-        },
-        {
-            "lane_number": 2,
-            "state": 0,
-            "use_count": true,
-            "athlete": "ligne 8",
-            "category": "master 55+"
-        }
-    ],
     "workouts": [
         {
             "categories": [
@@ -34,24 +12,42 @@
                     "sources": [
                         0
                     ]
-                },
-                {
-                    "name": "partB",
-                    "method": "forTime",
-                    "type": "normal",
-                    "sources": [
-                        1
-                    ]
                 }
             ],
             "blocks": [
                 {
                     "blockName": "A",
-                    "rounds": 1,
+                    "rounds": 5,
                     "movements": [
                         {
-                            "name": "1500m Row",
-                            "reps": 15
+                            "name": "Muscle up bar @3",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Muscle up bar @2",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Muscle up bar Relay",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Squat Clean @3",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Squat Clean @2",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Squat Clean Relay",
+                            "reps": 5,
+                            "varEachRounds": -1
                         }
                     ],
                     "measurements": {
@@ -61,51 +57,9 @@
                             0
                         ],
                         "from": 0,
-                        "at": 1,
+                        "at": 20,
                         "repsFrom": 0,
-                        "repsTot": 15,
-                        "device": "buzzer",
-                        "save": true
-                    }
-                },
-                {
-                    "blockName": "B",
-                    "rounds": 2,
-                    "movements": [
-                        {
-                            "name": "Pull Up @2",
-                            "reps": 15
-                        },
-                        {
-                            "name": "STOH @3",
-                            "reps": 15
-                        }
-                    ]
-                },
-                {
-                    "blockName": "C",
-                    "rounds": 2,
-                    "movements": [
-                        {
-                            "name": "T2B",
-                            "reps": 15
-                        },
-                        {
-                            "name": "STOH",
-                            "reps": 15
-                        }
-                    ],
-                    "measurements": {
-                        "id": 1,
-                        "type": "forTime",
-                        "blocksId": [
-                            1,
-                            2
-                        ],
-                        "from": 0,
-                        "at": 1,
-                        "repsFrom": 0,
-                        "repsTot": 135,
+                        "repsTot": 225,
                         "device": "buzzer",
                         "save": true
                     }

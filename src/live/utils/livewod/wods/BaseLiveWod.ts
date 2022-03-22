@@ -18,7 +18,7 @@ abstract class BaseLiveWod extends EventEmitter {
 
     updateState(state: State): void {
         this.state = state;
-        this.db.push("/globals/state", state);
+        // this.db.push("/globals/state", state);
     }
 
     clearAllTimeout() {
@@ -53,7 +53,6 @@ abstract class BaseLiveWod extends EventEmitter {
 
     loadWod(data: any): void {
         this.db.push("/", data);
-
         this.updateState(State.Loaded);
 
         this.emit("wodUpdate", "reset");

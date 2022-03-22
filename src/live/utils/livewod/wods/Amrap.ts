@@ -58,10 +58,10 @@ import { State } from "../../libs/State.js";
 //         this.db.push("/globals/duration", options.duration);
 //         this.db.push("/globals/startTime", options.startTime);
 
-//         this.updateState(State.Cooldown);
+//         this.updateState(State.Countdown);
 //         this.launchTimer(options.duration, options.startTime);
 
-//         this.emit("wodCooldown", options.startTime, options.duration);
+//         this.emit("wodCountdown", options.startTime, options.duration);
 //     }
 // }
 

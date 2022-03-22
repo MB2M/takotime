@@ -28,6 +28,9 @@ import * as timesync from "timesync";
 import HeatUpdate from "../../components/HeatUpdate";
 import DevicesUpdate from "../../components/DevicesUpdate";
 import { ST } from "next/dist/shared/lib/utils";
+import StaticsUpdate from "../../components/StaticsUpdate";
+import LiveWorkoutSelector from "../../components/LiveWorkoutSeletor";
+import LoadedWorkouts from "../../components/LoadedWorkouts";
 // import ntpClient from "ntp-client-promise";
 
 type Ranks = Array<number | undefined>;
@@ -99,8 +102,10 @@ const useChrono = (
 };
 
 const Dashboard: NextPage = () => {
+    const [workoutIds, setWorkoutIds] = useState<workoutId[]>([]);
+    const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
     const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
-    const [stations, setStations] = useState<Station[]>([]);
+    const [stationStatics, setStationStatics] = useState<StationStatics[]>([]);
     const [brokerClients, setBrokerClients] = useState<Broker>({});
     const [ranks, setRanks] = useState<StationRanked>([]);
     const [time, setTime] = useState<number>();
@@ -118,8 +123,8 @@ const Dashboard: NextPage = () => {
         const message = JSON.parse(data).data;
 
         switch (topic) {
-            case "stationUpdate":
-                setStations(message);
+            case "staticsUpdate":
+                setStationStatics(message);
                 break;
             case "brokerUpdate":
                 setBrokerClients(message);
@@ -131,14 +136,18 @@ const Dashboard: NextPage = () => {
                 setGlobals(message);
                 break;
             case "devicesConfig":
-                console.log(message);
                 setStationDevices(message);
+                break;
+            case "workoutIds":
+                setWorkoutIds(message);
+                break;
+            case "loadedWorkouts":
+                setLoadedWorkouts(message);
                 break;
             default:
                 break;
         }
     };
-
     useEffect(() => {
         const ts = timesync.create({
             server: `http://${process.env.NEXT_PUBLIC_LIVE_API}/timesync`,
@@ -160,9 +169,9 @@ const Dashboard: NextPage = () => {
         ws?.current?.sendMessage(message);
     };
 
-    const handleScriptRestart = (station: Station) => {
+    const handleScriptRestart = (station: StationStatics) => {
         const stationDevice = stationDevices.find(
-            (s) => s.laneNumber === station.lane_number
+            (s) => s.laneNumber === station.laneNumber
         );
 
         if (stationDevice)
@@ -188,9 +197,8 @@ const Dashboard: NextPage = () => {
             );
     };
 
-    const rowData = (station: Station) => {
-        console.log(station);
-        const lane = station.lane_number;
+    const rowData = (station: StationStatics) => {
+        const lane = station.laneNumber;
         const stationDevice = stationDevices.find((s) => s.laneNumber === lane);
         const stationIp = stationDevice?.ip;
         const stationConnected =
@@ -198,33 +206,30 @@ const Dashboard: NextPage = () => {
         const devicesConnected = !stationConnected
             ? null
             : stationDevice?.devices.map((d) => {
-                console.log(d)
                   return { name: d.role, connected: d.state === "connected" };
               });
 
         const rank =
             (ranks.length > 0 &&
-                ranks
-                    ?.find((r) => r.lane === station.lane_number)
-                    ?.rank?.join(" | ")) ||
+                ranks?.find((r) => r.lane === lane)?.rank?.join(" | ")) ||
             "n/a";
 
         return {
             lane,
-            athlete: station.athlete,
+            participant: station.participant,
             ip: stationDevice?.ip,
             stationConnected,
             devicesConnected,
-            reps: station.currentWodPosition?.repsPerBlock.join(" | "),
-            rank,
-            repsOfMovement: station.currentWodPosition?.repsOfMovement,
-            totalRepsOfMovement:
-                station.currentWodPosition?.totalRepsOfMovement,
-            currentMovement: station.currentWodPosition?.currentMovement,
-            nextMovementReps: station.currentWodPosition?.nextMovementReps,
-            nextMovement: station.currentWodPosition?.nextMovement,
-            appVersion: station.appVersion,
-            result: station.result,
+            // reps: station.currentWodPosition?.repsPerBlock.join(" | "),
+            // rank,
+            // repsOfMovement: station.currentWodPosition?.repsOfMovement,
+            // totalRepsOfMovement:
+            //     station.currentWodPosition?.totalRepsOfMovement,
+            // currentMovement: station.currentWodPosition?.currentMovement,
+            // nextMovementReps: station.currentWodPosition?.nextMovementReps,
+            // nextMovement: station.currentWodPosition?.nextMovement,
+            // appVersion: station.appVersion,
+            // result: station.result,
         };
     };
 
@@ -274,15 +279,15 @@ const Dashboard: NextPage = () => {
             setDeviceConfigUpdateDrawerOpen(open);
         };
 
-    const handleAthleteChange = (
-        station: Station,
-        index: number,
-        event: any
-    ) => {
-        const stationsCopy = stations;
-        stationsCopy[index].athlete = event?.target?.value;
-        setStations(stationsCopy);
-    };
+    // const handleAthleteChange = (
+    //     station: Station,
+    //     index: number,
+    //     event: any
+    // ) => {
+    //     const stationsCopy = stations;
+    //     stationsCopy[index].athlete = event?.target?.value;
+    //     setStations(stationsCopy);
+    // };
     return (
         // <ThemeProvider theme={darkTheme}>
         <>
@@ -306,10 +311,10 @@ const Dashboard: NextPage = () => {
                     },
                 }}
             >
-                <HeatUpdate
-                    stations={stations}
+                <StaticsUpdate
+                    stationStatics={stationStatics}
                     // handleAthleteChange={handleAthleteChange}
-                ></HeatUpdate>
+                ></StaticsUpdate>
             </Drawer>
             <Button onClick={toggleConfigDrawer(true)}>
                 Update Device Config
@@ -338,10 +343,16 @@ const Dashboard: NextPage = () => {
                             startTime={globals?.startTime}
                             chrono={chrono}
                         ></TimerForm>
+                        <LiveWorkoutSelector
+                            workoutIds={workoutIds}
+                        ></LiveWorkoutSelector>
+                        <LoadedWorkouts
+                            loadedWorkouts={loadedWorkouts}
+                        ></LoadedWorkouts>
                     </Grid>
                     <Grid item xs={12} lg={10}>
                         <Grid container spacing={2}>
-                            {stations.map((s, i) => {
+                            {stationStatics.map((s, i) => {
                                 const data = rowData(s);
                                 return (
                                     <Grid key={i} item md={3}>
@@ -383,7 +394,9 @@ const Dashboard: NextPage = () => {
                                                                 variant="h6"
                                                                 component="div"
                                                             >
-                                                                {data.athlete}
+                                                                {
+                                                                    data.participant
+                                                                }
                                                             </Typography>
                                                             <Typography
                                                                 gutterBottom
@@ -392,7 +405,7 @@ const Dashboard: NextPage = () => {
                                                             >
                                                                 {data.ip}
                                                             </Typography>
-                                                            {data.appVersion && (
+                                                            {/* {data.appVersion && (
                                                                 <Tooltip
                                                                     arrow
                                                                     disableFocusListener
@@ -424,7 +437,7 @@ const Dashboard: NextPage = () => {
                                                                         }}
                                                                     />
                                                                 </Tooltip>
-                                                            )}
+                                                            )} */}
                                                         </Box>
                                                         <Typography
                                                             gutterBottom
@@ -451,7 +464,7 @@ const Dashboard: NextPage = () => {
                                                                     }`
                                                             )}
                                                         </Typography>
-                                                        <Typography
+                                                        {/* <Typography
                                                             gutterBottom
                                                             variant="caption"
                                                             component="div"
@@ -476,7 +489,7 @@ const Dashboard: NextPage = () => {
                                                                       data.repsOfMovement
                                                                   ) &&
                                                                   `${data.repsOfMovement} / ${data.totalRepsOfMovement} ${data.currentMovement}`}
-                                                        </Typography>
+                                                        </Typography> */}
                                                     </Box>
                                                 </CardContent>
                                             </Box>

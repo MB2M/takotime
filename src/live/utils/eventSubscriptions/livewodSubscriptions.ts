@@ -2,13 +2,23 @@ import LiveWodManager from "../livewod/LiveWodManager";
 
 const livewodSubscription = {
     load: (emitter: LiveWodManager, listener: any) => {
-        emitter.on(
-            "setDevices", () =>
+        emitter.on("setDevices", () =>
             listener.sendStationDevicesToAllClients()
         );
 
-        emitter.on(
-            "station/deviceUpdated", () =>
+        emitter.on("setStationStatics", () => {
+            listener.sendStaticsToAllClients();
+        });
+
+        emitter.on("setWorkout", () => {
+            listener.sendWorkoutsToAllClients();
+        });
+
+        emitter.on("loadWorkout", () => {
+            listener.sendLoadedWorkoutsToAllClients();
+        });
+
+        emitter.on("station/deviceUpdated", () =>
             listener.sendStationDevicesToAllClients()
         );
 

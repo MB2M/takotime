@@ -12,9 +12,9 @@ import cors from "cors";
 import * as timesyncServer from "timesync/server/index.js";
 import dbConnect from "./config/dbConnect";
 import WebsocketSender from "./live/utils/livewod/WebsocketSender";
-import brokerSubscription from "./live/utils/eventListeners/brokerSubscriptions";
-import liveWodSubscription from "./live/utils/eventListeners/livewodSubscriptions";
-import wodSubscription from "./live/utils/eventListeners/wodSubscriptions";
+import brokerSubscription from "./live/utils/eventSubscriptions/brokerSubscriptions";
+import liveWodSubscription from "./live/utils/eventSubscriptions/livewodSubscriptions";
+import wodSubscription from "./live/utils/eventSubscriptions/wodSubscriptions";
 
 dotenv.config();
 
@@ -99,8 +99,10 @@ wss.on("connection", function connection(ws) {
             );
         }
     });
-    sender.sendStationDataToAllClients();
+    sender.sendStaticsToAllClients();
     sender.sendStationStatusToAllClients();
     sender.sendGlobalsToAllClients();
     sender.sendStationDevicesToAllClients();
+    sender.sendWorkoutsToAllClients();
+    sender.sendLoadedWorkoutsToAllClients();
 });

@@ -192,16 +192,16 @@ class ForTime extends BaseLiveWod {
         // }
     }
 
-    start(options: Options): void {
-        this.db.push("/globals/duration", options.duration);
-        this.db.push("/globals/startTime", options.startTime);
-        this.db.push("/globals/countdown", options.countdown);
+    start(options: StartOptions): void {
+        // this.db.push("/globals/duration", options.duration);
+        // this.db.push("/globals/startTime", options.startTime);
+        // this.db.push("/globals/countdown", options.countdown);
 
-        this.updateState(State.Cooldown);
+        this.updateState(State.Countdown);
         this.launchTimer(options.duration, options.startTime);
 
-        this.emit("wodUpdate", "cooldown");
-        // this.emit("wodCooldown", options.startTime, options.duration);
+        this.emit("wodUpdate", "countdown");
+        // this.emit("wodCountdown", options.startTime, options.duration);
     }
 }
 

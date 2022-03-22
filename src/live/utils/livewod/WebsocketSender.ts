@@ -1,5 +1,8 @@
 import WebSocket from "ws";
 import StationDevices from "../../models/StationDevices";
+import StationStatics from "../../models/StationStatics";
+import Workout from "../../models/Workout";
+import keyvInstance from "../libs/keyvInstance";
 
 class WebsocketSender {
     wss: WebSocket.Server<WebSocket.WebSocket>;
@@ -21,11 +24,9 @@ class WebsocketSender {
         });
     }
 
-    sendStationDataToAllClients() {
-        this.sendToAllClients(
-            "stationUpdate",
-            global.liveWodManager.wod.db.getData("/stations")
-        );
+    async sendStaticsToAllClients() {
+        const stationStatics = await StationStatics.find().exec();
+        this.sendToAllClients("staticsUpdate", stationStatics);
     }
 
     // sendStationDevicesToAllClients() {
@@ -40,11 +41,35 @@ class WebsocketSender {
         this.sendToAllClients("devicesConfig", stationDevices);
     }
 
-    sendGlobalsToAllClients() {
+    async sendGlobalsToAllClients() {
         this.sendToAllClients(
             "globalsUpdate",
-            global.liveWodManager.wod.db.getData("/globals")
+            await global.liveWodManager.getGlobals()
+            // global.liveWodManager.wod.db.getData("/globals")
         );
+    }
+
+    async sendWorkoutsToAllClients() {
+        const workoutIds = await Workout.find(
+            { active: true },
+            "customId"
+        ).exec();
+        this.sendToAllClients("workoutIds", workoutIds);
+    }
+
+    async sendLoadedWorkoutsToAllClients() {
+        const workoutIds = await keyvInstance.get("workoutId");
+        const workouts = await Promise.all(
+            workoutIds.map(async (id: string) => {
+                try {
+                    const workout = await Workout.findById(id).exec();
+                    return workout;
+                } catch (err) {
+                    return;
+                }
+            })
+        );
+        this.sendToAllClients("loadedWorkouts", workouts);
     }
 
     sendStationStatusToAllClients() {

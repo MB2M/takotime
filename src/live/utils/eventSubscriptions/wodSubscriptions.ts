@@ -9,7 +9,7 @@ const wodSubscription = {
         emitter.on("wodUpdate", (type: string) => {
             listener.sendGlobalsToAllClients();
             if (type === "reset") {
-                listener.sendStationDataToAllClients();
+                listener.sendStaticsToAllClients();
             }
         });
     },

@@ -5,9 +5,8 @@ import { DataGrid } from "@mui/x-data-grid";
 type Row = {
     id: string;
     laneNumber: number;
-    ip: string;
-    counter: string;
-    board: string;
+    participant: string;
+    category: string;
 };
 
 const columns = [
@@ -18,20 +17,14 @@ const columns = [
         width: 100,
     },
     {
-        field: "ip",
-        headerName: "Station IP",
+        field: "participant",
+        headerName: "Participant",
         width: 150,
         editable: true,
     },
     {
-        field: "counter",
-        headerName: "Counter",
-        width: 150,
-        editable: true,
-    },
-    {
-        field: "board",
-        headerName: "Board",
+        field: "category",
+        headerName: "Category",
         width: 150,
         editable: true,
     },
@@ -43,7 +36,7 @@ const columns = [
             const deleteRow = async (rowId: string) => {
                 try {
                     const response = await fetch(
-                        `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/stationdevices`,
+                        `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/stationstatics`,
                         {
                             method: "DELETE",
                             headers: {
@@ -67,35 +60,31 @@ const columns = [
     },
 ];
 
-const DevicesUpdate = ({
-    stationDevices,
-    setStationDevices,
+const StaticsUpdate = ({
+    stationStatics,
 }: {
-    stationDevices: StationDevices[];
-    setStationDevices: any;
+    stationStatics: StationStatics[];
 }) => {
     const [rows, setRows] = useState<Row[]>([]);
     const [newLane, setNewLane] = useState<number>();
 
     useEffect(() => {
-        const rows: Row[] = stationDevices.map((sd, i) => {
+        const rows: Row[] = stationStatics.map((ss) => {
             return {
-                id: sd._id,
-                laneNumber: sd.laneNumber,
-                ip: sd.ip,
-                counter:
-                    sd.devices.find((d) => d.role === "counter")?.mac || "",
-                board: sd.devices.find((d) => d.role === "board")?.mac || "",
+                id: ss._id,
+                laneNumber: ss.laneNumber,
+                participant: ss.participant,
+                category: ss.category,
             };
         });
         setRows(rows);
-    }, [stationDevices]);
+    }, [stationStatics]);
 
     const addRow = async () => {
         const laneNumber = newLane;
         try {
             const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/stationdevices`,
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/stationstatics`,
                 {
                     method: "POST",
                     headers: {
@@ -104,8 +93,6 @@ const DevicesUpdate = ({
                     body: JSON.stringify({ laneNumber }),
                 }
             );
-            const json = await response.json();
-            console.log(json);
         } catch (error) {
             console.error(error);
         }
@@ -114,34 +101,12 @@ const DevicesUpdate = ({
     const handleCellEditCommit = async (params: any) => {
         let payload: any = {
             id: params.row.id,
+            [params.field]: params.value,
         };
-        if (["counter", "board"].includes(params.field)) {
-            const actualDevices = [
-                {
-                    role: "counter",
-                    mac:
-                        params.field === "counter"
-                            ? params.value
-                            : params.row.counter,
-                    state: params.field === "counter" && "disconnected",
-                },
-                {
-                    role: "board",
-                    mac:
-                        params.field === "board"
-                            ? params.value
-                            : params.row.board,
-                    state: params.field === "board" && "disconnected",
-                },
-            ];
-            payload.devices = actualDevices;
-        } else {
-            payload[params.field] = params.value;
-        }
 
         try {
             const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/stationdevices`,
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/stationstatics`,
                 {
                     method: "PATCH",
                     headers: {
@@ -158,7 +123,7 @@ const DevicesUpdate = ({
     return (
         <>
             <Typography gutterBottom variant="h3" component="div">
-                Devices Update
+                Participant Update
             </Typography>
             <Grid
                 container
@@ -196,4 +161,4 @@ const DevicesUpdate = ({
     );
 };
 
-export default DevicesUpdate;
+export default StaticsUpdate;

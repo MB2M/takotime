@@ -1,6 +1,6 @@
 export enum State {
     Loaded,
-    Cooldown,
+    Countdown,
     Running,
     Finished,
 }

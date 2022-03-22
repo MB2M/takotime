@@ -1,13 +1,8 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import StationDevices from "../models/StationDevices";
+import StationStatics from "../models/StationStatics";
 
-interface StationDevices {
-    ip?: string;
-    devices?: Array<Object>;
-}
-
-export const createDevice: RequestHandler = async (
+export const createStationStatic: RequestHandler = async (
     req: Request,
     res: Response
 ) => {
@@ -20,15 +15,15 @@ export const createDevice: RequestHandler = async (
     }
 
     try {
-        const result = await StationDevices.create(body);
+        const result = await StationStatics.create(body);
         res.status(200).json(result);
-        global.liveWodManager.devicesSet();
+        global.liveWodManager.stationStaticsSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
 };
 
-export const updateDevice = async (req: Request, res: Response) => {
+export const updateStationStatic = async (req: Request, res: Response) => {
     const body = req.body;
 
     if (!body?.id) {
@@ -36,17 +31,17 @@ export const updateDevice = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await StationDevices.findByIdAndUpdate(body.id, body, {
+        const response = await StationStatics.findByIdAndUpdate(body.id, body, {
             runValidators: true,
         }).exec();
         res.status(200).json(response);
-        global.liveWodManager.devicesSet();
+        global.liveWodManager.stationStaticsSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
 };
 
-export const deleteDevice = async (req: Request, res: Response) => {
+export const deleteStationStatic = async (req: Request, res: Response) => {
     const body = req.body;
 
     if (!body?.id) {
@@ -54,20 +49,23 @@ export const deleteDevice = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await StationDevices.findByIdAndDelete(body.id).exec();
+        const response = await StationStatics.findByIdAndDelete(
+            body.id,
+            body
+        ).exec();
         res.status(200).json(response);
-        global.liveWodManager.devicesSet();
+        global.liveWodManager.stationStaticsSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
 };
 
 export const getAllStationDevices = async (req: Request, res: Response) => {
-    const stationDevicesList = await StationDevices.find();
-    if (!stationDevicesList.length)
+    const stationStaticsList = await StationStatics.find();
+    if (!stationStaticsList.length)
         return res.status(204).json({ message: "no stationDevices" });
 
-    res.status(200).json(stationDevicesList);
+    res.status(200).json(stationStaticsList);
 };
 
 const handleErrorDevice = (err: any, res: Response) => {

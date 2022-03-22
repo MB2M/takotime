@@ -19,7 +19,7 @@ interface InWodMeasurement {
     type: string;
 }
 
-interface Options {
+interface StartOptions {
     duration: number;
     startTime: Date;
     countdown: number;

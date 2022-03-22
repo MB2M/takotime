@@ -51,7 +51,7 @@ const TimerForm = ({
         >
             {!startTime && (
                 <>
-                    <h3> Launch Workout: </h3>
+                    <h3> Launch: </h3>
                     <TextField
                         label="Duration"
                         id="outlined-size-small"
@@ -76,7 +76,12 @@ const TimerForm = ({
                 </>
             )}
             <h1>{chrono}</h1>
-            <Button variant="outlined" onClick={handleReset} sx={{ mx: 2 }}>
+            <Button
+                color="error"
+                variant="outlined"
+                onClick={handleReset}
+                sx={{ mx: 2 }}
+            >
                 Reset
             </Button>
         </Box>

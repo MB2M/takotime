@@ -332,7 +332,6 @@ class Station {
         );
 
         if (board && board.charac) {
-            console.log(this.db);
             board.charac.write(displayBuffer(this.db, { value: value }), true);
         }
     }

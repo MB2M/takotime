@@ -115,8 +115,8 @@ class Station {
                             repsPerBlock: [],
                         };
                     }
-                    if (!data.stations.measurements) {
-                        data.stations.measurements = {};
+                    if (!data.stations.dynamics.measurements) {
+                        data.stations.dynamics.measurements = {};
                     }
                 }
                 this.updateDB(data);
@@ -126,8 +126,6 @@ class Station {
 
                 try {
                     this.wodInterpreter.load(this.db.getData("/workouts"));
-                    console.log("STATE:", data.stations.dynamics.state);
-                    console.log("DYNAMICS:", data.stations.dynamics);
                     if (data.stations.dynamics.state < 2) {
                         this.wodInterpreter.getRepsInfo(
                             data.stations.dynamics.currentWodPosition
@@ -281,8 +279,6 @@ class Station {
 
         this.db.push("/stations/dynamics/state", state);
 
-        console.log(this.db.getData("/stations/dynamics/state"));
-
         //TODO: appeller un preparateur de message pour le serveur basé sur le state
         // Pour l'instant  le message est de type reps
 
@@ -382,7 +378,6 @@ class Station {
     }
 
     publishData(buttonValue) {
-        console.log(this.db.getData("/stations/dynamics/state"));
         if (this.db.getData("/stations/dynamics/state") === 2) {
             const station = this.db.getData("/stations/");
             this.wodInterpreter.pressCounter(

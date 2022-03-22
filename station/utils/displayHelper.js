@@ -56,7 +56,7 @@ const runningDisplay = (station, meta) => {
             lane_number: station.lane_number,
             reps: station.dynamics.currentWodPosition.reps,
             name: station.athlete,
-            result: station.result,
+            result: station.dynamics.result,
             round: station.dynamics.currentWodPosition.round + 1,
             movement: `${station.dynamics.currentWodPosition.totalRepsOfMovement} ${station.dynamics.currentWodPosition.currentMovement}`,
             movement_reps: station.dynamics.currentWodPosition.repsOfMovement,
@@ -71,7 +71,7 @@ const endedDisplay = (station) => {
         JSON.stringify({
             lane_number: station.lane_number,
             name: station.athlete,
-            result: station.result,
+            result: station.dynamics.result,
             counter: getCounterInfo(station),
         })
     );

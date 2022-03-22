@@ -30,6 +30,45 @@ type StationStatics = {
     laneNumber: number;
     participant: string;
     category: string;
+    dynamics: {
+        appVersion: string;
+        state: number;
+        currentWodPosition: {
+            block: number;
+            round: number;
+            movement: number;
+            reps: number;
+            repsPerBlock: number[];
+            repsOfMovement: number;
+            totalRepsOfMovement: number;
+            currentMovement: string;
+            nextMovementReps: number;
+            nextMovement: string;
+        };
+        result: string;
+        measurements: object;
+    };
+};
+
+type StationDynamics = {
+    _id: string;
+    laneNumber: number;
+    appVersion: string;
+    state: number;
+    currentWodPosition: {
+        block: number;
+        round: number;
+        movement: number;
+        reps: number;
+        repsPerBlock: number[];
+        repsOfMovement: number;
+        totalRepsOfMovement: number;
+        currentMovement: string;
+        nextMovementReps: number;
+        nextMovement: string;
+    };
+    result: string;
+    measurements: object;
 };
 
 type Device = {

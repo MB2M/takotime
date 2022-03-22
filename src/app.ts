@@ -105,4 +105,5 @@ wss.on("connection", function connection(ws) {
     sender.sendStationDevicesToAllClients();
     sender.sendWorkoutsToAllClients();
     sender.sendLoadedWorkoutsToAllClients();
+    sender.sendDynamicsToAllClients();
 });

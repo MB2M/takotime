@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import StationDevices from "../../models/StationDevices";
+import StationDynamics from "../../models/StationDynamics";
 import StationStatics from "../../models/StationStatics";
 import Workout from "../../models/Workout";
 import keyvInstance from "../libs/keyvInstance";
@@ -29,12 +30,10 @@ class WebsocketSender {
         this.sendToAllClients("staticsUpdate", stationStatics);
     }
 
-    // sendStationDevicesToAllClients() {
-    //     this.sendToAllClients(
-    //         "devicesConfig",
-    //         global.liveWodManager.stationDevicesDb.getData("/stationDevices")
-    //     );
-    // }
+    async sendDynamicsToAllClients() {
+        const stationDynamics = await StationDynamics.find().exec();
+        this.sendToAllClients("dynamicsUpdate", stationDynamics);
+    }
 
     async sendStationDevicesToAllClients() {
         const stationDevices = await StationDevices.find().exec();
@@ -45,7 +44,6 @@ class WebsocketSender {
         this.sendToAllClients(
             "globalsUpdate",
             await global.liveWodManager.getGlobals()
-            // global.liveWodManager.wod.db.getData("/globals")
         );
     }
 

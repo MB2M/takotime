@@ -174,10 +174,6 @@ class ForTime extends BaseLiveWod {
 
         // this.db.push(`/stations[${index}]/appVersion`, message.data.appVersion);
 
-        // if (message.topic === "blePeripheral") {
-        //     this.db.push(`/stations[${index}]/configs`, message.data.configs);
-        // }
-
         // if (message.topic === "reps") {
         //     this.db.push(`/stations[${index}]`, message.data);
         // }

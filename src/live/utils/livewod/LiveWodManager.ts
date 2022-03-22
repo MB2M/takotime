@@ -10,6 +10,7 @@ import StationDevices from "../../models/StationDevices.js";
 import keyvInstance from "../libs/keyvInstance.js";
 import StationStatics from "../../models/StationStatics.js";
 import Workout from "../../models/Workout.js";
+import StationDynamics from "../../models/StationDynamics.js";
 class LiveWodManager extends EventEmitter {
     mqttBroker?: MqttBroker;
     mqttClient?: MqttClient;
@@ -38,7 +39,16 @@ class LiveWodManager extends EventEmitter {
 
     async resetWod() {
         await this.resetGlobals();
+        await this.resetDynamics();
         this.wod?.reset();
+    }
+
+    async resetDynamics() {
+        const stations = await StationStatics.find().exec();
+        stations.forEach((s) => {
+            s.reset();
+            s.save();
+        });
     }
 
     async startWod(options: StartOptions) {
@@ -95,6 +105,7 @@ class LiveWodManager extends EventEmitter {
                         devices: stationDevice.devices,
                     };
                 }
+                console.log(station.dynamics);
                 return station;
             })
         );
@@ -111,6 +122,7 @@ class LiveWodManager extends EventEmitter {
             })
         );
         msg.workouts = workouts;
+
         try {
             this.mqttClient?.client.publish(channel, JSON.stringify(msg), {
                 qos: 1,
@@ -118,7 +130,7 @@ class LiveWodManager extends EventEmitter {
         } catch (error) {
             console.error(error);
         }
-        console.log("send!")
+        console.log("send!");
     }
 
     // subsribe to receive data from stations
@@ -130,21 +142,45 @@ class LiveWodManager extends EventEmitter {
                 const msg = JSON.parse(message.toString());
 
                 if (msg.topic === "blePeripheral") {
-                    const stationDevice = await StationDevices.findOne(
-                        { ip: msg.data.configs.station_ip },
-                        "devices"
-                    ).exec();
-
-                    if (stationDevice) {
-                        stationDevice.devices = msg.data.configs.devices;
-                        await stationDevice.save();
-                    }
-                    this.emit("station/deviceUpdated");
+                    this.updateStation(msg.data);
                 } else {
-                    this.wod?.update(JSON.parse(message.toString()));
+                    this.updateDynamics(msg.data);
+                    // this.wod?.update(JSON.parse(message.toString()));
                 }
             }
         });
+    }
+
+    async updateDynamics(data: any) {
+        console.log("update Dynamics");
+        try {
+            const response = await StationDynamics.updateOne(
+                {
+                    laneNumber: data.laneNumber,
+                },
+                data,
+                {
+                    runValidators: true,
+                    upsert: true,
+                }
+            );
+            this.emit("station/dynamicsUpdated");
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async updateStation(data: any) {
+        const stationDevice = await StationDevices.findOne(
+            { ip: data.configs.station_ip },
+            "devices"
+        ).exec();
+
+        if (stationDevice) {
+            stationDevice.devices = data.configs.devices;
+            await stationDevice.save();
+            this.emit("station/deviceUpdated");
+        }
     }
 
     sendToChannel(
@@ -169,7 +205,7 @@ class LiveWodManager extends EventEmitter {
         const globals = await this.getGlobals();
         try {
             this.mqttClient?.client.publish(
-                "server/chrono",
+                "server/wodGlobals",
                 JSON.stringify(globals),
                 {
                     qos: 1,

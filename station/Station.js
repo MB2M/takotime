@@ -147,6 +147,7 @@ class Station {
 
             if (topic === "server/wodGlobals") {
                 const json = JSON.parse(message);
+                console.log()
                 if (this.isNewGlobals(json)) this.initTimer(json);
                 this.db.push("/globals", json);
             }

@@ -106,6 +106,9 @@ const Dashboard: NextPage = () => {
     const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
     const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
     const [stationStatics, setStationStatics] = useState<StationStatics[]>([]);
+    const [stationDynamics, setStationDynamics] = useState<StationDynamics[]>(
+        []
+    );
     const [brokerClients, setBrokerClients] = useState<Broker>({});
     const [ranks, setRanks] = useState<StationRanked>([]);
     const [time, setTime] = useState<number>();
@@ -123,6 +126,9 @@ const Dashboard: NextPage = () => {
         const message = JSON.parse(data).data;
 
         switch (topic) {
+            case "dynamicsUpdate":
+                setStationDynamics(message);
+                break;
             case "staticsUpdate":
                 setStationStatics(message);
                 break;
@@ -183,9 +189,9 @@ const Dashboard: NextPage = () => {
             );
     };
 
-    const handleRestartUpdate = (station: Station) => {
+    const handleRestartUpdate = (station: StationStatics) => {
         const stationDevice = stationDevices.find(
-            (s) => s.laneNumber === station.lane_number
+            (s) => s.laneNumber === station.laneNumber
         );
 
         if (stationDevice)
@@ -197,9 +203,11 @@ const Dashboard: NextPage = () => {
             );
     };
 
-    const rowData = (station: StationStatics) => {
-        const lane = station.laneNumber;
+    const rowData = (stationStatics: StationStatics) => {
+        const lane = stationStatics.laneNumber;
         const stationDevice = stationDevices.find((s) => s.laneNumber === lane);
+        const dynamics = stationDynamics.find((s) => s.laneNumber === lane);
+        console.log(dynamics);
         const stationIp = stationDevice?.ip;
         const stationConnected =
             (stationIp && brokerClients[stationIp]) || false;
@@ -216,20 +224,20 @@ const Dashboard: NextPage = () => {
 
         return {
             lane,
-            participant: station.participant,
+            participant: stationStatics.participant,
             ip: stationDevice?.ip,
             stationConnected,
             devicesConnected,
-            // reps: station.currentWodPosition?.repsPerBlock.join(" | "),
-            // rank,
-            // repsOfMovement: station.currentWodPosition?.repsOfMovement,
-            // totalRepsOfMovement:
-            //     station.currentWodPosition?.totalRepsOfMovement,
-            // currentMovement: station.currentWodPosition?.currentMovement,
-            // nextMovementReps: station.currentWodPosition?.nextMovementReps,
-            // nextMovement: station.currentWodPosition?.nextMovement,
-            // appVersion: station.appVersion,
-            // result: station.result,
+            reps: dynamics?.currentWodPosition?.repsPerBlock.join(" | "),
+            rank,
+            repsOfMovement: dynamics?.currentWodPosition?.repsOfMovement,
+            totalRepsOfMovement:
+                dynamics?.currentWodPosition?.totalRepsOfMovement,
+            currentMovement: dynamics?.currentWodPosition?.currentMovement,
+            nextMovementReps: dynamics?.currentWodPosition?.nextMovementReps,
+            nextMovement: dynamics?.currentWodPosition?.nextMovement,
+            appVersion: dynamics?.appVersion,
+            result: dynamics?.result,
         };
     };
 
@@ -405,7 +413,7 @@ const Dashboard: NextPage = () => {
                                                             >
                                                                 {data.ip}
                                                             </Typography>
-                                                            {/* {data.appVersion && (
+                                                            {data.appVersion && (
                                                                 <Tooltip
                                                                     arrow
                                                                     disableFocusListener
@@ -437,7 +445,7 @@ const Dashboard: NextPage = () => {
                                                                         }}
                                                                     />
                                                                 </Tooltip>
-                                                            )} */}
+                                                            )}
                                                         </Box>
                                                         <Typography
                                                             gutterBottom
@@ -464,7 +472,7 @@ const Dashboard: NextPage = () => {
                                                                     }`
                                                             )}
                                                         </Typography>
-                                                        {/* <Typography
+                                                        <Typography
                                                             gutterBottom
                                                             variant="caption"
                                                             component="div"
@@ -485,11 +493,11 @@ const Dashboard: NextPage = () => {
                                                         >
                                                             {data.result
                                                                 ? data.result
-                                                                : !isNaN(
+                                                                : (!!data.repsOfMovement && !isNaN(
                                                                       data.repsOfMovement
-                                                                  ) &&
+                                                                  )) &&
                                                                   `${data.repsOfMovement} / ${data.totalRepsOfMovement} ${data.currentMovement}`}
-                                                        </Typography> */}
+                                                        </Typography>
                                                     </Box>
                                                 </CardContent>
                                             </Box>

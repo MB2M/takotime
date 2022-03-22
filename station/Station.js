@@ -102,7 +102,7 @@ class Station {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
                 if (data.stations) {
-                    data.stations.appVersion =
+                    data.stations.dynamics.appVersion =
                         loadJsonFileSync("package.json").version;
 
                     // first time init
@@ -279,6 +279,7 @@ class Station {
 
         this.db.push("/stations/dynamics/state", state);
 
+        console.log(this.db.getData("/stations/dynamics/state"));
         //TODO: appeller un preparateur de message pour le serveur basé sur le state
         // Pour l'instant  le message est de type reps
 

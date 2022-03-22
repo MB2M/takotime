@@ -40,6 +40,8 @@ class WodInterpreter extends EventEmitter {
     deltaWodPosition(currentWodPosition, delta) {
         if (delta < -1 || delta > 1) throw "bad delta value";
 
+        console.log(currentWodPosition);
+
         const currentBlock = currentWodPosition.block;
         const currentRound = currentWodPosition.round;
         const currentMovement = currentWodPosition.movement;
@@ -360,13 +362,6 @@ class WodInterpreter extends EventEmitter {
                     const duration =
                         (expectedMeasurement.at - expectedMeasurement.from) *
                         60000;
-                    console.log("duration:", duration);
-                    console.log("repstot :", expectedMeasurement.repsTot);
-                    console.log("reps :", reps);
-                    console.log(
-                        "repsConvertion :",
-                        expectedMeasurement.repsConvertion
-                    );
                     reps =
                         duration +
                         (expectedMeasurement.repsTot - reps) *

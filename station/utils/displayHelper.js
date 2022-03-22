@@ -54,13 +54,13 @@ const runningDisplay = (station, meta) => {
     return Buffer.from(
         JSON.stringify({
             lane_number: station.lane_number,
-            reps: station.currentWodPosition.reps,
+            reps: station.dynamics.currentWodPosition.reps,
             name: station.athlete,
             result: station.result,
-            round: station.currentWodPosition.round + 1,
-            movement: `${station.currentWodPosition.totalRepsOfMovement} ${station.currentWodPosition.currentMovement}`,
-            movement_reps: station.currentWodPosition.repsOfMovement,
-            next_movement: `${station.currentWodPosition.nextMovementReps} ${station.currentWodPosition.nextMovement}`,
+            round: station.dynamics.currentWodPosition.round + 1,
+            movement: `${station.dynamics.currentWodPosition.totalRepsOfMovement} ${station.dynamics.currentWodPosition.currentMovement}`,
+            movement_reps: station.dynamics.currentWodPosition.repsOfMovement,
+            next_movement: `${station.dynamics.currentWodPosition.nextMovementReps} ${station.dynamics.currentWodPosition.nextMovement}`,
             counter: getCounterInfo(station),
         })
     );

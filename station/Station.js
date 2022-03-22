@@ -60,11 +60,8 @@ class Station {
                     this.timer.stopTimer();
                 } else {
                     const currentWodPosition = this.db.getData(
-                        "/stations/currentWodPosition"
+                        "/stations/dynamics/currentWodPosition"
                     );
-
-                    console.log(this.wodInterpreter.measurements);
-                    console.log(measurement.measurementId);
 
                     const nextBlock =
                         this.wodInterpreter.measurements[
@@ -109,8 +106,8 @@ class Station {
                         loadJsonFileSync("package.json").version;
 
                     // first time init
-                    if (!data.stations.currentWodPosition) {
-                        data.stations.currentWodPosition = {
+                    if (!data.stations.dynamics.currentWodPosition) {
+                        data.stations.dynamics.currentWodPosition = {
                             block: 0,
                             round: 0,
                             movement: 0,
@@ -132,7 +129,7 @@ class Station {
                     this.wodInterpreter.load(this.db.getData("/workouts"));
                     if (data.stations.state < 2) {
                         this.wodInterpreter.getRepsInfo(
-                            data.stations.currentWodPosition
+                            data.stations.dynamics.currentWodPosition
                         );
                         // save db
                         this.db.save();
@@ -228,7 +225,7 @@ class Station {
                 this.db.getData("/stations/measurements"),
                 this.db.getData("/globals/startTime"),
                 checkpoint,
-                this.db.getData("/stations/currentWodPosition")
+                this.db.getData("/stations/dynamics/currentWodPosition")
             );
         });
     }
@@ -266,7 +263,7 @@ class Station {
                     now,
                     Date.parse(this.db.getData("/globals/startTime")),
                     this.db.getData("/stations/measurements"),
-                    this.db.getData("/stations/currentWodPosition")
+                    this.db.getData("/stations/dynamics/currentWodPosition")
                 );
             }
         });
@@ -297,7 +294,7 @@ class Station {
 
     wodFinish() {
         const result = this.wodInterpreter.getFinalScore(
-            // this.db.getData("/stations/currentWodPosition"),
+            // this.db.getData("/stations/dynamics/currentWodPosition"),
             this.db.getData("/stations/measurements")
         );
 
@@ -388,7 +385,7 @@ class Station {
                 Date.now(),
                 Date.parse(this.db.getData("/globals/startTime")),
                 station.measurements,
-                station.currentWodPosition,
+                station.dynamics.currentWodPosition,
                 parseInt(buttonValue)
             );
 

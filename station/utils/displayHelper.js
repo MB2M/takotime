@@ -11,7 +11,7 @@ const displayBuffer = (db, meta) => {
             case 3:
                 return endedDisplay(station);
             default:
-                break;
+                return loadedDisplay(station);
         }
     } catch (err) {
         return loading();

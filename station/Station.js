@@ -281,6 +281,8 @@ class Station {
 
         this.db.push("/stations/dynamics/state", state);
 
+        console.log(this.db.getData("/stations/dynamics/state"));
+
         //TODO: appeller un preparateur de message pour le serveur basé sur le state
         // Pour l'instant  le message est de type reps
 

@@ -380,6 +380,7 @@ class Station {
     }
 
     publishData(buttonValue) {
+        console.log(this.db.getData("/stations/dynamics/state"));
         if (this.db.getData("/stations/dynamics/state") === 2) {
             const station = this.db.getData("/stations/");
             this.wodInterpreter.pressCounter(

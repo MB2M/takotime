@@ -1,7 +1,7 @@
 const displayBuffer = (db, meta) => {
     try {
         const station = db.getData("/stations");
-        switch (station.state) {
+        switch (station.dynamics.state) {
             case 0:
                 return loadedDisplay(station);
             case 1:

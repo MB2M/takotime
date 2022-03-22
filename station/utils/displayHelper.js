@@ -27,8 +27,8 @@ const getCounterInfo = (station) => {
 const loadedDisplay = (station) => {
     return Buffer.from(
         JSON.stringify({
-            lane_number: station.lane_number,
-            name: station.athlete,
+            lane_number: station.laneNumber,
+            name: station.participant,
             result: "READY|TO GO |",
             counter: getCounterInfo(station),
         })
@@ -38,8 +38,8 @@ const loadedDisplay = (station) => {
 const countdownDisplay = (station, meta) => {
     return Buffer.from(
         JSON.stringify({
-            lane_number: station.lane_number,
-            name: station.athlete,
+            lane_number: station.laneNumber,
+            name: station.participant,
             countdown: (meta && meta.value) || "",
             counter: getCounterInfo(station),
         })
@@ -53,9 +53,9 @@ const runningDisplay = (station, meta) => {
 
     return Buffer.from(
         JSON.stringify({
-            lane_number: station.lane_number,
+            lane_number: station.laneNumber,
             reps: station.dynamics.currentWodPosition.reps,
-            name: station.athlete,
+            name: station.participant,
             result: station.dynamics.result,
             round: station.dynamics.currentWodPosition.round + 1,
             movement: `${station.dynamics.currentWodPosition.totalRepsOfMovement} ${station.dynamics.currentWodPosition.currentMovement}`,

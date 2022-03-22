@@ -147,7 +147,7 @@ class Station {
 
             if (topic === "server/wodGlobals") {
                 const json = JSON.parse(message);
-                console.log()
+                console.log();
                 if (this.isNewGlobals(json)) this.initTimer(json);
                 this.db.push("/globals", json);
             }
@@ -262,7 +262,7 @@ class Station {
                 this.wodInterpreter.pressBuzzer(
                     now,
                     Date.parse(this.db.getData("/globals/startTime")),
-                    this.db.getData("/stations/measurements"),
+                    this.db.getData("/stations/dynamics/measurements"),
                     this.db.getData("/stations/dynamics/currentWodPosition")
                 );
             }

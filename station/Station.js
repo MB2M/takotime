@@ -122,11 +122,11 @@ class Station {
                 this.updateDB(data);
 
                 const devices = this.getRequiredDevices();
-                console.log(devices);
                 this.bleServices.connectTo(devices);
 
                 try {
                     this.wodInterpreter.load(this.db.getData("/workouts"));
+                    console.log("ézeazreazre")
                     if (data.stations.dynamics.state < 2) {
                         this.wodInterpreter.getRepsInfo(
                             data.stations.dynamics.currentWodPosition

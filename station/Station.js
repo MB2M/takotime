@@ -127,7 +127,7 @@ class Station {
 
                 try {
                     this.wodInterpreter.load(this.db.getData("/workouts"));
-                    if (data.stations.state < 2) {
+                    if (data.stations.dynamics.state < 2) {
                         this.wodInterpreter.getRepsInfo(
                             data.stations.dynamics.currentWodPosition
                         );
@@ -202,7 +202,7 @@ class Station {
             console.log("WOD COUNTDOWN TIMER");
             try {
                 const station = this.db.getData("/stations");
-                if (station.state !== 1) this.changeState(1);
+                if (station.dynamics.state !== 1) this.changeState(1);
             } finally {
                 this.updateBoard(value);
             }
@@ -252,7 +252,7 @@ class Station {
                 throw err;
             }
 
-            if (this.db.getData("/stations/state") === 2) {
+            if (this.db.getData("/stations/dynamics/state") === 2) {
                 const now = Date.now();
 
                 if (now < this.lastPush + 20000) return;
@@ -278,7 +278,7 @@ class Station {
     changeState(state) {
         if (this.timer && state === 3) this.timer.stopTimer();
 
-        this.db.push("/stations/state", state);
+        this.db.push("/stations/dynamics/state", state);
 
         //TODO: appeller un preparateur de message pour le serveur basé sur le state
         // Pour l'instant  le message est de type reps
@@ -295,10 +295,10 @@ class Station {
     wodFinish() {
         const result = this.wodInterpreter.getFinalScore(
             // this.db.getData("/stations/dynamics/currentWodPosition"),
-            this.db.getData("/stations/measurements")
+            this.db.getData("/stations/dynamics/measurements")
         );
 
-        this.db.push("/stations/result", result);
+        this.db.push("/stations/dynamics/result", result);
         this.changeState(3);
     }
 
@@ -379,7 +379,7 @@ class Station {
     }
 
     publishData(buttonValue) {
-        if (this.db.getData("/stations/state") === 2) {
+        if (this.db.getData("/stations/dynamics/state") === 2) {
             const station = this.db.getData("/stations/");
             this.wodInterpreter.pressCounter(
                 Date.now(),

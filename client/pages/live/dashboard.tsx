@@ -102,7 +102,7 @@ const useChrono = (
 };
 
 const Dashboard: NextPage = () => {
-    const [workoutIds, setWorkoutIds] = useState<workoutId[]>([]);
+    const [workoutIds, setWorkoutIds] = useState<WorkoutIds[]>([]);
     const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
     const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
     const [stationStatics, setStationStatics] = useState<StationStatics[]>([]);

@@ -166,22 +166,22 @@ class ForTime extends BaseLiveWod {
     }
 
     update(message: WodData): void {
-        const index = this.db.getIndex(
-            "/stations",
-            message.data.lane_number,
-            "lane_number"
-        );
+        // const index = this.db.getIndex(
+        //     "/stations",
+        //     message.data.lane_number,
+        //     "lane_number"
+        // );
 
-        this.db.push(`/stations[${index}]/appVersion`, message.data.appVersion);
+        // this.db.push(`/stations[${index}]/appVersion`, message.data.appVersion);
 
-        if (message.topic === "blePeripheral") {
-            this.db.push(`/stations[${index}]/configs`, message.data.configs);
-        }
+        // if (message.topic === "blePeripheral") {
+        //     this.db.push(`/stations[${index}]/configs`, message.data.configs);
+        // }
 
-        if (message.topic === "reps") {
-            this.db.push(`/stations[${index}]`, message.data);
-        }
-        this.emit("station/updated");
+        // if (message.topic === "reps") {
+        //     this.db.push(`/stations[${index}]`, message.data);
+        // }
+        // this.emit("station/updated");
 
         // if (message.topic === "reps") {
         //     Object.entries(message.data).forEach(([k, v]) => {

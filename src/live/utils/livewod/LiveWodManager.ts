@@ -228,10 +228,10 @@ class LiveWodManager extends EventEmitter {
                 case "start":
                     this.sendGlobalsToChannel();
                     // this.sendToChannel("server/wodGlobals", "/globals");
-                    const rankInterval = setInterval(() => {
-                        this.publishRank();
-                    }, 300);
-                    this.timeOuts?.push(rankInterval);
+                    // const rankInterval = setInterval(() => {
+                    //     this.publishRank();
+                    // }, 300);
+                    // this.timeOuts?.push(rankInterval);
                     break;
                 case "finish":
                     this.sendGlobalsToChannel();

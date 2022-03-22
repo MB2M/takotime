@@ -126,7 +126,7 @@ class Station {
 
                 try {
                     this.wodInterpreter.load(this.db.getData("/workouts"));
-                    console.log("ézeazreazre")
+                    console.log("STATE:", data.stations.dynamics.state);
                     if (data.stations.dynamics.state < 2) {
                         this.wodInterpreter.getRepsInfo(
                             data.stations.dynamics.currentWodPosition

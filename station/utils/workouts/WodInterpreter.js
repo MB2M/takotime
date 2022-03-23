@@ -11,7 +11,6 @@ class WodInterpreter extends EventEmitter {
         this.workout = workout;
         this.shortcut = {};
         this.measurements = [];
-        // this.buzzerMeasurements = [];
         const checkpointsTime = new Set();
 
         for (let block of this.workout.blocks) {
@@ -96,7 +95,6 @@ class WodInterpreter extends EventEmitter {
 
             // not end
             if (currentBlock + 1 < maxBlock) {
-                console.log(this.expectMeasurement(currentWodPosition));
                 if (!this.expectMeasurement(currentWodPosition)) {
                     currentWodPosition.reps = 0;
                     currentWodPosition.movement = 0;
@@ -276,7 +274,7 @@ class WodInterpreter extends EventEmitter {
         currentWodPosition
     ) {
         const expectedMeasurement = this.measurements.find(
-            (m) => m.id === Object.keys(wodMeasurements).length
+            (m) => m.id === wodMeasurements.length
         );
 
         if (!expectedMeasurement) return;
@@ -389,9 +387,9 @@ class WodInterpreter extends EventEmitter {
     }
 
     pressCounter(
-        timestamp,
-        startTime,
-        wodMeasurements,
+        // timestamp,
+        // startTime,
+        // wodMeasurements,
         currentWodPosition,
         buttonValue
     ) {
@@ -419,9 +417,7 @@ class WodInterpreter extends EventEmitter {
         let baseScore;
         let baseType;
 
-        const shortcutScore = Object.values(measurements).find(
-            (m) => m.shortcut
-        );
+        const shortcutScore = measurements.find((m) => m.shortcut);
         if (shortcutScore) {
             scores.push(this.toReadableTime(shortcutScore.value));
         } else {
@@ -430,9 +426,15 @@ class WodInterpreter extends EventEmitter {
                     baseScore = 0;
                     baseType = "reps";
                     for (let sourceId of score.sources) {
-                        baseScore += measurements[sourceId].value;
-                        if (measurements[sourceId].type === "time")
-                            baseType = "time";
+                        const measurement = measurements.find(
+                            (m) => m.id === sourceId
+                        );
+                        if (measurement) {
+                            baseScore += measurement.value;
+                            if (measurement.type === "time") {
+                                baseType = "time";
+                            }
+                        }
                     }
                 }
 

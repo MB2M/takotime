@@ -44,13 +44,12 @@ class Station {
             "checkpoint",
             (measurement, isFinal, shortcut) => {
                 this.db.push(
-                    "/stations/measurements",
+                    "/stations/dynamics/measurements[]",
                     {
-                        [measurement.measurementId]: {
-                            value: measurement.value,
-                            type: measurement.type,
-                            shortcut,
-                        },
+                        id: measurement.measurementId,
+                        value: measurement.value,
+                        type: measurement.type,
+                        shortcut,
                     },
                     false
                 );
@@ -116,7 +115,7 @@ class Station {
                         };
                     }
                     if (!data.stations.dynamics.measurements) {
-                        data.stations.dynamics.measurements = {};
+                        data.stations.dynamics.measurements = [];
                     }
                 }
                 this.updateDB(data);
@@ -222,7 +221,7 @@ class Station {
             console.log("NEW CHECKPOINT: ", checkpoint);
             this.wodInterpreter.checkpoint(
                 "timer",
-                this.db.getData("/stations/measurements"),
+                this.db.getData("/stations/dynamics/measurements"),
                 this.db.getData("/globals/startTime"),
                 checkpoint,
                 this.db.getData("/stations/dynamics/currentWodPosition")
@@ -385,7 +384,7 @@ class Station {
             this.wodInterpreter.pressCounter(
                 Date.now(),
                 Date.parse(this.db.getData("/globals/startTime")),
-                station.measurements,
+                station.dynamics.measurements,
                 station.dynamics.currentWodPosition,
                 parseInt(buttonValue)
             );

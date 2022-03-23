@@ -25,12 +25,15 @@ const stationStaticsSchema = new mongoose.Schema({
             nextMovement: String,
         },
         measurements: {
-            type: Map,
-            of: {
-                value: Number,
-                type: String,
-                shortcut: Boolean,
-            },
+            type: [
+                {
+                    id: Number,
+                    value: Number,
+                    type: String,
+                    shortcut: Boolean,
+                },
+            ],
+            default: undefined,
         },
         result: String,
     },

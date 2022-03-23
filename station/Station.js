@@ -51,7 +51,6 @@ class Station {
                         type: measurement.type,
                         shortcut,
                     },
-                    false
                 );
 
                 if (isFinal) {

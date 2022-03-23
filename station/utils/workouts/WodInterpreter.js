@@ -387,9 +387,9 @@ class WodInterpreter extends EventEmitter {
     }
 
     pressCounter(
-        // timestamp,
-        // startTime,
-        // wodMeasurements,
+        timestamp,
+        startTime,
+        wodMeasurements,
         currentWodPosition,
         buttonValue
     ) {
@@ -422,7 +422,7 @@ class WodInterpreter extends EventEmitter {
             scores.push(this.toReadableTime(shortcutScore.value));
         } else {
             for (let score of this.scores) {
-                if (["sum", "normal"].includes(score.type)) {
+                if (["sum", "normal"].includes(score.count)) {
                     baseScore = 0;
                     baseType = "reps";
                     for (let sourceId of score.sources) {

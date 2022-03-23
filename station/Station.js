@@ -132,7 +132,10 @@ class Station {
                     console.log("No workout to load");
                 }
 
-                if (data.globals.duration !== 0) {
+                if (
+                    data.globals.duration !== 0 && 
+                    data.dynamics.result === ""
+                ) {
                     this.initTimer(json.globals);
                 } else {
                     this.timer && this.timer.stopTimer();

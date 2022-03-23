@@ -229,6 +229,7 @@ const Dashboard: NextPage = () => {
             nextMovement: dynamics?.currentWodPosition?.nextMovement,
             appVersion: dynamics?.appVersion,
             result: dynamics?.result,
+            state: dynamics?.state,
         };
     };
 
@@ -462,6 +463,13 @@ const Dashboard: NextPage = () => {
                                                                             : "⭕"
                                                                     }`
                                                             )}
+                                                        </Typography>
+                                                        <Typography
+                                                            gutterBottom
+                                                            variant="caption"
+                                                            component="div"
+                                                        >
+                                                            {data.state}
                                                         </Typography>
                                                         <Typography
                                                             gutterBottom

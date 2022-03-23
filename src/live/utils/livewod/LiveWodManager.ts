@@ -154,9 +154,9 @@ class LiveWodManager extends EventEmitter {
     async updateDynamics(data: any) {
         console.log("update Dynamics");
         try {
-            const response = await StationDynamics.updateOne(
+            const response = await StationStatics.updateOne(
                 {
-                    laneNumber: data.laneNumber,
+                    _id: data._id,
                 },
                 data,
                 {

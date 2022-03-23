@@ -7,7 +7,7 @@ class WodInterpreter extends EventEmitter {
 
     // load the json
     load(workout) {
-        this.scoreType = workout.type;
+        // this.scoreType = workout.type;
         this.workout = workout;
         this.shortcut = {};
         this.measurements = [];
@@ -291,7 +291,7 @@ class WodInterpreter extends EventEmitter {
             measurement = {
                 measurementId: expectedMeasurement.id,
                 value: timestamp - startTime,
-                type: "time",
+                method: "time",
             };
 
             isFinal = true;
@@ -343,7 +343,7 @@ class WodInterpreter extends EventEmitter {
                     value:
                         timestamp -
                         (startTime + expectedMeasurement.from * 60000),
-                    type: "time",
+                    method: "time",
                 };
 
             case "timer":
@@ -354,7 +354,7 @@ class WodInterpreter extends EventEmitter {
 
                 reps -= expectedMeasurement.repsFrom;
 
-                let type = "reps";
+                let method = "reps";
 
                 if (expectedMeasurement.convertInTime) {
                     const duration =
@@ -365,26 +365,25 @@ class WodInterpreter extends EventEmitter {
                         (expectedMeasurement.repsTot - reps) *
                             expectedMeasurement.repsConvertion;
 
-                    type = "time";
+                    method = "time";
                 }
 
                 return {
                     measurementId: expectedMeasurement.id,
                     value: reps,
-                    type: type,
+                    method: method,
                 };
         }
     }
 
-    getTimeCapResult(reps) {
-        switch (this.scoreType) {
-            case "forTime":
-                return this.getFinalResult(reps);
-
-            default:
-                return this.getFinalResult(reps);
-        }
-    }
+    // getTimeCapResult(reps) {
+    // switch (this.scoreType) {
+    //     case "forTime":
+    //         return this.getFinalResult(reps);
+    //     default:
+    // return this.getFinalResult(reps);
+    // }
+    // }
 
     pressCounter(
         timestamp,
@@ -431,7 +430,7 @@ class WodInterpreter extends EventEmitter {
                         );
                         if (measurement) {
                             baseScore += measurement.value;
-                            if (measurement.type === "time") {
+                            if (measurement.method === "time") {
                                 baseType = "time";
                             }
                         }

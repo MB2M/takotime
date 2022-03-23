@@ -111,7 +111,6 @@ const Dashboard: NextPage = () => {
     );
     const [brokerClients, setBrokerClients] = useState<Broker>({});
     const [ranks, setRanks] = useState<StationRanked>([]);
-    const [time, setTime] = useState<number>();
     const [tSync, setTSync] = useState<timesync.TimeSync>();
     const [globals, setGlobals] = useState<Globals>();
     const chrono = useChrono(tSync, globals?.startTime, globals?.duration);
@@ -161,14 +160,6 @@ const Dashboard: NextPage = () => {
         });
 
         setTSync(ts);
-        // setTime(ts.now());
-
-        // const serverT = setInterval(function () {
-        //     const now = ts.now();
-        //     setTime(now);
-        // }, 300);
-
-        // return () => clearInterval(serverT);
     }, []);
 
     const sendMessage = (message: string) => {
@@ -206,7 +197,7 @@ const Dashboard: NextPage = () => {
     const rowData = (stationStatics: StationStatics) => {
         const lane = stationStatics.laneNumber;
         const stationDevice = stationDevices.find((s) => s.laneNumber === lane);
-        const dynamics = stationDynamics.find((s) => s.laneNumber === lane);
+        const dynamics = stationStatics.dynamics;
         console.log(dynamics);
         const stationIp = stationDevice?.ip;
         const stationConnected =
@@ -493,9 +484,10 @@ const Dashboard: NextPage = () => {
                                                         >
                                                             {data.result
                                                                 ? data.result
-                                                                : (!!data.repsOfMovement && !isNaN(
+                                                                : !!data.repsOfMovement &&
+                                                                  !isNaN(
                                                                       data.repsOfMovement
-                                                                  )) &&
+                                                                  ) &&
                                                                   `${data.repsOfMovement} / ${data.totalRepsOfMovement} ${data.currentMovement}`}
                                                         </Typography>
                                                     </Box>

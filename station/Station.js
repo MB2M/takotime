@@ -46,7 +46,7 @@ class Station {
                 this.db.push("/stations/dynamics/measurements[]", {
                     id: measurement.measurementId,
                     value: measurement.value,
-                    type: measurement.type,
+                    method: measurement.method,
                     shortcut,
                 });
 

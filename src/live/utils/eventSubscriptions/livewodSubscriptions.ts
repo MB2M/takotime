@@ -23,7 +23,7 @@ const livewodSubscription = {
         );
 
         emitter.on("station/dynamicsUpdated", () =>
-            listener.sendDynamicsToAllClients()
+            listener.sendStaticsToAllClients()
         );
 
         emitter.on("rank", (stationRanked: StationRanked) => {

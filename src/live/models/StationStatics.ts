@@ -29,7 +29,7 @@ const stationStaticsSchema = new mongoose.Schema({
                 {
                     id: Number,
                     value: Number,
-                    type: String,
+                    method: String,
                     shortcut: Boolean,
                 },
             ],

@@ -45,10 +45,12 @@ class LiveWodManager extends EventEmitter {
 
     async resetDynamics() {
         const stations = await StationStatics.find().exec();
-        stations.forEach((s) => {
-            s.reset();
-            s.save();
-        });
+        await Promise.all(
+            stations.map(async (s) => {
+                s.reset();
+                await s.save();
+            })
+        );
     }
 
     async startWod(options: StartOptions) {
@@ -105,7 +107,6 @@ class LiveWodManager extends EventEmitter {
                         devices: stationDevice.devices,
                     };
                 }
-                console.log(station.dynamics);
                 return station;
             })
         );
@@ -130,7 +131,6 @@ class LiveWodManager extends EventEmitter {
         } catch (error) {
             console.error(error);
         }
-        console.log("send!");
     }
 
     // subsribe to receive data from stations

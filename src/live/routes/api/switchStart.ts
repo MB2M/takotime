@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-const switchStart = (req: Request, res: Response) => {
+const switchStart = async (req: Request, res: Response) => {
     const action = req.query.action;
     const duration = parseInt(req.query.duration as string, 10);
     const countdown = parseInt(req.query.countdown as string, 10);
@@ -25,7 +25,7 @@ const switchStart = (req: Request, res: Response) => {
         }
     } else if (action === "reset") {
         try {
-            liveWodManager.resetWod();
+            await liveWodManager.resetWod();
             res.status(200).send(`Wod Reseted`);
         } catch (error) {
             res.status(400).send(`An error occured:${error}`);

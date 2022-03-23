@@ -198,7 +198,6 @@ const Dashboard: NextPage = () => {
         const lane = stationStatics.laneNumber;
         const stationDevice = stationDevices.find((s) => s.laneNumber === lane);
         const dynamics = stationStatics.dynamics;
-        console.log(dynamics);
         const stationIp = stationDevice?.ip;
         const stationConnected =
             (stationIp && brokerClients[stationIp]) || false;

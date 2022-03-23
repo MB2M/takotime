@@ -226,6 +226,7 @@ class Station {
 
     isNewGlobals(globals) {
         console.log(globals);
+        console.log(this.db.getData("/"));
         try {
             const actual = this.db.getData("/globals/startTime");
             const actualStartTime = actual.startTime;

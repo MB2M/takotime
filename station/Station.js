@@ -225,14 +225,11 @@ class Station {
     }
 
     isNewGlobals(globals) {
-        console.log(globals);
-        console.log(this.db.getData("/"));
         try {
-            const actual = this.db.getData("/globals/startTime");
+            const actual = this.db.getData("/globals");
             const actualStartTime = actual.startTime;
             const actualDuration = actual.duration;
-            console.log(actualStartTime);
-            console.log(actualDuration);
+
             return (
                 actualStartTime !== globals.startTime ||
                 actualDuration !== globals.duration

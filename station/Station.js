@@ -96,7 +96,7 @@ class Station {
             ) {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
-                if (data.stations) {
+                if (data.stations && data.stations.dynamics) {
                     data.stations.dynamics.appVersion =
                         loadJsonFileSync("package.json").version;
 
@@ -132,10 +132,7 @@ class Station {
                     console.log("No workout to load");
                 }
 
-                if (
-                    data.globals.duration !== 0 && 
-                    data.dynamics?.result
-                ) {
+                if (data.globals.duration !== 0 && data.dynamics?.result) {
                     this.initTimer(json.globals);
                 } else {
                     this.timer && this.timer.stopTimer();

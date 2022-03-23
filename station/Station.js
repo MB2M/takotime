@@ -43,15 +43,12 @@ class Station {
         this.wodInterpreter.on(
             "checkpoint",
             (measurement, isFinal, shortcut) => {
-                this.db.push(
-                    "/stations/dynamics/measurements[]",
-                    {
-                        id: measurement.measurementId,
-                        value: measurement.value,
-                        type: measurement.type,
-                        shortcut,
-                    },
-                );
+                this.db.push("/stations/dynamics/measurements[]", {
+                    id: measurement.measurementId,
+                    value: measurement.value,
+                    type: measurement.type,
+                    shortcut,
+                });
 
                 if (isFinal) {
                     this.wodFinish();
@@ -145,7 +142,6 @@ class Station {
 
             if (topic === "server/wodGlobals") {
                 const json = JSON.parse(message);
-                console.log();
                 if (this.isNewGlobals(json)) this.initTimer(json);
                 this.db.push("/globals", json);
             }
@@ -229,10 +225,13 @@ class Station {
     }
 
     isNewGlobals(globals) {
+        console.log(globals);
         try {
             const actual = this.db.getData("/globals/startTime");
             const actualStartTime = actual.startTime;
             const actualDuration = actual.duration;
+            console.log(actualStartTime);
+            console.log(actualDuration);
             return (
                 actualStartTime !== globals.startTime ||
                 actualDuration !== globals.duration

@@ -134,7 +134,7 @@ class Station {
 
                 if (
                     data.globals.duration !== 0 && 
-                    data.dynamics.result === ""
+                    data.dynamics?.result
                 ) {
                     this.initTimer(json.globals);
                 } else {

@@ -56,7 +56,7 @@ const LiveWorkoutSelector = ({ workoutIds }: { workoutIds: WorkoutIds[] }) => {
                     renderValue={(selected: any[]) => selected.join(", ")}
                     size="small"
                 >
-                    {workoutIds.map((w) => (
+                    {workoutIds?.map((w) => (
                         <MenuItem key={w.customId} value={w.customId}>
                             <Checkbox
                                 checked={

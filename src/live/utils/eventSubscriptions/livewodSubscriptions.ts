@@ -14,6 +14,10 @@ const livewodSubscription = {
             listener.sendWorkoutsToAllClients();
         });
 
+        emitter.on("setExternalLoad", () => {
+            listener.sendGlobalsToAllClients();
+        });
+
         emitter.on("loadWorkout", () => {
             listener.sendLoadedWorkoutsToAllClients();
         });

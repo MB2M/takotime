@@ -56,7 +56,6 @@ class LiveWodManager extends EventEmitter {
     async startWod(options: StartOptions) {
         await keyvInstance.set("startTime", options.startTime);
         await keyvInstance.set("duration", options.duration);
-        await keyvInstance.set("countdown", options.countdown);
         this.wod?.start(options);
     }
 
@@ -71,7 +70,6 @@ class LiveWodManager extends EventEmitter {
             (subscriptions: Subscription[]) => {
                 if (subscriptions[0]?.topic === "server/wodConfig") {
                     this.sendFullConfig("server/wodConfig");
-                    // this.sendToChannel("server/wodConfig");
                 }
             }
         );
@@ -80,12 +78,16 @@ class LiveWodManager extends EventEmitter {
     async resetGlobals() {
         await keyvInstance.set("duration", 0);
         await keyvInstance.set("startTime", "");
+        await keyvInstance.set("state", 0);
     }
 
     async getGlobals() {
         return {
             duration: await keyvInstance.get("duration"),
             startTime: await keyvInstance.get("startTime"),
+            externalEventId: await keyvInstance.get("externalEventId"),
+            externalHeatId: await keyvInstance.get("externalHeatId"),
+            state: await keyvInstance.get("state"),
         };
     }
 
@@ -216,8 +218,8 @@ class LiveWodManager extends EventEmitter {
         }
     }
 
-    publishRank() {
-        const stationRanked = this.wod?.getWodRank();
+    async publishRank() {
+        const stationRanked = await this.wod?.getWodRank();
         this.emit("rank", stationRanked);
         // this.sendToChannel("server/rank", JSON.stringify(stationRanked));
         // console.log(JSON.stringify(stationRanked));
@@ -249,6 +251,8 @@ class LiveWodManager extends EventEmitter {
         this.wod?.on("wodUpdate", async (type) => {
             console.log(`wod ${type}`);
 
+            await keyvInstance.set("state", this.wod?.state);
+
             switch (type) {
                 case "countdown":
                     this.sendGlobalsToChannel();
@@ -264,10 +268,10 @@ class LiveWodManager extends EventEmitter {
                 case "start":
                     this.sendGlobalsToChannel();
                     // this.sendToChannel("server/wodGlobals", "/globals");
-                    // const rankInterval = setInterval(() => {
-                    //     this.publishRank();
-                    // }, 300);
-                    // this.timeOuts?.push(rankInterval);
+                    const rankInterval = setInterval(() => {
+                        this.publishRank();
+                    }, 300);
+                    this.timeOuts?.push(rankInterval);
                     break;
                 case "finish":
                     this.sendGlobalsToChannel();
@@ -313,6 +317,10 @@ class LiveWodManager extends EventEmitter {
 
     workoutSet() {
         this.emit("setWorkout");
+    }
+
+    externalLoadSet() {
+        this.emit("setExternalLoad");
     }
 }
 

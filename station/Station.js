@@ -113,6 +113,7 @@ class Station {
                     if (!data.stations.dynamics.measurements) {
                         data.stations.dynamics.measurements = [];
                     }
+                    
                 }
                 this.updateDB(data);
 

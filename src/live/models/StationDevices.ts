@@ -19,7 +19,7 @@ const stationDevicesSchema = new mongoose.Schema({
         {
             role: {
                 type: String,
-                enum: ["counter", "board"]
+                enum: ["counter", "board"],
             },
             mac: {
                 type: String,
@@ -30,6 +30,7 @@ const stationDevicesSchema = new mongoose.Schema({
                 },
             },
             state: String,
+            _id: false,
         },
     ],
 });

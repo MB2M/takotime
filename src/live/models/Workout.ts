@@ -1,5 +1,23 @@
 import mongoose from "mongoose";
 
+const measurement = new mongoose.Schema({
+    id: { type: Number, required: true },
+    method: { type: String, default: "forTime" },
+    blocksId: [Number],
+    from: { type: Number, default: 0 },
+    at: { type: Number, min: 1 },
+    repsFrom: Number,
+    repsTot: Number,
+    device: {
+        type: String,
+        enum: ["buzzer", "timer"],
+    },
+    convertInTime: { type: Boolean, default: false },
+    repsConvertion: { type: Number, default: 1000 },
+    save: { type: Boolean, default: true },
+    _id: { auto: false },
+});
+
 const workoutSchema = new mongoose.Schema({
     name: String,
     customId: { type: String, unique: true, required: true },
@@ -39,22 +57,7 @@ const workoutSchema = new mongoose.Schema({
                     varEachRounds: { type: Number, default: 0 },
                 },
             ],
-            measurements: {
-                id: { type: Number, required: true },
-                method: { type: String, default: "forTime" },
-                blocksId: [Number],
-                from: { type: Number, default: 0 },
-                at: { type: Number, min: 1 },
-                repsFrom: Number,
-                repsTot: Number,
-                device: {
-                    type: String,
-                    enum: ["buzzer", "timer"],
-                },
-                convertInTime: { type: Boolean, default: false },
-                repsConvertion: { type: Number, default: 1000 },
-                save: { type: Boolean, default: true },
-            },
+            measurements: measurement,
         },
     ],
 });

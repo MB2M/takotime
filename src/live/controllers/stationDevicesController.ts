@@ -12,7 +12,6 @@ export const createDevice: RequestHandler = async (
     res: Response
 ) => {
     const body = req.body;
-
     if (!body?.laneNumber) {
         return res
             .status(400)
@@ -34,6 +33,14 @@ export const updateDevice = async (req: Request, res: Response) => {
     if (!body?.id) {
         return res.status(400).json({ message: "'id' parameter is missing" });
     }
+
+    const devices = body.devices?.map((d: Device) => {
+        if (d.mac !== "") {
+            return d;
+        }
+    });
+
+    body.devices = devices?.filter((d: Device) => d);
 
     try {
         const response = await StationDevices.findByIdAndUpdate(body.id, body, {

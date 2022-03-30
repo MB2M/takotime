@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
+import Schedule from "../../components/live/Schedule";
 import WebsocketWrapper from "../../components/live/WebSocketWrapper";
-import Dashboard from "../../components/dashboard2";
 
-const Test: NextPage = () => {
+const planning: NextPage = () => {
     return (
         <WebsocketWrapper>
-            <Dashboard></Dashboard>
+            <Schedule></Schedule>
         </WebsocketWrapper>
     );
 };
 
-export default Test;
+export default planning;

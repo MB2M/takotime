@@ -57,7 +57,6 @@ app.use(
         origin: process.env.CORS_ALLOWED_ORIGIN?.split(",") as string[],
     })
 );
-
 // configures body parser to parse JSON
 app.use(bodyParser.json());
 // configures body parser to parse url encoded data
@@ -105,5 +104,5 @@ wss.on("connection", function connection(ws) {
     sender.sendStationDevicesToAllClients();
     sender.sendWorkoutsToAllClients();
     sender.sendLoadedWorkoutsToAllClients();
-    sender.sendDynamicsToAllClients();
+    // sender.sendDynamicsToAllClients();
 });

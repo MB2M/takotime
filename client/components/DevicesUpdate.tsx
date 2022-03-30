@@ -69,10 +69,8 @@ const columns = [
 
 const DevicesUpdate = ({
     stationDevices,
-    setStationDevices,
 }: {
     stationDevices: StationDevices[];
-    setStationDevices: any;
 }) => {
     const [rows, setRows] = useState<Row[]>([]);
     const [newLane, setNewLane] = useState<number>();

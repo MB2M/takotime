@@ -9,9 +9,10 @@ const stationStaticsSchema = new mongoose.Schema({
     },
     participant: String,
     category: String,
+    externalId: Number,
     dynamics: {
         appVersion: String,
-        state: Number,
+        state: { type: Number, default: 0 },
         currentWodPosition: {
             block: Number,
             round: Number,

@@ -1,5 +1,6 @@
 import BaseLiveWod from "./BaseLiveWod.js";
 import { State } from "../../libs/State.js";
+import StationStatics from "../../../models/StationStatics.js";
 
 class ForTime extends BaseLiveWod {
     elements: Array<keyof WodData["data"]> = [
@@ -15,31 +16,37 @@ class ForTime extends BaseLiveWod {
         "repsTime",
     ];
 
-    getWodRank(): StationRanked {
-        const stations = this.db.getObject<Station[]>("/stations");
+    async getWodRank(): Promise<StationRanked> {
+        const stations = await StationStatics.find().exec();
+
+        const measurementsRanks = await Promise.all(
+            this.measurements.map(async (m) => {
+                return await this.getMeasurementRank(m.id);
+            })
+        );
+
         const rankedStation = stations.map((s) => {
             return {
-                lane: s.lane_number,
-                rank: this.measurements.map((m) => {
-                    return this.getMeasurementRank(m.id)[s.lane_number];
+                lane: s.laneNumber,
+                rank: measurementsRanks.map((mr) => {
+                    return mr[s.laneNumber];
                 }),
             };
         });
 
-        // console.log(rankedStation);
         return rankedStation;
     }
 
-    getMeasurementRank(measurementId: number) {
-        const stations = this.db.getObject<Station[]>("/stations");
-        // let repList: number[] = [];
-        // let timeList: number[] = [];
+    async getMeasurementRank(measurementId: number) {
+        const stations = await StationStatics.find().exec();
 
         stations.sort((a, b) => {
             const aMeasurement =
-                a.measurements && a.measurements[measurementId];
+                a.dynamics.measurements &&
+                a.dynamics.measurements[measurementId];
             const bMeasurement =
-                b.measurements && b.measurements[measurementId];
+                b.dynamics.measurements &&
+                b.dynamics.measurements[measurementId];
 
             if (!aMeasurement && bMeasurement) return 1;
 
@@ -47,28 +54,34 @@ class ForTime extends BaseLiveWod {
 
             if (!aMeasurement && !bMeasurement) {
                 const aReps =
-                    a.currentWodPosition?.repsPerBlock.reduce((p, c, i) => {
-                        return this.measurements[
-                            measurementId
-                        ]?.blocksId.includes(i)
-                            ? p + c
-                            : p + 0;
-                    }, 0) || 0;
+                    a.dynamics?.currentWodPosition?.repsPerBlock?.reduce(
+                        (p: number, c: number, i: number) => {
+                            return this.measurements[
+                                measurementId
+                            ]?.blocksId.includes(i)
+                                ? p + c
+                                : p + 0;
+                        },
+                        0
+                    ) || 0;
 
                 const bReps =
-                    b.currentWodPosition?.repsPerBlock.reduce((p, c, i) => {
-                        return this.measurements[
-                            measurementId
-                        ]?.blocksId.includes(i)
-                            ? p + c
-                            : p + 0;
-                    }, 0) || 0;
+                    b.dynamics?.currentWodPosition?.repsPerBlock?.reduce(
+                        (p: number, c: number, i: number) => {
+                            return this.measurements[
+                                measurementId
+                            ]?.blocksId.includes(i)
+                                ? p + c
+                                : p + 0;
+                        },
+                        0
+                    ) || 0;
 
                 return bReps - aReps;
             }
 
             if (aMeasurement?.type !== bMeasurement?.type) {
-                aMeasurement?.type === "buzzer" ? -1 : 1;
+                return aMeasurement?.type === "buzzer" ? -1 : 1;
             }
 
             if (
@@ -85,67 +98,38 @@ class ForTime extends BaseLiveWod {
 
             return 0;
         });
-
-        // stations.forEach((s) => {
-        //     const reps = s.currentWodPosition.repsPerBlock.reduce((p, c, i) => {
-        //         return blocksId.includes(i) ? p + c : 0;
-        //     }, 0);
-        //     s.measurements[measurementId]
-        //         ? s.measurements[measurementId]?.type === "timer"
-        //             ? repList.push(s.measurements[measurementId]!.value)
-        //             : timeList.push(s.measurements[measurementId]!.value)
-        //         : repList.push(reps);
-        // });
-
-        // stations.forEach((s) => {
-        //     let count = 0;
-        //     if (s.measurements[measurementId]) {
-        //         for (let i = 0; i < timeList.length; i++) {
-        //             if (
-        //                 (timeList[i] || "") <
-        //                 s.measurements[measurementId].value
-        //             ) {
-        //                 count++;
-        //             }
-        //         }
-        //     } else {
-        //         count = count + timeList.length;
-        //         for (let i = 0; i < repList.length; i++) {
-        //             if ((repList[i] || 0) > s.reps) {
-        //                 count++;
-        //             }
-        //         }
-        //     }
-        //     stationRanked = { ...stationRanked, [s.lane_number]: count + 1 };
-        // });
         let rank = 1;
         let stationRanked: { [x: number]: number } = {};
         stations.forEach((s, i, stations) => {
             if (i === 0) {
-                stationRanked = { ...stationRanked, [s.lane_number]: rank };
+                stationRanked = { ...stationRanked, [s.laneNumber]: rank };
             } else {
                 if (
-                    s.measurements &&
-                    s.measurements[measurementId]?.value !==
-                        stations[i - 1]?.measurements &&
-                    stations[i - 1]?.measurements[measurementId]?.value
+                    s.dynamics?.measurements &&
+                    s.dynamics?.measurements[measurementId]?.value !==
+                        stations[i - 1]?.dynamics?.measurements &&
+                    stations[i - 1]?.dynamics?.measurements[measurementId]
+                        ?.value
                 ) {
                     rank++;
                 } else {
                     const reps =
-                        s.currentWodPosition?.repsPerBlock.reduce((p, c, i) => {
-                            return this.measurements[
-                                measurementId
-                            ]?.blocksId.includes(i)
-                                ? p + c
-                                : p + 0;
-                        }, 0) || 0;
+                        s.dynamics?.currentWodPosition?.repsPerBlock?.reduce(
+                            (p: number, c: number, i: number) => {
+                                return this.measurements[
+                                    measurementId
+                                ]?.blocksId.includes(i)
+                                    ? p + c
+                                    : p + 0;
+                            },
+                            0
+                        ) || 0;
 
                     const previousStationReps =
                         stations[
                             i - 1
-                        ]?.currentWodPosition?.repsPerBlock.reduce(
-                            (p, c, i) => {
+                        ]?.dynamics?.currentWodPosition?.repsPerBlock?.reduce(
+                            (p: number, c: number, i: number) => {
                                 return this.measurements[
                                     measurementId
                                 ]?.blocksId.includes(i)
@@ -158,7 +142,7 @@ class ForTime extends BaseLiveWod {
                         rank++;
                     }
                 }
-                stationRanked = { ...stationRanked, [s.lane_number]: rank };
+                stationRanked = { ...stationRanked, [s.laneNumber]: rank };
             }
         });
 
@@ -171,14 +155,11 @@ class ForTime extends BaseLiveWod {
         //     message.data.lane_number,
         //     "lane_number"
         // );
-
         // this.db.push(`/stations[${index}]/appVersion`, message.data.appVersion);
-
         // if (message.topic === "reps") {
         //     this.db.push(`/stations[${index}]`, message.data);
         // }
         // this.emit("station/updated");
-
         // if (message.topic === "reps") {
         //     Object.entries(message.data).forEach(([k, v]) => {
         //         if (this.elements.find((e) => e === k)) {

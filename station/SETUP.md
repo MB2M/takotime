@@ -157,7 +157,7 @@ Reboot and run:
 
 > nano .env
 
-> cd takotime/station; git pull origin main && sudo node index.js
+> cd takotime/station; git pull origin main && sudo node index.js   
 
 ## Setup systemd services
 
@@ -165,37 +165,37 @@ Reboot and run:
 
 >sudo nano /etc/systemd/system/station.service
 
-    [Unit]
-    Description=Station Service
-    Wants=network-online.target
-    After=network-online.target
+[Unit]
+Description=Station Service
+Wants=network-online.target
+After=network-online.target
 
-    [Service]
-    WorkingDirectory=/home/pi/takotime/station
-    ExecStartPre=sudo rm -f livestation.json
-    ExecStart=sudo /usr/bin/node index.js
-    Restart=on-failure
-    User=pi
-    Environment=PORT=3000
+[Service]
+WorkingDirectory=/home/pi/takotime/station
+ExecStartPre=sudo rm -f livestation.json
+ExecStart=sudo /usr/bin/node index.js
+Restart=on-failure
+User=pi
+Environment=PORT=3000
 
-    [Install]
-    WantedBy=multi-user.target
+[Install]
+WantedBy=multi-user.target
 
 ### station_reload.service
 
->sudo nano /etc/systemd/system/station_service
+>sudo nano /etc/systemd/system/station_service.service
 
-    [Unit]
-    Description=Station Service
-    Wants=network-online.target
-    After=network-online.target
+[Unit]
+Description=Station Service
+Wants=network-online.target
+After=network-online.target
 
-    [Service]
-    WorkingDirectory=/home/pi/takotime/station
-    ExecStart=sudo /usr/bin/node buttonRestartScript.js
-    Restart=on-failure
-    User=pi
-    Environment=PORT=3000
+[Service]
+WorkingDirectory=/home/pi/takotime/station
+ExecStart=sudo /usr/bin/node buttonRestartScript.js
+Restart=on-failure
+User=pi
+Environment=PORT=3000
 
-    [Install]
-    WantedBy=multi-user.target
+[Install]
+WantedBy=multi-user.target

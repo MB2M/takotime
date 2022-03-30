@@ -82,7 +82,6 @@ export const loadWorkout = async (req: Request, res: Response) => {
                 res.status(400).json({ error: "one custom id is not valid" });
             })
         );
-        console.log(ids);
         global.liveWodManager.loadWorkout(ids);
         res.status(200).json({ message: "workouts loaded" });
     } catch (err) {
@@ -97,8 +96,7 @@ const handleErrorDevice = (err: any, res: Response) => {
                 Object.keys(err.keyValue)[0]
             }' with value: ${Object.values(err.keyValue)[0]}`,
         });
-    }
-    if (err.errors) {
+    } else if (err.errors) {
         res.status(400).json({
             errors: Object.entries(
                 err.errors as mongoose.Error.ValidatorError
@@ -106,6 +104,7 @@ const handleErrorDevice = (err: any, res: Response) => {
                 return `Parameter '${k}' with value '${v.value}' is not allowed`;
             }),
         });
+    } else {
+        res.status(400).json({ error: `invalid ${err.path}` });
     }
-    res.status(400).json({ error: `invalid ${err.path}` });
 };

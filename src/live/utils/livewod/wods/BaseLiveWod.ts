@@ -44,15 +44,16 @@ abstract class BaseLiveWod extends EventEmitter {
 
     reset(): void {
         this.clearAllTimeout();
-        const modelDB = new JsonDB(
-            new Config("./modelCurrentWod.json", true, true, "/")
-        );
-        const modelData = modelDB.getData("/");
-        this.loadWod(modelData);
+        // const modelDB = new JsonDB(
+        //     new Config("./modelCurrentWod.json", true, true, "/")
+        // );
+        // const modelData = modelDB.getData("/");
+        // this.loadWod(modelData);
+        this.loadWod();
     }
 
-    loadWod(data: any): void {
-        this.db.push("/", data);
+    loadWod(data?: any): void {
+        // this.db.push("/", data);
         this.updateState(State.Loaded);
 
         this.emit("wodUpdate", "reset");
@@ -60,7 +61,7 @@ abstract class BaseLiveWod extends EventEmitter {
 
     setWod(wod: any) {
         if (this.state && [1, 2].includes(this.state)) {
-            throw ("Wod is running");
+            throw "Wod is running";
         }
 
         const modelDB = new JsonDB(
@@ -91,7 +92,7 @@ abstract class BaseLiveWod extends EventEmitter {
         if (!wod.workouts) cb("wod workouts missing");
     }
 
-    abstract getWodRank(): StationRanked;
+    abstract getWodRank(): Promise<StationRanked>;
 
     abstract update(message: WodData): void;
 

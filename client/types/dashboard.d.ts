@@ -30,6 +30,7 @@ type StationStatics = {
     laneNumber: number;
     participant: string;
     category: string;
+    externalId: number;
     dynamics: {
         appVersion: string;
         state: number;
@@ -105,3 +106,63 @@ type WorkoutIds = {
     _id: string;
     customId: string;
 };
+
+type Ranks = Array<number | undefined>;
+
+type StationRanks = {
+    lane: number;
+    rank: Ranks;
+};
+
+type StationRanked = Array<StationRanks>;
+
+interface WebSocket extends EventTarget {
+    sendMessage: (this: WebSocket, msg: string) => any;
+}
+
+type Broker = { [key: string]: boolean };
+
+type Globals = {
+    wodname: string;
+    duration: number;
+    startTime: string;
+    countdown: number;
+    externalEventId: number;
+    externalHeatId: number;
+};
+
+interface WidescreenData {
+    globals: {
+        externalEventId: number;
+        externalWodId: number;
+        externalHeatId: number;
+        duration: number;
+        startTime: string;
+        state: number;
+    };
+    stations: WidescreenStation[];
+    workouts: Workout[];
+}
+
+interface WidescreenStation {
+    laneNumber: number;
+    externalId: number;
+    participant: string;
+    category: string;
+    repsPerBlock: number[];
+    currentMovement: string;
+    repsOfMovement: number;
+    totalRepsOfMovement: number;
+    nextMovement: string;
+    nextMovementReps: number;
+    result: string;
+    measurements: string;
+    state: number;
+    position: {
+        block: number;
+        round: number;
+        movement: number;
+        reps: number;
+    };
+    rank: Ranks;
+}

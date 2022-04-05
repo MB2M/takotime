@@ -1,5 +1,5 @@
 import EventEmitter from "events";
-import { State } from "../utils/libs/State";
+import { State } from "../libs/State";
 
 class WodTimerServices extends EventEmitter {
     // description: Object;

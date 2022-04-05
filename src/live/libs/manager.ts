@@ -3,7 +3,6 @@ import Keyv from "keyv";
 import WodTimerSubscription from "./WodTimerSubscription";
 import MqttServices from "../services/mqttServices";
 import WodTimerServices from "../services/WodTimerServices";
-import StationStatics from "../models/Station";
 import StationDevices from "../models/StationDevices";
 import Workout from "../models/Workout";
 import workoutServices from "../services/workoutServices";
@@ -54,11 +53,11 @@ class Manager extends EventEmitter {
         this.mqttServices.subscribe(this.topics);
         this.mqttServices.registerListener(
             "station/blePeripheral",
-            this.updateStation
+            this.updateStationDevices.bind(this)
         );
         this.mqttServices.registerListener(
             "station/generic",
-            this.updateDynamics
+            this.updateDynamics.bind(this)
         );
     }
 
@@ -80,7 +79,7 @@ class Manager extends EventEmitter {
     async updateDynamics(data: any) {
         console.log("update Dynamics");
         try {
-            const response = await StationStatics.updateOne(
+            const response = await Station.updateOne(
                 {
                     _id: data._id,
                 },
@@ -90,22 +89,21 @@ class Manager extends EventEmitter {
                     upsert: true,
                 }
             );
-            this.emit("station/dynamicsUpdated");
+            this.websocketMessages.sendStationsToAllClients();
         } catch (err) {
             console.log(err);
         }
     }
 
-    async updateStation(data: any) {
+    async updateStationDevices(data: any) {
         const stationDevice = await StationDevices.findOne(
             { ip: data.configs.station_ip },
             "devices"
         ).exec();
-
         if (stationDevice) {
             stationDevice.devices = data.configs.devices;
             await stationDevice.save();
-            this.emit("station/deviceUpdated");
+            this.websocketMessages.sendStationDevicesToAllClients();
         }
     }
 
@@ -123,7 +121,7 @@ class Manager extends EventEmitter {
     }
 
     async resetDynamics() {
-        const stations = await StationStatics.find().exec();
+        const stations = await Station.find().exec();
         await Promise.all(
             stations.map(async (s) => {
                 s.reset();
@@ -167,7 +165,7 @@ class Manager extends EventEmitter {
     async sendFullConfig(channel: string) {
         let msg: any = {};
         msg.globals = await this.getGlobals();
-        msg.stations = await StationStatics.find().exec();
+        msg.stations = await Station.find().exec();
         msg.stations = await Promise.all(
             msg.stations.map(async (s: any) => {
                 let station = JSON.parse(JSON.stringify(s));

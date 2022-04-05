@@ -439,7 +439,8 @@ class WodInterpreter extends EventEmitter {
 
                 switch (score.method) {
                     case "forTime":
-                        switch (baseType) {
+                        console.log(baseType);
+                        switch (baseScore) {
                             case "time":
                                 scores.push(this.toReadableTime(baseScore));
                                 break;

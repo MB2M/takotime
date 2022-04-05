@@ -324,6 +324,8 @@ class WodInterpreter extends EventEmitter {
             );
         }
 
+        console.log(">>>>>>>>>>MEASUREMENT:", measurement);
+
         this.emit("checkpoint", measurement, isFinal, shortcut);
     }
 
@@ -416,8 +418,6 @@ class WodInterpreter extends EventEmitter {
         let baseScore;
         let baseType;
 
-        console.log("SCORES:", this.scores);
-
         const shortcutScore = measurements.find((m) => m.shortcut);
         if (shortcutScore) {
             scores.push(this.toReadableTime(shortcutScore.value));
@@ -441,8 +441,8 @@ class WodInterpreter extends EventEmitter {
 
                 switch (score.method) {
                     case "forTime":
-                        console.log(baseType);
-                        switch (baseScore) {
+                        console.log(baseScore);
+                        switch (baseType) {
                             case "time":
                                 scores.push(this.toReadableTime(baseScore));
                                 break;

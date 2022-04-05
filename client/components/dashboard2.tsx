@@ -32,6 +32,7 @@ import LiveWorkoutSelector from "./LiveWorkoutSeletor";
 import LoadedWorkouts from "./LoadedWorkouts";
 import CCLoader from "./CCLoader";
 import WebsocketConnection from "./live/WebsocketConnection";
+import StationUpdate from "./StaticsUpdate";
 // import ntpClient from "ntp-client-promise";
 
 const toReadableTime = (timestamp: number) => {
@@ -84,7 +85,7 @@ const Dashboard: NextPage = ({
     workoutIds,
     loadedWorkouts,
     stationDevices,
-    stationStatics,
+    station,
     brokerClients,
     ranks,
     globals,
@@ -108,7 +109,7 @@ const Dashboard: NextPage = ({
         setTSync(ts);
     }, []);
 
-    const handleScriptRestart = (station: StationStatics) => {
+    const handleScriptRestart = (station: Station) => {
         const stationDevice = stationDevices.find(
             (s) => s.laneNumber === station.laneNumber
         );
@@ -122,7 +123,7 @@ const Dashboard: NextPage = ({
             );
     };
 
-    const handleRestartUpdate = (station: StationStatics) => {
+    const handleRestartUpdate = (station: Station) => {
         const stationDevice = stationDevices.find(
             (s) => s.laneNumber === station.laneNumber
         );
@@ -136,10 +137,12 @@ const Dashboard: NextPage = ({
             );
     };
 
-    const rowData = (stationStatics: StationStatics) => {
-        const lane = stationStatics.laneNumber;
-        const stationDevice = stationDevices.find((s) => s.laneNumber === lane);
-        const dynamics = stationStatics.dynamics;
+    const rowData = (station: Station) => {
+        const lane = station.laneNumber;
+        const stationDevice = stationDevices.find(
+            (s: StationDevices) => s.laneNumber === lane
+        );
+        const dynamics = station.dynamics;
         const stationIp = stationDevice?.ip;
         const stationConnected =
             (stationIp && brokerClients[stationIp]) || false;
@@ -155,7 +158,7 @@ const Dashboard: NextPage = ({
 
         return {
             lane,
-            participant: stationStatics.participant,
+            participant: station.participant,
             ip: stationDevice?.ip,
             stationConnected,
             devicesConnected,
@@ -247,10 +250,10 @@ const Dashboard: NextPage = ({
                     },
                 }}
             >
-                <StaticsUpdate
-                    stationStatics={stationStatics}
+                <StationUpdate
+                    station={station}
                     // handleAthleteChange={handleAthleteChange}
-                ></StaticsUpdate>
+                ></StationUpdate>
             </Drawer>
             <Button onClick={toggleConfigDrawer(true)}>
                 Update Device Config
@@ -285,7 +288,7 @@ const Dashboard: NextPage = ({
                     </Grid>
                     <Grid item xs={12} lg={10}>
                         <Grid container spacing={2}>
-                            {stationStatics
+                            {station
                                 ?.sort((a, b) => a.laneNumber - b.laneNumber)
                                 .map((s, i) => {
                                     const data = rowData(s);

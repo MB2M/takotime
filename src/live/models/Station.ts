@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const stationStaticsSchema = new mongoose.Schema({
+const stationSchema = new mongoose.Schema({
     laneNumber: {
         type: Number,
         unique: true,
@@ -40,11 +40,11 @@ const stationStaticsSchema = new mongoose.Schema({
     },
 });
 
-stationStaticsSchema.methods = {
+stationSchema.methods = {
     reset: async function () {
         const oldAppVersion = this.dynamics.appVersion;
         this.dynamics = { appVersion: oldAppVersion, state: 0 };
     },
 };
 
-export default mongoose.model("StationStatics", stationStaticsSchema);
+export default mongoose.model("Station", stationSchema);

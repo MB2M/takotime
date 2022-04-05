@@ -60,25 +60,21 @@ const columns = [
     },
 ];
 
-const StaticsUpdate = ({
-    stationStatics,
-}: {
-    stationStatics: StationStatics[];
-}) => {
+const StationUpdate = ({ station }: { station: Station[] }) => {
     const [rows, setRows] = useState<Row[]>([]);
     const [newLane, setNewLane] = useState<number>();
 
     useEffect(() => {
-        const rows: Row[] = stationStatics.map((ss) => {
+        const rows: Row[] = station.map((setBrokerClients) => {
             return {
-                id: ss._id,
-                laneNumber: ss.laneNumber,
-                participant: ss.participant,
-                category: ss.category,
+                id: setBrokerClients._id,
+                laneNumber: setBrokerClients.laneNumber,
+                participant: setBrokerClients.participant,
+                category: setBrokerClients.category,
             };
         });
         setRows(rows);
-    }, [stationStatics]);
+    }, [station]);
 
     const addRow = async () => {
         const laneNumber = newLane;
@@ -161,4 +157,4 @@ const StaticsUpdate = ({
     );
 };
 
-export default StaticsUpdate;
+export default StationUpdate;

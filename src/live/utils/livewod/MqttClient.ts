@@ -11,7 +11,10 @@ class MqttClient {
     }
 
     connect(options: object) {
-        return mqtt.connect(process.env.BROKER_URI as string, options);
+        return mqtt.connect(
+            `${process.env.BROKER_URI}:${process.env.BROKER_PORT}`,
+            options
+        );
     }
 
     toggle(callback: any) {
@@ -35,11 +38,11 @@ class MqttClient {
         });
 
         this.client.on("close", () => {
-            console.log("mqtt client end");
+            console.log("mqtt client end :(");
         });
 
         this.client.on("reconnect", () => {
-            console.log("mqtt client reconnect");
+            console.log("mqtt client reconnect :)");
         });
 
         this.client.on("offline", () => {

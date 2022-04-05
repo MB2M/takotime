@@ -1,6 +1,6 @@
 import BaseLiveWod from "./BaseLiveWod.js";
 import { State } from "../../libs/State.js";
-import StationStatics from "../../../models/StationStatics.js";
+import StationStatics from "../../../models/Station.js";
 
 class ForTime extends BaseLiveWod {
     elements: Array<keyof WodData["data"]> = [

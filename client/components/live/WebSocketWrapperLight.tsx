@@ -3,7 +3,7 @@ import WebsocketConnection from "./WebsocketConnection";
 
 const WebsocketWrapperLight = ({ children }: any) => {
     const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
-    const [stationStatics, setStationStatics] = useState<StationStatics[]>([]);
+    const [station, setStation] = useState<Station[]>([]);
     const [ranks, setRanks] = useState<StationRanked>([]);
     const [globals, setGlobals] = useState<Globals>();
     const ws = useRef<WebSocket>();
@@ -13,8 +13,8 @@ const WebsocketWrapperLight = ({ children }: any) => {
         const message = JSON.parse(data).data;
 
         switch (topic) {
-            case "staticsUpdate":
-                setStationStatics(message);
+            case "stationUpdate":
+                setStation(message);
                 break;
             case "rank":
                 setRanks(message);
@@ -31,7 +31,7 @@ const WebsocketWrapperLight = ({ children }: any) => {
     };
 
     const stationPayload = () => {
-        return stationStatics.map((s) => ({
+        return station.map((s) => ({
             laneNumber: s.laneNumber,
             externalId: s.externalId,
             participant: s.participant,

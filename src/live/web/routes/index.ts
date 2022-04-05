@@ -9,6 +9,6 @@ const __dirname = path.dirname(__filename);
 const router = express.Router();
 
 router.use("/api", api);
-router.use(express.static(path.join(__dirname,"..", "public")));
+router.use(express.static(path.join(__dirname, "..", "public")));
 
 export default router;

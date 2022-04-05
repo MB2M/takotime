@@ -1,17 +1,13 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import StationDevices from "../models/StationDevices";
+import liveApp from "../..";
 
-interface StationDevices {
-    ip?: string;
-    devices?: Array<Object>;
-}
-
-export const createDevice: RequestHandler = async (
+export const createStation: RequestHandler = async (
     req: Request,
     res: Response
 ) => {
     const body = req.body;
+
     if (!body?.laneNumber) {
         return res
             .status(400)
@@ -19,41 +15,14 @@ export const createDevice: RequestHandler = async (
     }
 
     try {
-        const result = await StationDevices.create(body);
+        const result = await liveApp.manager.stationUpdate(body, "create");
         res.status(200).json(result);
-        global.liveWodManager.devicesSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
 };
 
-export const updateDevice = async (req: Request, res: Response) => {
-    const body = req.body;
-
-    if (!body?.id) {
-        return res.status(400).json({ message: "'id' parameter is missing" });
-    }
-
-    const devices = body.devices?.map((d: Device) => {
-        if (d.mac !== "") {
-            return d;
-        }
-    });
-
-    body.devices = devices?.filter((d: Device) => d);
-
-    try {
-        const response = await StationDevices.findByIdAndUpdate(body.id, body, {
-            runValidators: true,
-        }).exec();
-        res.status(200).json(response);
-        global.liveWodManager.devicesSet();
-    } catch (err: any) {
-        handleErrorDevice(err, res);
-    }
-};
-
-export const deleteDevice = async (req: Request, res: Response) => {
+export const updateStation = async (req: Request, res: Response) => {
     const body = req.body;
 
     if (!body?.id) {
@@ -61,20 +30,36 @@ export const deleteDevice = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await StationDevices.findByIdAndDelete(body.id).exec();
+        const response = await liveApp.manager.stationUpdate(body, "update");
         res.status(200).json(response);
-        global.liveWodManager.devicesSet();
+        global.liveWodManager.stationStaticsSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
 };
 
-export const getAllStationDevices = async (req: Request, res: Response) => {
-    const stationDevicesList = await StationDevices.find();
-    if (!stationDevicesList.length)
+export const deleteStation = async (req: Request, res: Response) => {
+    const body = req.body;
+
+    if (!body?.id) {
+        return res.status(400).json({ message: "'id' parameter is missing" });
+    }
+
+    try {
+        const response = await liveApp.manager.stationUpdate(body, "delete");
+        res.status(200).json(response);
+        global.liveWodManager.stationStaticsSet();
+    } catch (err: any) {
+        handleErrorDevice(err, res);
+    }
+};
+
+export const getAllStation = async (req: Request, res: Response) => {
+    const stationStaticsList = await liveApp.manager.getAllStations();
+    if (!stationStaticsList.length)
         return res.status(204).json({ message: "no stationDevices" });
 
-    res.status(200).json(stationDevicesList);
+    res.status(200).json(stationStaticsList);
 };
 
 const handleErrorDevice = (err: any, res: Response) => {

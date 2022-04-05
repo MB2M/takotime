@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import loadFromCC from "../../utils/loadCCService";
+import loadFromCC from "../../../services/loadCCService";
 
 const loaderCC = async (req: Request, res: Response) => {
     const body = req.body;

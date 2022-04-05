@@ -5,10 +5,7 @@ const WebsocketWrapper = ({ children }: any) => {
     const [workoutIds, setWorkoutIds] = useState<WorkoutIds[]>([]);
     const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
     const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
-    const [stationStatics, setStationStatics] = useState<StationStatics[]>([]);
-    const [stationDynamics, setStationDynamics] = useState<StationDynamics[]>(
-        []
-    );
+    const [station, setStation] = useState<Station[]>([]);
     const [brokerClients, setBrokerClients] = useState<Broker>({});
     const [ranks, setRanks] = useState<StationRanked>([]);
     const [globals, setGlobals] = useState<Globals>();
@@ -19,17 +16,13 @@ const WebsocketWrapper = ({ children }: any) => {
         const message = JSON.parse(data).data;
 
         switch (topic) {
-            case "dynamicsUpdate":
-                setStationDynamics(message);
-                break;
-            case "staticsUpdate":
-                setStationStatics(message);
+            case "stationUpdate":
+                setStation(message);
                 break;
             case "brokerUpdate":
                 setBrokerClients(message);
                 break;
             case "rank":
-                console.log(message)
                 setRanks(message);
                 break;
             case "globalsUpdate":
@@ -38,10 +31,11 @@ const WebsocketWrapper = ({ children }: any) => {
             case "devicesConfig":
                 setStationDevices(message);
                 break;
-            case "workoutIds":
+            case "activeWorkoutList":
                 setWorkoutIds(message);
                 break;
             case "loadedWorkouts":
+                console.log(message)
                 setLoadedWorkouts(message);
                 break;
             default:
@@ -58,8 +52,7 @@ const WebsocketWrapper = ({ children }: any) => {
             workoutIds,
             loadedWorkouts,
             stationDevices,
-            stationStatics,
-            stationDynamics,
+            station,
             brokerClients,
             ranks,
             globals,
@@ -67,7 +60,6 @@ const WebsocketWrapper = ({ children }: any) => {
         });
     });
 
-    console.log(globals);
     return (
         <>
             <WebsocketConnection handleData={handleData} ws={ws} />

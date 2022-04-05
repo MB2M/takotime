@@ -1,22 +1,22 @@
-type Station = {
-    appVersion: string;
-    lane_number: number;
-    athlete: string;
-    category: string;
-    // configs: {
-    //     station_ip: string;
-    //     devices: { role: string; state: string }[];
-    // };
-    currentWodPosition: {
-        repsPerBlock: Array<number>;
-        repsOfMovement: number;
-        totalRepsOfMovement: number;
-        currentMovement: string;
-        nextMovementReps: number;
-        nextMovement: string;
-    };
-    result: string;
-};
+// type Station = {
+//     appVersion: string;
+//     lane_number: number;
+//     athlete: string;
+//     category: string;
+//     // configs: {
+//     //     station_ip: string;
+//     //     devices: { role: string; state: string }[];
+//     // };
+//     currentWodPosition: {
+//         repsPerBlock: Array<number>;
+//         repsOfMovement: number;
+//         totalRepsOfMovement: number;
+//         currentMovement: string;
+//         nextMovementReps: number;
+//         nextMovement: string;
+//     };
+//     result: string;
+// };
 
 type StationDevices = {
     _id: string;
@@ -25,7 +25,7 @@ type StationDevices = {
     devices: Device[];
 };
 
-type StationStatics = {
+type Station = {
     _id: string;
     laneNumber: number;
     participant: string;

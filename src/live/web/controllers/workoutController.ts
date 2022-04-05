@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import Workout from "../models/Workout";
+import liveApp from "../..";
+import Workout from "../../models/Workout";
 
 export const createWorkout: RequestHandler = async (
     req: Request,
@@ -15,9 +16,8 @@ export const createWorkout: RequestHandler = async (
     // }
 
     try {
-        const result = await Workout.create(body);
+        const result = await liveApp.manager.workoutUpdate(body, "create");
         res.status(200).json(result);
-        global.liveWodManager.workoutSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
@@ -31,11 +31,8 @@ export const updateWorkout = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await Workout.findByIdAndUpdate(body.id, body, {
-            runValidators: true,
-        }).exec();
+        const response = await liveApp.manager.workoutUpdate(body, "update");
         res.status(200).json(response);
-        global.liveWodManager.workoutSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
@@ -49,16 +46,15 @@ export const deleteWorkout = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await Workout.findByIdAndDelete(body.id, body).exec();
+        const response = await liveApp.manager.workoutUpdate(body, "delete");
         res.status(200).json(response);
-        global.liveWodManager.workoutSet();
     } catch (err: any) {
         handleErrorDevice(err, res);
     }
 };
 
 export const getAllWorkouts = async (req: Request, res: Response) => {
-    const stationStaticsList = await Workout.find();
+    const stationStaticsList = await liveApp.manager.getAllWorkouts();
     if (!stationStaticsList.length)
         return res.status(204).json({ message: "no stationDevices" });
 
@@ -72,18 +68,23 @@ export const loadWorkout = async (req: Request, res: Response) => {
         res.status(400).json({ error: "'customId' parameter is missing" });
 
     try {
-        const ids = await Promise.all(
-            customIdList.map(async (id: string) => {
-                const workout = await Workout.findOne({ customId: id }).exec();
+        const response = await liveApp.manager.loadWorkout(customIdList);
+        // const ids = await Promise.all(
+        //     customIdList.map(async (id: string) => {
+        //         const workout = await Workout.findOne({ customId: id }).exec();
 
-                if (workout) {
-                    return workout._id;
-                }
-                res.status(400).json({ error: "one custom id is not valid" });
-            })
-        );
-        global.liveWodManager.loadWorkout(ids);
-        res.status(200).json({ message: "workouts loaded" });
+        //         if (workout) {
+        //             return workout._id;
+        //         }
+        //         res.status(400).json({ error: "one custom id is not valid" });
+        //     })
+        // );
+
+        if (response.errors) {
+            res.status(400).json(response);
+        } else {
+            res.status(200).json({ message: "workouts loaded" });
+        }
     } catch (err) {
         console.log(err);
     }

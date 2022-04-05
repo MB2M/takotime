@@ -84,3 +84,5 @@ type Device = {
     mac: string | null;
     state: string;
 };
+
+type AedesWithClients<T> = Partial<T> & { clients: object };

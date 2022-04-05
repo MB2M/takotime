@@ -7,321 +7,321 @@ import ForTime from "./wods/ForTime.js";
 import BaseLiveWod from "./wods/BaseLiveWod.js";
 import { WodType } from "../libs/WodType.js";
 import StationDevices from "../../models/StationDevices.js";
-import keyvInstance from "../libs/keyvInstance.js";
-import StationStatics from "../../models/StationStatics.js";
+import keyvInstance from "../../services/keyvMongo.js";
+import StationStatics from "../../models/Station.js";
 import Workout from "../../models/Workout.js";
-import StationDynamics from "../../models/StationDynamics.js";
-class LiveWodManager extends EventEmitter {
-    mqttBroker?: MqttBroker;
-    mqttClient?: MqttClient;
-    timeOuts: NodeJS.Timeout[];
-    stationDevicesDb?: JsonDB;
-    wod?: BaseLiveWod;
 
-    constructor() {
-        super();
-        this.timeOuts = [];
-    }
+// class LiveWodManager extends EventEmitter {
+//     mqttBroker?: MqttBroker;
+//     mqttClient?: MqttClient;
+//     timeOuts: NodeJS.Timeout[];
+//     stationDevicesDb?: JsonDB;
+//     wod?: BaseLiveWod;
 
-    initBroker(port: number, databaseUrl?: string, start?: boolean) {
-        this.mqttBroker = new MqttBroker(port, databaseUrl, start);
-    }
+//     constructor() {
+//         super();
+//         this.timeOuts = [];
+//     }
 
-    initMqttClient(options: object) {
-        this.mqttClient = new MqttClient(options);
-    }
+//     initBroker(port: number, databaseUrl?: string, start?: boolean) {
+//         this.mqttBroker = new MqttBroker(port, databaseUrl, start);
+//     }
 
-    newWod(wodType: WodType, db: JsonDB) {
-        if (wodType === WodType.ForTime) {
-            this.wod = new ForTime(db);
-        }
-    }
+//     initMqttClient(options: object) {
+//         this.mqttClient = new MqttClient(options);
+//     }
 
-    async resetWod() {
-        await this.resetGlobals();
-        await this.resetDynamics();
-        this.wod?.reset();
-    }
+//     newWod(wodType: WodType, db: JsonDB) {
+//         if (wodType === WodType.ForTime) {
+//             this.wod = new ForTime(db);
+//         }
+//     }
 
-    async resetDynamics() {
-        const stations = await StationStatics.find().exec();
-        await Promise.all(
-            stations.map(async (s) => {
-                s.reset();
-                await s.save();
-            })
-        );
-    }
+//     async resetWod() {
+//         await this.resetGlobals();
+//         await this.resetDynamics();
+//         this.wod?.reset();
+//     }
 
-    async startWod(options: StartOptions) {
-        await keyvInstance.set("startTime", options.startTime);
-        await keyvInstance.set("duration", options.duration);
-        this.wod?.start(options);
-    }
+//     async resetDynamics() {
+//         const stations = await StationStatics.find().exec();
+//         await Promise.all(
+//             stations.map(async (s) => {
+//                 s.reset();
+//                 await s.save();
+//             })
+//         );
+//     }
 
-    subscribeTopic(topicName: string | string[]) {
-        this.mqttClient?.client.subscribe(topicName);
-    }
+//     async startWod(options: StartOptions) {
+//         await keyvInstance.set("startTime", options.startTime);
+//         await keyvInstance.set("duration", options.duration);
+//         this.wod?.start(options);
+//     }
 
-    // Send config when a station connect
-    initDefaultStationSub() {
-        this.mqttBroker?.socket.on(
-            "subscribe",
-            (subscriptions: Subscription[]) => {
-                if (subscriptions[0]?.topic === "server/wodConfig") {
-                    this.sendFullConfig("server/wodConfig");
-                }
-            }
-        );
-    }
+//     subscribeTopic(topicName: string | string[]) {
+//         this.mqttClient?.client.subscribe(topicName);
+//     }
 
-    async resetGlobals() {
-        await keyvInstance.set("duration", 0);
-        await keyvInstance.set("startTime", "");
-        await keyvInstance.set("state", 0);
-    }
+//     // Send config when a station connect
+//     initDefaultStationSub() {
+//         this.mqttBroker?.socket.on(
+//             "subscribe",
+//             (subscriptions: Subscription[]) => {
+//                 if (subscriptions[0]?.topic === "server/wodConfig") {
+//                     this.sendFullConfig("server/wodConfig");
+//                 }
+//             }
+//         );
+//     }
 
-    async getGlobals() {
-        return {
-            duration: await keyvInstance.get("duration"),
-            startTime: await keyvInstance.get("startTime"),
-            externalEventId: await keyvInstance.get("externalEventId"),
-            externalHeatId: await keyvInstance.get("externalHeatId"),
-            state: await keyvInstance.get("state"),
-        };
-    }
+//     async resetGlobals() {
+//         await keyvInstance.set("duration", 0);
+//         await keyvInstance.set("startTime", "");
+//         await keyvInstance.set("state", 0);
+//     }
 
-    async sendFullConfig(channel: string) {
-        let msg = JSON.parse(JSON.stringify(this.wod?.db.getData("/")));
-        msg.globals = await this.getGlobals();
-        msg.stations = await StationStatics.find().exec();
-        msg.stations = await Promise.all(
-            msg.stations.map(async (s: any) => {
-                let station = JSON.parse(JSON.stringify(s));
-                const stationDevice = await StationDevices.findOne(
-                    { laneNumber: s.laneNumber },
-                    "ip devices"
-                ).exec();
+//     async getGlobals() {
+//         return {
+//             duration: await keyvInstance.get("duration"),
+//             startTime: await keyvInstance.get("startTime"),
+//             externalEventId: await keyvInstance.get("externalEventId"),
+//             externalHeatId: await keyvInstance.get("externalHeatId"),
+//             state: await keyvInstance.get("state"),
+//         };
+//     }
 
-                if (stationDevice) {
-                    station.configs = {
-                        station_ip: stationDevice.ip,
-                        devices: stationDevice.devices,
-                    };
-                }
-                return station;
-            })
-        );
+//     async sendFullConfig(channel: string) {
+//         let msg = JSON.parse(JSON.stringify(this.wod?.db.getData("/")));
+//         msg.globals = await this.getGlobals();
+//         msg.stations = await StationStatics.find().exec();
+//         msg.stations = await Promise.all(
+//             msg.stations.map(async (s: any) => {
+//                 let station = JSON.parse(JSON.stringify(s));
+//                 const stationDevice = await StationDevices.findOne(
+//                     { laneNumber: s.laneNumber },
+//                     "ip devices"
+//                 ).exec();
 
-        const workoutIds = await keyvInstance.get("workoutId");
-        const workouts = await Promise.all(
-            workoutIds.map(async (id: string) => {
-                try {
-                    const workout = await Workout.findById(id).exec();
-                    return workout;
-                } catch (err) {
-                    return;
-                }
-            })
-        );
-        msg.workouts = workouts;
+//                 if (stationDevice) {
+//                     station.configs = {
+//                         station_ip: stationDevice.ip,
+//                         devices: stationDevice.devices,
+//                     };
+//                 }
+//                 return station;
+//             })
+//         );
 
-        try {
-            this.mqttClient?.client.publish(channel, JSON.stringify(msg), {
-                qos: 1,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
+//         const workoutIds = await keyvInstance.get("workoutId");
+//         const workouts = await Promise.all(
+//             workoutIds.map(async (id: string) => {
+//                 try {
+//                     const workout = await Workout.findById(id).exec();
+//                     return workout;
+//                 } catch (err) {
+//                     return;
+//                 }
+//             })
+//         );
+//         msg.workouts = workouts;
 
-    // subsribe to receive data from stations
-    // call the updatedb if wod is running
-    initDefaultMessageReceipt() {
-        this.subscribeTopic("station/wodData");
-        this.mqttClient?.client.on("message", async (topic, message) => {
-            if (topic === "station/wodData") {
-                const msg = JSON.parse(message.toString());
+//         try {
+//             this.mqttClient?.client.publish(channel, JSON.stringify(msg), {
+//                 qos: 1,
+//             });
+//         } catch (error) {
+//             console.error(error);
+//         }
+//     }
 
-                if (msg.topic === "blePeripheral") {
-                    this.updateStation(msg.data);
-                } else {
-                    this.updateDynamics(msg.data);
-                    // this.wod?.update(JSON.parse(message.toString()));
-                }
-            }
-        });
-    }
+//     // subsribe to receive data from stations
+//     // call the updatedb if wod is running
+//     initDefaultMessageReceipt() {
+//         this.subscribeTopic("station/wodData");
+//         this.mqttClient?.client.on("message", async (topic, message) => {
+//             if (topic === "station/wodData") {
+//                 const msg = JSON.parse(message.toString());
 
-    async updateDynamics(data: any) {
-        console.log("update Dynamics");
-        try {
-            const response = await StationStatics.updateOne(
-                {
-                    _id: data._id,
-                },
-                data,
-                {
-                    runValidators: true,
-                    upsert: true,
-                }
-            );
-            this.emit("station/dynamicsUpdated");
-        } catch (err) {
-            console.log(err);
-        }
-    }
+//                 if (msg.topic === "blePeripheral") {
+//                     this.updateStation(msg.data);
+//                 } else {
+//                     this.updateDynamics(msg.data);
+//                     // this.wod?.update(JSON.parse(message.toString()));
+//                 }
+//             }
+//         });
+//     }
 
-    async updateStation(data: any) {
-        const stationDevice = await StationDevices.findOne(
-            { ip: data.configs.station_ip },
-            "devices"
-        ).exec();
+//     async updateDynamics(data: any) {
+//         console.log("update Dynamics");
+//         try {
+//             const response = await StationStatics.updateOne(
+//                 {
+//                     _id: data._id,
+//                 },
+//                 data,
+//                 {
+//                     runValidators: true,
+//                     upsert: true,
+//                 }
+//             );
+//             this.emit("station/dynamicsUpdated");
+//         } catch (err) {
+//             console.log(err);
+//         }
+//     }
 
-        if (stationDevice) {
-            stationDevice.devices = data.configs.devices;
-            await stationDevice.save();
-            this.emit("station/deviceUpdated");
-        }
-    }
+//     async updateStation(data: any) {
+//         const stationDevice = await StationDevices.findOne(
+//             { ip: data.configs.station_ip },
+//             "devices"
+//         ).exec();
 
-    sendToChannel(
-        channel: string,
-        dbPath: string = "/",
-        message?: string
-    ): void {
-        try {
-            let msg =
-                message || dbPath[0] !== "/"
-                    ? message
-                    : JSON.stringify(this.wod?.db.getData(dbPath));
-            this.mqttClient?.client.publish(channel, msg as string, {
-                qos: 1,
-            });
-        } catch (error) {
-            console.error(error);
-        }
-    }
+//         if (stationDevice) {
+//             stationDevice.devices = data.configs.devices;
+//             await stationDevice.save();
+//             this.emit("station/deviceUpdated");
+//         }
+//     }
 
-    async sendGlobalsToChannel() {
-        const globals = await this.getGlobals();
-        try {
-            this.mqttClient?.client.publish(
-                "server/wodGlobals",
-                JSON.stringify(globals),
-                {
-                    qos: 1,
-                }
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    }
+//     sendToChannel(
+//         channel: string,
+//         dbPath: string = "/",
+//         message?: string
+//     ): void {
+//         try {
+//             let msg =
+//                 message || dbPath[0] !== "/"
+//                     ? message
+//                     : JSON.stringify(this.wod?.db.getData(dbPath));
+//             this.mqttClient?.client.publish(channel, msg as string, {
+//                 qos: 1,
+//             });
+//         } catch (error) {
+//             console.error(error);
+//         }
+//     }
 
-    async publishRank() {
-        const stationRanked = await this.wod?.getWodRank();
-        this.emit("rank", stationRanked);
-        // this.sendToChannel("server/rank", JSON.stringify(stationRanked));
-        // console.log(JSON.stringify(stationRanked));
-    }
+//     async sendGlobalsToChannel() {
+//         const globals = await this.getGlobals();
+//         try {
+//             this.mqttClient?.client.publish(
+//                 "server/wodGlobals",
+//                 JSON.stringify(globals),
+//                 {
+//                     qos: 1,
+//                 }
+//             );
+//         } catch (error) {
+//             console.error(error);
+//         }
+//     }
 
-    clearAlltimeout() {
-        this.timeOuts?.forEach(clearTimeout);
-    }
+//     async publishRank() {
+//         const stationRanked = await this.wod?.getWodRank();
+//         this.emit("rank", stationRanked);
+//         // this.sendToChannel("server/rank", JSON.stringify(stationRanked));
+//         // console.log(JSON.stringify(stationRanked));
+//     }
 
-    async chronoData() {
-        const startTime = await keyvInstance.get("startTime");
-        const duration = await keyvInstance.get("duration");
-        const start =
-            // Date.parse(this.wod?.db.getData("/globals/startTime")) / 1000;
-            Date.parse(await keyvInstance.get("startTime")) / 1000;
-        const end = (Date.parse(startTime) + duration * 60000) / 1000;
-        // const end =
-        //     (Date.parse(this.wod?.db.getData("/globals/startTime")) +
-        //         this.wod?.db.getData("/globals/duration") * 60000) /
-        //     1000;
+//     clearAlltimeout() {
+//         this.timeOuts?.forEach(clearTimeout);
+//     }
 
-        return JSON.stringify({
-            startTime: start,
-            endTime: end,
-        });
-    }
+//     async chronoData() {
+//         const startTime = await keyvInstance.get("startTime");
+//         const duration = await keyvInstance.get("duration");
+//         const start =
+//             // Date.parse(this.wod?.db.getData("/globals/startTime")) / 1000;
+//             Date.parse(await keyvInstance.get("startTime")) / 1000;
+//         const end = (Date.parse(startTime) + duration * 60000) / 1000;
+//         // const end =
+//         //     (Date.parse(this.wod?.db.getData("/globals/startTime")) +
+//         //         this.wod?.db.getData("/globals/duration") * 60000) /
+//         //     1000;
 
-    initDefaultManagerSub() {
-        this.wod?.on("wodUpdate", async (type) => {
-            console.log(`wod ${type}`);
+//         return JSON.stringify({
+//             startTime: start,
+//             endTime: end,
+//         });
+//     }
 
-            await keyvInstance.set("state", this.wod?.state);
+//     initDefaultManagerSub() {
+//         this.wod?.on("wodUpdate", async (type) => {
+//             console.log(`wod ${type}`);
 
-            switch (type) {
-                case "countdown":
-                    this.sendGlobalsToChannel();
-                    // this.sendToChannel("server/wodGlobals", "/globals");
-                    // this.mqttClient?.client.publish(
-                    //     "server/chrono",
-                    //     await this.chronoData(),
-                    //     {
-                    //         qos: 1,
-                    //     }
-                    // );
-                    break;
-                case "start":
-                    this.sendGlobalsToChannel();
-                    // this.sendToChannel("server/wodGlobals", "/globals");
-                    const rankInterval = setInterval(() => {
-                        this.publishRank();
-                    }, 300);
-                    this.timeOuts?.push(rankInterval);
-                    break;
-                case "finish":
-                    this.sendGlobalsToChannel();
-                    // this.sendToChannel("server/wodGlobals", "/globals");
-                    this.clearAlltimeout();
-                    break;
-                case "reset":
-                    this.clearAlltimeout();
-                    this.sendFullConfig("server/wodConfigUpdate");
-                    // this.mqttClient?.client.publish(
-                    //     "server/chrono",
-                    //     await this.chronoData(),
-                    //     {
-                    //         qos: 1,
-                    //     }
-                    // );
-                    break;
-                default:
-                    break;
-            }
-        });
-    }
+//             await keyvInstance.set("state", this.wod?.state);
 
-    async loadWorkout(workoutId: string[]) {
-        await keyvInstance.set("workoutId", workoutId);
-        this.emit("loadWorkout");
-        this.sendFullConfig("server/wodConfigUpdate");
-    }
+//             switch (type) {
+//                 case "countdown":
+//                     this.sendGlobalsToChannel();
+//                     // this.sendToChannel("server/wodGlobals", "/globals");
+//                     // this.mqttClient?.client.publish(
+//                     //     "server/chrono",
+//                     //     await this.chronoData(),
+//                     //     {
+//                     //         qos: 1,
+//                     //     }
+//                     // );
+//                     break;
+//                 case "start":
+//                     this.sendGlobalsToChannel();
+//                     // this.sendToChannel("server/wodGlobals", "/globals");
+//                     const rankInterval = setInterval(() => {
+//                         this.publishRank();
+//                     }, 300);
+//                     this.timeOuts?.push(rankInterval);
+//                     break;
+//                 case "finish":
+//                     this.sendGlobalsToChannel();
+//                     // this.sendToChannel("server/wodGlobals", "/globals");
+//                     this.clearAlltimeout();
+//                     break;
+//                 case "reset":
+//                     this.clearAlltimeout();
+//                     this.sendFullConfig("server/wodConfigUpdate");
+//                     // this.mqttClient?.client.publish(
+//                     //     "server/chrono",
+//                     //     await this.chronoData(),
+//                     //     {
+//                     //         qos: 1,
+//                     //     }
+//                     // );
+//                     break;
+//                 default:
+//                     break;
+//             }
+//         });
+//     }
 
-    setDevicesDb(db: JsonDB): void {
-        this.stationDevicesDb = db;
-    }
+//     async loadWorkout(workoutId: string[]) {
+//         await keyvInstance.set("workoutId", workoutId);
+//         this.emit("loadWorkout");
+//         this.sendFullConfig("server/wodConfigUpdate");
+//     }
 
-    devicesSet() {
-        this.emit("setDevices");
-        this.sendFullConfig("server/wodConfigUpdate");
-    }
+//     setDevicesDb(db: JsonDB): void {
+//         this.stationDevicesDb = db;
+//     }
 
-    stationStaticsSet() {
-        this.emit("setStationStatics");
-        this.sendFullConfig("server/wodConfigUpdate");
-    }
+//     devicesSet() {
+//         this.emit("setDevices");
+//         this.sendFullConfig("server/wodConfigUpdate");
+//     }
 
-    workoutSet() {
-        this.emit("setWorkout");
-    }
+//     stationStaticsSet() {
+//         this.emit("setStationStatics");
+//         this.sendFullConfig("server/wodConfigUpdate");
+//     }
 
-    externalLoadSet() {
-        this.emit("setExternalLoad");
-    }
-}
+//     workoutSet() {
+//         this.emit("setWorkout");
+//     }
 
-export default LiveWodManager;
+//     externalLoadSet() {
+//         this.emit("setExternalLoad");
+//     }
+// }
+// 
+// export default LiveWodManager;

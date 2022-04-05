@@ -113,7 +113,6 @@ class Station {
                     if (!data.stations.dynamics.measurements) {
                         data.stations.dynamics.measurements = [];
                     }
-                    
                 }
                 this.updateDB(data);
 
@@ -183,7 +182,7 @@ class Station {
                     state
                 );
                 // send to server
-                this.sendToServer("blePeripheral");
+                this.sendToServer("station/blePeripheral");
             } catch {
                 console.error("can't update BLE status");
             }
@@ -281,7 +280,7 @@ class Station {
         // Pour l'instant  le message est de type reps
 
         //Publish to server
-        this.sendToServer("reps");
+        this.sendToServer("station/generic");
 
         //publish to screen
         this.updateBoard();
@@ -340,11 +339,15 @@ class Station {
         const station = this.db.getData("/stations");
         console.log("STATION:", station);
 
-        this.mqttClient.client.publish(
-            "station/wodData",
-            JSON.stringify({ topic: topic, data: station }),
-            { qos: 1 }
-        );
+        // this.mqttClient.client.publish(
+        //     "station/wodData",
+        //     JSON.stringify({ topic: topic, data: station }),
+        //     { qos: 1 }
+        // );
+
+        this.mqttClient.client.publish(topic, JSON.stringify(station), {
+            qos: 1,
+        });
     }
 
     extractRelativesInfo(json) {
@@ -390,7 +393,7 @@ class Station {
             this.db.save();
 
             //Publish to server
-            this.sendToServer("reps");
+            this.sendToServer("station/generic");
 
             //publish to screen
             this.updateBoard();

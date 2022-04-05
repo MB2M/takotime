@@ -416,6 +416,8 @@ class WodInterpreter extends EventEmitter {
         let baseScore;
         let baseType;
 
+        console.log("SCORES:", this.scores);
+
         const shortcutScore = measurements.find((m) => m.shortcut);
         if (shortcutScore) {
             scores.push(this.toReadableTime(shortcutScore.value));

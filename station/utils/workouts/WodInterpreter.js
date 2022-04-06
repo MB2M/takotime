@@ -473,10 +473,10 @@ class WodInterpreter extends EventEmitter {
 
     toReadableTime(timestamp) {
         const asDate = new Date(timestamp);
-        const hours = addZero(asDate.getUTCHours(), 2);
-        const minutes = addZero(asDate.getUTCMinutes(), 2);
-        const seconds = addZero(asDate.getUTCSeconds(), 2);
-        const milli = addZero(asDate.getUTCMilliseconds(), 3);
+        const hours = this.addZero(asDate.getUTCHours(), 2);
+        const minutes = this.addZero(asDate.getUTCMinutes(), 2);
+        const seconds = this.addZero(asDate.getUTCSeconds(), 2);
+        const milli = this.addZero(asDate.getUTCMilliseconds(), 3);
 
         if (milli) return `${hours}:${minutes}:${seconds}:${milli}`;
     }

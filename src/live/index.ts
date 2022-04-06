@@ -34,7 +34,7 @@ class LiveApp {
         this.expressApp = expressApp;
         this.expressApp.use(endpoint, this.routes);
         await this.initMqttBroker();
-        this.managerInit(server);
+        // this.managerInit(server);
     }
 
     async initMqttBroker(): Promise<boolean> {

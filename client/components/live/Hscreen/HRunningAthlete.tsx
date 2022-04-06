@@ -79,7 +79,8 @@ const HorizontalRunningAthlete = ({
 
     useEffect(() => {
         setBgSize(getBgSize());
-        getColors(data?.rank?.at(-1));
+        const rank = data.rank.at(-1);
+        if (rank) getColors(rank);
     }, [data, workout]);
 
     // useEffect(() => {

@@ -119,7 +119,7 @@ type WorkoutIds = {
     customId: string;
 };
 
-type Ranks = Array<number | undefined>;
+type Ranks = Array<number>;
 
 type StationRanks = {
     lane: number;

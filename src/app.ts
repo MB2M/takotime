@@ -17,12 +17,15 @@ app.use(
     })
 );
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/timesync", timesyncServer.requestHandler);
 
 // Start App
 
-const server  = initServer(app);
-liveApp.start(app, server, "/live");
+const server = initServer(app);
+try {
+    liveApp.start(app, server, "/live");
+} catch (err) {
+    console.error(err);
+}

@@ -20,8 +20,8 @@ const widescreen: NextPage = () => {
                     crossOrigin="anonymous"
                 />
             </Head>
-            <WebsocketWrapperLight>
-                <WidescreenVertical></WidescreenVertical>
+            <WebsocketWrapperLight> 
+                <WidescreenVertical data={undefined}></WidescreenVertical>
             </WebsocketWrapperLight>
             <Script
                 src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

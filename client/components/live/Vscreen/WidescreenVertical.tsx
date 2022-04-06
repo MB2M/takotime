@@ -5,7 +5,7 @@ import Standing from "./Standing";
 const WidescreenVertical = ({
     data,
 }: {
-    data: WidescreenData;
+    data: WidescreenData | undefined;
 }): JSX.Element => {
     const [wodStatus, setWodStatus] = useState(1);
     const [staticsFiltered, setStaticsFiltered] = useState([]);
@@ -19,7 +19,7 @@ const WidescreenVertical = ({
     const [transitionFinished, setTransitionFinished] = useState(true);
 
     useEffect(() => {
-        if (data.globals?.state === 1) {
+        if (data?.globals?.state === 1) {
             setIsTransitionLogo(true);
             setLeftLogo("-50%");
             setTransiBg("#2e2e2e");
@@ -42,7 +42,7 @@ const WidescreenVertical = ({
             };
         }
 
-        if (data.globals?.state === 2) {
+        if (data?.globals?.state === 2) {
             setIsTransitionStart(true);
             setTransiBg("#2e2e2e");
 
@@ -105,15 +105,15 @@ const WidescreenVertical = ({
         );
     }
     const bigScrenLayout = () => {
-        switch (data.globals?.state) {
+        switch (data?.globals?.state) {
             case 0:
                 return <Standing data={data} />;
             case 2:
                 return <Running data={data} />;
             // case 3:
             //     return <LiveEndedWorkout data={data} />;
-            default:
-                return <Standing data={data} />;
+            // default:
+            //     return <Standing data={data} />;
         }
         return <div>loading</div>;
     };

@@ -5,7 +5,7 @@ import HorizontalRunning from "./HRunning";
 const WidescreenHorizontal = ({
     data,
 }: {
-    data: WidescreenData;
+    data: WidescreenData | undefined;
 }): JSX.Element => {
     const [wodStatus, setWodStatus] = useState(1);
     const [staticsFiltered, setStaticsFiltered] = useState([]);
@@ -105,15 +105,15 @@ const WidescreenHorizontal = ({
     //     );
     // }
     const bigScrenLayout = () => {
-        switch (data.globals?.state) {
+        switch (data?.globals?.state) {
             // case 0:
             //     return <Standing data={data} />;
-            // case 2:
-            //     return <Running data={data} />;
+            case 2:
+                return <HorizontalRunning data={data} />;
             // case 3:
             //     return <LiveEndedWorkout data={data} />;
-            default:
-                return <HorizontalRunning data={data} />;
+            // default:
+            //     return <HorizontalRunning data={data} />;
         }
         return <div>loading</div>;
     };

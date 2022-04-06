@@ -464,15 +464,21 @@ class WodInterpreter extends EventEmitter {
     }
 
     //SI PAS DE MEASUREMENT, REPS (SI AMRAP) SINON DECLENCHER UN (EN GROS PAS DE BUZZER ALORS 'CAP +XXX")
+    addZero(x, n) {
+        while (x.toString().length < n) {
+            x = "0" + x;
+        }
+        return x;
+    }
 
     toReadableTime(timestamp) {
         const asDate = new Date(timestamp);
-        const hours = asDate.getUTCHours();
-        const minutes = asDate.getUTCMinutes();
-        const seconds = asDate.getUTCSeconds();
-        const milli = asDate.getUTCMilliseconds();
+        const hours = addZero(asDate.getUTCHours(), 2);
+        const minutes = addZero(asDate.getUTCMinutes(), 2);
+        const seconds = addZero(asDate.getUTCSeconds(), 2);
+        const milli = addZero(asDate.getUTCMilliseconds(), 3);
 
-        return `${hours}:${minutes}:${seconds}:${milli}`;
+        if (milli) return `${hours}:${minutes}:${seconds}:${milli}`;
     }
 }
 

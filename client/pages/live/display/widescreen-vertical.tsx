@@ -6,7 +6,6 @@ import WidescreenVertical from "../../../components/live/Vscreen/WidescreenVerti
 
 const widescreen: NextPage = () => {
     return (
-        
         <>
             <Head>
                 <meta
@@ -20,7 +19,7 @@ const widescreen: NextPage = () => {
                     crossOrigin="anonymous"
                 />
             </Head>
-            <WebsocketWrapperLight> 
+            <WebsocketWrapperLight>
                 <WidescreenVertical data={undefined}></WidescreenVertical>
             </WebsocketWrapperLight>
             <Script

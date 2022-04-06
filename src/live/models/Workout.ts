@@ -14,7 +14,7 @@ const measurement = new mongoose.Schema({
     },
     convertInTime: { type: Boolean, default: false },
     repsConvertion: { type: Number, default: 1000 },
-    save: { type: Boolean, default: true },
+    forSave: { type: Boolean, default: true },
     _id: { auto: false },
 });
 

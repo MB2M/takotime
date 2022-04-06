@@ -33,11 +33,12 @@ class LiveApp {
     ) {
         this.expressApp = expressApp;
         this.expressApp.use(endpoint, this.routes);
-        this.initMqttBroker();
-        // this.managerInit(server);
+        await this.initMqttBroker();
+        this.managerInit(server);
     }
 
     async initMqttBroker(): Promise<boolean> {
+        // try {
         if (!brokerPort) {
             throw "Port number is missing";
         }
@@ -58,6 +59,9 @@ class LiveApp {
         });
 
         return true;
+        // } catch (err) {
+        // console.log(err);
+        // }
     }
 
     async initWebsocket(server: Server) {

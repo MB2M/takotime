@@ -31,14 +31,10 @@ class LiveApp {
         server: Server,
         endpoint: string = "/live"
     ) {
-        try {
-            this.expressApp = expressApp;
-            this.expressApp.use(endpoint, this.routes);
-            this.initMqttBroker();
-            this.managerInit(server);
-        } catch (err) {
-            console.log(err);
-        }
+        this.expressApp = expressApp;
+        this.expressApp.use(endpoint, this.routes);
+        // this.initMqttBroker();
+        // this.managerInit(server);
     }
 
     async initMqttBroker(): Promise<boolean> {

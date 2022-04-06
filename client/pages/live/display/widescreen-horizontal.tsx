@@ -7,6 +7,7 @@ import WidescreenHorizontal from "../../../components/live/Hscreen/WidescreenHor
 
 const widescreen: NextPage = () => {
     return (
+        
         <>
             <Head>
                 <meta

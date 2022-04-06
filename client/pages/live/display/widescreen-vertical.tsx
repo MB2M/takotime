@@ -6,6 +6,7 @@ import WidescreenVertical from "../../../components/live/Vscreen/WidescreenVerti
 
 const widescreen: NextPage = () => {
     return (
+        
         <>
             <Head>
                 <meta

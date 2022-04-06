@@ -25,7 +25,7 @@ app.use("/timesync", timesyncServer.requestHandler);
 
 const server = initServer(app);
 try {
-    liveApp.start(app, server, "/live");
+    // liveApp.start(app, server, "/live");
 } catch (err) {
     console.error(err);
 }

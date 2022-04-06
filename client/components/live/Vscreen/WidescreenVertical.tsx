@@ -1,8 +1,12 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Running from "./Running";
 import Standing from "./Standing";
 
-const Widescreen = ({ data }: { data: WidescreenData }): JSX.Element => {
+const WidescreenVertical = ({
+    data,
+}: {
+    data: WidescreenData;
+}): JSX.Element => {
     const [wodStatus, setWodStatus] = useState(1);
     const [staticsFiltered, setStaticsFiltered] = useState([]);
     const [athletesData, setAthletesData] = useState([]);
@@ -121,4 +125,4 @@ const Widescreen = ({ data }: { data: WidescreenData }): JSX.Element => {
     //     : bigScrenLayout();
 };
 
-export default Widescreen;
+export default WidescreenVertical;

@@ -7,6 +7,7 @@ class WodTimer extends EventEmitter {
     }
 
     async launchTimer(startTime, duration, checkpointTime) {
+        console.log("START TIMER");
         const now = Date.now();
         if (now < Date.parse(startTime) + duration * 60000) {
             if (now < Date.parse(startTime)) {

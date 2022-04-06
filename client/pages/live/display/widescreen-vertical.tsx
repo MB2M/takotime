@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Script from "next/script";
-import LiveDataWorkout from "../../../components/live/screen/old/LiveDataWorkout";
-import WebsocketWrapper from "../../../components/live/WebSocketWrapper";
+import WebsocketWrapperLight from "../../../components/live/WebSocketWrapperLight";
+import WidescreenVertical from "../../../components/live/Vscreen/WidescreenVertical";
 
 const widescreen: NextPage = () => {
     return (
@@ -19,9 +19,9 @@ const widescreen: NextPage = () => {
                     crossOrigin="anonymous"
                 />
             </Head>
-            <WebsocketWrapper>
-                <LiveDataWorkout broadcast={"bigscreen"}></LiveDataWorkout>
-            </WebsocketWrapper>
+            <WebsocketWrapperLight>
+                <WidescreenVertical></WidescreenVertical>
+            </WebsocketWrapperLight>
             <Script
                 src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

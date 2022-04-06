@@ -2,7 +2,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Script from "next/script";
 import WebsocketWrapperLight from "../../../components/live/WebSocketWrapperLight";
-import Widescreen from "../../../components/live/screen/Widescreen";
+import Widescreen from "../../../components/live/Vscreen/WidescreenVertical";
+import WidescreenHorizontal from "../../../components/live/Hscreen/WidescreenHorizontal";
 
 const widescreen: NextPage = () => {
     return (
@@ -20,7 +21,7 @@ const widescreen: NextPage = () => {
                 />
             </Head>
             <WebsocketWrapperLight>
-                <Widescreen broadcast={"bigscreen"}></Widescreen>
+                <WidescreenHorizontal></WidescreenHorizontal>
             </WebsocketWrapperLight>
             <Script
                 src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

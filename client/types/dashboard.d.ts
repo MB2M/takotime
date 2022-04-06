@@ -98,8 +98,20 @@ type Workout = {
     blocks: Array<{
         rounds: number;
         movements: Array<{ name: string; reps: number; varEachRounds: number }>;
-        measurements: object;
+        measurements: Measurement;
     }>;
+};
+
+type Measurement = {
+    id: number;
+    type: "fortime" | "amrap";
+    blocksId: number[];
+    from: number;
+    at: number;
+    repsFrom: number;
+    repsTot: number;
+    device: "buzzer" | "timer" | "counter";
+    save: boolean;
 };
 
 type WorkoutIds = {

@@ -11,7 +11,7 @@ const HeatUpdate = ({ stations }: { stations: Station[] }) => {
                 {stations.map((s, i) => {
                     return (
                         <Grid
-                            key={s.lane_number}
+                            key={s.laneNumber}
                             container
                             justifyContent="flex-start"
                             alignItems="center"
@@ -22,14 +22,14 @@ const HeatUpdate = ({ stations }: { stations: Station[] }) => {
                                 <TextField
                                     label="lane"
                                     // onChange={(e) => handleAthleteChange(s, i, e)}
-                                    defaultValue={s.lane_number}
+                                    defaultValue={s.laneNumber}
                                 />
                             </Grid>
                             <Grid item>
                                 <TextField
                                     label="participant"
                                     // onChange={(e) => handleAthleteChange(s, i, e)}
-                                    defaultValue={s.athlete}
+                                    defaultValue={s.participant}
                                 />
                             </Grid>
                             <Grid item>

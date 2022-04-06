@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { WebSocket } from "nextjs-websocket";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, Key } from "react";
 import {
     Container,
     Table,
@@ -111,7 +111,7 @@ const Dashboard: NextPage = ({
 
     const handleScriptRestart = (station: Station) => {
         const stationDevice = stationDevices.find(
-            (s) => s.laneNumber === station.laneNumber
+            (s: { laneNumber: number; }) => s.laneNumber === station.laneNumber
         );
 
         if (stationDevice)
@@ -125,7 +125,7 @@ const Dashboard: NextPage = ({
 
     const handleRestartUpdate = (station: Station) => {
         const stationDevice = stationDevices.find(
-            (s) => s.laneNumber === station.laneNumber
+            (s: { laneNumber: number; }) => s.laneNumber === station.laneNumber
         );
 
         if (stationDevice)
@@ -148,12 +148,12 @@ const Dashboard: NextPage = ({
             (stationIp && brokerClients[stationIp]) || false;
         const devicesConnected = !stationConnected
             ? null
-            : stationDevice?.devices.map((d) => {
+            : stationDevice?.devices.map((d: { role: any; state: string; }) => {
                   return { name: d.role, connected: d.state === "connected" };
               });
         const rank =
             (ranks.length > 0 &&
-                ranks?.find((r) => r.lane === lane)?.rank?.join(" | ")) ||
+                ranks?.find((r: { lane: number; }) => r.lane === lane)?.rank?.join(" | ")) ||
             "n/a";
 
         return {
@@ -289,8 +289,8 @@ const Dashboard: NextPage = ({
                     <Grid item xs={12} lg={10}>
                         <Grid container spacing={2}>
                             {station
-                                ?.sort((a, b) => a.laneNumber - b.laneNumber)
-                                .map((s, i) => {
+                                ?.sort((a: { laneNumber: number; }, b: { laneNumber: number; }) => a.laneNumber - b.laneNumber)
+                                .map((s: { _id: string; laneNumber: number; participant: string; category: string; externalId: number; dynamics: { appVersion: string; state: number; currentWodPosition: { block: number; round: number; movement: number; reps: number; repsPerBlock: number[]; repsOfMovement: number; totalRepsOfMovement: number; currentMovement: string; nextMovementReps: number; nextMovement: string; }; result: string; measurements: object; }; }, i: Key | null | undefined) => {
                                     const data = rowData(s);
                                     return (
                                         <Grid key={i} item md={3}>
@@ -396,7 +396,7 @@ const Dashboard: NextPage = ({
                                                             component="div"
                                                         > */}
                                                                 {data.devicesConnected?.map(
-                                                                    (d) =>
+                                                                    (d: { name: any; connected: any; }) =>
                                                                         `${
                                                                             d.name
                                                                         }: ${

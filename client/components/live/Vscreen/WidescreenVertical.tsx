@@ -110,8 +110,8 @@ const WidescreenVertical = ({
                 return <Standing data={data} />;
             case 2:
                 return <Running data={data} />;
-            case 3:
-                return <LiveEndedWorkout data={data} />;
+            // case 3:
+            //     return <LiveEndedWorkout data={data} />;
             default:
                 return <Standing data={data} />;
         }

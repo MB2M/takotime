@@ -69,36 +69,40 @@ class LiveApp {
     }
 
     async initWebsocket(server: Server) {
-        this.wss = new WebSocketServer({ server });
-        this.wss.on("connection", function connection(ws) {
-            ws.on("message", function message(data) {
-                const json = JSON.parse(data.toString());
-                const topic = json.topic;
-                const message = json.message;
-                if (topic === "client/scriptReset") {
-                    console.log("scriptReset");
-                    global.liveWodManager.sendToChannel(
-                        "server/scriptReset",
-                        null,
-                        message
-                    );
-                }
-                if (topic === "client/restartUpdate") {
-                    global.liveWodManager.sendToChannel(
-                        "server/restartUpdate",
-                        null,
-                        message
-                    );
-                }
+        try {
+            this.wss = new WebSocketServer({ server });
+            this.wss.on("connection", function connection(ws) {
+                ws.on("message", function message(data) {
+                    const json = JSON.parse(data.toString());
+                    const topic = json.topic;
+                    const message = json.message;
+                    if (topic === "client/scriptReset") {
+                        console.log("scriptReset");
+                        global.liveWodManager.sendToChannel(
+                            "server/scriptReset",
+                            null,
+                            message
+                        );
+                    }
+                    if (topic === "client/restartUpdate") {
+                        global.liveWodManager.sendToChannel(
+                            "server/restartUpdate",
+                            null,
+                            message
+                        );
+                    }
+                });
+                // sender.sendStaticsToAllClients();
+                // sender.sendStationStatusToAllClients();
+                // sender.sendGlobalsToAllClients();
+                // sender.sendStationDevicesToAllClients();
+                // sender.sendWorkoutsToAllClients();
+                // sender.sendLoadedWorkoutsToAllClients();
+                // sender.sendDynamicsToAllClients();
             });
-            // sender.sendStaticsToAllClients();
-            // sender.sendStationStatusToAllClients();
-            // sender.sendGlobalsToAllClients();
-            // sender.sendStationDevicesToAllClients();
-            // sender.sendWorkoutsToAllClients();
-            // sender.sendLoadedWorkoutsToAllClients();
-            // sender.sendDynamicsToAllClients();
-        });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async managerInit(server: Server) {

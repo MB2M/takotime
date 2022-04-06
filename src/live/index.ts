@@ -33,7 +33,7 @@ class LiveApp {
     ) {
         this.expressApp = expressApp;
         this.expressApp.use(endpoint, this.routes);
-        // this.initMqttBroker();
+        this.initMqttBroker();
         // this.managerInit(server);
     }
 

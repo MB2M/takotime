@@ -76,6 +76,24 @@ class Manager extends EventEmitter {
         });
     }
 
+    async chronoData() {
+        const startTime = await keyvInstance.get("startTime");
+        const duration = await keyvInstance.get("duration");
+        const start =
+            // Date.parse(this.wod?.db.getData("/globals/startTime")) / 1000;
+            Date.parse(await keyvInstance.get("startTime")) / 1000;
+        const end = (Date.parse(startTime) + duration * 60000) / 1000;
+        // const end =
+        //     (Date.parse(this.wod?.db.getData("/globals/startTime")) +
+        //         this.wod?.db.getData("/globals/duration") * 60000) /
+        //     1000;
+
+        return JSON.stringify({
+            startTime: start,
+            endTime: end,
+        });
+    }
+
     async updateDynamics(data: any) {
         console.log("update Dynamics");
         try {

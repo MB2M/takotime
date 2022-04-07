@@ -19,7 +19,10 @@ class WodTimerSubscription extends AbstractEventsubscription {
             switch (topic) {
                 case "countdown":
                     liveApp.manager.sendGlobalsToChannel();
-
+                    liveApp.manager.mqttServices.send(
+                        "server/chrono",
+                        await liveApp.manager.chronoData()
+                    );
                     break;
                 case "start":
                     liveApp.manager.sendGlobalsToChannel();
@@ -36,6 +39,10 @@ class WodTimerSubscription extends AbstractEventsubscription {
                     liveApp.manager.clearAlltimeout();
                     liveApp.manager.sendFullConfig("server/wodConfigUpdate");
                     liveApp.manager.websocketMessages.sendStationsToAllClients();
+                    liveApp.manager.mqttServices.send(
+                        "server/chrono",
+                        await liveApp.manager.chronoData()
+                    );
                     break;
                 default:
                     break;

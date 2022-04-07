@@ -4,6 +4,8 @@ live*.json
 WODS*.json
 src/sub_*
 src/pub_*
+station/devices
+
 
 ### Node ###
 # Logs

@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 const MIN_SIZE = 650;
 const FULL_WIDTH = 1920;
 
+// linear-gradient(90deg, #3787FF50 0%, #3787FF 99%, rgba(255, 255, 255, 0) 100%)
+
 const colors = {
-    first: "#FFD600",
-    second: "#3787FF",
-    third: "#D40000",
+    first: "linear-gradient(90deg, #FFD60070 0%, #FFD600 99%, rgba(255, 255, 255, 0) 100%)",
+    second: "linear-gradient(90deg, #3787FF70 0%, #3787FF 99%, rgba(255, 255, 255, 0) 100%)",
+    third: "linear-gradient(90deg, #D4000070 0%, #D40000 99%, rgba(255, 255, 255, 0) 100%)",
     other: "linear-gradient(90deg, #5C5C5C 0%, rgba(33, 33, 33, 0.44) 99%, rgba(255, 255, 255, 0) 100%)",
 };
 
@@ -24,7 +26,6 @@ const HorizontalRunningAthlete = ({
     const [bg, setBg] = useState("");
     const [borders, setBorders] = useState("");
     const [bgSize, setBgSize] = useState(MIN_SIZE);
-    const [textColor, setTextColor] = useState("");
 
     const colorOdd = "#747474";
     const colorEven = "#c0c0c0";
@@ -67,11 +68,11 @@ const HorizontalRunningAthlete = ({
     const getColors = (rank: number) => {
         switch (rank) {
             case 1:
-                setBg(colors.first);
+                setBg(colors.second);
                 setColor("#000000");
                 break;
             case 2:
-                setBg(colors.second);
+                setBg(colors.third);
                 setColor("#fff");
                 break;
         }
@@ -165,6 +166,8 @@ const HorizontalRunningAthlete = ({
                 maxHeight: "100px",
                 background: bg,
                 color: color,
+                borderTop: "#fff 1px solid",
+                borderBottom: "#fff 1px solid",
             }}
         >
             {/* // <div
@@ -172,15 +175,15 @@ const HorizontalRunningAthlete = ({
         //     className="liveathletezone w-100 d-flex flex-column justify-content-end"
         //     style={{ background: bgColor, border: borders }}
         // > */}
-            <Box sx={{ display: "flex" }}>
-                <Typography variant="h3" gutterBottom component="div">
+            <Box sx={{ display: "flex", height: "100%", alignItems: "center" }}>
+                <Typography variant="h3" component="div">
                     {data.laneNumber}
                 </Typography>
                 <Typography
+                    width="100%"
                     variant="h3"
-                    gutterBottom
                     component="div"
-                    sx={{ mx: 2 }}
+                    sx={{ mx: 2, overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: 'CantoraOne'}}
                 >
                     {data.participant}
                 </Typography>

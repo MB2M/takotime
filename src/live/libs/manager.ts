@@ -77,11 +77,11 @@ class Manager extends EventEmitter {
     }
 
     async chronoData() {
-        const startTime = await keyvInstance.get("startTime");
-        const duration = await keyvInstance.get("duration");
+        const startTime = await this.keyv.get("startTime");
+        const duration = await this.keyv.get("duration");
         const start =
             // Date.parse(this.wod?.db.getData("/globals/startTime")) / 1000;
-            Date.parse(await keyvInstance.get("startTime")) / 1000;
+            Date.parse(await this.keyv.get("startTime")) / 1000;
         const end = (Date.parse(startTime) + duration * 60000) / 1000;
         // const end =
         //     (Date.parse(this.wod?.db.getData("/globals/startTime")) +

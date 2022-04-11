@@ -73,6 +73,9 @@ class Station {
                     shortcut,
                 };
 
+                console.log("lastMeasurement:", lastMeasurement.id);
+                console.log("newMeasurement:", measurement.measurementId);
+
                 if (lastMeasurement.id === measurement.measurementId) {
                     this.db.push(
                         "/stations/dynamics/measurements[-1]",

@@ -186,7 +186,7 @@ class Station {
             if (topic === "server/restartUpdate") {
                 if (this.ip === message.toString()) {
                     exec(
-                        "git pull origin main && sudo systemctl restart station",
+                        "git pull origin && sudo systemctl restart station",
                         function (msg) {
                             console.log(msg);
                         }

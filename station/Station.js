@@ -40,15 +40,41 @@ class Station {
     }
 
     initWodInterpreterEventLister() {
+        this.wodInterpreter.on("tieBreak", (tieBreak) => {
+            const payload = {
+                id: tieBreak.measurementId,
+                tieBreak: {
+                    value: tieBreak.value,
+                    method: tieBreak.method,
+                },
+            };
+
+            this.db.push("/stations/dynamics/measurements[]", payload);
+        });
+
         this.wodInterpreter.on(
             "checkpoint",
             (measurement, isFinal, shortcut) => {
-                this.db.push("/stations/dynamics/measurements[]", {
+                const lastMeasurement = this.db.getData(
+                    "/stations/dynamics/measurements[-1]"
+                );
+
+                const payload = {
                     id: measurement.measurementId,
                     value: measurement.value,
                     method: measurement.method,
                     shortcut,
-                });
+                };
+
+                if (lastMeasurement.id === measurement.measurementId) {
+                    this.db.push(
+                        "/stations/dynamics/measurements[-1]",
+                        payload,
+                        false
+                    );
+                } else {
+                    this.db.push("/stations/dynamics/measurements[]", payload);
+                }
 
                 if (isFinal) {
                     this.wodFinish();

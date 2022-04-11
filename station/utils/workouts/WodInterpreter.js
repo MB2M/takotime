@@ -12,6 +12,7 @@ class WodInterpreter extends EventEmitter {
         this.shortcut = {};
         this.measurements = [];
         const checkpointsTime = new Set();
+        const secondaryCheckpointsTime = new Set();
 
         for (let block of this.workout.blocks) {
             if (block.measurements) {
@@ -23,6 +24,7 @@ class WodInterpreter extends EventEmitter {
         }
 
         this.checkpointTime = [...checkpointsTime];
+
         this.scores = this.workout.scoring;
         this.shortcut = this.workout.shortcut;
     }
@@ -219,6 +221,8 @@ class WodInterpreter extends EventEmitter {
         return this.checkpointTime;
     }
 
+    getSecondaryCheckpointTime() {}
+
     getNextMovement(repPosition) {
         const currentBlock = repPosition.block;
         const currentMovement = repPosition.movement;
@@ -273,9 +277,28 @@ class WodInterpreter extends EventEmitter {
         timestamp,
         currentWodPosition
     ) {
-        const expectedMeasurement = this.measurements.find(
-            (m) => m.id === wodMeasurements.length
-        );
+        const expectNewMeasurement = wodMeasurements.at(-1).value
+            ? true
+            : false;
+        let expectedMeasurement;
+        let expectTieBreak;
+
+        if (expectNewMeasurement) {
+            expectedMeasurement = this.measurements.find(
+                (m) => m.id === wodMeasurements.at(-1) + 1
+            );
+            expectTieBreak = expectedMeasurement.tieBreakSource ? true : false;
+        } else {
+            expectedMeasurement = this.measurements.find(
+                (m) => m.id === wodMeasurements.at(-1)
+            );
+            expectTieBreak = false;
+        }
+
+
+        // const expectedMeasurement = this.measurements.find(
+        //     (m) => m.id === wodMeasurements.length
+        // );
 
         if (!expectedMeasurement) return;
 
@@ -299,7 +322,11 @@ class WodInterpreter extends EventEmitter {
             shortcut = true;
         } else {
             // buzzer and counter can't validate if not expected
-            if (source !== "timer" && expectedMeasurement.device !== source)
+            if (
+                source !== "timer" &&
+                expectedMeasurement.device !== source &&
+                expectedMeasurement.tieBreakSource !== source
+            )
                 return;
 
             // if out of time range
@@ -313,20 +340,36 @@ class WodInterpreter extends EventEmitter {
             if (source === "timer" && expectedMeasurement.at !== timestamp)
                 return;
 
-            isFinal = expectedMeasurement.id === this.measurements.at(-1).id;
+            if (expectedMeasurement.tieBreakSource === source && expectTieBreak) {
+                const tieBreak = this.doMeasurement(
+                    source,
+                    expectedMeasurement,
+                    startTime,
+                    timestamp,
+                    currentWodPosition
+                );
+                this.emit("tieBreak", tieBreak);
+            } else {
+                if (!expectedMeasurement.tieBreakCut || !expectTieBreak) {
+                    isFinal = true;
+                } else {
+                    isFinal =
+                        expectedMeasurement.id === this.measurements.at(-1).id;
+                }
 
-            measurement = this.doMeasurement(
-                source,
-                expectedMeasurement,
-                startTime,
-                timestamp,
-                currentWodPosition
-            );
+                measurement = this.doMeasurement(
+                    source,
+                    expectedMeasurement,
+                    startTime,
+                    timestamp,
+                    currentWodPosition
+                );
+            }
+
+            console.log(">>>>>>>>>>MEASUREMENT:", measurement);
+
+            this.emit("checkpoint", measurement, isFinal, shortcut);
         }
-
-        console.log(">>>>>>>>>>MEASUREMENT:", measurement);
-
-        this.emit("checkpoint", measurement, isFinal, shortcut);
     }
 
     doMeasurement(

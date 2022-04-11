@@ -2,6 +2,7 @@ import React from "react";
 import "../styles/globals.css";
 import "../styles/LiveDataWorkout.css";
 import "../styles/LiveAthlete.css";
+import "../styles/chevron.css";
 import type { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {

@@ -32,8 +32,8 @@ function HorizontalRunning({ data }: { data: WidescreenData }) {
                 backgroundColor: "black",
                 flexDirection: "column",
                 justifyContent: "space-evenly",
-                border: "3px solid",
-                borderColor: "red",
+                // border: "3px solid",
+                // borderColor: "red",
             }}
         >
             {data.stations

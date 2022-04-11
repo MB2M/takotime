@@ -1,3 +1,9 @@
+@font-face {
+    font-family: "CantoraOne";
+    src: url("/fonts/CantoraOne-Regular.ttf");
+  }
+
+
 html,
 body {
     background-color: #3a3a3a;
@@ -16,3 +22,5 @@ a {
 * {
     box-sizing: border-box;
 }
+
+

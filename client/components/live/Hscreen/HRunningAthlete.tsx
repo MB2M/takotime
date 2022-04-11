@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-// import "../statics/css/LiveAthlete.css";
 
 const MIN_SIZE = 650;
 const FULL_WIDTH = 1920;
@@ -8,10 +7,17 @@ const FULL_WIDTH = 1920;
 // linear-gradient(90deg, #3787FF50 0%, #3787FF 99%, rgba(255, 255, 255, 0) 100%)
 
 const colors = {
-    first: "linear-gradient(90deg, #FFD60070 0%, #FFD600 99%, rgba(255, 255, 255, 0) 100%)",
-    second: "linear-gradient(90deg, #3787FF70 0%, #3787FF 99%, rgba(255, 255, 255, 0) 100%)",
-    third: "linear-gradient(90deg, #D4000070 0%, #D40000 99%, rgba(255, 255, 255, 0) 100%)",
-    other: "linear-gradient(90deg, #5C5C5C 0%, rgba(33, 33, 33, 0.44) 99%, rgba(255, 255, 255, 0) 100%)",
+    first: "linear-gradient(90deg, #FFD60070 0%, #FFD600 97%, rgba(255, 255, 255, 0) 97%)",
+    second: "linear-gradient(90deg, #3787FF70 0%, #3787FF 97%, rgba(255, 255, 255, 0) 97%)",
+    third: "linear-gradient(90deg, #D4000070 0%, #D40000 97%, rgba(255, 255, 255, 0) 97%)",
+    other: "linear-gradient(90deg, #5C5C5C 0%, rgba(33, 33, 33, 0.44) 97%, rgba(255, 255, 255, 0) 97%)",
+};
+
+const chevColor = {
+    first: "#EECD22",
+    second: "#5F9EFF",
+    third: "#FF5454",
+    other: "#989797",
 };
 
 const HorizontalRunningAthlete = ({
@@ -24,6 +30,7 @@ const HorizontalRunningAthlete = ({
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [color, setColor] = useState("#000");
     const [bg, setBg] = useState("");
+    const [chevronColor, setChevronColor] = useState("");
     const [borders, setBorders] = useState("");
     const [bgSize, setBgSize] = useState(MIN_SIZE);
 
@@ -65,15 +72,27 @@ const HorizontalRunningAthlete = ({
         // return Math.min(Math.round(size * 100) / 100, 100);
     };
 
-    const getColors = (rank: number) => {
+    const setupColors = (rank: number) => {
         switch (rank) {
             case 1:
-                setBg(colors.second);
+                setBg(colors.first);
                 setColor("#000000");
+                setChevronColor(chevColor.first)
                 break;
             case 2:
+                setBg(colors.second);
+                setColor("#fff");
+                setChevronColor(chevColor.second)
+                break;
+            case 3:
                 setBg(colors.third);
                 setColor("#fff");
+                setChevronColor(chevColor.third)
+                break;
+            default:
+                setBg(colors.other);
+                setColor("#fff");
+                setChevronColor(chevColor.other)
                 break;
         }
     };
@@ -81,7 +100,7 @@ const HorizontalRunningAthlete = ({
     useEffect(() => {
         setBgSize(getBgSize());
         const rank = data.rank.at(-1);
-        if (rank) getColors(rank);
+        if (rank) setupColors(rank);
     }, [data, workout]);
 
     // useEffect(() => {
@@ -166,8 +185,12 @@ const HorizontalRunningAthlete = ({
                 maxHeight: "100px",
                 background: bg,
                 color: color,
-                borderTop: "#fff 1px solid",
-                borderBottom: "#fff 1px solid",
+                borderTop: "0.5px solid",
+                borderImage:
+                    "linear-gradient(90deg, #fff 0%, #fff 98.5%, #00000000 98.5%) 1",
+                borderBottom: "0.5px solid",
+                justifyContent: "flex-end",
+                position: "relative",
             }}
         >
             {/* // <div
@@ -175,19 +198,48 @@ const HorizontalRunningAthlete = ({
         //     className="liveathletezone w-100 d-flex flex-column justify-content-end"
         //     style={{ background: bgColor, border: borders }}
         // > */}
-            <Box sx={{ display: "flex", height: "100%", alignItems: "center" }}>
-                <Typography variant="h3" component="div">
+            <Box
+                sx={{
+                    display: "flex",
+                    height: "100%",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                }}
+            >
+                <Typography
+                    variant="h3"
+                    component="div"
+                    sx={{ fontFamily: "CantoraOne" }}
+                >
                     {data.laneNumber}
                 </Typography>
                 <Typography
-                    width="100%"
                     variant="h3"
                     component="div"
-                    sx={{ mx: 2, overflow: "hidden", textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: 'CantoraOne'}}
+                    sx={{
+                        ml: 2,
+                        mr: 12,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        fontFamily: "CantoraOne",
+                    }}
                 >
                     {data.participant}
                 </Typography>
             </Box>
+            <Box
+                className="chevron"
+                sx={{
+                    "::after": {
+                        background: chevronColor,
+                    },
+                    "::before": {
+                        background: chevronColor,
+                    },
+                }}
+            ></Box>
 
             {/* <div className="live-result">
                 {data.result?.includes("CAP")

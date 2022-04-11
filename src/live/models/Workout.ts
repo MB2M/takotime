@@ -12,6 +12,12 @@ const measurement = new mongoose.Schema({
         type: String,
         enum: ["buzzer", "timer"],
     },
+    tieBreakSource: {
+        type: String,
+        enum: ["buzzer", "timer"],
+    },
+    tieBreakMethod: { type: String, default: "forTime" },
+    tieBreakCut: Boolean,
     convertInTime: { type: Boolean, default: false },
     repsConvertion: { type: Number, default: 1000 },
     forSave: { type: Boolean, default: true },
@@ -35,6 +41,7 @@ const workoutSchema = new mongoose.Schema({
             enum: ["buzzer", "timer"],
         },
         sources: [Number],
+        _id: { auto: false },
     },
     scoring: [
         {
@@ -45,6 +52,7 @@ const workoutSchema = new mongoose.Schema({
             },
             count: { type: String, default: "normal", enum: ["normal", "sum"] },
             sources: [Number],
+            _id: { auto: false },
         },
     ],
     blocks: [
@@ -55,9 +63,11 @@ const workoutSchema = new mongoose.Schema({
                     name: { type: String, required: true },
                     reps: { type: Number, required: true },
                     varEachRounds: { type: Number, default: 0 },
+                    _id: { auto: false },
                 },
             ],
             measurements: measurement,
+            _id: { auto: false },
         },
     ],
 });

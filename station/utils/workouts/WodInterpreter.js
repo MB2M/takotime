@@ -12,7 +12,6 @@ class WodInterpreter extends EventEmitter {
         this.shortcut = {};
         this.measurements = [];
         const checkpointsTime = new Set();
-        const secondaryCheckpointsTime = new Set();
 
         for (let block of this.workout.blocks) {
             if (block.measurements) {
@@ -24,7 +23,7 @@ class WodInterpreter extends EventEmitter {
         }
 
         this.checkpointTime = [...checkpointsTime];
-
+        console.log(this.checkpointTime);
         this.scores = this.workout.scoring;
         this.shortcut = this.workout.shortcut;
     }
@@ -292,7 +291,7 @@ class WodInterpreter extends EventEmitter {
         let currentMeasurementId = wodMeasurements.at(-1)
             ? wodMeasurements.at(-1).id
             : -1;
-            
+
         if (expectNewMeasurement) {
             expectedMeasurement = this.measurements.find(
                 (m) => m.id === currentMeasurementId + 1

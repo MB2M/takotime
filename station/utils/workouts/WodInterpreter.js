@@ -290,17 +290,16 @@ class WodInterpreter extends EventEmitter {
         console.log("EXPECT NEW MEASUREMENT:", expectNewMeasurement);
 
         if (expectNewMeasurement) {
-            console.log(
-                "||||||||||||||",
-                (wodMeasurements.at(-1)?.id || -1) + 1
-            );
+            const currentMeasurementId = wodMeasurements.at(-1)
+                ? wodMeasurements.at(-1).id
+                : -1;
             expectedMeasurement = this.measurements.find(
-                (m) => m.id === (wodMeasurements.at(-1)?.id || -1) + 1
+                (m) => m.id === currentMeasurementId + 1
             );
             expectTieBreak = expectedMeasurement.tieBreakSource ? true : false;
         } else {
             expectedMeasurement = this.measurements.find(
-                (m) => m.id === wodMeasurements.at(-1).id
+                (m) => m.id === currentMeasurementId
             );
             expectTieBreak = false;
         }

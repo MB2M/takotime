@@ -288,7 +288,6 @@ class WodInterpreter extends EventEmitter {
         }
 
         if (expectNewMeasurement) {
-            console.log(">>>>>>>>>>>>", wodMeasurements.at(-1)?.id || 0);
             console.log(this.measurements);
             expectedMeasurement = this.measurements.find(
                 (m) => m.id === (wodMeasurements.at(-1)?.id || -1) + 1
@@ -374,11 +373,10 @@ class WodInterpreter extends EventEmitter {
                     timestamp,
                     currentWodPosition
                 );
+                console.log(">>>>>>>>>>MEASUREMENT:", measurement);
+
+                this.emit("checkpoint", measurement, isFinal, shortcut);
             }
-
-            console.log(">>>>>>>>>>MEASUREMENT:", measurement);
-
-            this.emit("checkpoint", measurement, isFinal, shortcut);
         }
     }
 

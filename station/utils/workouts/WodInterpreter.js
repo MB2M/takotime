@@ -291,12 +291,12 @@ class WodInterpreter extends EventEmitter {
             console.log(">>>>>>>>>>>>", wodMeasurements.at(-1)?.id || 0);
             console.log(this.measurements);
             expectedMeasurement = this.measurements.find(
-                (m) => m.id === (wodMeasurements.at(-1)?.id || 0) + 1
+                (m) => m.id === (wodMeasurements.at(-1)?.id || -1) + 1
             );
             expectTieBreak = expectedMeasurement.tieBreakSource ? true : false;
         } else {
             expectedMeasurement = this.measurements.find(
-                (m) => m.id === (wodMeasurements.at(-1)?.id || 0)
+                (m) => m.id === wodMeasurements.at(-1).id
             );
             expectTieBreak = false;
         }

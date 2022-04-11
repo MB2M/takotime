@@ -517,14 +517,14 @@ class WodInterpreter extends EventEmitter {
                                 case "time":
                                     scores.push(
                                         `(${this.toReadableTime(
-                                            measurements.at(-1).tieBreak.value
+                                            measurements.at(-2).tieBreak.value
                                         )})`
                                     );
                                     break;
                                 case "reps":
                                     scores.push(
                                         `(${
-                                            measurements.at(-1).tieBreak.value
+                                            measurements.at(-2).tieBreak.value
                                         })`
                                     );
                             }

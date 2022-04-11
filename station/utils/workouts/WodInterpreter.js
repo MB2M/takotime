@@ -295,6 +295,7 @@ class WodInterpreter extends EventEmitter {
             expectTieBreak = false;
         }
 
+        console.log("EXPECT TIEBREAK:", expectTieBreak);
 
         // const expectedMeasurement = this.measurements.find(
         //     (m) => m.id === wodMeasurements.length
@@ -340,7 +341,10 @@ class WodInterpreter extends EventEmitter {
             if (source === "timer" && expectedMeasurement.at !== timestamp)
                 return;
 
-            if (expectedMeasurement.tieBreakSource === source && expectTieBreak) {
+            if (
+                expectedMeasurement.tieBreakSource === source &&
+                expectTieBreak
+            ) {
                 const tieBreak = this.doMeasurement(
                     source,
                     expectedMeasurement,

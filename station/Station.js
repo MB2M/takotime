@@ -55,9 +55,16 @@ class Station {
         this.wodInterpreter.on(
             "checkpoint",
             (measurement, isFinal, shortcut) => {
-                const lastMeasurement = this.db.getData(
-                    "/stations/dynamics/measurements[-1]"
-                );
+                let lastMeasurement = {};
+                if (
+                    this.db.getData(
+                        "/stations/dynamics/measurements".length > 0
+                    )
+                ) {
+                    lastMeasurement = this.db.getData(
+                        "/stations/dynamics/measurements[-1]"
+                    );
+                }
 
                 const payload = {
                     id: measurement.measurementId,

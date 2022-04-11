@@ -277,7 +277,7 @@ class WodInterpreter extends EventEmitter {
         timestamp,
         currentWodPosition
     ) {
-        const expectNewMeasurement = wodMeasurements.at(-1).value
+        const expectNewMeasurement = wodMeasurements.at(-1)?.value
             ? true
             : false;
         let expectedMeasurement;

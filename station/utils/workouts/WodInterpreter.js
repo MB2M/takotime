@@ -16,7 +16,7 @@ class WodInterpreter extends EventEmitter {
         for (let block of this.workout.blocks) {
             if (block.measurements) {
                 this.measurements.push(block.measurements);
-                if (block.measurements.save) {
+                if (block.measurements.forSave) {
                     checkpointsTime.add(block.measurements.at);
                 }
             }

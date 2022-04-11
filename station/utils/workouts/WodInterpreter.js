@@ -359,9 +359,9 @@ class WodInterpreter extends EventEmitter {
                 );
                 this.emit("tieBreak", tieBreak);
             } else {
-                console.log("#######", !expectedMeasurement.tieBreakCut);
-                console.log("#######", !expectTieBreak);
-                if (!expectedMeasurement.tieBreakCut || !expectTieBreak) {
+                console.log("#######", expectedMeasurement.tieBreakCut);
+                console.log("#######", expectTieBreak);
+                if (expectedMeasurement.tieBreakCut && expectTieBreak) {
                     isFinal = true;
                 } else {
                     isFinal =

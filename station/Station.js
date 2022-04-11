@@ -57,9 +57,8 @@ class Station {
             (measurement, isFinal, shortcut) => {
                 let lastMeasurement = {};
                 if (
-                    this.db.getData(
-                        "/stations/dynamics/measurements".length > 0
-                    )
+                    this.db.getData("/stations/dynamics/measurements").length >
+                    0
                 ) {
                     lastMeasurement = this.db.getData(
                         "/stations/dynamics/measurements[-1]"

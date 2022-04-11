@@ -512,6 +512,23 @@ class WodInterpreter extends EventEmitter {
                         break;
                     case "amrap":
                         scores.push(`${baseScore} reps`);
+                        if (measurements.at(-1).tieBreak) {
+                            switch (measurements.at(-1).tieBreak.method) {
+                                case "time":
+                                    scores.push(
+                                        `(${this.toReadableTime(
+                                            measurements.at(-1).tieBreak.value
+                                        )})`
+                                    );
+                                    break;
+                                case "reps":
+                                    scores.push(
+                                        `(${
+                                            measurements.at(-1).tieBreak.value
+                                        })`
+                                    );
+                            }
+                        }
                         break;
                     default:
                         break;
@@ -536,7 +553,7 @@ class WodInterpreter extends EventEmitter {
         const seconds = this.addZero(asDate.getUTCSeconds(), 2);
         const milli = this.addZero(asDate.getUTCMilliseconds(), 3);
 
-        if (milli) return `${hours}:${minutes}:${seconds}:${milli}`;
+        return `${hours !== "00" && hours + ":"}${minutes}:${seconds}:${milli}`;
     }
 }
 

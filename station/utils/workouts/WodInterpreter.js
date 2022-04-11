@@ -289,10 +289,11 @@ class WodInterpreter extends EventEmitter {
 
         console.log("EXPECT NEW MEASUREMENT:", expectNewMeasurement);
 
+        let currentMeasurementId = wodMeasurements.at(-1)
+            ? wodMeasurements.at(-1).id
+            : -1;
+            
         if (expectNewMeasurement) {
-            const currentMeasurementId = wodMeasurements.at(-1)
-                ? wodMeasurements.at(-1).id
-                : -1;
             expectedMeasurement = this.measurements.find(
                 (m) => m.id === currentMeasurementId + 1
             );

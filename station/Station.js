@@ -55,6 +55,7 @@ class Station {
         this.wodInterpreter.on(
             "checkpoint",
             (measurement, isFinal, shortcut) => {
+                console.log("CHECKPOINT!!!!");
                 let lastMeasurement = {};
                 if (
                     this.db.getData("/stations/dynamics/measurements").length >

@@ -277,20 +277,24 @@ class WodInterpreter extends EventEmitter {
         timestamp,
         currentWodPosition
     ) {
-        const expectNewMeasurement = wodMeasurements.at(-1)?.value
-            ? true
-            : false;
+        let expectNewMeasurement;
         let expectedMeasurement;
         let expectTieBreak;
 
+        if (wodMeasurements.length === 0) {
+            expectNewMeasurement = true;
+        } else {
+            expectNewMeasurement = wodMeasurements.at(-1)?.value ? true : false;
+        }
+
         if (expectNewMeasurement) {
             expectedMeasurement = this.measurements.find(
-                (m) => m.id === wodMeasurements.at(-1) + 1
+                (m) => m.id === (wodMeasurements.at(-1)?.id || 0) + 1
             );
             expectTieBreak = expectedMeasurement.tieBreakSource ? true : false;
         } else {
             expectedMeasurement = this.measurements.find(
-                (m) => m.id === wodMeasurements.at(-1)
+                (m) => m.id === (wodMeasurements.at(-1)?.id || 0)
             );
             expectTieBreak = false;
         }

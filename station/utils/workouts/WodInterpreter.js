@@ -512,7 +512,7 @@ class WodInterpreter extends EventEmitter {
                         break;
                     case "amrap":
                         scores.push(`${baseScore} reps`);
-                        if (measurements.at(-1).tieBreak) {
+                        if (measurements.at(-2).tieBreak) {
                             switch (measurements.at(-1).tieBreak.method) {
                                 case "time":
                                     scores.push(

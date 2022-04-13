@@ -32,6 +32,10 @@ const stationSchema = new mongoose.Schema({
                     value: Number,
                     method: String,
                     shortcut: Boolean,
+                    tieBreak: {
+                        value: Number,
+                        method: String,
+                    },
                 },
             ],
             default: undefined,

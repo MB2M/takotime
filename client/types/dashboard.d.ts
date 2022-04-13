@@ -47,7 +47,15 @@ type Station = {
             nextMovement: string;
         };
         result: string;
-        measurements: object;
+        measurements: {
+            id: number;
+            value: number;
+            method: string;
+            tieBreak: {
+                value: number;
+                method: string;
+            };
+        }[];
     };
 };
 

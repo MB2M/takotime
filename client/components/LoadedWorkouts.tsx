@@ -1,5 +1,4 @@
 const LoadedWorkouts = ({ loadedWorkouts }: { loadedWorkouts: Workout[] }) => {
-    console.log(loadedWorkouts);
     return (
         <>
             <h3>Loaded:</h3>

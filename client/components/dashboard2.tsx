@@ -33,6 +33,7 @@ import LoadedWorkouts from "./LoadedWorkouts";
 import CCLoader from "./CCLoader";
 import WebsocketConnection from "./live/WebsocketConnection";
 import StationUpdate from "./StaticsUpdate";
+import { parseNextUrl } from "next/dist/shared/lib/router/utils/parse-next-url";
 // import ntpClient from "ntp-client-promise";
 
 const toReadableTime = (timestamp: number) => {
@@ -91,8 +92,6 @@ const Dashboard: NextPage = ({
     globals,
     sendMessage,
 }: any) => {
-    console.log(globals);
-
     const [tSync, setTSync] = useState<timesync.TimeSync>();
     const chrono = useChrono(tSync, globals?.startTime, globals?.duration);
     const [heatUpdateDrawerOpen, setHeatUpdateDrawerOpen] =
@@ -111,7 +110,7 @@ const Dashboard: NextPage = ({
 
     const handleScriptRestart = (station: Station) => {
         const stationDevice = stationDevices.find(
-            (s: { laneNumber: number; }) => s.laneNumber === station.laneNumber
+            (s: { laneNumber: number }) => s.laneNumber === station.laneNumber
         );
 
         if (stationDevice)
@@ -125,7 +124,7 @@ const Dashboard: NextPage = ({
 
     const handleRestartUpdate = (station: Station) => {
         const stationDevice = stationDevices.find(
-            (s: { laneNumber: number; }) => s.laneNumber === station.laneNumber
+            (s: { laneNumber: number }) => s.laneNumber === station.laneNumber
         );
 
         if (stationDevice)
@@ -148,14 +147,17 @@ const Dashboard: NextPage = ({
             (stationIp && brokerClients[stationIp]) || false;
         const devicesConnected = !stationConnected
             ? null
-            : stationDevice?.devices.map((d: { role: any; state: string; }) => {
+            : stationDevice?.devices.map((d: { role: any; state: string }) => {
                   return { name: d.role, connected: d.state === "connected" };
               });
         const rank =
             (ranks.length > 0 &&
-                ranks?.find((r: { lane: number; }) => r.lane === lane)?.rank?.join(" | ")) ||
+                ranks
+                    ?.find((r: { lane: number }) => r.lane === lane)
+                    ?.rank?.join(" | ")) ||
             "n/a";
 
+        lane === 2 && console.log(dynamics.measurements);
         return {
             lane,
             participant: station.participant,
@@ -171,6 +173,19 @@ const Dashboard: NextPage = ({
             nextMovementReps: dynamics?.currentWodPosition?.nextMovementReps,
             nextMovement: dynamics?.currentWodPosition?.nextMovement,
             appVersion: dynamics?.appVersion,
+            tieBreak: dynamics?.measurements?.reduce(
+                (p, c) => {
+                    return [
+                        ...p,
+                        c.tieBreak?.method === "time"
+                            ? toReadableTime(c.tieBreak?.value)
+                            : c.tieBreak?.method === "reps"
+                            ? c.tieBreak?.value.toString() + "reps"
+                            : "",
+                    ];
+                },
+                [""]
+            ),
             result: dynamics?.result,
             state: dynamics?.state,
         };
@@ -289,178 +304,230 @@ const Dashboard: NextPage = ({
                     <Grid item xs={12} lg={10}>
                         <Grid container spacing={2}>
                             {station
-                                ?.sort((a: { laneNumber: number; }, b: { laneNumber: number; }) => a.laneNumber - b.laneNumber)
-                                .map((s: { _id: string; laneNumber: number; participant: string; category: string; externalId: number; dynamics: { appVersion: string; state: number; currentWodPosition: { block: number; round: number; movement: number; reps: number; repsPerBlock: number[]; repsOfMovement: number; totalRepsOfMovement: number; currentMovement: string; nextMovementReps: number; nextMovement: string; }; result: string; measurements: object; }; }, i: Key | null | undefined) => {
-                                    const data = rowData(s);
-                                    return (
-                                        <Grid key={i} item md={3}>
-                                            <Card>
-                                                <Box
-                                                    component="div"
-                                                    sx={{
-                                                        display: "flex",
-                                                    }}
-                                                >
-                                                    <CardContent sx={{ p: 1 }}>
-                                                        <Typography
-                                                            gutterBottom
-                                                            variant="h3"
-                                                            component="div"
-                                                        >
-                                                            {data.lane}
-                                                        </Typography>
-                                                    </CardContent>
-                                                    <CardContent
+                                ?.sort(
+                                    (
+                                        a: { laneNumber: number },
+                                        b: { laneNumber: number }
+                                    ) => a.laneNumber - b.laneNumber
+                                )
+                                .map(
+                                    (
+                                        s: {
+                                            _id: string;
+                                            laneNumber: number;
+                                            participant: string;
+                                            category: string;
+                                            externalId: number;
+                                            dynamics: {
+                                                appVersion: string;
+                                                state: number;
+                                                currentWodPosition: {
+                                                    block: number;
+                                                    round: number;
+                                                    movement: number;
+                                                    reps: number;
+                                                    repsPerBlock: number[];
+                                                    repsOfMovement: number;
+                                                    totalRepsOfMovement: number;
+                                                    currentMovement: string;
+                                                    nextMovementReps: number;
+                                                    nextMovement: string;
+                                                };
+                                                result: string;
+                                                measurements: object;
+                                            };
+                                        },
+                                        i: Key | null | undefined
+                                    ) => {
+                                        const data = rowData(s);
+                                        return (
+                                            <Grid key={i} item md={3}>
+                                                <Card>
+                                                    <Box
+                                                        component="div"
                                                         sx={{
-                                                            p: 1,
-                                                            width: "100%",
+                                                            display: "flex",
                                                         }}
                                                     >
-                                                        <Box
+                                                        <CardContent
+                                                            sx={{ p: 1 }}
+                                                        >
+                                                            <Typography
+                                                                gutterBottom
+                                                                variant="h3"
+                                                                component="div"
+                                                            >
+                                                                {data.lane}
+                                                            </Typography>
+                                                        </CardContent>
+                                                        <CardContent
                                                             sx={{
-                                                                display: "flex",
-                                                                flexDirection:
-                                                                    "column",
+                                                                p: 1,
+                                                                width: "100%",
                                                             }}
                                                         >
                                                             <Box
                                                                 sx={{
                                                                     display:
                                                                         "flex",
-                                                                    justifyContent:
-                                                                        "space-between",
+                                                                    flexDirection:
+                                                                        "column",
                                                                 }}
                                                             >
+                                                                <Box
+                                                                    sx={{
+                                                                        display:
+                                                                            "flex",
+                                                                        justifyContent:
+                                                                            "space-between",
+                                                                    }}
+                                                                >
+                                                                    <Typography
+                                                                        gutterBottom
+                                                                        variant="h6"
+                                                                        component="div"
+                                                                    >
+                                                                        {
+                                                                            data.participant
+                                                                        }
+                                                                    </Typography>
+                                                                    <Typography
+                                                                        gutterBottom
+                                                                        variant="caption"
+                                                                        component="div"
+                                                                    >
+                                                                        {
+                                                                            data.ip
+                                                                        }
+                                                                    </Typography>
+                                                                    {data.appVersion && (
+                                                                        <Tooltip
+                                                                            arrow
+                                                                            disableFocusListener
+                                                                            disableTouchListener
+                                                                            title={
+                                                                                <Button
+                                                                                    size="small"
+                                                                                    variant="text"
+                                                                                    color="inherit"
+                                                                                    onClick={() =>
+                                                                                        handleRestartUpdate(
+                                                                                            s
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    Update
+                                                                                </Button>
+                                                                            }
+                                                                        >
+                                                                            <Chip
+                                                                                label={
+                                                                                    data.appVersion
+                                                                                }
+                                                                                size="small"
+                                                                                variant="outlined"
+                                                                                color="info"
+                                                                                sx={{
+                                                                                    ml: "auto",
+                                                                                }}
+                                                                            />
+                                                                        </Tooltip>
+                                                                    )}
+                                                                </Box>
                                                                 <Typography
                                                                     gutterBottom
-                                                                    variant="h6"
+                                                                    variant="caption"
                                                                     component="div"
                                                                 >
-                                                                    {
-                                                                        data.participant
-                                                                    }
+                                                                    {data.stationConnected
+                                                                        ? "✔️"
+                                                                        : "⭕"}
+                                                                    {/* </Typography>
+                                                        <Typography
+                                                            gutterBottom
+                                                            variant="caption"
+                                                            component="div"
+                                                        > */}
+                                                                    {data.devicesConnected?.map(
+                                                                        (d: {
+                                                                            name: any;
+                                                                            connected: any;
+                                                                        }) =>
+                                                                            `${
+                                                                                d.name
+                                                                            }: ${
+                                                                                d.connected
+                                                                                    ? "✔️"
+                                                                                    : "⭕"
+                                                                            }`
+                                                                    )}
                                                                 </Typography>
                                                                 <Typography
                                                                     gutterBottom
                                                                     variant="caption"
                                                                     component="div"
                                                                 >
-                                                                    {data.ip}
+                                                                    {data.state}
                                                                 </Typography>
-                                                                {data.appVersion && (
-                                                                    <Tooltip
-                                                                        arrow
-                                                                        disableFocusListener
-                                                                        disableTouchListener
-                                                                        title={
-                                                                            <Button
-                                                                                size="small"
-                                                                                variant="text"
-                                                                                color="inherit"
-                                                                                onClick={() =>
-                                                                                    handleRestartUpdate(
-                                                                                        s
-                                                                                    )
-                                                                                }
-                                                                            >
-                                                                                Update
-                                                                            </Button>
-                                                                        }
-                                                                    >
-                                                                        <Chip
-                                                                            label={
-                                                                                data.appVersion
-                                                                            }
-                                                                            size="small"
-                                                                            variant="outlined"
-                                                                            color="info"
-                                                                            sx={{
-                                                                                ml: "auto",
-                                                                            }}
-                                                                        />
-                                                                    </Tooltip>
-                                                                )}
+                                                                <Typography
+                                                                    gutterBottom
+                                                                    variant="caption"
+                                                                    component="div"
+                                                                >
+                                                                    {data.reps}
+                                                                </Typography>
+                                                                <Typography
+                                                                    gutterBottom
+                                                                    variant="caption"
+                                                                    component="div"
+                                                                >
+                                                                    Rank:{" "}
+                                                                    {data.rank}
+                                                                </Typography>
+                                                                <Typography
+                                                                    gutterBottom
+                                                                    variant="caption"
+                                                                    component="div"
+                                                                >
+                                                                    {data.result
+                                                                        ? data.result
+                                                                        : !!data.repsOfMovement &&
+                                                                          !isNaN(
+                                                                              data.repsOfMovement
+                                                                          ) &&
+                                                                          `${data.repsOfMovement} / ${data.totalRepsOfMovement} ${data.currentMovement}`}
+                                                                </Typography>
+                                                                <Typography
+                                                                    gutterBottom
+                                                                    variant="caption"
+                                                                    component="div"
+                                                                >
+                                                                    TieBreak:
+                                                                    {data.tieBreak?.at(
+                                                                        -1
+                                                                    )}
+                                                                </Typography>
                                                             </Box>
-                                                            <Typography
-                                                                gutterBottom
-                                                                variant="caption"
-                                                                component="div"
-                                                            >
-                                                                {data.stationConnected
-                                                                    ? "✔️"
-                                                                    : "⭕"}
-                                                                {/* </Typography>
-                                                        <Typography
-                                                            gutterBottom
-                                                            variant="caption"
-                                                            component="div"
-                                                        > */}
-                                                                {data.devicesConnected?.map(
-                                                                    (d: { name: any; connected: any; }) =>
-                                                                        `${
-                                                                            d.name
-                                                                        }: ${
-                                                                            d.connected
-                                                                                ? "✔️"
-                                                                                : "⭕"
-                                                                        }`
-                                                                )}
-                                                            </Typography>
-                                                            <Typography
-                                                                gutterBottom
-                                                                variant="caption"
-                                                                component="div"
-                                                            >
-                                                                {data.state}
-                                                            </Typography>
-                                                            <Typography
-                                                                gutterBottom
-                                                                variant="caption"
-                                                                component="div"
-                                                            >
-                                                                {data.reps}
-                                                            </Typography>
-                                                            <Typography
-                                                                gutterBottom
-                                                                variant="caption"
-                                                                component="div"
-                                                            >
-                                                                Rank:{" "}
-                                                                {data.rank}
-                                                            </Typography>
-                                                            <Typography
-                                                                gutterBottom
-                                                                variant="caption"
-                                                                component="div"
-                                                            >
-                                                                {data.result
-                                                                    ? data.result
-                                                                    : !!data.repsOfMovement &&
-                                                                      !isNaN(
-                                                                          data.repsOfMovement
-                                                                      ) &&
-                                                                      `${data.repsOfMovement} / ${data.totalRepsOfMovement} ${data.currentMovement}`}
-                                                            </Typography>
-                                                        </Box>
-                                                    </CardContent>
-                                                </Box>
-                                                <CardActions>
-                                                    <Button
-                                                        variant="outlined"
-                                                        onClick={() =>
-                                                            handleScriptRestart(
-                                                                s
-                                                            )
-                                                        }
-                                                        size="small"
-                                                    >
-                                                        Restart
-                                                    </Button>
-                                                </CardActions>
-                                            </Card>
-                                        </Grid>
-                                    );
-                                })}
+                                                        </CardContent>
+                                                    </Box>
+                                                    <CardActions>
+                                                        <Button
+                                                            variant="outlined"
+                                                            onClick={() =>
+                                                                handleScriptRestart(
+                                                                    s
+                                                                )
+                                                            }
+                                                            size="small"
+                                                        >
+                                                            Restart
+                                                        </Button>
+                                                    </CardActions>
+                                                </Card>
+                                            </Grid>
+                                        );
+                                    }
+                                )}
                         </Grid>
                     </Grid>
                 </Grid>

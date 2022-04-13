@@ -50,6 +50,12 @@ class Station {
             };
 
             this.db.push("/stations/dynamics/measurements[]", payload);
+
+            //Publish to server
+            this.sendToServer("station/generic");
+
+            //publish to screen
+            this.updateBoard();
         });
 
         this.wodInterpreter.on(
@@ -72,9 +78,6 @@ class Station {
                     method: measurement.method,
                     shortcut,
                 };
-
-                console.log("lastMeasurement:", lastMeasurement.id);
-                console.log("newMeasurement:", measurement.measurementId);
 
                 if (lastMeasurement.id === measurement.measurementId) {
                     this.db.push(

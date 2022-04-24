@@ -7,7 +7,6 @@ class WodInterpreter extends EventEmitter {
 
     // load the json
     load(workout) {
-        // this.scoreType = workout.type;
         this.workout = workout;
         this.shortcut = {};
         this.measurements = [];
@@ -23,7 +22,6 @@ class WodInterpreter extends EventEmitter {
         }
 
         this.checkpointTime = [...checkpointsTime];
-        console.log(this.checkpointTime);
         this.scores = this.workout.scoring;
         this.shortcut = this.workout.shortcut;
     }

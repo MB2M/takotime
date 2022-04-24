@@ -312,31 +312,7 @@ const Dashboard: NextPage = ({
                                 )
                                 .map(
                                     (
-                                        s: {
-                                            _id: string;
-                                            laneNumber: number;
-                                            participant: string;
-                                            category: string;
-                                            externalId: number;
-                                            dynamics: {
-                                                appVersion: string;
-                                                state: number;
-                                                currentWodPosition: {
-                                                    block: number;
-                                                    round: number;
-                                                    movement: number;
-                                                    reps: number;
-                                                    repsPerBlock: number[];
-                                                    repsOfMovement: number;
-                                                    totalRepsOfMovement: number;
-                                                    currentMovement: string;
-                                                    nextMovementReps: number;
-                                                    nextMovement: string;
-                                                };
-                                                result: string;
-                                                measurements: object;
-                                            };
-                                        },
+                                        s: Station,
                                         i: Key | null | undefined
                                     ) => {
                                         const data = rowData(s);

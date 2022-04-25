@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import Overlay from "../../../components/live/overlay/Overlay";
 import WebsocketWrapperLight from "../../../components/live/WebSocketWrapperLight";
 
-
 const overlay: NextPage = () => {
     return (
         <>

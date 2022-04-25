@@ -117,6 +117,9 @@ class Station {
 
                     this.db.save();
 
+                    //Publish to server
+                    this.sendToServer("station/generic");
+
                     this.updateBoard();
                 }
 

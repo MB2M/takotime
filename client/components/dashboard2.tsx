@@ -248,7 +248,7 @@ const Dashboard: NextPage = ({
     // };
     return (
         // <ThemeProvider theme={darkTheme}>
-        <>
+        <Box sx={{ backgroundColor: "#3b3b3b" }}>
             <Typography gutterBottom variant="h2" component="div">
                 Dashboard
                 {` / state: ${globals?.state}`}
@@ -311,10 +311,7 @@ const Dashboard: NextPage = ({
                                     ) => a.laneNumber - b.laneNumber
                                 )
                                 .map(
-                                    (
-                                        s: Station,
-                                        i: Key | null | undefined
-                                    ) => {
+                                    (s: Station, i: Key | null | undefined) => {
                                         const data = rowData(s);
                                         return (
                                             <Grid key={i} item md={3}>
@@ -578,7 +575,7 @@ const Dashboard: NextPage = ({
                                 </TableBody>
                             </Table>
                         </TableContainer> */}
-        </>
+        </Box>
         // </ThemeProvider>
     );
 };

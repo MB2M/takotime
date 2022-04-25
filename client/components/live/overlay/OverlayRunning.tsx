@@ -17,7 +17,6 @@ const OverlayRunning = ({ data }: { data: WidescreenData }) => {
             sx={{
                 width: 1920,
                 height: 1080,
-                backgroundColor: "black",
                 flexDirection: "column",
                 justifyContent: "space-evenly",
                 // border: "3px solid",
@@ -33,9 +32,10 @@ const OverlayRunning = ({ data }: { data: WidescreenData }) => {
             >
                 <Stack
                     direction="column"
-                    justifyContent="space-around"
+                    // justifyContent="space-around"
                     alignItems="flex-start"
-                    spacing={2}
+                    spacing={7}
+                    paddingTop={1}
                     height="100%"
                 >
                     {data.stations

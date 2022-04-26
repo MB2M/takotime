@@ -1,6 +1,9 @@
 import { Box } from "@mui/system";
 import Stack from "@mui/material/Stack";
 import OverlayRunningAthlete from "./OverlayRunningAthlete";
+import OverlayRunningDuelAthlete from "./OverlayRunningDuelAthlete";
+import useChrono from "../../../hooks/useChrono";
+import { Typography } from "@mui/material";
 
 const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     for (let workout of workouts) {
@@ -10,7 +13,15 @@ const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     }
 };
 
-const OverlayRunning = ({ data }: { data: WidescreenData }) => {
+const OverlayRunning = ({
+    data,
+    version,
+}: {
+    data: WidescreenData;
+    version: OverlayVersion;
+}) => {
+    const chrono = useChrono(data.globals.startTime, data.globals.duration);
+
     return (
         <Box
             className="displayZone"
@@ -32,7 +43,6 @@ const OverlayRunning = ({ data }: { data: WidescreenData }) => {
             >
                 <Stack
                     direction="column"
-                    // justifyContent="space-around"
                     alignItems="flex-start"
                     spacing={7}
                     paddingTop={1}
@@ -45,20 +55,45 @@ const OverlayRunning = ({ data }: { data: WidescreenData }) => {
                             data.stations.length / 2 +
                                 (data.stations.length % 2)
                         )
-                        .map((s) => (
-                            <OverlayRunningAthlete
-                                key={s.laneNumber}
-                                data={s}
-                                workout={getWorkout(data.workouts, s)}
-                                position="left"
-                            />
-                        ))}
+                        .map((s) =>
+                            version === "duel" ? (
+                                <OverlayRunningDuelAthlete
+                                    key={s.laneNumber}
+                                    data={s}
+                                    workout={getWorkout(data.workouts, s)}
+                                    position="left"
+                                    opposantData={data.stations[1]}
+                                />
+                            ) : (
+                                <OverlayRunningAthlete
+                                    key={s.laneNumber}
+                                    data={s}
+                                    workout={getWorkout(data.workouts, s)}
+                                    position="left"
+                                />
+                            )
+                        )}
                 </Stack>
+                <Typography
+                    variant="h3"
+                    component="div"
+                    padding={2}
+                    sx={{
+                        background: "#000000f2",
+                        color: "white",
+                        textAlign: "center",
+                        borderTop: 0,
+                        radius: 0,
+                        borderRadius: "0px 0px 50px 50px",
+                    }}
+                >
+                    {chrono?.toString().slice(0,5)}
+                </Typography>
                 <Stack
                     direction="column"
-                    justifyContent="space-around"
-                    alignItems="flex-start"
-                    spacing={2}
+                    alignItems="flex-end"
+                    spacing={7}
+                    paddingTop={1}
                     height="100%"
                 >
                     {data.stations
@@ -67,14 +102,24 @@ const OverlayRunning = ({ data }: { data: WidescreenData }) => {
                             data.stations.length / 2 +
                                 (data.stations.length % 2)
                         )
-                        .map((s) => (
-                            <OverlayRunningAthlete
-                                key={s.laneNumber}
-                                data={s}
-                                workout={getWorkout(data.workouts, s)}
-                                position="right"
-                            />
-                        ))}
+                        .map((s) =>
+                            version === "duel" ? (
+                                <OverlayRunningDuelAthlete
+                                    key={s.laneNumber}
+                                    data={s}
+                                    workout={getWorkout(data.workouts, s)}
+                                    position="right"
+                                    opposantData={data.stations[0]}
+                                />
+                            ) : (
+                                <OverlayRunningAthlete
+                                    key={s.laneNumber}
+                                    data={s}
+                                    workout={getWorkout(data.workouts, s)}
+                                    position="right"
+                                />
+                            )
+                        )}
                 </Stack>
             </Stack>
         </Box>

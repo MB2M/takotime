@@ -142,6 +142,8 @@ interface WebSocket extends EventTarget {
 
 type Broker = { [key: string]: boolean };
 
+type OverlayVersion = "duel" | undefined;
+
 type Globals = {
     wodname: string;
     duration: number;
@@ -176,7 +178,15 @@ interface WidescreenStation {
     nextMovement: string;
     nextMovementReps: number;
     result: string;
-    measurements: string;
+    measurements: {
+        id: number;
+        value: number;
+        method: string;
+        tieBreak: {
+            value: number;
+            method: string;
+        };
+    }[];
     state: number;
     position: {
         block: number;

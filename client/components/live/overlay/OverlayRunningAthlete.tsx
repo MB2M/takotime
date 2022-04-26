@@ -89,7 +89,7 @@ const OverlayRunningAthlete = ({
 
     useEffect(() => {
         setBgSize(getBgSize());
-        const rank = data.rank.at(-1);
+        const rank = data.rank[data.measurements?.length || 0];
         if (rank) setupColors(rank);
     }, [data, workout]);
 
@@ -207,8 +207,8 @@ const OverlayRunningAthlete = ({
                                 >
                                     {data.result.split("|").map((r) => (
                                         <Typography
-                                        lineHeight={1.2}
-                                        // variant="h6"
+                                            lineHeight={1.2}
+                                            // variant="h6"
                                         >
                                             {r}
                                         </Typography>
@@ -217,10 +217,8 @@ const OverlayRunningAthlete = ({
                             )}
                         </Grid>
                         <Grid item marginRight={1}>
-                            <Typography
-                                variant="h6"
-                            >
-                                {data.rank}
+                            <Typography variant="h6">
+                                {data.rank[data.measurements?.length || 0]}
                             </Typography>
                         </Grid>
                     </Grid>

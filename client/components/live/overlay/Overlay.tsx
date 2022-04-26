@@ -1,12 +1,19 @@
 import OverlayRunning from "./OverlayRunning";
 
-const Overlay = ({ data }: { data: WidescreenData }): JSX.Element => {
+const Overlay = ({
+    data,
+    version,
+}: {
+    data: WidescreenData;
+    version: OverlayVersion;
+}): JSX.Element => {
     const bigScrenLayout = () => {
         // switch (data?.globals?.state) {
         // case 0:
         //     return <Standing data={data} />;
         // case 2:
-        if (data?.globals?.state) return <OverlayRunning data={data} />;
+        if (data?.globals?.state)
+            return <OverlayRunning data={data} version={version} />;
         // case 3:
         //     return <LiveEndedWorkout data={data} />;
         // default:

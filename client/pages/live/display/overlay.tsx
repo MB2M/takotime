@@ -6,7 +6,7 @@ const overlay: NextPage = () => {
     return (
         <>
             <WebsocketWrapperLight>
-                <Overlay data={undefined}></Overlay>
+                <Overlay data={undefined} version={undefined}></Overlay>
             </WebsocketWrapperLight>
         </>
     );

@@ -4,7 +4,7 @@ const Overlay = ({
     data,
     version,
 }: {
-    data: WidescreenData;
+    data: WidescreenData | undefined;
     version: OverlayVersion;
 }): JSX.Element => {
     const bigScrenLayout = () => {

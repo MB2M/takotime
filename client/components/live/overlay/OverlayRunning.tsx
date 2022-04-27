@@ -5,7 +5,7 @@ import OverlayRunningDuelAthlete from "./OverlayRunningDuelAthlete";
 import useChrono from "../../../hooks/useChrono";
 import { Typography } from "@mui/material";
 
-const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
+const getWorkout = (workouts: Workout[], station: WidescreenStation ) => {
     for (let workout of workouts) {
         if (workout.categories.includes(station.category)) {
             return workout;

@@ -55,155 +55,159 @@ const OverlayRunningDuelAthlete = ({
             alignItems={position === "left" ? "flex-start" : "flex-end"}
             height={1}
         >
-            <Slide
-                    direction={position === "left" ? "right" : "left"}
-                    in={true}
-                ><Box
-                width={600}
-                height={150}
-                sx={{
-                    borderRadius:
-                        position === "left"
-                            ? "0px 10px 10px 0px"
-                            : "10px 0px 0px 10px",
-                    overflow: "hidden",
-                }}
-            >
-                <Grid
-                    container
-                    spacing={0}
-                    direction={"column"}
-                    justifyContent="space-between"
+            <Slide direction={position === "left" ? "right" : "left"} in={true}>
+                <Box
+                    width={600}
+                    height={150}
                     sx={{
-                        height: "100%",
-                        background: "#000000f2",
-                        color: "white",
+                        borderRadius:
+                            position === "left"
+                                ? "0px 10px 10px 0px"
+                                : "10px 0px 0px 10px",
+                        overflow: "hidden",
                     }}
                 >
                     <Grid
                         container
-                        item
-                        xs
-                        direction={position === "left" ? "row" : "row-reverse"}
+                        spacing={0}
+                        direction={"column"}
+                        justifyContent="space-between"
+                        sx={{
+                            height: "100%",
+                            background: "#000000f2",
+                            color: "white",
+                        }}
                     >
                         <Grid
                             container
                             item
-                            xs={7}
-                            direction="column"
-                            justifyContent="space-between"
-                            alignItems={
-                                position === "left" ? "flex-start" : "flex-end"
+                            xs
+                            direction={
+                                position === "left" ? "row" : "row-reverse"
                             }
-                            marginX={1}
                         >
                             <Grid
+                                container
                                 item
-                                width={1}
-                                textAlign={
-                                    position === "left" ? "right" : "left"
+                                xs={7}
+                                direction="column"
+                                justifyContent="space-between"
+                                alignItems={
+                                    position === "left"
+                                        ? "flex-start"
+                                        : "flex-end"
                                 }
+                                marginX={1}
                             >
-                                {!data.result && (
+                                <Grid
+                                    item
+                                    width={1}
+                                    textAlign={
+                                        position === "left" ? "right" : "left"
+                                    }
+                                >
+                                    {!data.result && (
+                                        <Typography
+                                            variant="h5"
+                                            sx={{
+                                                fontFamily: "CantoraOne",
+                                                lineHeight: "0.9",
+                                            }}
+                                        >
+                                            {`${
+                                                data.totalRepsOfMovement || ""
+                                            } ${data.currentMovement || ""}`}
+                                        </Typography>
+                                    )}
+                                </Grid>
+                                <Grid
+                                    item
+                                    marginTop="auto"
+                                    textAlign={
+                                        position === "left" ? "left" : "right"
+                                    }
+                                >
                                     <Typography
-                                        variant="h5"
+                                        variant="h3"
+                                        component="div"
                                         sx={{
+                                            mt: "auto",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
                                             fontFamily: "CantoraOne",
                                             lineHeight: "0.9",
                                         }}
                                     >
-                                        {`${data.totalRepsOfMovement || ""} ${
-                                            data.currentMovement || ""
-                                        }`}
+                                        {data.participant}
                                     </Typography>
-                                )}
+                                </Grid>
                             </Grid>
                             <Grid
+                                container
                                 item
-                                marginTop="auto"
-                                textAlign={
-                                    position === "left" ? "left" : "right"
+                                xs
+                                direction="column"
+                                justifyContent="space-between"
+                                alignItems={
+                                    position === "left"
+                                        ? "flex-end"
+                                        : "flex-start"
                                 }
+                                marginX={1}
                             >
-                                <Typography
-                                    variant="h3"
-                                    component="div"
-                                    sx={{
-                                        mt: "auto",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        fontFamily: "CantoraOne",
-                                        lineHeight: "0.9",
-                                    }}
-                                >
-                                    {data.participant}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            direction="column"
-                            justifyContent="space-between"
-                            alignItems={
-                                position === "left" ? "flex-end" : "flex-start"
-                            }
-                            marginX={1}
-                        >
-                            <Grid item>
-                                {!data.result ? (
-                                    <Stack
-                                        direction="row"
-                                        justifyContent={
-                                            position === "left"
-                                                ? "flex-end"
-                                                : "flex-start"
-                                        }
-                                        alignItems="center"
-                                        spacing={2}
-                                    >
-                                        <Typography variant="h4">
-                                            {data.repsOfMovement}
-                                        </Typography>
-                                    </Stack>
-                                ) : (
-                                    <Stack
-                                        direction="column"
-                                        justifyContent="flex-start"
-                                        alignItems="flex-end"
-                                        spacing={0}
-                                        marginRight={1}
-                                    >
-                                        {data.result.split("|").map((r) => (
-                                            <Typography
-                                                lineHeight={1.2}
-                                                variant={"h5"}
-                                            >
-                                                {r}
+                                <Grid item>
+                                    {!data.result ? (
+                                        <Stack
+                                            direction="row"
+                                            justifyContent={
+                                                position === "left"
+                                                    ? "flex-end"
+                                                    : "flex-start"
+                                            }
+                                            alignItems="center"
+                                            spacing={2}
+                                        >
+                                            <Typography variant="h4">
+                                                {data.repsOfMovement}
                                             </Typography>
-                                        ))}
-                                    </Stack>
-                                )}
-                            </Grid>
-                            <Grid item marginRight={1}>
-                                <Typography variant="h2">
-                                    {data.rank[
-                                        data.measurements?.length || 0
-                                    ] ||
-                                        data.rank[
-                                            data.measurements?.length - 1
-                                        ]}
-                                </Typography>
+                                        </Stack>
+                                    ) : (
+                                        <Stack
+                                            direction="column"
+                                            justifyContent="flex-start"
+                                            alignItems="flex-end"
+                                            spacing={0}
+                                            marginRight={1}
+                                        >
+                                            {data.result.split("|").map((r) => (
+                                                <Typography
+                                                    lineHeight={1.2}
+                                                    variant={"h5"}
+                                                >
+                                                    {r}
+                                                </Typography>
+                                            ))}
+                                        </Stack>
+                                    )}
+                                </Grid>
+                                <Grid item marginRight={1}>
+                                    <Typography variant="h2">
+                                        {data.rank[
+                                            data.measurements?.length || 0
+                                        ] ||
+                                            data.rank[
+                                                data.measurements?.length - 1
+                                            ]}
+                                    </Typography>
+                                </Grid>
                             </Grid>
                         </Grid>
+                        {/* jauge */}
+                        <Grid item height={7} sx={{ background: bg }}>
+                            {" "}
+                        </Grid>
                     </Grid>
-                    {/* jauge */}
-                    <Grid item height={7} sx={{ background: bg }}>
-                        {" "}
-                    </Grid>
-                </Grid>
-            </Box>
+                </Box>
             </Slide>
             {/* <Box marginTop={0}> */}
             {/* <Stack> */}
@@ -255,7 +259,8 @@ const OverlayRunningDuelAthlete = ({
                             data?.measurements &&
                             data.measurements.at(-1)?.tieBreak?.value
                                 ? toReadableTime(
-                                      data.measurements.at(-1)?.tieBreak?.value
+                                      data.measurements.at(-1)?.tieBreak
+                                          ?.value || 0
                                   )
                                 : "DNF"
                         }`}

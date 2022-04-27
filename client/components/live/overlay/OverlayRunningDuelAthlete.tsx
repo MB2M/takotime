@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Fade, Grid, Slide, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import toReadableTime from "../../../utils/timeConverter";
 
@@ -55,7 +55,10 @@ const OverlayRunningDuelAthlete = ({
             alignItems={position === "left" ? "flex-start" : "flex-end"}
             height={1}
         >
-            <Box
+            <Slide
+                    direction={position === "left" ? "right" : "left"}
+                    in={true}
+                ><Box
                 width={600}
                 height={150}
                 sx={{
@@ -201,30 +204,51 @@ const OverlayRunningDuelAthlete = ({
                     </Grid>
                 </Grid>
             </Box>
+            </Slide>
             {/* <Box marginTop={0}> */}
             {/* <Stack> */}
             {data.measurements?.map((m) => (
-                <Typography
-                    variant="h4"
-                    color="gray"
-                    textAlign={"right"}
-                    sx={{ backgroundColor: "#000000d2" }}
-                >{`R${m.id + 1}: ${
-                    m.tieBreak?.value ? toReadableTime(m.tieBreak.value) : "DNF"
-                }`}</Typography>
+                <Slide
+                    direction={position === "left" ? "right" : "left"}
+                    in={true}
+                >
+                    <Typography
+                        variant="h5"
+                        color="gray"
+                        textAlign={"right"}
+                        sx={{ backgroundColor: "#000000d2" }}
+                        padding={1}
+                        borderRadius={
+                            position === "left"
+                                ? "0px 4px 20px 0px"
+                                : "4px 0px 0px 20px "
+                        }
+                    >{`R${m.id + 1}: ${
+                        m.tieBreak?.value
+                            ? toReadableTime(m.tieBreak.value)
+                            : "DNF"
+                    }`}</Typography>
+                </Slide>
             ))}
             {/* </Stack> */}
-            {showTieBreak && (
+            {/* {showTieBreak && ( */}
+            <Fade in={showTieBreak}>
                 <Box
                     marginTop={"auto"}
-                    width={500}
-                    height={200}
+                    width={400}
+                    height={170}
                     sx={{ mt: "auto", backgroundColor: "#000000f2" }}
                     textAlign={"center"}
                     padding={2}
+                    borderRadius={
+                        position === "left"
+                            ? "0px 20px 0px 0px"
+                            : "20px 0px 0px 0px "
+                    }
+                    borderTop={`5px solid ${bg}`}
                 >
                     <Typography variant="h4">
-                        {`Round ${data.measurements?.length}`}
+                        <u>{`Round ${data.measurements?.length}`}</u>
                     </Typography>
                     <Typography variant="h4">
                         {`${
@@ -245,17 +269,20 @@ const OverlayRunningDuelAthlete = ({
                                 data.measurements?.length - 1
                             ]?.tieBreak.value && (
                             <Typography variant="h4" color={"red"}>
-                                -{toReadableTime(
+                                -
+                                {toReadableTime(
                                     data?.measurements[
                                         data.measurements?.length - 1
-                                    ].tieBreak?.value - opposantData?.measurements[
-                                        data.measurements?.length - 1
-                                    ].tieBreak?.value
+                                    ].tieBreak?.value -
+                                        opposantData?.measurements[
+                                            data.measurements?.length - 1
+                                        ].tieBreak?.value
                                 )}
                             </Typography>
                         )}
                 </Box>
-            )}
+            </Fade>
+            {/* )} */}
         </Stack>
     );
 };

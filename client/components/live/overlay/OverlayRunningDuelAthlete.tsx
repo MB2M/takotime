@@ -268,7 +268,7 @@ const OverlayRunningDuelAthlete = ({
 
                     {data?.measurements &&
                         opposantData?.measurements &&
-                        data?.measurements[data.measurements?.length - 1]
+                        data?.measurements[data.measurements?.length - 1]?
                             .tieBreak?.value >
                             opposantData.measurements[
                                 data.measurements?.length - 1

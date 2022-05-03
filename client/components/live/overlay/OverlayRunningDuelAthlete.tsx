@@ -272,7 +272,7 @@ const OverlayRunningDuelAthlete = ({
                             .tieBreak?.value >
                             opposantData.measurements[
                                 data.measurements?.length - 1
-                            ]?.tieBreak.value && (
+                            ]?.tieBreak?.value && (
                             <Typography variant="h4" color={"red"}>
                                 -
                                 {toReadableTime(

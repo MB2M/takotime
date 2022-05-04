@@ -28,7 +28,7 @@ import * as timesync from "timesync";
 import HeatUpdate from "./HeatUpdate";
 import DevicesUpdate from "./DevicesUpdate";
 import StaticsUpdate from "./StaticsUpdate";
-import LiveWorkoutSelector from "./LiveWorkoutSeletor";
+import LiveWorkoutSelector from "./LiveWorkoutSelector";
 import LoadedWorkouts from "./LoadedWorkouts";
 import CCLoader from "./CCLoader";
 import WebsocketConnection from "./live/WebsocketConnection";

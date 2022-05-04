@@ -36,6 +36,7 @@ class MqttServices {
             this.client.publish(topic, message, {
                 qos: 1,
             });
+            console.log("MQTT/Send:", topic);
         } catch (err) {
             console.error(err);
         }

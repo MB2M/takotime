@@ -1,6 +1,7 @@
 import aedes, { Aedes } from "aedes";
 import net from "net";
 import mongoPersistence from "aedes-persistence-mongodb";
+import aedeslogging from "aedes-logging";
 
 class MqttBroker {
     socket!: Aedes;
@@ -49,9 +50,9 @@ class MqttBroker {
 
         this.socket = socket;
         this.server = server;
+        aedeslogging({ instance: aedes, server: server });
         return { socket, server };
     }
 }
- 
 
 export default new MqttBroker();

@@ -50,7 +50,7 @@ class MqttBroker {
 
         this.socket = socket;
         this.server = server;
-        aedeslogging({ instance: aedes, server: server });
+        aedeslogging({ instance: socket, server: server });
         return { socket, server };
     }
 }

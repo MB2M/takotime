@@ -21,7 +21,7 @@ class BLEPeripheral {
             this.charac.subscribe((error) => {
                 console.log("init subscribe");
                 this.charac.on("data", (data) => {
-                    console.log(data.toString());
+                    // console.log(data.toString());
                     this.subscribeCallback(data.toString());
                 });
             });

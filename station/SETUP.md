@@ -158,8 +158,15 @@ Reboot and run:
 > nano .env
 
 > cd takotime/station; git pull origin main && sudo node index.js   
+cd && sudo npm install pm2@latest -g
 
-## Setup systemd services
+cd takotime/station 
+pm2 start npm --name "livestation" -- start
+pm2 start npm --name "restart button" -- run restartButton
+pm2 save
+pm2 startup
+
+<!-- ## Setup systemd services
 
 ### station.service
 
@@ -198,4 +205,4 @@ User=pi
 Environment=PORT=3000
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target -->

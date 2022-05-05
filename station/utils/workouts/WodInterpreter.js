@@ -38,7 +38,7 @@ class WodInterpreter extends EventEmitter {
     deltaWodPosition(currentWodPosition, delta) {
         if (delta < -1 || delta > 1) throw "bad delta value";
 
-        console.log(currentWodPosition);
+        // console.log(currentWodPosition);
 
         const currentBlock = currentWodPosition.block;
         const currentRound = currentWodPosition.round;
@@ -357,8 +357,7 @@ class WodInterpreter extends EventEmitter {
                 );
                 this.emit("tieBreak", tieBreak);
             } else {
-                console.log("#######", expectedMeasurement.tieBreakCut);
-                console.log("#######", expectTieBreak);
+
                 if (expectedMeasurement.tieBreakCut && expectTieBreak) {
                     isFinal = true;
                 } else {
@@ -373,7 +372,6 @@ class WodInterpreter extends EventEmitter {
                     timestamp,
                     currentWodPosition
                 );
-                console.log(">>>>>>>>>>MEASUREMENT:", measurement);
 
                 this.emit("checkpoint", measurement, isFinal, shortcut);
             }
@@ -492,7 +490,6 @@ class WodInterpreter extends EventEmitter {
 
                 switch (score.method) {
                     case "forTime":
-                        console.log(baseScore);
                         switch (baseType) {
                             case "time":
                                 scores.push(this.toReadableTime(baseScore));

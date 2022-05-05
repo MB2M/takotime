@@ -5,7 +5,7 @@ class MqttClient {
         this.client = mqtt.connect(mqttUrl, options);
         if (topics) {
             this.client.on("connect", () => {
-                console.log("connected");
+                console.log("connected to MQTT broker");
                 this.subscribe(topics);
             });
         }

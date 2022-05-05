@@ -48,21 +48,27 @@ class BLEServices extends EventEmitter {
             this.scan();
         });
 
-        let subSuccess;
-        switch (blePeripheral.role) {
-            case "counter":
-                subSuccess = await blePeripheral.initAndSubscribe(
-                    COUNTER_SERVICE_UUID
-                );
-                break;
-            case "board":
-                subSuccess = await blePeripheral.init(BOARD_SERVICE_UUID);
-                break;
-            default:
-                break;
-        }
+        let subSuccess = false;
 
-        if (subSuccess) this.emit("stateChange", blePeripheral);
+        let subtry = 5;
+
+        while (!subSuccess && subtry > 0) {
+            subtry--;
+            switch (blePeripheral.role) {
+                case "counter":
+                    subSuccess = await blePeripheral.initAndSubscribe(
+                        COUNTER_SERVICE_UUID
+                    );
+                    break;
+                case "board":
+                    subSuccess = await blePeripheral.init(BOARD_SERVICE_UUID);
+                    break;
+                default:
+                    break;
+            }
+    
+            if (subSuccess) this.emit("stateChange", blePeripheral);
+        }
     }
 
     async scan() {

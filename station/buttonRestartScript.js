@@ -10,7 +10,10 @@ resetScript.watch((err, value) => {
         throw err;
     }
 
-    exec("sudo systemctl restart station", function (msg) {
+    exec("pm2 restart npm", function (msg) {
         console.log(msg);
     });
+    // exec("sudo systemctl restart station", function (msg) {
+    //     console.log(msg);
+    // });
 });

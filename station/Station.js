@@ -379,7 +379,7 @@ class Station {
 
     sendToServer(topic) {
         const station = this.db.getData("/stations");
-        console.log("STATION:", station);
+        // console.log("STATION:", station);
 
         // this.mqttClient.client.publish(
         //     "station/wodData",

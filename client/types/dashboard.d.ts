@@ -142,7 +142,7 @@ interface WebSocket extends EventTarget {
 
 type Broker = { [key: string]: boolean };
 
-type OverlayVersion = "duel" | undefined;
+type OverlayVersion = "duel" | "duel-2" | undefined;
 
 type Globals = {
     wodname: string;

@@ -4,8 +4,9 @@ import OverlayRunningAthlete from "./OverlayRunningAthlete";
 import OverlayRunningDuelAthlete from "./OverlayRunningDuelAthlete";
 import useChrono from "../../../hooks/useChrono";
 import { Typography } from "@mui/material";
+import OverlayRunningDuelAthlete2 from "./OverlayRunningDuelAthlete2";
 
-const getWorkout = (workouts: Workout[], station: WidescreenStation ) => {
+const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     for (let workout of workouts) {
         if (workout.categories.includes(station.category)) {
             return workout;
@@ -55,24 +56,48 @@ const OverlayRunning = ({
                             data.stations.length / 2 +
                                 (data.stations.length % 2)
                         )
-                        .map((s) =>
-                            version === "duel" ? (
-                                <OverlayRunningDuelAthlete
-                                    key={s.laneNumber}
-                                    data={s}
-                                    workout={getWorkout(data.workouts, s)}
-                                    position="left"
-                                    opposantData={data.stations[1]}
-                                />
-                            ) : (
-                                <OverlayRunningAthlete
-                                    key={s.laneNumber}
-                                    data={s}
-                                    workout={getWorkout(data.workouts, s)}
-                                    position="left"
-                                />
-                            )
-                        )}
+                        .map((s) => {
+                            switch (version) {
+                                case "duel":
+                                    return (
+                                        <OverlayRunningDuelAthlete
+                                            key={s.laneNumber}
+                                            data={s}
+                                            workout={getWorkout(
+                                                data.workouts,
+                                                s
+                                            )}
+                                            position="left"
+                                            opposantData={data.stations[1]}
+                                        />
+                                    );
+                                case "duel-2":
+                                    return (
+                                        <OverlayRunningDuelAthlete2
+                                            key={s.laneNumber}
+                                            data={s}
+                                            workout={getWorkout(
+                                                data.workouts,
+                                                s
+                                            )}
+                                            position="left"
+                                            opposantData={data.stations[1]}
+                                        />
+                                    );
+                                default:
+                                    return (
+                                        <OverlayRunningAthlete
+                                            key={s.laneNumber}
+                                            data={s}
+                                            workout={getWorkout(
+                                                data.workouts,
+                                                s
+                                            )}
+                                            position="left"
+                                        />
+                                    );
+                            }
+                        })}
                 </Stack>
                 <Typography
                     variant="h3"
@@ -87,7 +112,7 @@ const OverlayRunning = ({
                         borderRadius: "0px 0px 50px 50px",
                     }}
                 >
-                    {chrono?.toString().slice(0,5)}
+                    {chrono?.toString().slice(0, 5)}
                 </Typography>
                 <Stack
                     direction="column"
@@ -102,24 +127,48 @@ const OverlayRunning = ({
                             data.stations.length / 2 +
                                 (data.stations.length % 2)
                         )
-                        .map((s) =>
-                            version === "duel" ? (
-                                <OverlayRunningDuelAthlete
-                                    key={s.laneNumber}
-                                    data={s}
-                                    workout={getWorkout(data.workouts, s)}
-                                    position="right"
-                                    opposantData={data.stations[0]}
-                                />
-                            ) : (
-                                <OverlayRunningAthlete
-                                    key={s.laneNumber}
-                                    data={s}
-                                    workout={getWorkout(data.workouts, s)}
-                                    position="right"
-                                />
-                            )
-                        )}
+                        .map((s) => {
+                            switch (version) {
+                                case "duel":
+                                    return (
+                                        <OverlayRunningDuelAthlete
+                                            key={s.laneNumber}
+                                            data={s}
+                                            workout={getWorkout(
+                                                data.workouts,
+                                                s
+                                            )}
+                                            position="right"
+                                            opposantData={data.stations[0]}
+                                        />
+                                    );
+                                case "duel-2":
+                                    return (
+                                        <OverlayRunningDuelAthlete2
+                                            key={s.laneNumber}
+                                            data={s}
+                                            workout={getWorkout(
+                                                data.workouts,
+                                                s
+                                            )}
+                                            position="right"
+                                            opposantData={data.stations[0]}
+                                        />
+                                    );
+                                default:
+                                    return (
+                                        <OverlayRunningAthlete
+                                            key={s.laneNumber}
+                                            data={s}
+                                            workout={getWorkout(
+                                                data.workouts,
+                                                s
+                                            )}
+                                            position="right"
+                                        />
+                                    );
+                            }
+                        })}
                 </Stack>
             </Stack>
         </Box>

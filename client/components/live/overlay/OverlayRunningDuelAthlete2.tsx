@@ -227,7 +227,7 @@ const OverlayRunningDuelAthlete = ({
                                 ? "0px 4px 20px 0px"
                                 : "4px 0px 0px 20px "
                         }
-                    >{`${
+                    >{`Score ${m.id + 1}: ${
                         m.value
                             ? m.method == "time"
                                 ? toReadableTime(m.value)

@@ -1,11 +1,10 @@
-import type { NextPage } from "next";
 import Head from "next/head";
 import Script from "next/script";
 import WebsocketWrapperLight from "../../../components/live/WebSocketWrapperLight";
-import Widescreen from "../../../components/live/Vscreen/WidescreenVertical";
 import WidescreenHorizontal from "../../../components/live/Hscreen/WidescreenHorizontal";
+import type { GetServerSideProps, NextPage } from "next";
 
-const widescreen: NextPage = () => {
+const widescreen: NextPage<Props> = ({ hostname }: { hostname: string | undefined }) => {
     return (
         
         <>
@@ -21,7 +20,7 @@ const widescreen: NextPage = () => {
                     crossOrigin="anonymous"
                 />
             </Head>
-            <WebsocketWrapperLight>
+            <WebsocketWrapperLight hostname={hostname}>
                 <WidescreenHorizontal data={undefined}></WidescreenHorizontal>
             </WebsocketWrapperLight>
             <Script
@@ -31,6 +30,15 @@ const widescreen: NextPage = () => {
             />
         </>
     );
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+    req,
+    res,
+}) => {
+    console.log(req.headers.host);
+    const hostname = req.headers.host?.split(":", 1)[0];
+    return { props: { hostname: hostname || undefined } };
 };
 
 export default widescreen;

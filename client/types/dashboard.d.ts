@@ -196,3 +196,5 @@ interface WidescreenStation {
     };
     rank: Ranks;
 }
+
+type Props = { hostname: string | undefined };

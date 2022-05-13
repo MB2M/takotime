@@ -1,15 +1,24 @@
-import type { NextPage } from "next";
 import Overlay from "../../../components/live/overlay/Overlay";
 import WebsocketWrapperLight from "../../../components/live/WebSocketWrapperLight";
+import type { GetServerSideProps, NextPage } from "next";
 
-const overlay: NextPage = () => {
+const overlay: NextPage<Props> = ({ hostname }: { hostname: string | undefined }) => {
     return (
         <>
-            <WebsocketWrapperLight>
+            <WebsocketWrapperLight hostname={hostname}>
                 <Overlay data={undefined} version={undefined}></Overlay>
             </WebsocketWrapperLight>
         </>
     );
 };
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+    req,
+    res,
+}) => {
+    console.log(req.headers.host);
+    const hostname = req.headers.host?.split(":", 1)[0];
+    return { props: { hostname: hostname || undefined } };
+};
+
 
 export default overlay;

@@ -1,7 +1,7 @@
 import { Children, cloneElement, useEffect, useRef, useState } from "react";
 import WebsocketConnection from "./WebsocketConnection";
 
-const WebsocketWrapperLight = ({ children }: any) => {
+const WebsocketWrapperLight = ({ hostname, children }: any) => {
     const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
     const [station, setStation] = useState<Station[]>([]);
     const [ranks, setRanks] = useState<StationRanked>([]);
@@ -81,7 +81,11 @@ const WebsocketWrapperLight = ({ children }: any) => {
 
     return (
         <>
-            <WebsocketConnection handleData={handleData} ws={ws} />
+            <WebsocketConnection
+                handleData={handleData}
+                ws={ws}
+                hostname={hostname}
+            />
             <div>{childrenWithProps}</div>
         </>
     );

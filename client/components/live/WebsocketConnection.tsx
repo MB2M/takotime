@@ -5,16 +5,15 @@ import { MutableRefObject } from "react";
 const WebsocketConnection = ({
     handleData,
     ws,
+    hostname,
 }: {
     handleData: (data: string) => void;
     ws: MutableRefObject<WebSocket | undefined>;
+    hostname: string | null;
 }) => {
+    console.log(hostname)
     return (
-        <WebSocket
-            url={`ws://${window.location.hostname}:3001`}
-            onMessage={handleData}
-            ref={ws}
-        />
+        <WebSocket url={`ws://${hostname}:3000`} onMessage={handleData} ref={ws} />
     );
 };
 

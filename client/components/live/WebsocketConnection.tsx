@@ -1,6 +1,7 @@
 import { WebSocket } from "nextjs-websocket";
 import { MutableRefObject } from "react";
 
+
 const WebsocketConnection = ({
     handleData,
     ws,
@@ -10,7 +11,7 @@ const WebsocketConnection = ({
 }) => {
     return (
         <WebSocket
-            url={`ws://${process.env.NEXT_PUBLIC_LIVE_API}`}
+            url={`ws://${window.location.hostname}:3001`}
             onMessage={handleData}
             ref={ws}
         />

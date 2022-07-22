@@ -14,7 +14,12 @@ type NameIdObject = {
     id: number;
 };
 
-const CCLoader = () => {
+const CCLoader = ({
+    onLoad,
+}: {
+    loadButton?: boolean;
+    onLoad?: (heatId: string, workoutId: string) => any;
+}) => {
     const [event, setEvent] = useState<NameIdObject>();
     const [workouts, setWorkouts] = useState<Array<NameIdObject>>([]);
     const [selectedWorkout, setSelectedWorkout] = useState<number>();
@@ -73,7 +78,7 @@ const CCLoader = () => {
             workout: selectedWorkout,
             heat: selectedHeat,
         };
-        console.log(payload);
+
         try {
             const response = await fetch(
                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/loadCC`,
@@ -108,7 +113,6 @@ const CCLoader = () => {
     };
 
     const handleHeatChange = async (event: any) => {
-        console.log(event.target.value);
         setSelectedHeat(event.target.value);
     };
 
@@ -169,7 +173,18 @@ const CCLoader = () => {
                 </>
             )}
             {selectedHeat && (
-                <Button variant="outlined" onClick={load} sx={{ mx: 2 }}>
+                <Button
+                    variant="outlined"
+                    onClick={() => {
+                        onLoad
+                            ? onLoad(
+                                  selectedHeat.toString(),
+                                  selectedWorkout?.toString()
+                              )
+                            : load();
+                    }}
+                    sx={{ mx: 2 }}
+                >
                     Load
                 </Button>
             )}

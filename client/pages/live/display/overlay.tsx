@@ -15,7 +15,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     req,
     res,
 }) => {
-    console.log(req.headers.host);
     const hostname = req.headers.host?.split(":", 1)[0];
     return { props: { hostname: hostname || undefined } };
 };

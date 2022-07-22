@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Modal, TextField } from "@mui/material";
-import { SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
 import CCLoader from "../CCLoader";
 
 const style = {
@@ -15,6 +15,9 @@ const style = {
 };
 
 const CCURL = `https://competitioncorner.net/api2/v1/schedule/workout/`;
+
+const regexTime =
+    /([0-5][0-9]:[0-5][0-9](\.[0-9]{0,3})?)|([0-5][0-9]:[0-5][0-9])|([0-5][0-9]:[0-5])|([0-5][0-9]:)|([0-5][0-9])|[0-5]/g;
 
 const HeatsDetail = ({
     heat,
@@ -74,6 +77,16 @@ const HeatsDetail = ({
         handleModalClose();
     };
 
+    const checkformat = (text: string) => {};
+
+    const handleResultChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        r: Result
+    ) => {
+        checkformat(e.target.value);
+        r.result = e.target.value;
+    };
+
     if (!heat) {
         return <></>;
     }
@@ -111,7 +124,15 @@ const HeatsDetail = ({
             {heat.results?.map((r) => (
                 <div key={r.station}>
                     {`[${r.station}] ${r.participant.name}`}
-                    
+                    <TextField
+                        id="result"
+                        name="result"
+                        value={r.result}
+                        onChange={(e) => handleResultChange(e, r)}
+                        label="score"
+                        type={"text"}
+                        variant="outlined"
+                    ></TextField>
                 </div>
             ))}
         </Box>

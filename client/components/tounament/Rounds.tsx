@@ -32,7 +32,7 @@ const Rounds = ({
 
     const selectedRound = useMemo(() => {
         return rounds.find((r) => r._id === selectedRoundId);
-    }, [selectedRoundId]);
+    }, [selectedRoundId, rounds]);
 
     const printName = (round: Round) => `${round.customId} - ${round.name}`;
 

@@ -14,7 +14,7 @@ const heatSchema = new mongoose.Schema({
             athleteSources: [String],
             station: Number,
             participant: participantSchema,
-            result: { type: Number, default: undefined },
+            result: { type: String, default: undefined },
             state: String,
         },
     ],

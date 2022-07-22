@@ -32,7 +32,7 @@ type Heat = {
 type Result = {
     station: number;
     participant: Participant;
-    result?: number;
+    result?: string;
     state?: string;
 };
 

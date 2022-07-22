@@ -6,17 +6,21 @@ import HeatsModal from "./HeatsModal";
 
 const Heats = ({
     heats,
+    resultType,
     onAddHeat,
     onEditHeat,
     onRemoveHeat,
 }: {
     heats: Heat[];
+    resultType: string;
     onAddHeat: (heat: Heat) => any;
     onEditHeat: (heat: Heat) => any;
     onRemoveHeat: (heatId: string) => any;
 }) => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [selectedHeatId, setSelectedHeatId] = useState<string>("");
+
+    console.log(heats);
 
     const selectedHeat = useMemo(() => {
         return heats.find((h) => h._id === selectedHeatId);

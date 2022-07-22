@@ -35,7 +35,7 @@ const HeatsList = ({
 
     const selectedHeat = useMemo(() => {
         return heats.find((h) => h._id === selectedHeatId);
-    }, [selectedHeatId]);
+    }, [selectedHeatId, heats]);
 
     useEffect(() => {
         onSelectHeat(selectedHeatId);

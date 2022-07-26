@@ -21,6 +21,5 @@ router.post("/tournaments", createTournament);
 router.put("/tournaments/:tournamentId", updateTournament);
 router.delete("/tournaments/:tournamentId", deleteTournament);
 
-router.post("/tournaments/:tournamentId", updateTournament);
 
 export default router;

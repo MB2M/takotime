@@ -1,6 +1,16 @@
-import { Box, Button, Divider, Modal, TextField } from "@mui/material";
-import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
+import {
+    Box,
+    Button,
+    Divider,
+    List,
+    Modal,
+    Paper,
+    Switch,
+    TextField,
+} from "@mui/material";
+import { ChangeEvent, useEffect, useState } from "react";
 import CCLoader from "../CCLoader";
+import Result from "./Result";
 
 const style = {
     position: "absolute" as "absolute",
@@ -16,9 +26,6 @@ const style = {
 
 const CCURL = `https://competitioncorner.net/api2/v1/schedule/workout/`;
 
-const regexTime =
-    /([0-5][0-9]:[0-5][0-9](\.[0-9]{0,3})?)|([0-5][0-9]:[0-5][0-9])|([0-5][0-9]:[0-5])|([0-5][0-9]:)|([0-5][0-9])|[0-5]/g;
-
 const HeatsDetail = ({
     heat,
     onUpdateResult,
@@ -26,10 +33,11 @@ const HeatsDetail = ({
     heat: Heat;
     onUpdateResult: (heat: Heat) => any;
 }) => {
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [modalCCOpen, setModalCCOpen] = useState<boolean>(false);
     const [ccHeatId, setCCHeatId] = useState<string>("");
     const [ccWorkoutId, setCCWorkoutId] = useState<string>("");
     const [stations, setStations] = useState<any[]>([]);
+    const [finished, setFinished] = useState<boolean>(false);
 
     useEffect(() => {
         if (ccHeatId && ccWorkoutId) {
@@ -50,13 +58,19 @@ const HeatsDetail = ({
         }
     }, [ccHeatId, ccWorkoutId]);
 
-    const handleClickModal = () => {
-        setModalOpen(true);
+    useEffect(() => {
+        if (heat) {
+            setFinished(heat.state === "F");
+        }
+    }, [heat]);
+
+    const handleClickCCModal = () => {
+        setModalCCOpen(true);
     };
 
-    const handleModalClose = () => {
+    const handleModalCCClose = () => {
         setStations([]);
-        setModalOpen(false);
+        setModalCCOpen(false);
     };
 
     const handleCCLoad = async (heatId: string, workoutId: string) => {
@@ -65,35 +79,72 @@ const HeatsDetail = ({
     };
 
     const handleLoadHeat = () => {
-        const results = stations.map((s) => ({
+        const results: Result[] = stations.map((s) => ({
             station: s.station,
             participant: {
                 customId: s.participantId,
                 name: s.participantName,
             },
+            state: "R",
+            result: "",
+            athleteSources: [],
         }));
         heat.results = results;
         onUpdateResult(heat);
-        handleModalClose();
+        handleModalCCClose();
     };
 
-    const checkformat = (text: string) => {};
-
-    const handleResultChange = (
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        r: Result
-    ) => {
-        checkformat(e.target.value);
-        r.result = e.target.value;
+    const handleResultChange = () => {
+        onUpdateResult(heat);
     };
 
-    if (!heat) {
-        return <></>;
-    }
+    const handleFinishedChange = () => {
+        heat.state = heat.state === "F" ? "NF" : "F";
+        onUpdateResult(heat);
+    };
+
+    const handleClickLoadResults = async () => {
+        try {
+            const response = await fetch(
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/stationstatics`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            const stations = await response.json();
+            console.log(stations);
+            const results: Result[] = stations.map(
+                (s: {
+                    laneNumber: any;
+                    participant: any;
+                    participantName: any;
+                    result: any;
+                }) => ({
+                    station: s.laneNumber,
+                    participant: {
+                        name: s.participant,
+                    },
+                    result: s.result || "",
+                })
+            );
+            heat.results = heat.results.map((r) => {
+                const result = stations.find(
+                    (station: { laneNumber: number }) =>
+                        station.laneNumber === r.station
+                );
+                return { ...r, result: result.result };
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
-        <Box>
-            <Modal open={modalOpen} onClose={handleModalClose}>
+        <>
+            <Modal open={modalCCOpen} onClose={handleModalCCClose}>
                 <Box sx={style}>
                     <Box marginY={2}>
                         <CCLoader onLoad={handleCCLoad}></CCLoader>
@@ -103,7 +154,7 @@ const HeatsDetail = ({
                             <Divider />
                             <Box marginY={2}>
                                 {stations.map((s) => (
-                                    <div>
+                                    <div key={s.station}>
                                         {s.station} - {s.participantName}
                                     </div>
                                 ))}
@@ -115,27 +166,50 @@ const HeatsDetail = ({
                     )}
                 </Box>
             </Modal>
-            <Box textAlign={"center"}>
-                <h2>
-                    {heat.name}
-                    <Button onClick={handleClickModal}>load athlete</Button>
-                </h2>
+            <Box paddingX={5}>
+                <Box textAlign={"center"}>
+                    <h2>
+                        {heat.name}
+                        <Button onClick={handleClickCCModal}>
+                            load athlete
+                        </Button>
+                        <Button onClick={handleClickLoadResults}>
+                            Get Results
+                        </Button>
+                        {/* <Button onClick={handleClickCustomModal}>
+                            setup custom
+                        </Button> */}
+                        <Switch
+                            checked={finished}
+                            onChange={handleFinishedChange}
+                            inputProps={{ "aria-label": "controlled" }}
+                        />
+                        Finished
+                    </h2>
+                </Box>
+                <Box justifyContent="center">
+                    <Paper>
+                        <List
+                            dense={true}
+                            sx={{
+                                width: "100%",
+                                maxWidth: "80%",
+                            }}
+                        >
+                            {heat.results
+                                ?.sort((a, b) => a.station - b.station)
+                                .map((r, i) => (
+                                    <Result
+                                        key={r.station}
+                                        result={r}
+                                        onChange={handleResultChange}
+                                    ></Result>
+                                ))}
+                        </List>
+                    </Paper>
+                </Box>
             </Box>
-            {heat.results?.map((r) => (
-                <div key={r.station}>
-                    {`[${r.station}] ${r.participant.name}`}
-                    <TextField
-                        id="result"
-                        name="result"
-                        value={r.result}
-                        onChange={(e) => handleResultChange(e, r)}
-                        label="score"
-                        type={"text"}
-                        variant="outlined"
-                    ></TextField>
-                </div>
-            ))}
-        </Box>
+        </>
     );
 };
 

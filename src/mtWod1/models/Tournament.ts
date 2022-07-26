@@ -18,6 +18,11 @@ const heatSchema = new mongoose.Schema({
             state: String,
         },
     ],
+    state: {
+        type: String,
+        enum: ["NF", "F"],
+        default: "NF",
+    },
 });
 
 const roundSchema = new mongoose.Schema({

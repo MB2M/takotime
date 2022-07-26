@@ -1,7 +1,6 @@
 import { WebSocket } from "nextjs-websocket";
 import { MutableRefObject } from "react";
 
-
 const WebsocketConnection = ({
     handleData,
     ws,
@@ -11,9 +10,12 @@ const WebsocketConnection = ({
     ws: MutableRefObject<WebSocket | undefined>;
     hostname: string | null;
 }) => {
-    console.log(hostname)
     return (
-        <WebSocket url={`ws://${hostname}:3000`} onMessage={handleData} ref={ws} />
+        <WebSocket
+            url={`ws://${hostname}:3000`}
+            onMessage={handleData}
+            ref={ws}
+        />
     );
 };
 

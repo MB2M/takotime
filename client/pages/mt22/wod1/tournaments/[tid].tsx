@@ -1,7 +1,8 @@
-import { Button, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import RankedTournament from "../../../../components/tounament/RankedTournament";
 import Rounds from "../../../../components/tounament/Rounds";
 import RoundsModal from "../../../../components/tounament/RoundsModal";
 import {
@@ -28,14 +29,10 @@ const Tournament = () => {
         retrieveTournament();
     }, []);
 
-    const update = async (payload: Object) => {
+    const update = async (payload: Object, params?: Object) => {
         if (!tournament) return;
 
-        console.log(update);
-
-        await updateTournament(tournament._id, payload);
-
-        setModalOpen(false);
+        await updateTournament(tournament._id, payload, params);
 
         retrieveTournament();
     };
@@ -43,6 +40,8 @@ const Tournament = () => {
     const handleAddRound = async (round: Round) => {
         if (!round) return;
         if (!tournament) return;
+
+        round.heats = [];
 
         const payload = {
             rounds: [...tournament.rounds, round],
@@ -89,28 +88,46 @@ const Tournament = () => {
         setModalOpen(false);
     };
 
+    const handleUpdateTournamentState = async () => {
+        await update({}, { validation: true });
+    };
+
     if (!tournament) return <h3>BAD TOURNAMENT ID</h3>;
 
     return (
-        <Container>
-            <RoundsModal
-                open={modalOpen}
-                onSave={handleAddRound}
-                onClose={handleModalClose}
-            ></RoundsModal>
+        <Box display={"flex"}>
+            {tournament && (
+                <div>
+                    <h3>Tournament Rank</h3>
+                    <RankedTournament tournament={tournament} />
+                </div>
+            )}
+            <Box marginX={15} marginY={5}>
+                <RoundsModal
+                    open={modalOpen}
+                    onSave={handleAddRound}
+                    onClose={handleModalClose}
+                ></RoundsModal>
 
-            <p>{`Tournament ${tournament.name} with id ${tournament._id}`}</p>
+                <p>{`Tournament ${tournament.name} with id ${tournament._id}`}</p>
+                <Button
+                    variant="outlined"
+                    onClick={handleUpdateTournamentState}
+                >
+                    Update Tournament States
+                </Button>
 
-            <Button variant="outlined" onClick={() => setModalOpen(true)}>
-                Add new Round
-            </Button>
-            <h3>Round List</h3>
-            <Rounds
-                rounds={tournament.rounds.sort()}
-                onRemoveRound={handleRemoveRound}
-                onEditRound={handleEditRound}
-            />
-        </Container>
+                <Button variant="outlined" onClick={() => setModalOpen(true)}>
+                    Add new Round
+                </Button>
+                <h3>Round List</h3>
+                <Rounds
+                    rounds={tournament.rounds.sort()}
+                    onRemoveRound={handleRemoveRound}
+                    onEditRound={handleEditRound}
+                />
+            </Box>
+        </Box>
     );
 };
 

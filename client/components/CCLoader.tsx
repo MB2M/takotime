@@ -172,14 +172,14 @@ const CCLoader = ({
                     </Select>
                 </>
             )}
-            {selectedHeat && (
+            {selectedHeat && selectedWorkout && (
                 <Button
                     variant="outlined"
                     onClick={() => {
                         onLoad
                             ? onLoad(
                                   selectedHeat.toString(),
-                                  selectedWorkout?.toString()
+                                  selectedWorkout.toString()
                               )
                             : load();
                     }}

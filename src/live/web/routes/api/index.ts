@@ -8,6 +8,7 @@ import * as stationDevicesController from "../../controllers/stationDevicesContr
 import * as stationStaticsController from "../../controllers/stationController";
 import * as workoutController from "../../controllers/workoutController.js";
 import loaderCC from "./loaderCC.js";
+import loaderTournament from "./loaderTournament.js";
 
 const api = express.Router();
 
@@ -32,6 +33,7 @@ api.use("/signup", signup);
 api.get("/switchStart", switchStart);
 api.post("/loadworkout", workoutController.loadWorkout);
 api.post("/loadCC", loaderCC);
+api.post("/loadTournament", loaderTournament);
 // api.post("/setWod", setWod);
 // api.post("/setDevices", setDevices);
 export default api;

@@ -10,7 +10,6 @@ const router = express.Router();
 
 router.use(express.static(path.join(__dirname, "..", "..", "public")));
 router.use("/api", api);
-// router.use("public",express.static("build/live/public"));
 
 console.log(path.join(__dirname, "..", "..", "public"))
 

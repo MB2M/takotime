@@ -34,6 +34,7 @@ import CCLoader from "./CCLoader";
 import WebsocketConnection from "./live/WebsocketConnection";
 import StationUpdate from "./StaticsUpdate";
 import { parseNextUrl } from "next/dist/shared/lib/router/utils/parse-next-url";
+import TournamentLoader from "./TournamentLoader";
 // import ntpClient from "ntp-client-promise";
 
 const toReadableTime = (timestamp: number) => {
@@ -157,7 +158,6 @@ const Dashboard: NextPage = ({
                     ?.rank?.join(" | ")) ||
             "n/a";
 
-        lane === 2 && console.log(dynamics.measurements);
         return {
             lane,
             participant: station.participant,
@@ -300,6 +300,7 @@ const Dashboard: NextPage = ({
                             loadedWorkouts={loadedWorkouts}
                         ></LoadedWorkouts>
                         <CCLoader></CCLoader>
+                        <TournamentLoader></TournamentLoader>
                     </Grid>
                     <Grid item xs={12} lg={10}>
                         <Grid container spacing={2}>

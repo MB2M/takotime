@@ -45,6 +45,7 @@ const RoundsModal = ({
             resultType: "time",
             sortOrder: "asc",
             ranking: { start: 0, end: 0 },
+            heats: [],
         }
     );
 
@@ -55,12 +56,15 @@ const RoundsModal = ({
     }, [round]);
 
     const handleChange = (e: { target: { name: any; value: any } }) => {
-        ["start", "end"].includes(e.target.name) &&
-            setNewRound((nr: any) => ({
-                ...nr,
-                ranking: { [e.target.name]: e.target.value },
-            }));
-        setNewRound((nr: any) => ({ ...nr, [e.target.name]: e.target.value }));
+        ["start", "end"].includes(e.target.name)
+            ? setNewRound((nr: any) => ({
+                  ...nr,
+                  ranking: { ...nr.ranking, [e.target.name]: e.target.value },
+              }))
+            : setNewRound((nr: any) => ({
+                  ...nr,
+                  [e.target.name]: e.target.value,
+              }));
     };
 
     const handleSave = () => {
@@ -72,7 +76,7 @@ const RoundsModal = ({
         <Modal open={open} onClose={onClose}>
             <Box sx={style}>
                 <Stack gap={2}>
-                <TextField
+                    <TextField
                         id="customId"
                         name="customId"
                         value={newRound.customId}
@@ -161,7 +165,7 @@ const RoundsModal = ({
                     <TextField
                         id="rankingStart"
                         name="start"
-                        value={newRound.ranking.start}
+                        value={newRound.ranking?.start}
                         onChange={handleChange}
                         label="ranking start"
                         type={"number"}
@@ -170,7 +174,7 @@ const RoundsModal = ({
                     <TextField
                         id="rankingEnd"
                         name="end"
-                        value={newRound.ranking.end}
+                        value={newRound.ranking?.end}
                         onChange={handleChange}
                         label="ranking end"
                         type={"number"}

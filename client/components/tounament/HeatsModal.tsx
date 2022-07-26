@@ -1,10 +1,4 @@
-import {
-    Modal,
-    Box,
-    Stack,
-    TextField,
-    Button,
-} from "@mui/material";
+import { Modal, Box, Stack, TextField, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const style = {
@@ -34,6 +28,8 @@ const HeatsModal = ({
         heat || {
             customId: "",
             name: "",
+            results: [],
+            state: "NF"
             // order: 0,
         }
     );

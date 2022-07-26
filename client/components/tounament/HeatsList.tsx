@@ -17,6 +17,7 @@ import { useEffect, useMemo, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import HeatsModal from "./HeatsModal";
+import RankedHeat from "./RankedHeat";
 
 const HeatsList = ({
     heats,
@@ -110,39 +111,48 @@ const HeatsList = ({
 
             <List component="nav" aria-label="main mailbox folders">
                 {heats.map((h) => (
-                    <ListItem
-                        key={h.customId}
-                        disablePadding
-                        secondaryAction={
-                            <div>
-                                <IconButton
-                                    aria-label="delete"
-                                    size="small"
-                                    onClick={() => handleEditModal(h._id || "")}
-                                >
-                                    <EditIcon fontSize="inherit" />
-                                </IconButton>
-                                <IconButton
-                                    edge="end"
-                                    aria-label="delete"
-                                    size="small"
-                                    onClick={() =>
-                                        handleDeleteDialog(h._id || "")
-                                    }
-                                >
-                                    <DeleteIcon fontSize="inherit" />
-                                </IconButton>
-                            </div>
-                        }
-                    >
-                        <ListItemButton
-                            selected={selectedHeatId === h._id}
-                            onClick={() => handleSelectHeat(h._id || "")}
+                    <>
+                        <ListItem
+                            key={h.customId}
+                            disablePadding
+                            secondaryAction={
+                                <div>
+                                    <IconButton
+                                        aria-label="delete"
+                                        size="small"
+                                        onClick={() =>
+                                            handleEditModal(h._id || "")
+                                        }
+                                    >
+                                        <EditIcon fontSize="inherit" />
+                                    </IconButton>
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="delete"
+                                        size="small"
+                                        onClick={() =>
+                                            handleDeleteDialog(h._id || "")
+                                        }
+                                    >
+                                        <DeleteIcon fontSize="inherit" />
+                                    </IconButton>
+                                </div>
+                            }
                         >
-                            <ListItemText primary={h.name} />
-                            {/* <h2>{h.name}</h2> */}
-                        </ListItemButton>
-                    </ListItem>
+                            <ListItemButton
+                                selected={selectedHeatId === h._id}
+                                onClick={() => handleSelectHeat(h._id || "")}
+                            >
+                                <ListItemText primary={h.name} />
+                                {/* <h2>{h.name}</h2> */}
+                            </ListItemButton>
+                        </ListItem>
+                        <div>
+                            {selectedHeatId === h._id && selectedHeat && (
+                                <RankedHeat heat={selectedHeat} />
+                            )}
+                        </div>
+                    </>
                 ))}
             </List>
         </div>

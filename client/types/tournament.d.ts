@@ -18,25 +18,29 @@ type Round = {
     };
     resultType: "time" | "reps";
     sortOrder: "asc" | "desc";
-    heats?: Heat[];
+    heats: Heat[];
 };
 
 type Heat = {
     customId: string;
     _id?: string;
     name: string;
-    // order: number;
-    results?: Result[];
+    state: "NF" | "F";
+    results: Result[];
 };
 
 type Result = {
+    _id?: any;
     station: number;
     participant: Participant;
-    result?: string;
-    state?: string;
+    result: string;
+    state: State;
+    athleteSources?: [];
 };
 
 type Participant = {
     customId: string;
     name: string;
 };
+
+type State = "R" | "Q" | "E" | "W" | "D";

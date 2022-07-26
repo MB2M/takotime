@@ -19,10 +19,21 @@ const getTournament = async (tournamentId: string) => {
     }
 };
 
-const updateTournament = async (tournamentId: string, payload: Object) => {
+const updateTournament = async (
+    tournamentId: string,
+    payload: Object,
+    params?: Object
+) => {
+    let paramsString = "";
+    if (params) {
+        paramsString = Object.entries(params).reduce((p, c) => {
+            return `${p}${p!=="" ? "$" : ""}${c[0]}=${c[1]}`;
+        }, "");
+    }
+
     try {
         const response = await fetch(
-            `http://${process.env.NEXT_PUBLIC_LIVE_API}/wod1/tournaments/${tournamentId}`,
+            `http://${process.env.NEXT_PUBLIC_LIVE_API}/wod1/tournaments/${tournamentId}?${paramsString}`,
             {
                 method: "PUT",
                 body: JSON.stringify(payload),

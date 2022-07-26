@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Heats from "./Heats";
 import RoundsModal from "./RoundsModal";
+import RankedRound from "./RankedRound";
 
 const Rounds = ({
     rounds,
@@ -195,12 +196,18 @@ const Rounds = ({
                         </Stack>
                     </Box>
                     {selectedRound.heats && (
-                        <Heats
-                            heats={selectedRound.heats}
-                            onAddHeat={handleAddHeat}
-                            onEditHeat={handleEditHeat}
-                            onRemoveHeat={handleRemoveHeat}
-                        ></Heats>
+                        <>
+                            <Heats
+                                heats={selectedRound.heats}
+                                onAddHeat={handleAddHeat}
+                                onEditHeat={handleEditHeat}
+                                onRemoveHeat={handleRemoveHeat}
+                            ></Heats>
+                            <h3>Rank of round</h3>
+                            <RankedRound
+                                heats={selectedRound.heats}
+                            ></RankedRound>
+                        </>
                     )}
                 </>
             )}

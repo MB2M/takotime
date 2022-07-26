@@ -5,11 +5,11 @@ import {
     changeTournament,
     viewTournament,
     delTournament,
+    calculateTournamentRank,
 } from "../services/tournamentService";
 
 export async function getTournaments(req: Request, res: Response) {
     try {
-        
         const tournaments = await viewTournaments();
         res.status(200).json(tournaments);
     } catch (err) {
@@ -52,6 +52,8 @@ export async function createTournament(req: Request, res: Response) {
 export async function updateTournament(req: Request, res: Response) {
     const body = req.body;
     const id = req.params.tournamentId;
+    const validation = !!req.query.validation;
+
 
     if (!id) {
         res.status(401).json({ error: "unauthorized" });
@@ -59,6 +61,9 @@ export async function updateTournament(req: Request, res: Response) {
         try {
             const tournament = await changeTournament(body, id as string);
             if (!!tournament) {
+                if (validation) {
+                    await calculateTournamentRank(id);
+                }
                 res.status(202).json(tournament);
             } else {
                 res.status(404).json("tournament not found");

@@ -12,7 +12,7 @@ const WebsocketConnection = ({
 }) => {
     return (
         <WebSocket
-            url={`ws://${hostname}:3000`}
+            url={`ws://${process.env.NEXT_PUBLIC_LIVE_API}`}
             onMessage={handleData}
             ref={ws}
         />

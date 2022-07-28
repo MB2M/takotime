@@ -1,7 +1,6 @@
-import { Children, cloneElement, useRef, useState } from "react";
-import WebsocketConnection from "./WebsocketConnection";
+import { useState, useRef } from "react";
 
-const WebsocketWrapper = ({ hostname, children }: any) => {
+export const useLiveData = () => {
     const [workoutIds, setWorkoutIds] = useState<WorkoutIds[]>([]);
     const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
     const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
@@ -26,6 +25,7 @@ const WebsocketWrapper = ({ hostname, children }: any) => {
                 setRanks(message);
                 break;
             case "globalsUpdate":
+                console.log(message)
                 setGlobals(message);
                 break;
             case "devicesConfig":
@@ -35,7 +35,6 @@ const WebsocketWrapper = ({ hostname, children }: any) => {
                 setWorkoutIds(message);
                 break;
             case "loadedWorkouts":
-                console.log(message);
                 setLoadedWorkouts(message);
                 break;
             default:
@@ -47,29 +46,16 @@ const WebsocketWrapper = ({ hostname, children }: any) => {
         ws?.current?.sendMessage(message);
     };
 
-    const childrenWithProps = Children.map(children, (child, index) => {
-        return cloneElement(child, {
-            workoutIds,
-            loadedWorkouts,
-            stationDevices,
-            station,
-            brokerClients,
-            ranks,
-            globals,
-            sendMessage,
-        });
-    });
-
-    return (
-        <>
-            <WebsocketConnection
-                handleData={handleData}
-                ws={ws}
-                hostname={hostname}
-            />
-            <div>{childrenWithProps}</div>
-        </>
-    );
+    return {
+        workoutIds,
+        loadedWorkouts,
+        stationDevices,
+        station,
+        brokerClients,
+        ranks,
+        globals,
+        sendMessage,
+        handleData,
+        ws,
+    };
 };
-
-export default WebsocketWrapper;

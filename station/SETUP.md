@@ -7,6 +7,7 @@ Setup sd Card :
     ```
     ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
     update_config=1
+    country=FR
 
     network={
         ssid="Great Again"
@@ -16,9 +17,9 @@ Setup sd Card :
     ```
     https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#4-boot-ubuntu-server
 
-# change password
+<!-- # change password
 
-    passwd
+    passwd -->
 
 # config GPIO 18 as PINUP
 
@@ -26,17 +27,17 @@ sudo nano /boot/config.txt
 
 Add : gpio=18,24=pu
 
-# update/upgrade
+<!-- # update/upgrade
 
-    sudo apt update && sudo apt upgrade
+    sudo apt update && sudo apt upgrade -->
 
-# setup wifi /etc/dhcpcd.conf
+<!-- # setup wifi /etc/dhcpcd.conf
 
     sudo nano /etc/dhcpcd.conf
     interface wlan0
     static ip_address=192.168.3.10X
     static routers=192.168.3.1
-    static domain_name_servers=192.168.3.1
+    static domain_name_servers=192.168.3.1 -->
 
 <!-- # install python
 
@@ -70,6 +71,9 @@ change user:
     \q
     exit -->
 
+
+    apt-get install -y build-essential
+
 # Install chrony
 
     sudo apt install chrony -y
@@ -82,6 +86,8 @@ add following line:
 
     server 192.168.3.100 iburst
 
+remove lines that are setting sources:
+
 then run:
 
     sudo systemctl enable chrony
@@ -91,9 +97,9 @@ reboot and run cmd to verify:
 
     sudo chronyc tracking
 
-change timezone
+<!-- change timezone -->
 
-    sudo timedatectl set-timezone Europe/Paris
+   <!-- sudo timedatectl set-timezone Europe/Paris -->
 
 <!-- # install pip
 

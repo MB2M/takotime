@@ -11,9 +11,34 @@ const STATE_COLOR_GRID = {
     R: "lightgray",
 };
 
-const RankedRound = ({ heats }: { heats: Heat[] }) => {
+const RankedRound = ({
+    heats,
+    byPoints = false,
+}: {
+    heats: Heat[];
+    byPoints: boolean;
+}) => {
     const sortedHeat = useMemo(() => {
-        const results = heats.flatMap((h) => h.results);
+        let results = heats.flatMap((h) => h.results);
+        if (byPoints) {
+            results = [...new Set(results.map((r) => r.participant.name))].map(
+                (p) => {
+                    const pointsSum = results
+                        .filter((r) => r.participant.name === p)
+                        .reduce((p, c) => p + (c.points || 0), 0);
+                    return {
+                        participant: results.find(
+                            (r) => r.participant.name === p
+                        )?.participant || { customId: "", name: "" },
+                        station:
+                            results.find((r) => r.participant.name === p)
+                                ?.station || 1,
+                        result: pointsSum.toString(),
+                        state: "D",
+                    };
+                }
+            );
+        }
         const newResults = results.sort((a, b) => {
             if (a.result.includes(":") && !b.result.includes(":")) return -1;
             if (b.result.includes(":") && !a.result.includes(":")) return 1;

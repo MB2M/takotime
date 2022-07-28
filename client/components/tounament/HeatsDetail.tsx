@@ -115,7 +115,6 @@ const HeatsDetail = ({
                 }
             );
             const stations = await response.json();
-            console.log(stations);
             const results: Result[] = stations.map(
                 (s: {
                     laneNumber: any;
@@ -135,8 +134,10 @@ const HeatsDetail = ({
                     (station: { laneNumber: number }) =>
                         station.laneNumber === r.station
                 );
-                return { ...r, result: result.result };
+                return { ...r, result: result.result || "" };
             });
+            heat.state = "NF";
+            onUpdateResult(heat);
         } catch (err) {
             console.log(err);
         }

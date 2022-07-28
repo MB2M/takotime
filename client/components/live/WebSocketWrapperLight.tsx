@@ -79,6 +79,7 @@ const WebsocketWrapperLight = ({ hostname, children }: any) => {
         });
     });
 
+
     return (
         <>
             <WebsocketConnection

@@ -8,7 +8,7 @@ const WebsocketConnection = ({
 }: {
     handleData: (data: string) => void;
     ws: MutableRefObject<WebSocket | undefined>;
-    hostname: string | null;
+    hostname: string | undefined;
 }) => {
     return (
         <WebSocket

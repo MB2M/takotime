@@ -73,6 +73,10 @@ class Manager extends EventEmitter {
             if (topic === "client/restartUpdate") {
                 this.mqttServices.send("server/restartUpdate", message);
             }
+            if (topic === "client/remoteWarmupHeat") {
+                this.keyv.set("remoteWarmupHeat", message);
+                this.websocketMessages.sendGlobalsToAllClients();
+            }
         });
     }
 
@@ -161,6 +165,7 @@ class Manager extends EventEmitter {
             externalEventId: await this.keyv.get("externalEventId"),
             externalHeatId: await this.keyv.get("externalHeatId"),
             state: await this.keyv.get("state"),
+            remoteWarmupHeat: await this.keyv.get("remoteWarmupHeat"),
         };
     }
 

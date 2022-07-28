@@ -35,6 +35,7 @@ import WebsocketConnection from "./live/WebsocketConnection";
 import StationUpdate from "./StaticsUpdate";
 import { parseNextUrl } from "next/dist/shared/lib/router/utils/parse-next-url";
 import TournamentLoader from "./TournamentLoader";
+import { useLiveDataContext } from "../context/liveData/livedata";
 // import ntpClient from "ntp-client-promise";
 
 const toReadableTime = (timestamp: number) => {
@@ -91,7 +92,7 @@ const Dashboard: NextPage = ({
     brokerClients,
     ranks,
     globals,
-    sendMessage,
+    // sendMessage,
 }: any) => {
     const [tSync, setTSync] = useState<timesync.TimeSync>();
     const chrono = useChrono(tSync, globals?.startTime, globals?.duration);
@@ -99,6 +100,8 @@ const Dashboard: NextPage = ({
         useState<boolean>(false);
     const [deviceConfigUpdateDrawerOpen, setDeviceConfigUpdateDrawerOpen] =
         useState<boolean>(false);
+
+        const {sendMessage} = useLiveDataContext()
 
     useEffect(() => {
         const ts = timesync.create({

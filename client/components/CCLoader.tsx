@@ -140,7 +140,7 @@ const CCLoader = ({
                         }
                         // value={selectedWorkout}
                         onChange={handleWorkoutChange}
-                        input={<OutlinedInput label="Tag" />}
+                        // input={<OutlinedInput label="Tag" />}
                         size="small"
                     >
                         {workouts.map((w, i) => (

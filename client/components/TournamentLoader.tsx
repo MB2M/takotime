@@ -87,7 +87,7 @@ const TournamentLoader = () => {
                 label="tournament"
                 id="tournament-checkbox"
                 onChange={handleTournamentSelectChange}
-                input={<OutlinedInput label="Tag" />}
+                // input={<OutlinedInput label="Tag" />}
                 size="small"
             >
                 {tournaments.map((t, i) => (
@@ -101,7 +101,7 @@ const TournamentLoader = () => {
                     label="round"
                     id="round-checkbox"
                     onChange={handleRoundSelectChange}
-                    input={<OutlinedInput label="Tag" />}
+                    // input={<OutlinedInput label="Tag" />}
                     size="small"
                 >
                     {tournaments

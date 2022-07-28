@@ -29,6 +29,7 @@ const RankedHeat = ({ heat }: { heat: Heat }) => {
                             <TableCell>{i + 1}</TableCell>
                             <TableCell>{r.participant.name}</TableCell>
                             <TableCell>{r.result}</TableCell>
+                            {r.points && <TableCell>{r.points}</TableCell>}
                         </TableRow>
                     ))}
                 </Table>

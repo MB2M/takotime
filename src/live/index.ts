@@ -70,14 +70,15 @@ class LiveApp {
 
     async initWebsocket(server: Server) {
         try {
+            const that = this;
             this.wss = new WebSocketServer({ server });
             this.wss.on("connection", function connection(ws) {
                 ws.on("message", function message(data) {
                     const json = JSON.parse(data.toString());
+
                     const topic = json.topic;
                     const message = json.message;
                     if (topic === "client/scriptReset") {
-                        console.log("scriptReset");
                         global.liveWodManager.sendToChannel(
                             "server/scriptReset",
                             null,
@@ -90,6 +91,10 @@ class LiveApp {
                             null,
                             message
                         );
+                    }
+                    if (topic === "client/remoteWarmupHeat") {
+                        liveApp.manager.keyv.set("remoteWarmupHeat", message);
+                        liveApp.manager.websocketMessages.sendGlobalsToAllClients();
                     }
                 });
                 // sender.sendStaticsToAllClients();

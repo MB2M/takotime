@@ -1,8 +1,11 @@
 import Overlay from "../../../components/live/overlay/Overlay";
 import WebsocketWrapperLight from "../../../components/live/WebSocketWrapperLight";
 import type { GetServerSideProps, NextPage } from "next";
+import { useEventContext } from "../../../context/event";
 
 const overlay: NextPage<Props> = ({ hostname }: { hostname: string | undefined }) => {
+    const event = useEventContext()
+    console.log(event)
     return (
         <>
             <WebsocketWrapperLight hostname={hostname}>

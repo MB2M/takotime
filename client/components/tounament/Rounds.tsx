@@ -206,6 +206,7 @@ const Rounds = ({
                             <h3>Rank of round</h3>
                             <RankedRound
                                 heats={selectedRound.heats}
+                                byPoints={!!selectedRound.points?.length}
                             ></RankedRound>
                         </>
                     )}

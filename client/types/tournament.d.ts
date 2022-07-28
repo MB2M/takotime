@@ -19,6 +19,7 @@ type Round = {
     resultType: "time" | "reps";
     sortOrder: "asc" | "desc";
     heats: Heat[];
+    points?: number[];
 };
 
 type Heat = {
@@ -36,6 +37,7 @@ type Result = {
     result: string;
     state: State;
     athleteSources?: [];
+    points?: number;
 };
 
 type Participant = {

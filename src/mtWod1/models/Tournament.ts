@@ -16,6 +16,7 @@ const heatSchema = new mongoose.Schema({
             participant: participantSchema,
             result: { type: String, default: undefined },
             state: String,
+            points: Number,
         },
     ],
     state: {
@@ -33,6 +34,7 @@ const roundSchema = new mongoose.Schema({
     draftQualifiedOverallNumber: Number,
     eliminatedNumber: Number,
     stationNumber: Number,
+    points:[Number],
     ranking: {
         start: Number,
         end: Number,

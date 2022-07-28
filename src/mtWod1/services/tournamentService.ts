@@ -1,3 +1,4 @@
+import { cp } from "node:fs";
 import Tournament from "../models/Tournament";
 
 type Tournament = {
@@ -59,6 +60,7 @@ const calculateTournamentRank = async (id: string) => {
             eliminatedNumber: number;
             heats: any[];
             state: string;
+            points?: number[];
         }) => {
             let finished = true;
             round.heats.forEach(
@@ -75,6 +77,12 @@ const calculateTournamentRank = async (id: string) => {
                             result.state = "R";
                             return;
                         }
+
+                        if (!!round.points?.length) {
+                            result.points = round.points[index];
+                            result.state = "DP";
+                        }
+
                         if (index < round.topQualifPerHeatNumber) {
                             result.state = "Q";
                             return;
@@ -93,7 +101,7 @@ const calculateTournamentRank = async (id: string) => {
                 }
             );
             round.finished = finished;
-            const roundResults = round.heats.flatMap((h) => h.results);
+            let roundResults = round.heats.flatMap((h) => h.results);
             roundResults.sort(sortResult);
 
             let toDraft = round.draftQualifiedOverallNumber;
@@ -108,7 +116,7 @@ const calculateTournamentRank = async (id: string) => {
                     return;
                 }
             });
-
+            // MISE A JOUR DES AUTRES ROUNDS
             let excludedSources: string[] = [];
             let waitingSources: string[] = [];
             round.heats.forEach((heat) => {
@@ -120,7 +128,8 @@ const calculateTournamentRank = async (id: string) => {
                         let previousSource = "";
                         result.athleteSources.forEach((source) => {
                             if (excludedSources.includes(source)) return;
-                            if (["D", "Q", "DQ"].includes(previousSource)) return;
+                            if (["D", "Q", "DQ"].includes(previousSource))
+                                return;
                             if (previousSource === "W") {
                                 waitingSources.push(source);
                                 return;
@@ -134,8 +143,84 @@ const calculateTournamentRank = async (id: string) => {
                             const heat = source.slice(3, 5);
                             const rank = source.slice(6);
 
-                            let foundResult;
-                            if (heat === "DQ") {
+                            let foundResult: any;
+                            if (["DP"].includes(heat)) {
+                                foundResult = tournament.rounds
+                                    .find(
+                                        (r: { customId: string }) =>
+                                            r.customId === round
+                                    )
+                                    ?.heats.flatMap(
+                                        (h: { results: any }) => h.results
+                                    );
+
+                                foundResult = [
+                                    ...new Set(
+                                        foundResult?.map(
+                                            (r: {
+                                                participant: { name: any };
+                                            }) => r.participant.name
+                                        )
+                                    ),
+                                ]
+                                    .map((p) => {
+                                        const pointsSum = foundResult
+                                            ?.filter(
+                                                (r: {
+                                                    participant: {
+                                                        name: unknown;
+                                                    };
+                                                }) => r.participant.name === p
+                                            )
+                                            .reduce(
+                                                (p: any, c: { points: any }) =>
+                                                    p + (c.points || 0),
+                                                0
+                                            );
+
+                                        return {
+                                            participant: foundResult.find(
+                                                (r: {
+                                                    participant: {
+                                                        name: unknown;
+                                                    };
+                                                }) => r.participant.name === p
+                                            )?.participant || {
+                                                customId: "",
+                                                name: "",
+                                            },
+                                            station:
+                                                foundResult.find(
+                                                    (r: {
+                                                        participant: {
+                                                            name: unknown;
+                                                        };
+                                                    }) =>
+                                                        r.participant.name === p
+                                                )?.station || 1,
+                                            result: pointsSum.toString(),
+                                            state: "DP",
+                                        };
+                                    })
+                                    .sort(sortResult)
+                                    .filter(
+                                        (result: { state: string }) =>
+                                            result.state === "DP"
+                                    )?.[Number(rank) - 1];
+
+                                console.log(foundResult);
+                                if (["DP"].includes(foundResult?.state)) {
+                                    result.participant =
+                                        foundResult.participant;
+                                    excludedSources.push(source);
+                                    previousSource = foundResult.state;
+                                } else {
+                                    result.participant = {
+                                        name: "TBD",
+                                        customId: "",
+                                    };
+                                }
+                            } else if (["DQ"].includes(heat)) {
                                 foundResult = tournament.rounds
                                     .find(
                                         (r: { customId: string }) =>
@@ -147,7 +232,7 @@ const calculateTournamentRank = async (id: string) => {
                                     .sort(sortResult)
                                     .filter(
                                         (result: { state: string }) =>
-                                            result.state === "DQ"
+                                            result.state === heat
                                     )?.[Number(rank) - 1];
 
                                 if (["DQ"].includes(foundResult?.state)) {

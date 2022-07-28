@@ -8,13 +8,6 @@ import {
 import { Box } from "@mui/system";
 import { useMemo } from "react";
 
-const STATE_COLOR_GRID = {
-    Q: "green",
-    D: "pink",
-    W: "orange",
-    E: "red",
-    R: "black",
-};
 
 const sortTournament = (a: { result: string }, b: { result: string }) => {
     if (a.result.includes(":") && !b.result.includes(":")) return -1;

@@ -19,7 +19,7 @@ const useChrono = (
         const serverT = setInterval(function () {
             const now = ts.now();
             setTime(now);
-        }, 300);
+        }, 250);
 
         return () => clearInterval(serverT);
     }, []);

@@ -151,6 +151,7 @@ type Globals = {
     countdown: number;
     externalEventId: number;
     externalHeatId: number;
+    remoteWarmupHeat: number;
 };
 
 interface WidescreenData {

@@ -1,5 +1,4 @@
-import { createContext, useContext } from "react";
-import { LivedataContext, useEventContext } from "../../../context/event";
+import { useEventContext } from "../../../context/event";
 
 const Warmup = () => {
     const { eventId } = useEventContext();

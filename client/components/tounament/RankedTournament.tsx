@@ -8,7 +8,6 @@ import {
 import { Box } from "@mui/system";
 import { useMemo } from "react";
 
-
 const sortTournament = (a: { result: string }, b: { result: string }) => {
     if (a.result.includes(":") && !b.result.includes(":")) return -1;
     if (b.result.includes(":") && !a.result.includes(":")) return 1;
@@ -45,7 +44,7 @@ const RankedTournament = ({ tournament }: { tournament: Tournament }) => {
             <Table size="small" aria-label="a dense table">
                 {Object.entries(ranking)
                     .sort((a: any, b: any) => a[1] - b[1])
-                    .map(([k, v]) => (
+                    .map(([k, v]: any) => (
                         <TableRow key={`${k}`}>
                             <TableCell>{v}</TableCell>
                             <TableCell>{k}</TableCell>

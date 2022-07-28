@@ -1,7 +1,13 @@
 import Head from "next/head";
 import Script from "next/script";
-import { useState, useEffect, ReactChild, ReactFragment, ReactPortal } from "react";
-import usePlanning from "../../hooks/usePlanning";
+import {
+    useState,
+    useEffect,
+    ReactChild,
+    ReactFragment,
+    ReactPortal,
+} from "react";
+import { usePlanning } from "../../utils/mt/usePlanning";
 
 const Schedule = ({
     workoutIds,
@@ -15,7 +21,7 @@ const Schedule = ({
     sendMessage,
 }: any) => {
     console.log(globals);
-    const planning = usePlanning(globals?.eventId, 300000);
+    const planning = usePlanning(300000);
     const [heatPositionPlanning, setHeatPositionPLanning] = useState(0);
     const [viewPastHeat, setViewPastHeat] = useState(false);
     useEffect(() => {
@@ -116,7 +122,7 @@ const Schedule = ({
                                         aria-expanded="true"
                                         aria-controls={"collapse" + i}
                                     >
-                                        {h.time.toLocaleTimeString()} |{" "}
+                                        {h.time} |{" "}
                                         {h.workoutName} | {h.title} - {h.id}
                                     </button>
                                 </h2>
@@ -136,28 +142,51 @@ const Schedule = ({
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {h.stations.map((s: { station: {} | null | undefined; participantName: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; division: boolean | ReactChild | ReactFragment | ReactPortal | null | undefined; }) => {
-                                                    return (
-                                                        <tr
-                                                            key={
-                                                                "h" +
-                                                                h.id +
-                                                                "s" +
-                                                                s.station
-                                                            }
-                                                        >
-                                                            <td>{s.station}</td>
-                                                            <td>
-                                                                {
-                                                                    s.participantName
+                                                {h.stations.map(
+                                                    (s: {
+                                                        station:
+                                                            | {}
+                                                            | null
+                                                            | undefined;
+                                                        participantName:
+                                                            | boolean
+                                                            | ReactChild
+                                                            | ReactFragment
+                                                            | ReactPortal
+                                                            | null
+                                                            | undefined;
+                                                        division:
+                                                            | boolean
+                                                            | ReactChild
+                                                            | ReactFragment
+                                                            | ReactPortal
+                                                            | null
+                                                            | undefined;
+                                                    }) => {
+                                                        return (
+                                                            <tr
+                                                                key={
+                                                                    "h" +
+                                                                    h.id +
+                                                                    "s" +
+                                                                    s.station
                                                                 }
-                                                            </td>
-                                                            <td>
-                                                                {s.division}
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
+                                                            >
+                                                                <td>
+                                                                    {s.station}
+                                                                </td>
+                                                                <td>
+                                                                    {
+                                                                        s.participantName
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    {s.division}
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    }
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>

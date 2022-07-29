@@ -9,20 +9,7 @@ function WarmupRemote() {
 
     const planning = usePlanning(300000);
 
-    const [selectedId, setSelectedId] = useState<string>("");
-
     function handleHeatClick(id: number) {
-        // let title;
-        // if (selectedId === id.toString()) {
-        //     title = "";
-        // } else {
-        //     title = id;
-        // }
-        // setSelectedId(title.toString());
-
-        // sendMessage(
-        //     JSON.stringify({ topic: "client/remoteWarmupHeat", message: title })
-        // );
 
         let message;
         if (globals?.remoteWarmupHeat === id) {
@@ -30,28 +17,17 @@ function WarmupRemote() {
         } else {
             message = id;
         }
-        // setSelectedId(title.toString());
 
         sendMessage(
             JSON.stringify({ topic: "client/remoteWarmupHeat", message })
         );
 
-        // const requestOptions = {
-        //     method: "POST",
-        //     headers: {
-        //         Accept: "application/json",
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({ remoteHeatName: title }),
-        // };
-        // fetch("/livedata/remote-post", requestOptions);
     }
 
     const handleUnselect = () => {
         sendMessage(
             JSON.stringify({ topic: "client/remoteWarmupHeat", message: "" })
         );
-        // setSelectedId("");
     };
 
     return (

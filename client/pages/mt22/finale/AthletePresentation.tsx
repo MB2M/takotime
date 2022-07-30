@@ -27,7 +27,7 @@ function AthletePresentation2() {
             return setEligibleParticipants([]);
         }
         (async () => {
-            console.log(mockEp2)
+            console.log(mockEp2);
             setEligibleParticipants(
                 mockEp2.filter(
                     (eligibleParticipant) =>
@@ -64,9 +64,9 @@ function AthletePresentation2() {
         })();
     }, [globals?.externalHeatId]);
 
-    useEffect(()=> {
-        console.log("neeeeeee")
-    }, [eligibleParticipants])
+    useEffect(() => {
+        console.log("neeeeeee");
+    }, [eligibleParticipants]);
 
     useEffect(() => {
         if (globals?.remoteFinaleAthlete) {
@@ -141,6 +141,7 @@ function AthletePresentation2() {
                 width={"100vw"}
                 height={"100vh"}
                 overflow="hidden"
+                sx={{ backgroundColor: "black" }}
             >
                 {vidUrl !== "" && (
                     <ReactPlayer
@@ -167,7 +168,7 @@ function AthletePresentation2() {
                         <Typography
                             fontFamily={"CantoraOne"}
                             fontSize={"6.2rem"}
-                            sx={{transition:"font-size"}}
+                            sx={{ transition: "font-size" }}
                         >
                             Rank : {athlete.rank + 10}
                         </Typography>
@@ -230,8 +231,6 @@ function AthletePresentation2() {
         </Box>
     );
     // }
-
-    return null;
 }
 
 export default AthletePresentation2;

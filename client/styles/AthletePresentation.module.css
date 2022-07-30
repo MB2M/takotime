@@ -1,0 +1,21 @@
+.athletedata{
+    background-color: #05c1de;
+    color:#fd1085;
+    font-family: strasua;
+    height: 200px;
+    bottom: 0;
+    border-top: solid 4px;
+    /* border-bottom: solid 4px; */
+}
+
+.athletename{
+    position:relative;
+    font-size: 6.2rem;
+}
+
+
+
+.athletescore{
+    top: 100px;
+    height: 500px;
+}

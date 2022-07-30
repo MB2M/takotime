@@ -77,6 +77,10 @@ class Manager extends EventEmitter {
                 this.keyv.set("remoteWarmupHeat", message);
                 this.websocketMessages.sendGlobalsToAllClients();
             }
+            if (topic === "client/remoteFinaleAthlete") {
+                this.keyv.set("remoteFinaleAthlete", message);
+                this.websocketMessages.sendGlobalsToAllClients();
+            }
         });
     }
 
@@ -166,6 +170,7 @@ class Manager extends EventEmitter {
             externalHeatId: await this.keyv.get("externalHeatId"),
             state: await this.keyv.get("state"),
             remoteWarmupHeat: await this.keyv.get("remoteWarmupHeat"),
+            remoteFinaleAthlete: await this.keyv.get("remoteFinaleAthlete"),
         };
     }
 

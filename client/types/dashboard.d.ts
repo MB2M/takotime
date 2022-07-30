@@ -152,6 +152,7 @@ type Globals = {
     externalEventId: number;
     externalHeatId: number;
     remoteWarmupHeat: number;
+    remoteFinaleAthlete: number;
 };
 
 interface WidescreenData {

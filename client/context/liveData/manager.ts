@@ -43,6 +43,7 @@ export const useLiveData = () => {
     };
 
     const sendMessage = (message: string) => {
+        ws.current?.readyState
         ws?.current?.sendMessage(message);
     };
 

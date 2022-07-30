@@ -24,6 +24,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
         externalEventId: 0,
         externalHeatId: 0,
         remoteWarmupHeat: 0,
+        remoteFinaleAthlete: 0,
     },
     sendMessage: () => undefined,
     handleData: () => undefined,

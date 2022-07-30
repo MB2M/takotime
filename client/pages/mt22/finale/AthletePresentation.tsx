@@ -155,29 +155,46 @@ function AthletePresentation2() {
             </Box>
             {athlete && (
                 <>
-                    <Stack
-                        className={styles.athletescore}
-                        direction={"row"}
-                        justifyContent={"space-between"}
-                        display={"flex"}
-                        spacing={2}
-                        fontFamily={"CantoraOne"}
-                        color={"#c6316e"}
-                        marginX={4}
-                    >
-                        <Typography
+                    <Stack direction={"row"} justifyContent={"space-between"}>
+                        <Stack
+                            className={styles.athletescore}
+                            display={"flex"}
+                            spacing={2}
                             fontFamily={"CantoraOne"}
-                            fontSize={"6.2rem"}
-                            sx={{ transition: "font-size" }}
+                            color={"#c6316e"}
+                            marginX={10}
+                            marginTop={4}
                         >
-                            Rank : {athlete.rank + 10}
-                        </Typography>
-                        <Typography
-                            fontFamily={"CantoraOne"}
-                            fontSize={"6.2rem"}
+                            <Typography
+                                className={styles.gradiant}
+                                fontFamily={"CantoraOne"}
+                                fontSize={"6.2rem"}
+                                sx={{ transition: "font-size" }}
+                            >
+                                {athlete.rank + 8}
+                                <sup>th</sup>
+                            </Typography>
+                            <Typography
+                                className={styles.gradiant}
+                                fontFamily={"CantoraOne"}
+                                fontSize={"6.2rem"}
+                            >
+                                {athlete.points + 302} pts
+                            </Typography>
+                        </Stack>
+                        <Box
+                            className={styles.athletescore}
+                            color={"#fd1085"}
+                            marginX={7}
+                            marginTop={4}
                         >
-                            Points : {athlete.points + 302}
-                        </Typography>
+                            {/* <Typography
+                                fontFamily={"CantoraOne"}
+                                fontSize={"5rem"}
+                            >
+                                {athlete.division}
+                            </Typography> */}
+                        </Box>
                     </Stack>
                     <Box
                         className={styles.athletedata}
@@ -188,23 +205,37 @@ function AthletePresentation2() {
                         textAlign={"start"}
                         width={1}
                     >
-                        <Stack direction={"row"}>
+                        <Stack
+                            direction={"row"}
+                            justifyContent={"space-between"}
+                        >
                             <Box
-                                width={450}
+                                width={400}
                                 position="relative"
-                                top={"-150px"}
+                                top={"-185px"}
+                                sx={{ backgroundColor: "#000000df" }}
                                 // sx={{ transform: "translate(50%,50%)" }}
                             >
                                 <Image src={mtLogo} layout="responsive"></Image>
                             </Box>
-                            <Typography
-                                variant="h1"
-                                className={styles.athletename}
-                                paddingX={4}
-                                fontFamily={"CantoraOne"}
-                            >
-                                {athlete.displayName}
-                            </Typography>
+                            <Stack marginRight={5}>
+                                <Typography
+                                    variant="h1"
+                                    // paddingX={4}
+                                    fontFamily={"CantoraOne"}
+                                    noWrap
+                                >
+                                    {athlete.displayName}
+                                </Typography>
+                                <Typography
+                                    fontFamily={"CantoraOne"}
+                                    fontSize={"3rem"}
+                                    color={"#05c1de"}
+                                    textAlign={"end"}
+                                >
+                                    {athlete.division}
+                                </Typography>
+                            </Stack>
                         </Stack>
                     </Box>
                 </>

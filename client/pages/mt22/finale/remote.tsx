@@ -80,7 +80,7 @@ function WarmupRemote() {
                                     : "outlined"
                             }
                         >
-                            {athlete.participantName}
+                            {athlete.station} | {athlete.participantName}
                         </Button>
                     ))}
                 </Stack>

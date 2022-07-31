@@ -4,7 +4,7 @@ export const useLiveData = () => {
     const [workoutIds, setWorkoutIds] = useState<WorkoutIds[]>([]);
     const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
     const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
-    const [station, setStation] = useState<Station[]>([]);
+    const [stations, setStations] = useState<Station[]>([]);
     const [brokerClients, setBrokerClients] = useState<Broker>({});
     const [ranks, setRanks] = useState<StationRanked>([]);
     const [globals, setGlobals] = useState<Globals>();
@@ -16,7 +16,7 @@ export const useLiveData = () => {
 
         switch (topic) {
             case "stationUpdate":
-                setStation(message);
+                setStations(message);
                 break;
             case "brokerUpdate":
                 setBrokerClients(message);
@@ -51,7 +51,7 @@ export const useLiveData = () => {
         workoutIds,
         loadedWorkouts,
         stationDevices,
-        station,
+        stations,
         brokerClients,
         ranks,
         globals,

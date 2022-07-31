@@ -13,7 +13,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
     workoutIds: [],
     loadedWorkouts: [],
     stationDevices: [],
-    station: [],
+    stations: [],
     brokerClients: {},
     ranks: [],
     globals: {
@@ -25,6 +25,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
         externalHeatId: 0,
         remoteWarmupHeat: 0,
         remoteFinaleAthlete: 0,
+        state: 0,
     },
     sendMessage: () => undefined,
     handleData: () => undefined,
@@ -34,7 +35,7 @@ export interface LiveDataState {
     workoutIds: WorkoutIds[];
     loadedWorkouts: Workout[];
     stationDevices: StationDevices[];
-    station: Station[];
+    stations: Station[];
     brokerClients: Broker;
     ranks: StationRanked;
     globals: Globals | undefined;

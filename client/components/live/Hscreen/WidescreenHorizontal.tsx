@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLiveDataContext } from "../../../context/liveData/livedata";
 import HorizontalRunning from "./HRunning";
 // import Standing from "./Standing";
 
@@ -17,6 +18,8 @@ const WidescreenHorizontal = ({
     const [transition, setTransition] = useState(false);
     const [transitionTimer, setTransitionTimer] = useState(0);
     const [transitionFinished, setTransitionFinished] = useState(true);
+
+    const { globals } = useLiveDataContext();
 
     // useEffect(() => {
     //     if (data.globals?.state === 1) {
@@ -105,11 +108,12 @@ const WidescreenHorizontal = ({
     //     );
     // }
     const bigScrenLayout = () => {
-        switch (data?.globals?.state) {
+        switch (globals?.state) {
             // case 0:
             //     return <Standing data={data} />;
             case 2:
-                return <HorizontalRunning data={data} />;
+                // return <HorizontalRunning data={data} />;
+                return <HorizontalRunning />;
             // case 3:
             //     return <LiveEndedWorkout data={data} />;
             // default:

@@ -308,7 +308,7 @@ class Station {
 
         process.on("SIGINT", (_) => {
             this.buzzer.unexport();
-            this.resetScanBLE.unexport();
+            // this.resetScanBLE.unexport();
         });
         console.log("BUZZER LOADED");
     }

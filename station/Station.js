@@ -422,23 +422,25 @@ class Station {
 
     publishData(buttonValue) {
         if (this.db.getData("/stations/dynamics/state") === 2) {
-            const station = this.db.getData("/stations/");
-            this.wodInterpreter.pressCounter(
-                Date.now(),
-                Date.parse(this.db.getData("/globals/startTime")),
-                station.dynamics.measurements,
-                station.dynamics.currentWodPosition,
-                parseInt(buttonValue)
-            );
+            setTimeout(() => {
+                const station = this.db.getData("/stations/");
+                this.wodInterpreter.pressCounter(
+                    Date.now(),
+                    Date.parse(this.db.getData("/globals/startTime")),
+                    station.dynamics.measurements,
+                    station.dynamics.currentWodPosition,
+                    parseInt(buttonValue)
+                );
 
-            // save db
-            this.db.save();
+                // save db
+                this.db.save();
 
-            //Publish to server
-            this.sendToServer("station/generic");
+                //Publish to server
+                this.sendToServer("station/generic");
 
-            //publish to screen
-            this.updateBoard();
+                //publish to screen
+                this.updateBoard();
+            }, 50);
         }
     }
 }

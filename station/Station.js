@@ -193,7 +193,7 @@ class Station {
 
             if (topic === "server/scriptReset") {
                 if (this.ip === message.toString()) {
-                    exec("sudo systemctl restart station", function (msg) {
+                    exec("pm2 restart livestation", function (msg) {
                         console.log(msg);
                     });
                 }

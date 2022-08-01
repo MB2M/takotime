@@ -1,7 +1,7 @@
 import Station from "./Station.js";
 import network from "network";
 import * as dotenv from "dotenv";
-import * as fs from 'node:fs';
+import * as fs from "node:fs";
 dotenv.config();
 
 const MQTT_URL = process.env.MQTT_URL;
@@ -23,7 +23,13 @@ const mqttTopics = [
 const main = async () => {
     network.get_private_ip(async (err, ip) => {
         console.log(err || ip);
-        fs.unlinkSync("./livestation.json");
+        try {
+            fs.unlinkSync("./livestation.json");
+        } catch (err) {
+            console.log(
+                "error deleting livestation.json, file probably doesn't exist... if so ignore this error "
+            );
+        }
         const station = new Station(ip, MQTT_URL, mqttOptions, mqttTopics);
         station.initProcess();
     });

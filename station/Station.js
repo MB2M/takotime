@@ -115,12 +115,14 @@ class Station {
                         0
                     );
 
-                    this.db.save();
+                    setTimeout(() => {
+                        this.db.save();
 
-                    //Publish to server
-                    this.sendToServer("station/generic");
+                        //Publish to server
+                        this.sendToServer("station/generic");
 
-                    this.updateBoard();
+                        this.updateBoard();
+                    }, 50);
                 }
 
                 // TODO: SI TYPE EST CHECKPOINT
@@ -361,7 +363,7 @@ class Station {
         }
     }
 
-    updateBoard(value) {
+    async updateBoard(value) {
         const board = this.bleServices.connectedDevices.find(
             (d) => d.role === "board"
         );

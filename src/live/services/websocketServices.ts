@@ -40,6 +40,8 @@ class WebsocketServices {
 
             const clients = await liveApp.manager.getAllBrokerClient();
             this.sendToClient(ws, "brokerUpdate", clients);
+
+            liveApp.manager.publishRank();
         });
     }
 

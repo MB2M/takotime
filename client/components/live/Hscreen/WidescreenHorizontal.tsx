@@ -114,8 +114,9 @@ const WidescreenHorizontal = ({
             case 2:
                 // return <HorizontalRunning data={data} />;
                 return <HorizontalRunning />;
-            // case 3:
+            case 3:
             //     return <LiveEndedWorkout data={data} />;
+            return <HorizontalRunning />;
             // default:
             //     return <HorizontalRunning data={data} />;
         }

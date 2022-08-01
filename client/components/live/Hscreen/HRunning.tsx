@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
@@ -15,7 +16,9 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
     const [stationsPayload, setStationsPayload] = useState<WidescreenStation[]>(
         []
     );
+
     useEffect(() => {
+        console.log(stations);
         setStationsPayload(
             stations.map((s) => {
                 const r = ranks.find((r) => r.lane === s.laneNumber);
@@ -62,6 +65,7 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
 
 function HorizontalRunning() {
     const { stations, ranks, loadedWorkouts } = useLiveDataContext();
+    console.log(ranks);
 
     const stationsUpgraded = useStationPayload(stations, ranks);
 
@@ -78,27 +82,64 @@ function HorizontalRunning() {
     // }
 
     return (
-        <Box
-            className="displayZone"
-            sx={{
-                width: 1920,
-                height: 1080,
-                backgroundColor: "black",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-                // border: "3px solid",
-                // borderColor: "red",
-            }}
-        >
-            {stationsUpgraded
-                .sort((a, b) => a.laneNumber - b.laneNumber)
-                .map((s) => (
-                    <HRunningAthlete
-                        key={s.laneNumber}
-                        data={s}
-                        workout={getWorkout(loadedWorkouts, s)}
-                    />
-                ))}
+        <Box>
+            <Box
+                className="displayZone"
+                display={"flex"}
+                overflow={"hidden"}
+                gap={0}
+                sx={{
+                    width: 1920,
+                    height: 1080,
+                    backgroundColor: "#242424",
+                    flexDirection: "column",
+                    justifyContent: "space-evenly",
+                    // border: "3px solid",
+                    // borderColor: "red",
+                }}
+            >
+                {stationsUpgraded
+                    .sort((a, b) => a.laneNumber - b.laneNumber)
+                    .map((s) => (
+                        <HRunningAthlete
+                            key={s.laneNumber}
+                            data={s}
+                            workout={getWorkout(loadedWorkouts, s)}
+                            divNumber={stationsUpgraded.length}
+                        />
+                    ))}
+            </Box>
+            <Box
+                zIndex={1}
+                position="absolute"
+                top={"50%"}
+                right={40}
+                sx={{ transform: "translateY(-50%)" }}
+            >
+                {loadedWorkouts?.[0]?.blocks.flatMap((block) => {
+                    let mvts: JSX.Element[][] = [];
+                    for (let i = 0; i < block.rounds; i++) {
+                        mvts.push(
+                            block.movements.map((movement) => {
+                                const mvt = `${
+                                    movement.reps +
+                                    (movement.varEachRounds || 0) * i
+                                } ${movement.name}`;
+                                return (
+                                    <Typography
+                                        color={"gray"}
+                                        fontSize={"5.5rem"}
+                                        fontFamily={"CantoraOne"} 
+                                    >
+                                        {mvt}
+                                    </Typography>
+                                );
+                            })
+                        );
+                    }
+                    return mvts;
+                })}
+            </Box>
         </Box>
     );
     {

@@ -32,7 +32,7 @@ const useChrono = (
             timer = setInterval(() => {
                 const diff = time - Date.parse(startTime || "");
                 if (diff < 0) {
-                    setChrono(Math.trunc(diff / 1000));
+                    setChrono(Math.ceil(diff / 1000));
                 } else {
                     setChrono(
                         toReadableTime(Math.min((duration || 0) * 60000, diff))
@@ -45,7 +45,7 @@ const useChrono = (
                 clearInterval(timer);
             }
         };
-    }, [time,startTime, duration]);
+    }, [time, startTime, duration]);
 
     return chrono;
 };

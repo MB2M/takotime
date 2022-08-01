@@ -36,6 +36,7 @@ import StationUpdate from "./StaticsUpdate";
 import { parseNextUrl } from "next/dist/shared/lib/router/utils/parse-next-url";
 import TournamentLoader from "./TournamentLoader";
 import { useLiveDataContext } from "../context/liveData/livedata";
+import useChrono from "../hooks/useChrono";
 // import ntpClient from "ntp-client-promise";
 
 const toReadableTime = (timestamp: number) => {
@@ -50,39 +51,6 @@ const toReadableTime = (timestamp: number) => {
     }:${seconds < 10 ? "0" + seconds : seconds}`;
 };
 
-const useChrono = (
-    timesync: timesync.TimeSync | undefined,
-    startTime: string | undefined,
-    duration: number | undefined
-    // isOn: boolean
-) => {
-    const [chrono, setChrono] = useState<number | string | null>(null);
-
-    useEffect(() => {
-        let timer: NodeJS.Timeout | undefined;
-        if (!startTime || startTime === "" || !timesync?.now()) {
-            setChrono(null);
-        } else {
-            timer = setInterval(() => {
-                const diff = timesync?.now() - Date.parse(startTime || "");
-                if (diff < 0) {
-                    setChrono(Math.trunc(diff / 1000));
-                } else {
-                    setChrono(
-                        toReadableTime(Math.min((duration || 0) * 60000, diff))
-                    );
-                }
-            }, 100);
-        }
-        return () => {
-            if (typeof timer !== "undefined") {
-                clearInterval(timer);
-            }
-        };
-    }, [timesync, startTime, duration]);
-
-    return chrono;
-};
 
 const Dashboard: NextPage = ({
     workoutIds,
@@ -95,7 +63,7 @@ const Dashboard: NextPage = ({
     // sendMessage,
 }: any) => {
     const [tSync, setTSync] = useState<timesync.TimeSync>();
-    const chrono = useChrono(tSync, globals?.startTime, globals?.duration);
+    const chrono = useChrono(globals?.startTime, globals?.duration);
     const [heatUpdateDrawerOpen, setHeatUpdateDrawerOpen] =
         useState<boolean>(false);
     const [deviceConfigUpdateDrawerOpen, setDeviceConfigUpdateDrawerOpen] =

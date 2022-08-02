@@ -97,12 +97,12 @@ function HeatWinner() {
                                     >
                                         {winner?.participant}
                                     </Typography>
-                                    {/* <Typography variant="h1">
+                                    <Typography variant="h1">
                                         {winner?.result.slice(
                                             0,
                                             winner.result.length - 1
                                         )}
-                                    </Typography> */}
+                                    </Typography>
                                 </Stack>
                             );
                         })}

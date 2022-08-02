@@ -261,7 +261,7 @@ const HorizontalRunningAthlete = ({
                     }}
                     noWrap
                 >
-                    {/* {data.result?.slice(0, data.result?.length - 1)} */}
+                    {data.result?.slice(0, data.result?.length - 1)}
                 </Typography>
                 {data.result && data.rank && (
                     <Typography

@@ -34,7 +34,7 @@ function HorizontalRunning() {
 
     return (
         <Box>
-            <Box
+            {/* <Box
                 className="displayZone"
                 display={"flex"}
                 overflow={"hidden"}
@@ -74,7 +74,7 @@ function HorizontalRunning() {
                         fontFamily={"CantoraOne"}
                         paddingRight={"200px"}
                     >
-                        {/* {chrono?.toString().slice(1) || ""} */}
+                        {chrono?.toString().slice(1) || ""}
                     </Typography>
                 ) : (
                     loadedWorkouts?.[0]?.blocks.flatMap((block) => {
@@ -101,7 +101,7 @@ function HorizontalRunning() {
                         return mvts;
                     })
                 )}
-            </Box>
+            </Box> */}
         </Box>
     );
     {

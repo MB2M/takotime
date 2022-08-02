@@ -16,7 +16,7 @@ const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
 
 function HorizontalRunning() {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    // const chrono = useChrono(globals?.startTime, globals?.duration);
 
     const stationsUpgraded = useStationPayload(stations, ranks);
 

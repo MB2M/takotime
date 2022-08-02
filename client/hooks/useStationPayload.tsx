@@ -6,6 +6,7 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
     );
 
     useEffect(() => {
+        if (!stations || !ranks) return
         setStationsPayload(
             stations.map((s) => {
                 const r = ranks.find((r) => r.lane === s.laneNumber);

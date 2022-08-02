@@ -52,13 +52,12 @@ function HorizontalRunning() {
                 {stationsUpgraded
                     ?.sort((a, b) => a.laneNumber - b.laneNumber)
                     ?.map((s) => (
-                        <div>coucou</div>
-                        // <HRunningAthlete
-                        //     key={s.laneNumber}
-                        //     data={s}
-                        //     workout={getWorkout(loadedWorkouts, s)}
-                        //     divNumber={stationsUpgraded.length}
-                        // />
+                        <HRunningAthlete
+                            key={s.laneNumber}
+                            data={s}
+                            workout={getWorkout(loadedWorkouts, s)}
+                            divNumber={stationsUpgraded.length}
+                        />
                     ))}
             </Box>
             {/* <Box

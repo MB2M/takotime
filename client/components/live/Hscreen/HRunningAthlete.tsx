@@ -82,7 +82,7 @@ const HorizontalRunningAthlete = ({
     useEffect(() => {
         // setBgSize(getBgSize());
         if (data?.rank?.length > 0) {
-            setRank(data.rank.at(-1));
+            // setRank(data.rank.at(-1));
         }
     }, [data]);
 

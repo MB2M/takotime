@@ -62,8 +62,8 @@ const HorizontalRunningAthlete = ({
     // divNumber,
 }: {
     data: WidescreenStation;
-    workout: Workout | undefined;
-    divNumber: number;
+    // workout: Workout | undefined;
+    // divNumber: number;
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [color, setColor] = useState("#000");

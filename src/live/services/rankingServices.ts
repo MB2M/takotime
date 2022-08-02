@@ -68,10 +68,10 @@ const getMeasurementRank = async (
             return aMeasurement?.type === "buzzer" ? -1 : 1;
         }
 
-        if (aMeasurement?.type === "buzzer" && bMeasurement?.type === "timer")
+        if (aMeasurement?.type === "buzzer" )
             return aMeasurement.value - bMeasurement.value;
 
-        if (aMeasurement?.type === "timer" && bMeasurement?.type === "buzzer")
+        if (aMeasurement?.type === "timer")
             return bMeasurement.value - aMeasurement.value;
 
         return 0;

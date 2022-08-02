@@ -74,7 +74,7 @@ function HorizontalRunning() {
                         fontFamily={"CantoraOne"}
                         paddingRight={"200px"}
                     >
-                        {chrono?.toString().slice(1) || ""}
+                        {/* {chrono?.toString().slice(1) || ""} */}
                     </Typography>
                 ) : (
                     loadedWorkouts?.[0]?.blocks.flatMap((block) => {

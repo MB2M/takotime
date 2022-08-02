@@ -56,9 +56,9 @@ function HorizontalRunning() {
                             key={s.laneNumber}
                             data={s}
                             // workout={getWorkout(loadedWorkouts, s)}
-                            workout={undefined}
+                            // workout={undefined}
 
-                            divNumber={stationsUpgraded.length}
+                            // divNumber={stationsUpgraded.length}
                         />
                     ))}
             </Box>

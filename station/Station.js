@@ -172,18 +172,17 @@ class Station {
                         // save db
                         this.db.save();
                     }
+                    if (
+                        data.globals.duration !== 0
+                        // && data.stations.dynamics.result === ""
+                    ) {
+                        this.initTimer(json.globals);
+                    } else {
+                        this.timer && this.timer.stopTimer();
+                        this.updateBoard();
+                    }
                 } catch (err) {
                     console.log("No workout to load");
-                }
-
-                if (
-                    data.globals.duration !== 0
-                    // && data.stations.dynamics.result === ""
-                ) {
-                    this.initTimer(json.globals);
-                } else {
-                    this.timer && this.timer.stopTimer();
-                    this.updateBoard();
                 }
             }
 

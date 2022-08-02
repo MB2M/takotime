@@ -25,8 +25,7 @@ export const useLiveData = () => {
                 setRanks(message);
                 break;
             case "globalsUpdate":
-                console.log(message)
-                setGlobals(message);
+                    setGlobals(message);
                 break;
             case "devicesConfig":
                 setStationDevices(message);
@@ -43,7 +42,7 @@ export const useLiveData = () => {
     };
 
     const sendMessage = (message: string) => {
-        ws.current?.readyState
+        ws?.current?.readyState
         ws?.current?.sendMessage(message);
     };
 

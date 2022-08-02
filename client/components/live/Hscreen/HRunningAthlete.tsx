@@ -105,8 +105,7 @@ const HorizontalRunningAthlete = ({
 
     useEffect(() => {
         // setBgSize(getBgSize());
-        const rank = data.rank.at(-1);
-        console.log(data);
+        const rank = data.rank?.at(-1);
         if (rank) setupColors(rank);
     }, [data]);
 
@@ -262,7 +261,7 @@ const HorizontalRunningAthlete = ({
                     }}
                     noWrap
                 >
-                    {data.result?.slice(0, data.result?.length - 1)}
+                    {/* {data.result?.slice(0, data.result?.length - 1)} */}
                 </Typography>
                 {data.result && data.rank && (
                     <Typography

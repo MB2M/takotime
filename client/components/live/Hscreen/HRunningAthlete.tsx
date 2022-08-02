@@ -77,8 +77,16 @@ const HorizontalRunningAthlete = ({
     const colorOdd = "#747474";
     const colorEven = "#c0c0c0";
     const textColorDefault = "#c0c0c0";
+    const [rank, setRank] = useState<number | undefined>();
 
-    const setupColors = (rank: number) => {
+    useEffect(() => {
+        // setBgSize(getBgSize());
+        if (data?.rank?.length > 0) {
+            setRank(data.rank.at(-1));
+        }
+    }, [data]);
+
+    useEffect(()=> {
         switch (rank) {
             case 1:
                 setBg(colors.first);
@@ -101,15 +109,7 @@ const HorizontalRunningAthlete = ({
                 setChevronColor(chevColor.other);
                 break;
         }
-    };
-
-    useEffect(() => {
-        // setBgSize(getBgSize());
-        if (data?.rank?.length > 0) {
-            const rank = data.rank.at(-1);
-            if (rank) setupColors(rank);
-        }
-    }, [data]);
+    }, [rank])
 
     // useEffect(() => {
     //     if (!data) {

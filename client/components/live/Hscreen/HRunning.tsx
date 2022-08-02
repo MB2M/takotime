@@ -2,7 +2,9 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
+import useChrono from "../../../hooks/useChrono";
 import HRunningAthlete from "./HRunningAthlete";
+import useStationPayload from "../../../hooks/useStationPayload";
 
 const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     for (let workout of workouts) {
@@ -12,60 +14,9 @@ const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     }
 };
 
-const useStationPayload = (stations: Station[], ranks: StationRanked) => {
-    const [stationsPayload, setStationsPayload] = useState<WidescreenStation[]>(
-        []
-    );
-
-    useEffect(() => {
-        console.log(stations);
-        setStationsPayload(
-            stations.map((s) => {
-                const r = ranks.find((r) => r.lane === s.laneNumber);
-
-                let rank: Ranks = [];
-                if (!r) {
-                    rank = [];
-                } else {
-                    rank = r.rank;
-                }
-
-                return {
-                    laneNumber: s.laneNumber,
-                    externalId: s.externalId,
-                    participant: s.participant,
-                    category: s.category,
-                    repsPerBlock: s.dynamics?.currentWodPosition?.repsPerBlock,
-                    currentMovement:
-                        s.dynamics?.currentWodPosition?.currentMovement,
-                    repsOfMovement:
-                        s.dynamics?.currentWodPosition?.repsOfMovement,
-                    totalRepsOfMovement:
-                        s.dynamics?.currentWodPosition?.totalRepsOfMovement,
-                    nextMovement: s.dynamics?.currentWodPosition?.nextMovement,
-                    nextMovementReps:
-                        s.dynamics?.currentWodPosition?.nextMovementReps,
-                    result: s.dynamics?.result,
-                    measurements: s.dynamics?.measurements,
-                    state: s.dynamics?.state,
-                    position: {
-                        block: s.dynamics?.currentWodPosition?.block,
-                        round: s.dynamics?.currentWodPosition?.round,
-                        movement: s.dynamics?.currentWodPosition?.movement,
-                        reps: s.dynamics?.currentWodPosition?.reps,
-                    },
-                    rank: rank,
-                };
-            })
-        );
-    }, [stations, ranks]);
-
-    return stationsPayload;
-};
-
 function HorizontalRunning() {
-    const { stations, ranks, loadedWorkouts } = useLiveDataContext();
-    console.log(ranks);
+    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
+    const chrono = useChrono(globals?.startTime, globals?.duration);
 
     const stationsUpgraded = useStationPayload(stations, ranks);
 
@@ -116,29 +67,40 @@ function HorizontalRunning() {
                 right={40}
                 sx={{ transform: "translateY(-50%)" }}
             >
-                {loadedWorkouts?.[0]?.blocks.flatMap((block) => {
-                    let mvts: JSX.Element[][] = [];
-                    for (let i = 0; i < block.rounds; i++) {
-                        mvts.push(
-                            block.movements.map((movement) => {
-                                const mvt = `${
-                                    movement.reps +
-                                    (movement.varEachRounds || 0) * i
-                                } ${movement.name}`;
-                                return (
-                                    <Typography
-                                        color={"gray"}
-                                        fontSize={"5.5rem"}
-                                        fontFamily={"CantoraOne"} 
-                                    >
-                                        {mvt}
-                                    </Typography>
-                                );
-                            })
-                        );
-                    }
-                    return mvts;
-                })}
+                {globals?.state === 1 ? (
+                    <Typography
+                        color={"gray"}
+                        fontSize={"45rem"}
+                        fontFamily={"CantoraOne"}
+                        paddingRight={"200px"}
+                    >
+                        {chrono?.toString().slice(1) || ""}
+                    </Typography>
+                ) : (
+                    loadedWorkouts?.[0]?.blocks.flatMap((block) => {
+                        let mvts: JSX.Element[][] = [];
+                        for (let i = 0; i < block.rounds; i++) {
+                            mvts.push(
+                                block.movements.map((movement) => {
+                                    const mvt = `${
+                                        movement.reps +
+                                        (movement.varEachRounds || 0) * i
+                                    } ${movement.name}`;
+                                    return (
+                                        <Typography
+                                            color={"gray"}
+                                            fontSize={"5.5rem"}
+                                            fontFamily={"CantoraOne"}
+                                        >
+                                            {mvt}
+                                        </Typography>
+                                    );
+                                })
+                            );
+                        }
+                        return mvts;
+                    })
+                )}
             </Box>
         </Box>
     );

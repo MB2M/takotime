@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { resolve } from "path";
+import { useCallback, useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
+import HeatWinner from "./HeatWinner";
 import HorizontalRunning from "./HRunning";
 // import Standing from "./Standing";
 
@@ -20,6 +22,15 @@ const WidescreenHorizontal = ({
     const [transitionFinished, setTransitionFinished] = useState(true);
 
     const { globals } = useLiveDataContext();
+
+    const [waitEndWorkout, setWaitEndWorkout] = useState<boolean>(false);
+
+    useEffect(() => {
+        setWaitEndWorkout(true);
+        setTimeout(() => {
+            setWaitEndWorkout(false);
+        }, 5000);
+    }, [globals?.state]);
 
     // useEffect(() => {
     //     if (data.globals?.state === 1) {
@@ -107,23 +118,45 @@ const WidescreenHorizontal = ({
     //         </div>
     //     );
     // }
-    const bigScrenLayout = () => {
-        switch (globals?.state) {
-            // case 0:
-            //     return <Standing data={data} />;
-            case 2:
-                // return <HorizontalRunning data={data} />;
-                return <HorizontalRunning />;
-            case 3:
-            //     return <LiveEndedWorkout data={data} />;
-            return <HorizontalRunning />;
-            // default:
-            //     return <HorizontalRunning data={data} />;
-        }
-        return <div>loading</div>;
-    };
+
+    // const bigScrenLayout = useCallback(() => {
+    //     switch (globals?.state) {
+    //         // case 0:
+    //         //     return <Standing data={data} />;
+    //         case 2:
+    //             // return <HorizontalRunning data={data} />;
+    //             return <HorizontalRunning />;
+    //         case 3:
+    //             setWaitEndWorkout(true);
+    //             // setTimeout(() => {
+    //             //     setWaitEndWorkout(false);
+    //             // }, 10000);
+    //             return !waitEndWorkout ? (
+    //                 <div>coucou</div>
+    //             ) : (
+    //                 <HorizontalRunning />
+    //             );
+    //         default:
+    //             return <HorizontalRunning />;
+    //     }
+    //     return <div>loading</div>;
+    // }, [globals?.state]);
     // return <div>dsqd</div>;
-    return bigScrenLayout();
+    switch (globals?.state) {
+        // case 0:
+        //     return <Standing data={data} />;
+        case 2:
+            // return <HorizontalRunning data={data} />;
+            return <HorizontalRunning />;
+        case 3:
+            // setWaitEndWorkout(true);
+            // setTimeout(() => {
+            //     setWaitEndWorkout(false);
+            // }, 10000);
+            return !waitEndWorkout ? <HeatWinner/> : <HorizontalRunning />;
+        default:
+            return <HorizontalRunning />;
+    }
 
     // return data.stations?.length !== 0 || !data.globals
     //     ? null

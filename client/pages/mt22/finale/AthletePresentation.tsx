@@ -15,6 +15,8 @@ const BASE_URL =
 
 const BASE_VIDEO_URL = "/mp4/";
 
+const RANKS_SUP = ["st", "nd", "rd", "th"];
+
 function AthletePresentation2() {
     const { globals } = useLiveDataContext();
     // const params = useFetchInterval(paramsUrl, 300);
@@ -100,8 +102,6 @@ function AthletePresentation2() {
         }
     };
 
-    console.log(globals?.remoteFinaleAthlete);
-
     // const loadAthletes = async (params) => {
     //     const response = await fetch(
     //         "/livedata/heats2?eventId=" +
@@ -169,10 +169,13 @@ function AthletePresentation2() {
                                 className={styles.gradiant}
                                 fontFamily={"CantoraOne"}
                                 fontSize={"6.2rem"}
-                                sx={{ transition: "font-size" }}
                             >
                                 {athlete.rank + 8}
-                                <sup>th</sup>
+                                <sup>
+                                    {[1, 2, 3].includes(athlete.rank)
+                                        ? RANKS_SUP[athlete.rank]
+                                        : "th"}
+                                </sup>
                             </Typography>
                             <Typography
                                 className={styles.gradiant}

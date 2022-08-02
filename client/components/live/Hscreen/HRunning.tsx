@@ -34,7 +34,7 @@ function HorizontalRunning() {
 
     return (
         <Box>
-            {/* <Box
+            <Box
                 className="displayZone"
                 display={"flex"}
                 overflow={"hidden"}
@@ -60,7 +60,7 @@ function HorizontalRunning() {
                         />
                     ))}
             </Box>
-            <Box
+            {/* <Box
                 zIndex={1}
                 position="absolute"
                 top={"50%"}

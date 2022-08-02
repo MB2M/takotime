@@ -60,7 +60,7 @@ function HorizontalRunning() {
                         />
                     ))}
             </Box>
-            {/* <Box
+            <Box
                 zIndex={1}
                 position="absolute"
                 top={"50%"}
@@ -101,20 +101,9 @@ function HorizontalRunning() {
                         return mvts;
                     })
                 )}
-            </Box> */}
+            </Box>
         </Box>
     );
-    {
-        /* <div className="livezone d-flex justify-content-equity text-center align-text-bottom fixed-bottom px-1 pb-2 mb-0 h1">
-                <>
-                    {data.stations
-                        .sort((a, b) => a.laneNumber - b.laneNumber)
-                        .map((s) => (
-                            <HRunningAthlete key={s.laneNumber} data={s} />
-                        ))}
-                </>
-            </div> */
-    }
 }
 
 export default HorizontalRunning;

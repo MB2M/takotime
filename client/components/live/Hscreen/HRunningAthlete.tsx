@@ -16,8 +16,8 @@ const FULL_WIDTH = 1920;
 
 const colors = {
     first: "linear-gradient(145deg, #FFD600 , #FFD600)",
-    second: "linear-gradient(145deg, #3787FF , #3787FF)",
-    third: "linear-gradient(145deg, #D40000 , #D40000)",
+    second: "linear-gradient(145deg, #05c1de , #05c1de)",
+    third: "linear-gradient(145deg, #fd1085 , #fd1085)",
     other: "linear-gradient(145deg,#5C5C5C, #5C5C5C)",
 };
 
@@ -96,7 +96,7 @@ const HorizontalRunningAthlete = ({
                 break;
             case 2:
                 setBg(colors.second);
-                setColor("#fff");
+                setColor("#000");
                 setChevronColor(chevColor.second);
                 break;
             case 3:
@@ -111,72 +111,6 @@ const HorizontalRunningAthlete = ({
                 break;
         }
     }, [rank]);
-
-    // useEffect(() => {
-    //     if (!data) {
-    //         return;
-    //     }
-
-    //     if (data.result) {
-    //         switch (data.rank?.at(-1)) {
-    //             case 1:
-    //                 setBgColor(
-    //                     "linear-gradient(to top, #ffc51a50, #ffc51a 30% 70%, #ffc51a50"
-    //                 );
-    //                 setBorders("1px solid #ffbf00");
-    //                 break;
-    //             case 2:
-    //                 setBgColor(
-    //                     "linear-gradient(to top, #c6316e50, #c6316e 30% 70%, #c6316e50"
-    //                 );
-    //                 setBorders("1px solid #c6316e");
-    //                 break;
-    //             case 3:
-    //                 setBgColor(
-    //                     "linear-gradient(to top, #31b9c650, #31b9c6 30% 70%, #31b9c650"
-    //                 );
-    //                 setBorders("1px solid #31b9c6");
-    //                 break;
-    //             default:
-    //                 setBgColor(
-    //                     "linear-gradient(to top, #9a9a9a50, #9a9a9a 30% 70%, #9a9a9a50"
-    //                 );
-    //                 setBorders("1px solid #c0c0c0");
-    //                 break;
-    //         }
-    //     } else {
-    //         setBgColor("");
-    //     }
-    //     switch (data.rank?.at(-1)) {
-    //         case 1:
-    //             setColor("#ffbf00");
-    //             setTextColor("#ffbf00");
-    //             break;
-    //         case 2:
-    //             setColor("#c6316e");
-    //             setTextColor("#c6316e");
-    //             break;
-    //         case 3:
-    //             setColor("#31b9c6");
-    //             setTextColor("#31b9c6");
-    //             break;
-    //         default:
-    //             if (data.laneNumber % 2 == 0) {
-    //                 setColor(colorEven);
-    //             } else {
-    //                 setColor(colorOdd);
-    //             }
-    //             setTextColor(textColorDefault);
-    //             break;
-    //     }
-    // }, [data]);
-
-    // const hrs = [];
-    // if (data.wod) {
-    //     for (let i = data.wod.mvt_reps.length - 1; i > 0; i--) {
-    //         hrs.push(<hr></hr>);
-    //     }
-    // }
 
     if (!data) {
         return <div></div>;
@@ -211,11 +145,11 @@ const HorizontalRunningAthlete = ({
                     width: "100%",
                     alignItems: "center",
                     justifyContent: data.result ? "space-around" : "flex-end",
-                    paddingRight: "60px",
+                    // paddingRight: "px",
                 }}
                 ml={3}
             >
-                <Box display={"flex"} justifyContent={"flex-start"}>
+                <Box display={"flex"} justifyContent={"flex-end"}>
                     <Typography
                         variant="h3"
                         component="div"
@@ -230,7 +164,6 @@ const HorizontalRunningAthlete = ({
                         component="div"
                         sx={{
                             ml: 2,
-                            mr: 5,
                             overflow: "hidden",
                             textOverflow: "ellipsis",
                             fontFamily: "CantoraOne",
@@ -278,7 +211,7 @@ const HorizontalRunningAthlete = ({
                         alignItems="center"
                         paddingTop={0.7}
                     >
-                        {data.rank[data.rank.length - 1]}
+                        {data.rank[data.rank.length -1]}
                     </Typography>
                 )}
             </Box>

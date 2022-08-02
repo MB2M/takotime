@@ -64,14 +64,16 @@ const getMeasurementRank = async (
             return bReps - aReps;
         }
 
-        if (aMeasurement?.type !== bMeasurement?.type) {
-            return aMeasurement?.type === "buzzer" ? -1 : 1;
+        if (aMeasurement?.method !== bMeasurement?.method) {
+            return aMeasurement?.method === "time" ? -1 : 1;
         }
 
-        if (aMeasurement?.type === "buzzer" )
-            return aMeasurement.value - bMeasurement.value;
 
-        if (aMeasurement?.type === "timer")
+        if (aMeasurement?.method === "time") {
+            return aMeasurement.value - bMeasurement.value;
+        }
+
+        if (aMeasurement?.method === "reps")
             return bMeasurement.value - aMeasurement.value;
 
         return 0;

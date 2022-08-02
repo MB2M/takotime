@@ -14,8 +14,7 @@ function HeatWinner() {
     const stationsUpgraded = useStationPayload(stations, ranks);
 
     useEffect(() => {
-        console.log("DDDDDDDDDDDDDD");
-        setShowVideo(true);
+            setShowVideo(true);
         setShowWinner(true);
         setTimeout(() => {
             setShowVideo(false);
@@ -100,7 +99,7 @@ function HeatWinner() {
                                         {winner?.participant}
                                     </Typography>
                                     <Typography variant="h1">
-                                        {winner?.result.slice(
+                                        {winner?.result?.slice(
                                             0,
                                             winner.result.length - 1
                                         )}

@@ -58,9 +58,9 @@ const chevColor = {
 
 const HorizontalRunningAthlete = ({
     data,
-    // workout,
-    // divNumber,
-}: {
+}: // workout,
+// divNumber,
+{
     data: WidescreenStation;
     // workout: Workout | undefined;
     // divNumber: number;
@@ -105,8 +105,10 @@ const HorizontalRunningAthlete = ({
 
     useEffect(() => {
         // setBgSize(getBgSize());
-        const rank = data?.rank?.at(-1);
-        if (rank) setupColors(rank);
+        if (data?.rank?.length > 0) {
+            const rank = data.rank.at(-1);
+            if (rank) setupColors(rank);
+        }
     }, [data]);
 
     // useEffect(() => {
@@ -176,10 +178,7 @@ const HorizontalRunningAthlete = ({
     // }
 
     if (!data) {
-        return (
-            <div
-            ></div>
-        );
+        return <div></div>;
     }
     return (
         <div>HELLLLLLLOOOOO</div>

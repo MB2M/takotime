@@ -55,8 +55,7 @@ function HorizontalRunning() {
                         <HRunningAthlete
                             key={s.laneNumber}
                             data={s}
-                            // workout={getWorkout(loadedWorkouts, s)}
-                            workout={undefined}
+                            workout={getWorkout(loadedWorkouts, s)}
 
                             divNumber={stationsUpgraded.length}
                         />

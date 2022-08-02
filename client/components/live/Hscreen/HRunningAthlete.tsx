@@ -211,7 +211,8 @@ const HorizontalRunningAthlete = ({
         //     className="liveathletezone w-100 d-flex flex-column justify-content-end"
         //     style={{ background: bgColor, border: borders }}
         // > */}
-            <Box
+        <div>HELLLLLLLOOOOO</div>
+            {/* <Box
                 sx={{
                     display: "flex",
                     height: "100%",
@@ -288,7 +289,7 @@ const HorizontalRunningAthlete = ({
                         {data.rank.at(-1)}
                     </Typography>
                 )}
-            </Box>
+            </Box> */}
             {/* <Box
                 className="chevron"
                 sx={{

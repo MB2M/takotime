@@ -52,7 +52,7 @@ const OverlayRunningAthlete = ({
             return 100;
         }
 
-        const totalReps = workout?.blocks.at(-1)?.measurements?.repsTot;
+        const totalReps = workout?.blocks[workout.blocks.length - 1]?.measurements?.repsTot;
         const currentReps = data.repsPerBlock?.reduce((p, c) => p + c, 0);
 
         if (!currentReps || !totalReps) return MIN_SIZE;

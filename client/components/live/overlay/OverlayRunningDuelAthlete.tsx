@@ -257,10 +257,12 @@ const OverlayRunningDuelAthlete = ({
                     <Typography variant="h4">
                         {`${
                             data?.measurements &&
-                            data.measurements.at(-1)?.tieBreak?.value
+                            data.measurements[data.measurements.length - 1]
+                                ?.tieBreak?.value
                                 ? toReadableTime(
-                                      data.measurements.at(-1)?.tieBreak
-                                          ?.value || 0
+                                      data.measurements[
+                                          data.measurements.length - 1
+                                      ]?.tieBreak?.value || 0
                                   )
                                 : "DNF"
                         }`}

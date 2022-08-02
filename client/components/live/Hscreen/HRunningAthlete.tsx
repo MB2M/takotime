@@ -33,7 +33,8 @@ const useHRunningBackgroundSize = (
     workout: Workout | undefined
 ) => {
     const totalReps = useMemo(() => {
-        return workout?.blocks.at(-1)?.measurements?.repsTot;
+        return workout?.blocks[workout.blocks.length - 1]?.measurements
+            ?.repsTot;
     }, [workout]);
 
     const currentReps = useMemo(() => {
@@ -277,7 +278,7 @@ const HorizontalRunningAthlete = ({
                         alignItems="center"
                         paddingTop={0.7}
                     >
-                        {data.rank.at(-1)}
+                        {data.rank[data.rank.length - 1]}
                     </Typography>
                 )}
             </Box>

@@ -14,7 +14,7 @@ function HeatWinner() {
     const stationsUpgraded = useStationPayload(stations, ranks);
 
     useEffect(() => {
-        console.log("DDDDDDDDDDDDDD")
+        console.log("DDDDDDDDDDDDDD");
         setShowVideo(true);
         setShowWinner(true);
         setTimeout(() => {
@@ -74,7 +74,9 @@ function HeatWinner() {
                             const winner = stationsUpgraded.find(
                                 (station) =>
                                     station.category === category &&
-                                    Number(station.rank.at(-1)) === 1
+                                    Number(
+                                        station.rank[station.rank.length - 1]
+                                    ) === 1
                             );
                             return (
                                 <Stack

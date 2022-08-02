@@ -58,8 +58,8 @@ const chevColor = {
 
 const HorizontalRunningAthlete = ({
     data,
-    workout,
-    divNumber,
+    // workout,
+    // divNumber,
 }: {
     data: WidescreenStation;
     workout: Workout | undefined;
@@ -103,11 +103,11 @@ const HorizontalRunningAthlete = ({
         }
     };
 
-    useEffect(() => {
-        // setBgSize(getBgSize());
-        const rank = data?.rank?.at(-1);
-        if (rank) setupColors(rank);
-    }, [data]);
+    // useEffect(() => {
+    //     // setBgSize(getBgSize());
+    //     const rank = data?.rank?.at(-1);
+    //     if (rank) setupColors(rank);
+    // }, [data]);
 
     // useEffect(() => {
     //     if (!data) {
@@ -178,8 +178,6 @@ const HorizontalRunningAthlete = ({
     if (!data) {
         return (
             <div
-                className="liveathletezone w-100 d-flex flex-column justify-content-end"
-                style={{ background: bg, border: borders }}
             ></div>
         );
     }

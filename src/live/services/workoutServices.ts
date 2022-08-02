@@ -20,7 +20,7 @@ const getMeasurements = async (keyvInstance: Keyv): Promise<Measurement[]> => {
     const workouts = await getLoadedWorkouts(keyvInstance);
 
     let measurements: Measurement[] = [];
-    if (!workouts) return measurements;
+    if (!workouts || workouts.length === 0) return measurements;
     for (let block of workouts[0].blocks) {
         if (block.measurements) {
             measurements.push(block.measurements);

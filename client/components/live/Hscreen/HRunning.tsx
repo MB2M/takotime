@@ -16,7 +16,7 @@ const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
 
 function HorizontalRunning() {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    // const chrono = useChrono(globals?.startTime, globals?.duration);
+    const chrono = useChrono(globals?.startTime, globals?.duration);
 
     const stationsUpgraded = useStationPayload(stations, ranks);
 
@@ -50,7 +50,7 @@ function HorizontalRunning() {
                 }}
             >
                 {stationsUpgraded
-                    .sort((a, b) => a.laneNumber - b.laneNumber)
+                    ?.sort((a, b) => a.laneNumber - b.laneNumber)
                     .map((s) => (
                         <HRunningAthlete
                             key={s.laneNumber}
@@ -74,7 +74,7 @@ function HorizontalRunning() {
                         fontFamily={"CantoraOne"}
                         paddingRight={"200px"}
                     >
-                        {/* {chrono?.toString().slice(1) || ""} */}
+                        {chrono?.toString().slice(1) || ""}
                     </Typography>
                 ) : (
                     loadedWorkouts?.[0]?.blocks.flatMap((block) => {

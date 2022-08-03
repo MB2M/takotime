@@ -120,7 +120,7 @@ const HorizontalRunningAthlete = ({
             zIndex={10}
             sx={{
                 width: `${bgSize}px`,
-                height: 1080 / divNumber - 10,
+                height: 1080 / divNumber - 20,
                 // maxHeight: "100px",
                 background: bg,
                 color: color,
@@ -132,7 +132,8 @@ const HorizontalRunningAthlete = ({
                 position: "relative",
                 borderRadius: data.result
                     ? "0px"
-                    : "100% 70px 70px 100% / 50% 50% 50% 50%",
+                    // : "100% 70px 70px 100% / 50% 50% 50% 50%",
+                    : "5px",
                 // background: "linear-gradient(145deg, #dadd17, #ffff1b)",
                 boxShadow: "5px 5px 7px #151515, -5px -5px 7px #333333",
                 transition: "width 0.7s",
@@ -183,7 +184,8 @@ const HorizontalRunningAthlete = ({
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         fontFamily: "CantoraOne",
-                        fontSize: "5rem",
+                        fontSize: "3.7rem",
+                        fontWeight:"800"
                     }}
                     noWrap
                 >
@@ -206,10 +208,10 @@ const HorizontalRunningAthlete = ({
                         width={70}
                         height={70}
                         borderRadius={"50%"}
-                        border={"1px solid"}
+                        border={"6px solid"}
                         textAlign={"center"}
                         alignItems="center"
-                        paddingTop={0.7}
+                        paddingTop={0.2}
                     >
                         {data.rank[data.rank.length -1]}
                     </Typography>

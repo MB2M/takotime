@@ -357,7 +357,6 @@ class WodInterpreter extends EventEmitter {
                 );
                 this.emit("tieBreak", tieBreak);
             } else {
-
                 if (expectedMeasurement.tieBreakCut && expectTieBreak) {
                     isFinal = true;
                 } else {
@@ -559,7 +558,9 @@ class WodInterpreter extends EventEmitter {
         const seconds = this.addZero(asDate.getUTCSeconds(), 2);
         const milli = this.addZero(asDate.getUTCMilliseconds(), 3);
 
-        return `${hours !== "00" ? hours + ":" : ""}${minutes}:${seconds}:${milli}`;
+        return `${
+            hours !== "00" ? hours + ":" : ""
+        }${minutes}:${seconds}.${milli}`;
     }
 }
 

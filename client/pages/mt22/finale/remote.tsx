@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import { usePlanning } from "../../../utils/mt/usePlanning";
 
-function WarmupRemote() {
+function FinaleRemote() {
     const { globals, sendMessage } = useLiveDataContext();
 
     const planning = usePlanning(300000);
@@ -89,4 +89,4 @@ function WarmupRemote() {
     );
 }
 
-export default WarmupRemote;
+export default FinaleRemote;

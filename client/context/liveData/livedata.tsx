@@ -22,6 +22,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
         startTime: "",
         countdown: 0,
         externalEventId: 0,
+        externalWorkoutId: 0,
         externalHeatId: 0,
         remoteWarmupHeat: 0,
         remoteFinaleAthlete: 0,
@@ -64,5 +65,5 @@ export const LiveDataProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useLiveDataContext = () => {
-    return useContext(LiveDataContext);
+    return useContext<LiveDataState>(LiveDataContext);
 };

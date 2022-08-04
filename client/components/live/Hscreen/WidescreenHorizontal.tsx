@@ -1,166 +1,59 @@
-import { resolve } from "path";
 import { useCallback, useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
+import HeatPresentation from "../HeatPresentation";
+import HeatResult from "../HeatResult";
 import HeatWinner from "./HeatWinner";
 import HorizontalRunning from "./HRunning";
-// import Standing from "./Standing";
+import HorizontalRunningNoData from "./HRunningNoData";
 
 const WidescreenHorizontal = ({
-    data,
+    withTako = false,
 }: {
-    data: WidescreenData | undefined;
+    withTako?: boolean;
 }): JSX.Element => {
-    const [wodStatus, setWodStatus] = useState(1);
-    const [staticsFiltered, setStaticsFiltered] = useState([]);
-    const [athletesData, setAthletesData] = useState([]);
-    const [isTransitionLogo, setIsTransitionLogo] = useState(false);
-    const [isTransitionStart, setIsTransitionStart] = useState(false);
-    const [leftLogo, setLeftLogo] = useState("-50%");
-    const [transiBg, setTransiBg] = useState("#2e2e2e");
-    const [transition, setTransition] = useState(false);
-    const [transitionTimer, setTransitionTimer] = useState(0);
-    const [transitionFinished, setTransitionFinished] = useState(true);
-
     const { globals } = useLiveDataContext();
 
     const [waitEndWorkout, setWaitEndWorkout] = useState<boolean>(false);
 
     useEffect(() => {
-        setWaitEndWorkout(true);
-        setTimeout(() => {
+        if (globals?.state === 3) {
+            setWaitEndWorkout(true);
+            setTimeout(() => {
+                setWaitEndWorkout(false);
+            }, 5000);
+        } else {
             setWaitEndWorkout(false);
-        }, 5000);
+        }
     }, [globals?.state]);
 
-    // useEffect(() => {
-    //     if (data.globals?.state === 1) {
-    //         setIsTransitionLogo(true);
-    //         setLeftLogo("-50%");
-    //         setTransiBg("#2e2e2e");
-    //         const wait = setTimeout(() => {
-    //             setLeftLogo("50%");
-    //         }, 100);
-
-    //         const popupTimer = setTimeout(() => {
-    //             setLeftLogo("150%");
-    //             setTransiBg("#2e2e2e20");
-    //             const popOut = setTimeout(() => {
-    //                 setIsTransitionLogo(false);
-    //             }, 800);
-    //             return () => clearTimeout(popOut);
-    //         }, 3000);
-
-    //         return () => {
-    //             clearTimeout(popupTimer);
-    //             clearTimeout(wait);
-    //         };
-    //     }
-
-    //     if (data.globals?.state === 2) {
-    //         setIsTransitionStart(true);
-    //         setTransiBg("#2e2e2e");
-
-    //         const popupTimer = setTimeout(() => {
-    //             setTransiBg("#2e2e2e20");
-    //             const popOut = setTimeout(() => {
-    //                 setIsTransitionStart(false);
-    //             }, 400);
-    //             return () => clearTimeout(popOut);
-    //         }, 3000);
-
-    //         return () => clearTimeout(popupTimer);
-    //     }
-    // }, [data]);
-
-    // useEffect(() => {
-    //     if (
-    //         dynamics &&
-    //         dynamics.status === "T" &&
-    //         statics &&
-    //         statics.workoutName.includes("Wod 5A")
-    //     ) {
-    //         setTransition(true);
-    //     } else {
-    //         setTransition(false);
-    //     }
-    // }, [dynamics]);
-
-    // useEffect(() => {
-    //     if (transition || !transitionFinished) {
-    //         let timer;
-    //         if (!transitionFinished) {
-    //             timer = transitionTimer;
-    //         } else {
-    //             timer = 60000;
-    //         }
-    //         setTransitionFinished(false);
-    //         setTransitionTimer(timer);
-    //         const countdown = setInterval(() => {
-    //             setTransitionTimer((t) => t - 1000);
-    //         }, 1000);
-
-    //         const timeout = setTimeout(() => {
-    //             clearInterval(countdown);
-    //             setTransitionFinished(true);
-    //         }, timer + 1000);
-
-    //         return () => {
-    //             clearInterval(countdown);
-    //             clearTimeout(timeout);
-    //         };
-    //     }
-    // }, [transition]);
-
-    // if (transitionTimer > 0) {
-    //     return (
-    //         <div className="bigfontsize vw-100 vh-100 strasua align-items-center d-flex justify-content-center">
-    //             {transitionTimer / 1000}
-    //         </div>
-    //     );
-    // }
-
-    // const bigScrenLayout = useCallback(() => {
-    //     switch (globals?.state) {
-    //         // case 0:
-    //         //     return <Standing data={data} />;
-    //         case 2:
-    //             // return <HorizontalRunning data={data} />;
-    //             return <HorizontalRunning />;
-    //         case 3:
-    //             setWaitEndWorkout(true);
-    //             // setTimeout(() => {
-    //             //     setWaitEndWorkout(false);
-    //             // }, 10000);
-    //             return !waitEndWorkout ? (
-    //                 <div>coucou</div>
-    //             ) : (
-    //                 <HorizontalRunning />
-    //             );
-    //         default:
-    //             return <HorizontalRunning />;
-    //     }
-    //     return <div>loading</div>;
-    // }, [globals?.state]);
-    // return <div>dsqd</div>;
     switch (globals?.state) {
-        // case 0:
-        //     return <Standing data={data} />;
+        case 0:
+            return <HeatPresentation />;
+        case 1:
+            return withTako ? (
+                <HorizontalRunning withTako={withTako} />
+            ) : (
+                <HorizontalRunningNoData />
+            );
         case 2:
-            // return <HorizontalRunning data={data} />;
-            return <HorizontalRunning />;
+            return withTako ? (
+                <HorizontalRunning withTako={withTako} />
+            ) : (
+                <HorizontalRunningNoData />
+            );
         case 3:
-            // setWaitEndWorkout(true);
-            // setTimeout(() => {
-            //     setWaitEndWorkout(false);
-            // }, 10000);
-            return !waitEndWorkout ? <HeatWinner/> : <HorizontalRunning />;
+            return withTako ? (
+                !waitEndWorkout ? (
+                    <HeatWinner withTako={withTako} />
+                ) : (
+                    <HorizontalRunning withTako={withTako} />
+                )
+            ) : (
+                <HeatResult />
+            );
         default:
-            return <HorizontalRunning />;
+            return <HorizontalRunning withTako={withTako} />;
     }
-
-    // return data.stations?.length !== 0 || !data.globals
-    //     ? null
-    //     : bigScrenLayout();
 };
 
 export default WidescreenHorizontal;

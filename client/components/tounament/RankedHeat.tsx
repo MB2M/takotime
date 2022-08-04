@@ -1,4 +1,10 @@
-import { Table, TableCell, TableContainer, TableRow } from "@mui/material";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
+} from "@mui/material";
 import { useMemo } from "react";
 
 const RankedHeat = ({ heat }: { heat: Heat }) => {
@@ -22,16 +28,18 @@ const RankedHeat = ({ heat }: { heat: Heat }) => {
 
     return (
         <div>
-            <TableContainer >
+            <TableContainer>
                 <Table size="small" aria-label="a dense table">
-                    {sortedHeat.results?.map((r, i) => (
-                        <TableRow key={r.station}>
-                            <TableCell>{i + 1}</TableCell>
-                            <TableCell>{r.participant.name}</TableCell>
-                            <TableCell>{r.result}</TableCell>
-                            {r.points && <TableCell>{r.points}</TableCell>}
-                        </TableRow>
-                    ))}
+                    <TableBody>
+                        {sortedHeat.results?.map((r, i) => (
+                            <TableRow key={r.station}>
+                                <TableCell>{i + 1}</TableCell>
+                                <TableCell>{r.participant.name}</TableCell>
+                                <TableCell>{r.result}</TableCell>
+                                {r.points && <TableCell>{r.points}</TableCell>}
+                            </TableRow>
+                        ))}
+                    </TableBody>
                 </Table>
             </TableContainer>
         </div>

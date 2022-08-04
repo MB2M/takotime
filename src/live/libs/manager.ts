@@ -168,6 +168,7 @@ class Manager extends EventEmitter {
             startTime: await this.keyv.get("startTime"),
             externalEventId: await this.keyv.get("externalEventId"),
             externalHeatId: await this.keyv.get("externalHeatId"),
+            externalWorkoutId: await this.keyv.get("externalWorkoutId"),
             state: await this.keyv.get("state"),
             remoteWarmupHeat: await this.keyv.get("remoteWarmupHeat"),
             remoteFinaleAthlete: await this.keyv.get("remoteFinaleAthlete"),

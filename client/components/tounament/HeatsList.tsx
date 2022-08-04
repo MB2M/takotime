@@ -12,6 +12,7 @@ import {
     ListItemIcon,
     ListItemText,
     ListItem,
+    Box,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -111,9 +112,8 @@ const HeatsList = ({
 
             <List component="nav" aria-label="main mailbox folders">
                 {heats.map((h) => (
-                    <>
+                    <Box key={h.customId}>
                         <ListItem
-                            key={h.customId}
                             disablePadding
                             secondaryAction={
                                 <div>
@@ -152,7 +152,7 @@ const HeatsList = ({
                                 <RankedHeat heat={selectedHeat} />
                             )}
                         </div>
-                    </>
+                    </Box>
                 ))}
             </List>
         </div>

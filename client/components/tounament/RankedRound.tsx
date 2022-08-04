@@ -1,4 +1,10 @@
-import { TableContainer, Table, TableRow, TableCell } from "@mui/material";
+import {
+    TableContainer,
+    Table,
+    TableRow,
+    TableCell,
+    TableBody,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useMemo } from "react";
 
@@ -55,23 +61,25 @@ const RankedRound = ({
     return (
         <TableContainer>
             <Table size="small" aria-label="a dense table">
-                {sortedHeat.results?.map((r, i) => (
-                    <TableRow
-                        key={`${r._id}-${r.station}-${r.participant.name}`}
-                        sx={{ backgroundColor: STATE_COLOR_GRID[r.state] }}
-                    >
-                        <TableCell>{i + 1}</TableCell>
-                        <TableCell>{r.participant?.name}</TableCell>
-                        <TableCell>{r.result}</TableCell>
-                        <TableCell>{r.state}</TableCell>
-                    </TableRow>
-                    // <Box
-                    //     key={}
-                    //     sx={{ color: STATE_COLOR_GRID[r.state] }}
-                    // >
-                    //     <li>{`${r.participant?.name} - ${r.result} - state: ${r.state}`}</li>
-                    // </Box>
-                ))}
+                <TableBody>
+                    {sortedHeat.results?.map((r, i) => (
+                        <TableRow
+                            key={`${r._id}-${r.station}-${r.participant.name}`}
+                            sx={{ backgroundColor: STATE_COLOR_GRID[r.state] }}
+                        >
+                            <TableCell>{i + 1}</TableCell>
+                            <TableCell>{r.participant?.name}</TableCell>
+                            <TableCell>{r.result}</TableCell>
+                            <TableCell>{r.state}</TableCell>
+                        </TableRow>
+                        // <Box
+                        //     key={}
+                        //     sx={{ color: STATE_COLOR_GRID[r.state] }}
+                        // >
+                        //     <li>{`${r.participant?.name} - ${r.result} - state: ${r.state}`}</li>
+                        // </Box>
+                    ))}
+                </TableBody>
             </Table>
         </TableContainer>
     );

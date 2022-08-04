@@ -21,7 +21,7 @@ const WebsocketWrapperLight = ({ hostname, children }: any) => {
                 break;
             case "globalsUpdate":
                 setGlobals(message);
-                break;
+                break;55
             case "loadedWorkouts":
                 setLoadedWorkouts(message);
                 break;

@@ -42,15 +42,16 @@ const RankedTournament = ({ tournament }: { tournament: Tournament }) => {
     return (
         <TableContainer sx={{ width: "300px" }}>
             <Table size="small" aria-label="a dense table">
-                {Object.entries(ranking)
-                    .sort((a: any, b: any) => a[1] - b[1])
-                    .map(([k, v]: any) => (
-                        <TableRow key={`${k}`}>
-                            <TableCell>{v}</TableCell>
-                            <TableCell>{k}</TableCell>
-                            {/* <li>{`${k}: ${v}`}</li> */}
-                        </TableRow>
-                    ))}
+                <TableBody>
+                    {Object.entries(ranking)
+                        .sort((a: any, b: any) => a[1] - b[1])
+                        .map(([k, v]: any) => (
+                            <TableRow key={`${k}`}>
+                                <TableCell>{v}</TableCell>
+                                <TableCell>{k}</TableCell>
+                            </TableRow>
+                        ))}
+                </TableBody>
             </Table>
         </TableContainer>
     );

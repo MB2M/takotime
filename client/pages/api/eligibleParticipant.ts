@@ -1,15 +1,58 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { json } from "stream/consumers";
 
-const BASE_URL =
-    "https://competitioncorner.net/api2/v1/events/1989/workouts/11352/eligible-participants";
+const BASE_URL = "https://competitioncorner.net/api2/v1/"
+const BASE_LOGIN_URL = "https://competitioncorner.net/api2/v1/accounts/login";
+
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { eventId, workoutId } = req.query;
+    const { eventId, workoutId } = JSON.parse(req.body);
+
+    try {
+        const response = await fetch(BASE_LOGIN_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                username: process.env.CC_LOGIN,
+                password: process.env.CC_PASSWORD,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        
+        if (response.ok) {
+            const { access_token: accessToken } = await response.json();
+
+            try {
+                const response = await fetch(
+                    `${BASE_URL}events/${eventId}/workouts/${workoutId}/eligible-participants`,
+                    {
+                        method: "GET",
+                        headers: { Authorization: "Bearer " + accessToken }, //TODO
+                    }
+                    );
+                if (response.ok) {
+                    const json = await response.json();
+                    res.status(200).json(json);
+                    return
+                }
+            } catch (err) {
+                console.log(err);
+                res.status(400).send("bad request");
+                return
+            }
+        } else {
+            res.status(400).send("bad request");
+            return
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).send("bad request");
+        return;
+    }
 
     // try {
     //     const response = await fetch(

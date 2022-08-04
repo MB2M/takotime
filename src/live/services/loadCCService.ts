@@ -44,6 +44,7 @@ const loadFromCC = async (
         );
         await liveApp.manager.keyv.set("externalEventId", externalEventId);
         await liveApp.manager.keyv.set("externalHeatId", externalHeatId);
+        await liveApp.manager.keyv.set("externalWorkoutId", externalWorkoutId);
         liveApp.manager.websocketMessages.sendGlobalsToAllClients();
     } catch (err) {
         console.error(err);

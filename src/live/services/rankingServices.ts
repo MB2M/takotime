@@ -68,7 +68,6 @@ const getMeasurementRank = async (
             return aMeasurement?.method === "time" ? -1 : 1;
         }
 
-
         if (aMeasurement?.method === "time") {
             return aMeasurement.value - bMeasurement.value;
         }
@@ -78,19 +77,18 @@ const getMeasurementRank = async (
 
         return 0;
     });
-    let rank = 1;
+    let athleteRank = 1;
+    let globalRank = 1;
     let stationRanked: { [x: number]: number } = {};
     stations.forEach((s, i, stations) => {
         if (i === 0) {
-            stationRanked = { ...stationRanked, [s.laneNumber]: rank };
+            stationRanked = { ...stationRanked, [s.laneNumber]: athleteRank };
         } else {
             if (
-                s.dynamics?.measurements &&
-                s.dynamics?.measurements[measurementId]?.value !==
-                    stations[i - 1]?.dynamics?.measurements &&
-                stations[i - 1]?.dynamics?.measurements[measurementId]?.value
+                s.dynamics?.measurements?.[measurementId]?.value !==
+                stations[i - 1]?.dynamics?.measurements?.[measurementId]?.value
             ) {
-                rank++;
+                athleteRank = globalRank;
             } else {
                 const reps =
                     s.dynamics?.currentWodPosition?.repsPerBlock?.reduce(
@@ -118,11 +116,12 @@ const getMeasurementRank = async (
                         0
                     ) || 0;
                 if (reps !== previousStationReps) {
-                    rank++;
+                    athleteRank = globalRank;
                 }
             }
-            stationRanked = { ...stationRanked, [s.laneNumber]: rank };
+            stationRanked = { ...stationRanked, [s.laneNumber]: athleteRank };
         }
+        globalRank++;
     });
 
     return stationRanked;

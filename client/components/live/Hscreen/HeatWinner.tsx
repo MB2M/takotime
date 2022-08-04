@@ -1,12 +1,21 @@
-import { Stack, Typography } from "@mui/material";
+import { Divider, List, ListItem, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import {
+    ReactChild,
+    ReactFragment,
+    ReactPortal,
+    useEffect,
+    useState,
+} from "react";
 import ReactPlayer from "react-player";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useStationPayload from "../../../hooks/useStationPayload";
 import styles from "../../../styles/HeatWinner.module.css";
+import Header from "../../mt/Header";
+import mtLogo from "../../../public/img/logo.png";
+import HeatResult from "../HeatResult";
 
-function HeatWinner() {
+function HeatWinner({withTako}: {withTako: boolean}) {
     const { stations, ranks } = useLiveDataContext();
     const [showWinner, setShowWinner] = useState<boolean>(false);
     const [showVideo, setShowVideo] = useState<boolean>(false);
@@ -14,7 +23,7 @@ function HeatWinner() {
     const stationsUpgraded = useStationPayload(stations, ranks);
 
     useEffect(() => {
-            setShowVideo(true);
+        setShowVideo(true);
         setShowWinner(true);
         setTimeout(() => {
             setShowVideo(false);
@@ -56,12 +65,10 @@ function HeatWinner() {
                     height: 1080,
                     backgroundColor: "#242424",
                     flexDirection: "column",
-                    justifyContent: "space-around",
                 }}
             >
                 {showWinner ? (
                     <Box
-                        // textAlign={"center"}
                         height={"100%"}
                         display={"flex"}
                         flexDirection="column"
@@ -79,6 +86,7 @@ function HeatWinner() {
                             );
                             return (
                                 <Stack
+                                    key={category}
                                     color="white"
                                     alignItems={"center"}
                                     height={"50%"}
@@ -96,7 +104,7 @@ function HeatWinner() {
                                         fontSize={"10rem"}
                                         className={styles.gradiant}
                                     >
-                                        {winner?.participant}
+                                        {winner?.participant.toUpperCase()}
                                     </Typography>
                                     <Typography variant="h1">
                                         {winner?.result?.slice(
@@ -108,22 +116,7 @@ function HeatWinner() {
                             );
                         })}
                     </Box>
-                ) : (
-                    <Box>
-                        {stationsUpgraded
-                            .sort((a, b) => a.laneNumber - b.laneNumber)
-                            .map((s) => (
-                                <div>
-                                    {s.participant} - {s.rank}
-                                </div>
-                                //   <HFinishedAthlete
-                                //       key={s.laneNumber}
-                                //       data={s}
-                                //       divNumber={stationsUpgraded.length}
-                                //   />
-                            ))}
-                    </Box>
-                )}
+                ) : <HeatResult/>}
             </Box>
         </>
     );

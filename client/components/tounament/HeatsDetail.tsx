@@ -117,6 +117,7 @@ const HeatsDetail = ({
             const stations = await response.json();
             const results: Result[] = stations.map(
                 (s: {
+                    dynamics: any;
                     laneNumber: any;
                     participant: any;
                     participantName: any;
@@ -126,15 +127,24 @@ const HeatsDetail = ({
                     participant: {
                         name: s.participant,
                     },
-                    result: s.result || "",
+                    result:
+                        s.dynamics?.result?.slice(
+                            0,
+                            s.dynamics.result.length - 1
+                        ) || "",
                 })
             );
             heat.results = heat.results.map((r) => {
-                const result = stations.find(
-                    (station: { laneNumber: number }) =>
-                        station.laneNumber === r.station
+                const result = results.find(
+                    (station: { station: number }) =>
+                        station.station === r.station
                 );
-                return { ...r, result: result.result || "" };
+                console.log(result);
+                if (result?.result.includes("+")) {
+                    return { ...r, result: result?.result.slice(6) || "" };
+                } else {
+                    return { ...r, result: result?.result || "" };
+                }
             });
             heat.state = "NF";
             onUpdateResult(heat);

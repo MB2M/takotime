@@ -14,7 +14,7 @@ const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     }
 };
 
-function HorizontalRunning() {
+function HorizontalRunning({ withTako }: { withTako: boolean }) {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
     const chrono = useChrono(globals?.startTime, globals?.duration);
 
@@ -33,20 +33,16 @@ function HorizontalRunning() {
     // }
 
     return (
-        <Box>
+        <Box sx={{ width: 1920, height: 1080, backgroundColor: "#242424" }}>
             <Box
                 className="displayZone"
                 display={"flex"}
                 overflow={"hidden"}
                 gap={0}
                 sx={{
-                    width: 1920,
-                    height: 1080,
-                    backgroundColor: "#242424",
                     flexDirection: "column",
                     justifyContent: "space-evenly",
-                    // border: "3px solid",
-                    // borderColor: "red",
+                    height:"100%"
                 }}
             >
                 {stationsUpgraded
@@ -60,11 +56,13 @@ function HorizontalRunning() {
                         />
                     ))}
             </Box>
+
             <Box
                 zIndex={1}
                 position="absolute"
                 top={"50%"}
-                right={40}
+                width={"50%"}
+                right={35}
                 sx={{ transform: "translateY(-50%)" }}
             >
                 {globals?.state === 1 ? (
@@ -77,17 +75,18 @@ function HorizontalRunning() {
                         {chrono?.toString().slice(1) || ""}
                     </Typography>
                 ) : (
-                    loadedWorkouts?.[0]?.blocks.flatMap((block) => {
+                    loadedWorkouts?.[0]?.blocks.flatMap((block, index1) => {
                         let mvts: JSX.Element[][] = [];
                         for (let i = 0; i < block.rounds; i++) {
                             mvts.push(
-                                block.movements.map((movement) => {
+                                block.movements.map((movement, index2) => {
                                     const mvt = `${
                                         movement.reps +
                                         (movement.varEachRounds || 0) * i
                                     } ${movement.name}`;
                                     return (
                                         <Typography
+                                            key={index1 + "-" + index2}
                                             color={"gray"}
                                             fontSize={"5.5rem"}
                                             fontFamily={"CantoraOne"}

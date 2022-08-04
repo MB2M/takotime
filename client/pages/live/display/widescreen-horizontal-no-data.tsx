@@ -19,7 +19,7 @@ const widescreen: NextPage<Props> = ({
 
             </Head>
             {/* <WebsocketWrapperLight hostname={hostname}> */}
-            <WidescreenHorizontal withTako={true}></WidescreenHorizontal>
+            <WidescreenHorizontal></WidescreenHorizontal>
             {/* </WebsocketWrapperLight> */}
 
         </>

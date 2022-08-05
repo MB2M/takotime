@@ -15,7 +15,7 @@ import Header from "../../mt/Header";
 import mtLogo from "../../../public/img/logo.png";
 import HeatResult from "../HeatResult";
 
-function HeatWinner({withTako}: {withTako: boolean}) {
+function HeatWinner({ withTako }: { withTako: boolean }) {
     const { stations, ranks } = useLiveDataContext();
     const [showWinner, setShowWinner] = useState<boolean>(false);
     const [showVideo, setShowVideo] = useState<boolean>(false);
@@ -25,13 +25,18 @@ function HeatWinner({withTako}: {withTako: boolean}) {
     useEffect(() => {
         setShowVideo(true);
         setShowWinner(true);
-        setTimeout(() => {
+        const timeoutVideo = setTimeout(() => {
             setShowVideo(false);
         }, 1700);
-        setTimeout(() => {
+        const timeoutWinner = setTimeout(() => {
             setShowWinner(false);
         }, 10000);
-    }, [stationsUpgraded]);
+
+        return () => {
+            clearTimeout(timeoutVideo);
+            clearTimeout(timeoutWinner);
+        };
+    }, []);
 
     return (
         <>
@@ -116,7 +121,9 @@ function HeatWinner({withTako}: {withTako: boolean}) {
                             );
                         })}
                     </Box>
-                ) : <HeatResult/>}
+                ) : (
+                    <HeatResult />
+                )}
             </Box>
         </>
     );

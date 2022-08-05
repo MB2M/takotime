@@ -29,13 +29,18 @@ function AthletePresentation2() {
         }
         (async () => {
             try {
-                const response = await fetch(`/api/eligibleParticipant`, {
-                    method: "POST",
-                    body: JSON.stringify({
-                        eventId: globals?.externalEventId,
-                        workoutId: globals?.externalWorkoutId,
-                    }),
-                });
+                const response = await fetch(
+                    `/api/eligibleParticipant?token=${sessionStorage.getItem(
+                        "CC_TOKEN"
+                    )}`,
+                    {
+                        method: "POST",
+                        body: JSON.stringify({
+                            eventId: globals?.externalEventId,
+                            workoutId: globals?.externalWorkoutId,
+                        }),
+                    }
+                );
                 if (response.ok) {
                     const json: any[] = await response.json();
                     setEligibleParticipants(
@@ -74,7 +79,6 @@ function AthletePresentation2() {
             ),
         [globals?.remoteFinaleAthlete, eligibleParticipants]
     );
-
 
     return (
         <Box>
@@ -135,8 +139,7 @@ function AthletePresentation2() {
                             color={"#fd1085"}
                             marginX={7}
                             marginTop={4}
-                        >
-                        </Box>
+                        ></Box>
                     </Stack>
                     <Box
                         className={styles.athletedata}
@@ -155,7 +158,6 @@ function AthletePresentation2() {
                                 width={400}
                                 position="relative"
                                 top={"-185px"}
-                                sx={{ backgroundColor: "#000000df" }}
                             >
                                 <Image src={mtLogo} layout="responsive"></Image>
                             </Box>

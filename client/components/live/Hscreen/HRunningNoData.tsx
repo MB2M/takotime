@@ -9,12 +9,14 @@ import HeatPresentation from "../HeatPresentation";
 import Header from "../../mt/Header";
 import mtLogo from "../../../public/img/logo.png";
 import StationsUpgradedTableDisplay from "../StationsUpgradedTableDisplay";
+import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 
 function HorizontalRunningNoData() {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
     const chrono = useChrono(globals?.startTime, globals?.duration);
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [toggle, setToggle] = useState<"wod" | "participants">("wod");
+    const CCData = useCompetitionCornerContext();
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -56,7 +58,7 @@ function HorizontalRunningNoData() {
         >
             <Header
                 logo={mtLogo}
-                textTop={stationsUpgraded?.[0]?.category || ""}
+                textTop={CCData?.epHeat?.[0].heatName}
                 chrono={chrono?.toString().slice(0, 5) || ""}
             />
             {(toggle === "participants" && (

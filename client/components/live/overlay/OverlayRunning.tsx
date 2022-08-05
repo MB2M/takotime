@@ -5,6 +5,11 @@ import OverlayRunningDuelAthlete from "./OverlayRunningDuelAthlete";
 import useChrono from "../../../hooks/useChrono";
 import { Typography } from "@mui/material";
 import OverlayRunningDuelAthlete2 from "./OverlayRunningDuelAthlete2";
+import { useLiveDataContext } from "../../../context/liveData/livedata";
+import useStationPayload from "../../../hooks/useStationPayload";
+import Header from "../../mt/Header";
+import mtLogo from "../../../public/img/logo.png";
+import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 
 const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     for (let workout of workouts) {
@@ -14,27 +19,36 @@ const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     }
 };
 
-const OverlayRunning = ({
-    data,
-    version,
-}: {
-    data: WidescreenData;
-    version: OverlayVersion;
-}) => {
-    const chrono = useChrono(data.globals.startTime, data.globals.duration);
+const OverlayRunning = ({ version }: { version?: OverlayVersion }) => {
+    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
+    const chrono = useChrono(globals?.startTime, globals?.duration);
+
+    const stationsUpgraded = useStationPayload(stations, ranks);
+    const CCData = useCompetitionCornerContext();
 
     return (
         <Box
             className="displayZone"
+            overflow={"hidden"}
             sx={{
                 width: 1920,
                 height: 1080,
                 flexDirection: "column",
                 justifyContent: "space-evenly",
+                
                 // border: "3px solid",
                 // borderColor: "red",
             }}
         >
+            <Header
+                // logo={mtLogo}
+                chrono={chrono?.toString().slice(0, 5) || ""}
+                chronoFontSize="4rem"
+                textTop={CCData?.epHeat?.[0].heatName}
+                textTopFontSize="4rem"
+                imageWidth={"110px"}
+                backgroundColor="black"
+            />
             <Stack
                 direction="row"
                 justifyContent="space-between"
@@ -45,16 +59,16 @@ const OverlayRunning = ({
                 <Stack
                     direction="column"
                     alignItems="flex-start"
-                    spacing={7}
+                    spacing={5.7}
                     paddingTop={1}
                     height="100%"
                 >
-                    {data.stations
+                    {stationsUpgraded
                         .sort((a, b) => a.laneNumber - b.laneNumber)
                         .slice(
                             0,
-                            data.stations.length / 2 +
-                                (data.stations.length % 2)
+                            stationsUpgraded.length / 2 +
+                                (stationsUpgraded.length % 2)
                         )
                         .map((s) => {
                             switch (version) {
@@ -64,11 +78,11 @@ const OverlayRunning = ({
                                             key={s.laneNumber}
                                             data={s}
                                             workout={getWorkout(
-                                                data.workouts,
+                                                loadedWorkouts,
                                                 s
                                             )}
                                             position="left"
-                                            opposantData={data.stations[1]}
+                                            opposantData={stationsUpgraded[1]}
                                         />
                                     );
                                 case "duel-2":
@@ -77,11 +91,11 @@ const OverlayRunning = ({
                                             key={s.laneNumber}
                                             data={s}
                                             workout={getWorkout(
-                                                data.workouts,
+                                                loadedWorkouts,
                                                 s
                                             )}
                                             position="left"
-                                            opposantData={data.stations[1]}
+                                            opposantData={stationsUpgraded[1]}
                                         />
                                     );
                                 default:
@@ -90,7 +104,7 @@ const OverlayRunning = ({
                                             key={s.laneNumber}
                                             data={s}
                                             workout={getWorkout(
-                                                data.workouts,
+                                                loadedWorkouts,
                                                 s
                                             )}
                                             position="left"
@@ -99,7 +113,7 @@ const OverlayRunning = ({
                             }
                         })}
                 </Stack>
-                <Typography
+                {/* <Typography
                     variant="h3"
                     component="div"
                     padding={2}
@@ -113,19 +127,19 @@ const OverlayRunning = ({
                     }}
                 >
                     {chrono?.toString().slice(0, 5)}
-                </Typography>
+                </Typography> */}
                 <Stack
                     direction="column"
                     alignItems="flex-end"
-                    spacing={7}
+                    spacing={5.7}
                     paddingTop={1}
                     height="100%"
                 >
-                    {data.stations
+                    {stationsUpgraded
                         .sort((a, b) => a.laneNumber - b.laneNumber)
                         .slice(
-                            data.stations.length / 2 +
-                                (data.stations.length % 2)
+                            stationsUpgraded.length / 2 +
+                                (stationsUpgraded.length % 2)
                         )
                         .map((s) => {
                             switch (version) {
@@ -135,11 +149,11 @@ const OverlayRunning = ({
                                             key={s.laneNumber}
                                             data={s}
                                             workout={getWorkout(
-                                                data.workouts,
+                                                loadedWorkouts,
                                                 s
                                             )}
                                             position="right"
-                                            opposantData={data.stations[0]}
+                                            opposantData={stationsUpgraded[0]}
                                         />
                                     );
                                 case "duel-2":
@@ -148,11 +162,11 @@ const OverlayRunning = ({
                                             key={s.laneNumber}
                                             data={s}
                                             workout={getWorkout(
-                                                data.workouts,
+                                                loadedWorkouts,
                                                 s
                                             )}
                                             position="right"
-                                            opposantData={data.stations[0]}
+                                            opposantData={stationsUpgraded[0]}
                                         />
                                     );
                                 default:
@@ -161,7 +175,7 @@ const OverlayRunning = ({
                                             key={s.laneNumber}
                                             data={s}
                                             workout={getWorkout(
-                                                data.workouts,
+                                                loadedWorkouts,
                                                 s
                                             )}
                                             position="right"

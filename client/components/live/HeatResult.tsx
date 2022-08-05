@@ -4,11 +4,15 @@ import useStationPayload from "../../hooks/useStationPayload";
 import Header from "../mt/Header";
 import mtLogo from "../../public/img/logo.png";
 import StationsUpgradedTableDisplay from "./StationsUpgradedTableDisplay";
+import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
 
 const HeatResult = () => {
     const { stations, ranks } = useLiveDataContext();
 
     const stationsUpgraded = useStationPayload(stations, ranks);
+    const CCData = useCompetitionCornerContext()
+
+    console.log(CCData)
 
     return (
         <Box
@@ -25,7 +29,7 @@ const HeatResult = () => {
         >
             <Header
                 logo={mtLogo}
-                textTop={stationsUpgraded?.[0]?.category || ""}
+                textTop={CCData?.epHeat?.[0].heatName}
             />
             <StationsUpgradedTableDisplay sortBy={"rank"} />
         </Box>

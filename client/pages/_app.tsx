@@ -7,10 +7,10 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { EventProvider } from "../context/event";
 import { LiveDataProvider } from "../context/liveData/livedata";
+import { CompetitionCornerProvider } from "../context/competitionCorner/data/competitionCorner";
 
 function MyApp({ Component, pageProps }: AppProps) {
     React.useEffect(() => {
-        // Remove the server-side injected CSS.
         const jssStyles = document.querySelector("#jss-server-side");
         if (jssStyles) {
             jssStyles?.parentElement?.removeChild(jssStyles);
@@ -21,15 +21,19 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (isMT22) {
         return (
             <LiveDataProvider>
-                <EventProvider>
-                    <Component {...pageProps} />
-                </EventProvider>
+                <CompetitionCornerProvider>
+                    <EventProvider>
+                        <Component {...pageProps} />
+                    </EventProvider>
+                </CompetitionCornerProvider>
             </LiveDataProvider>
         );
     }
     return (
         <LiveDataProvider>
-            <Component {...pageProps} />
+            <CompetitionCornerProvider>
+                <Component {...pageProps} />
+            </CompetitionCornerProvider>
         </LiveDataProvider>
     );
 }

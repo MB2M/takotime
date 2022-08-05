@@ -51,7 +51,7 @@ export const LiveDataContext = createContext<LiveDataState>(
 export const LiveDataProvider = ({ children }: { children: ReactNode }) => {
     const liveData = useLiveData();
     const hostname = process.env.NEXT_PUBLIC_LOCAL_HOSTNAME;
-
+    
     return (
         <LiveDataContext.Provider value={liveData}>
             <WebsocketConnection

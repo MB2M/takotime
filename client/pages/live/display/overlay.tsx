@@ -5,9 +5,9 @@ import type { GetServerSideProps, NextPage } from "next";
 const overlay: NextPage<Props> = ({ hostname }: { hostname: string | undefined }) => {
     return (
         <>
-            <WebsocketWrapperLight hostname={hostname}>
+            {/* <WebsocketWrapperLight hostname={hostname}> */}
                 <Overlay data={undefined} version={undefined}></Overlay>
-            </WebsocketWrapperLight>
+            {/* </WebsocketWrapperLight> */}
         </>
     );
 };

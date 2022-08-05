@@ -9,7 +9,7 @@ const overlay: NextPage<Props> = ({ hostname }: { hostname: string | undefined }
     return (
         <>
             <WebsocketWrapperLight hostname={hostname}>
-                <Overlay data={undefined} version={"duel-2"}></Overlay>
+                <Overlay  version={"duel-2"}></Overlay>
             </WebsocketWrapperLight>
         </>
     );

@@ -14,7 +14,7 @@ const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
     }
 };
 
-function HorizontalRunning({ withTako }: { withTako: boolean }) {
+function HorizontalRunning() {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
     const chrono = useChrono(globals?.startTime, globals?.duration);
 

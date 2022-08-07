@@ -27,7 +27,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/timesync", timesyncServer.requestHandler);
 
-
 // Start App
 
 const server = initServer(app);
@@ -40,6 +39,14 @@ try {
 // wod 1 MT
 import router from "./mtWod1/routes";
 app.use("/wod1", router);
+
+// wod Max MT
+import routerMax from "./mtWodMax/routes";
+app.use("/wodMax", routerMax);
+
+// wod Max MT
+import routerVote from "./vote/routes";
+app.use("/vote", routerVote);
 // try {
 //     WOD1App.start(app, server, "/wod1");
 // } catch (err) {

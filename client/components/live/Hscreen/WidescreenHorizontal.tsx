@@ -31,28 +31,28 @@ const WidescreenHorizontal = ({
             return <HeatPresentation />;
         case 1:
             return withTako ? (
-                <HorizontalRunning withTako={withTako} />
+                <HorizontalRunning  />
             ) : (
                 <HorizontalRunningNoData />
             );
         case 2:
             return withTako ? (
-                <HorizontalRunning withTako={withTako} />
+                <HorizontalRunning  />
             ) : (
                 <HorizontalRunningNoData />
             );
         case 3:
             return withTako ? (
                 !waitEndWorkout ? (
-                    <HeatWinner withTako={withTako} />
+                    <HeatWinner  />
                 ) : (
-                    <HorizontalRunning withTako={withTako} />
+                    <HorizontalRunning  />
                 )
             ) : (
                 <HeatResult />
             );
         default:
-            return <HorizontalRunning withTako={withTako} />;
+            return <HorizontalRunning />;
     }
 };
 

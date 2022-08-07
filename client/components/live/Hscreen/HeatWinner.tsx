@@ -15,7 +15,7 @@ import Header from "../../mt/Header";
 import mtLogo from "../../../public/img/logo.png";
 import HeatResult from "../HeatResult";
 
-function HeatWinner({ withTako }: { withTako: boolean }) {
+function HeatWinner() {
     const { stations, ranks } = useLiveDataContext();
     const [showWinner, setShowWinner] = useState<boolean>(false);
     const [showVideo, setShowVideo] = useState<boolean>(false);

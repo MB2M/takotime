@@ -23,6 +23,7 @@ type Round = {
 };
 
 type Heat = {
+    date: string;
     customId: string;
     _id?: string;
     name: string;

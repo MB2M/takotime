@@ -29,6 +29,7 @@ const Heats = ({
     };
 
     const handleEditHeat = async (heat: Heat) => {
+        console.log(heat)
         onEditHeat(heat);
         handleModalClose();
     };

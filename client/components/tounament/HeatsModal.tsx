@@ -29,7 +29,8 @@ const HeatsModal = ({
             customId: "",
             name: "",
             results: [],
-            state: "NF"
+            state: "NF",
+            date:""
             // order: 0,
         }
     );
@@ -68,6 +69,15 @@ const HeatsModal = ({
                         onChange={handleChange}
                         label="name"
                         type={"text"}
+                        variant="outlined"
+                    />
+                    <TextField
+                        id="date"
+                        name="date"
+                        value={newHeat.date}
+                        onChange={handleChange}
+                        label="date"
+                        type={"datetime-local"}
                         variant="outlined"
                     />
                 </Stack>

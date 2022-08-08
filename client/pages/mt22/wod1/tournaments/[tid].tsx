@@ -12,7 +12,7 @@ import {
 
 // const Tournament = ({ tournament }: { tournament: Tournament }) => {
 const Tournament = () => {
-    const [tournament, setTournament] = useState<Tournament | null>();
+    const [tournament, setTournament] = useState<Tournament | null>(null);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const router = useRouter();
 
@@ -24,6 +24,15 @@ const Tournament = () => {
             setTournament(tournament);
         }
     };
+
+    useEffect(() => {
+        if (!tournament) return;
+        (async () =>
+            await fetch("/api/testfirebase", {
+                method: "POST",
+                body: JSON.stringify({ payload: tournament }),
+            }))();
+    }, [tournament]);
 
     useEffect(() => {
         retrieveTournament();

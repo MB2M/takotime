@@ -96,6 +96,13 @@ const Rounds = ({
         handleEditRound(selectedRound);
     };
 
+    // const handleTestFirebase = async () => {
+    //     await fetch("/api/testfirebase", {
+    //         method: "POST",
+    //         body: JSON.stringify({ payload: rounds }),
+    //     });
+    // };
+
     return (
         <div>
             <RoundsModal
@@ -105,6 +112,7 @@ const Rounds = ({
                 round={selectedRound}
             ></RoundsModal>
             <Box>
+                {/* <Button onClick={handleTestFirebase}>test firebase</Button> */}
                 <Grid container spacing={2} justifyContent="center">
                     {rounds.map((r) => (
                         <Grid item xs={3} key={r._id}>

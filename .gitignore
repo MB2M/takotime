@@ -1,3 +1,4 @@
+firebase-credentials*
 .env
 /node_modules
 live*.json

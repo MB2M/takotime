@@ -143,7 +143,7 @@ const HeatsList = ({
                                 selected={selectedHeatId === h._id}
                                 onClick={() => handleSelectHeat(h._id || "")}
                             >
-                                <ListItemText primary={h.name} />
+                                <ListItemText primary={`${h.name} ${new Date(h.date).toLocaleTimeString()}`} />
                                 {/* <h2>{h.name}</h2> */}
                             </ListItemButton>
                         </ListItem>

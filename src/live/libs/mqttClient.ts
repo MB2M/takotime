@@ -27,7 +27,8 @@ const loadSubscriptions = (client: mqtt.Client) => {
 };
 
 const client = mqtt.connect(
-    `${process.env.BROKER_URI}:${process.env.BROKER_PORT}`,
+    // `${process.env.BROKER_URI}:${process.env.BROKER_PORT}`,
+    `${process.env.MQTT_URL}`,
     options
 );
 

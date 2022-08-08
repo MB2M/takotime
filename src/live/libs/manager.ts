@@ -346,10 +346,10 @@ class Manager extends EventEmitter {
     //     return this.mqttServices.getAllBrokerClients();
     // }
 
-    async brokerClientUpdate(client: Client) {
-        this.websocketMessages.sendBrokerClientStatusToAllClients();
-        // this.websocketServices.sendToAllClients("brokerUpdate", client);
-    }
+    // async brokerClientUpdate(client: Client) {
+    //     this.websocketMessages.sendBrokerClientStatusToAllClients();
+    //     // this.websocketServices.sendToAllClients("brokerUpdate", client);
+    // }
 }
 
 // const mqttServices = new MqttServices();

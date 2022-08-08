@@ -37,36 +37,36 @@ class LiveApp {
         this.managerInit(server);
     }
 
-    async initMqttBroker(): Promise<boolean> {
-        try {
-            if (!brokerPort) {
-                throw "Port number is missing";
-            }
-            mqttBroker.start(parseInt(brokerPort), brokerDatabase);
+    // async initMqttBroker(): Promise<boolean> {
+    //     try {
+    //         if (!brokerPort) {
+    //             throw "Port number is missing";
+    //         }
+    //         mqttBroker.start(parseInt(brokerPort), brokerDatabase);
 
-            mqttBroker.socket.on("clientReady", (client) => {
-                this.manager.brokerClientUpdate(client);
-            });
+    //         mqttBroker.socket.on("clientReady", (client) => {
+    //             this.manager.brokerClientUpdate(client);
+    //         });
 
-            mqttBroker.socket.on("clientDisconnect", (client) => {
-                this.manager.brokerClientUpdate(client);
-            });
+    //         mqttBroker.socket.on("clientDisconnect", (client) => {
+    //             this.manager.brokerClientUpdate(client);
+    //         });
 
-            mqttBroker.socket.on(
-                "subscribe",
-                (subscriptions: Subscription[]) => {
-                    if (subscriptions[0]?.topic === "server/wodConfig") {
-                        this.manager.sendFullConfig("server/wodConfig");
-                    }
-                }
-            );
+    //         mqttBroker.socket.on(
+    //             "subscribe",
+    //             (subscriptions: Subscription[]) => {
+    //                 if (subscriptions[0]?.topic === "server/wodConfig") {
+    //                     this.manager.sendFullConfig("server/wodConfig");
+    //                 }
+    //             }
+    //         );
 
-            return true;
-        } catch (err) {
-            console.log(err);
-            return false;
-        }
-    }
+    //         return true;
+    //     } catch (err) {
+    //         console.log(err);
+    //         return false;
+    //     }
+    // }
 
     async initWebsocket(server: Server) {
         try {

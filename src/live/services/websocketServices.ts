@@ -38,8 +38,8 @@ class WebsocketServices {
             const workouts = await liveApp.manager.getLoadedWorkouts();
             this.sendToClient(ws, "loadedWorkouts", workouts);
 
-            const clients = await liveApp.manager.getAllBrokerClient();
-            this.sendToClient(ws, "brokerUpdate", clients);
+            // const clients = await liveApp.manager.getAllBrokerClient();
+            // this.sendToClient(ws, "brokerUpdate", clients);
 
             liveApp.manager.publishRank();
         });

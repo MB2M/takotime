@@ -40,10 +40,10 @@ class WebSocketMessages {
         this.websocketServices.sendToAllClients("loadedWorkouts", workouts);
     }
 
-    async sendBrokerClientStatusToAllClients() {
-        const clients = await liveApp.manager.getAllBrokerClient();
-        this.websocketServices.sendToAllClients("brokerUpdate", clients);
-    }
+    // async sendBrokerClientStatusToAllClients() {
+    //     const clients = await liveApp.manager.getAllBrokerClient();
+    //     this.websocketServices.sendToAllClients("brokerUpdate", clients);
+    // }
 }
 
 export default WebSocketMessages;

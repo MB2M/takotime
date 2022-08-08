@@ -33,7 +33,7 @@ class LiveApp {
     ) {
         this.expressApp = expressApp;
         this.expressApp.use(endpoint, this.routes);
-        await this.initMqttBroker();
+        // await this.initMqttBroker();
         this.managerInit(server);
     }
 
@@ -113,7 +113,7 @@ class LiveApp {
     async managerInit(server: Server) {
         const wodTimerServices = new WodTimerServices();
         const mqttServices = new MqttServices(
-            mqttBroker.socket as AedesWithClients<Aedes>
+            // mqttBroker.socket as AedesWithClients<Aedes>
         );
         const websocketServices = new WebsocketServices(server);
         this.manager = new Manager(

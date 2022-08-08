@@ -11,15 +11,16 @@ class MqttServices {
     };
 
     client: mqtt.MqttClient;
-    brokerSocket: AedesWithClients<Aedes>;
+    // brokerSocket: AedesWithClients<Aedes>;
 
-    constructor(brokerSocket: AedesWithClients<Aedes>) {
+    // constructor(brokerSocket: AedesWithClients<Aedes>) {
+    constructor() {
         this.client = mqtt.connect(`${config.mqttUrl}`, this.options);
-        this.brokerSocket = brokerSocket;
+        // this.brokerSocket = brokerSocket;
     }
 
     subscribe(topics: string[]) {
-        this.client.subscribe(topics);
+        this.client.subscribe(topics, { qos: 1 });
     }
 
     registerListener(aimedTopic: string, listener: (arg0: any) => void) {
@@ -39,13 +40,13 @@ class MqttServices {
         }
     }
 
-    getAllBrokerClients() {
-        let clients = {};
-        Object.entries(this.brokerSocket.clients).forEach(([k, v]) => {
-            clients = { ...clients, [k]: v.connected };
-        });
-        return clients;
-    }
+    // getAllBrokerClients() {
+    //     let clients = {};
+    //     Object.entries(this.brokerSocket.clients).forEach(([k, v]) => {
+    //         clients = { ...clients, [k]: v.connected };
+    //     });
+    //     return clients;
+    // }
 }
 
 export default MqttServices;

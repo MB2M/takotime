@@ -342,9 +342,9 @@ class Manager extends EventEmitter {
         await Station.deleteMany().exec();
     }
 
-    async getAllBrokerClient() {
-        return this.mqttServices.getAllBrokerClients();
-    }
+    // async getAllBrokerClient() {
+    //     return this.mqttServices.getAllBrokerClients();
+    // }
 
     async brokerClientUpdate(client: Client) {
         this.websocketMessages.sendBrokerClientStatusToAllClients();

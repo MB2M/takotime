@@ -14,10 +14,7 @@ class MqttServices {
     brokerSocket: AedesWithClients<Aedes>;
 
     constructor(brokerSocket: AedesWithClients<Aedes>) {
-        this.client = mqtt.connect(
-            `${config.brokerUri}:${config.brokerPort}`,
-            this.options
-        );
+        this.client = mqtt.connect(`${config.mqttUrl}`, this.options);
         this.brokerSocket = brokerSocket;
     }
 

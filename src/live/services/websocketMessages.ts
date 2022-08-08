@@ -36,7 +36,6 @@ class WebSocketMessages {
 
     async sendLoadedWorkoutsToAllClients() {
         const workouts = await liveApp.manager.getLoadedWorkouts();
-        console.log(workouts);
         this.websocketServices.sendToAllClients("loadedWorkouts", workouts);
     }
 

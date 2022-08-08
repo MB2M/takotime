@@ -9,6 +9,7 @@ const heatSchema = new mongoose.Schema({
     customId: String,
     name: String,
     order: Number,
+    date: Date,
     results: [
         {
             athleteSources: [String],

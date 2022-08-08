@@ -34,7 +34,7 @@ const viewTournaments = async () => {
 };
 
 const viewTournament = async (id: string) => {
-    const tournament = await Tournament.findById(id).exec();
+    const tournament = await Tournament.findById(id, "_id name rounds").exec();
     return tournament;
 };
 

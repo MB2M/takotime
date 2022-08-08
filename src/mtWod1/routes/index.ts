@@ -20,6 +20,7 @@ router.get("/tournaments/:tournamentId", getTournament);
 router.post("/tournaments", createTournament);
 router.put("/tournaments/:tournamentId", updateTournament);
 router.delete("/tournaments/:tournamentId", deleteTournament);
+// router.post("/firebase", )
 
 
 export default router;

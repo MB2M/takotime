@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from "express";
+import { updateFirebase } from "../services/firebase/admin/requests";
 import {
     newTournament,
     viewTournaments,
@@ -54,7 +55,6 @@ export async function updateTournament(req: Request, res: Response) {
     const id = req.params.tournamentId;
     const validation = !!req.query.validation;
 
-
     if (!id) {
         res.status(401).json({ error: "unauthorized" });
     } else {
@@ -64,6 +64,10 @@ export async function updateTournament(req: Request, res: Response) {
                 if (validation) {
                     await calculateTournamentRank(id);
                 }
+                // const tournamentUpdated = await viewTournament(id);
+                // await updateFirebase(tournamentUpdated, (error: any) => {
+                //     if (error) console.log(error);
+                // });
                 res.status(202).json(tournament);
             } else {
                 res.status(404).json("tournament not found");

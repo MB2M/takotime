@@ -224,7 +224,7 @@ class Manager extends EventEmitter {
             laneNumber: stationDevice.laneNumber,
         }).exec();
 
-        stations.configs = {
+        stations["configs"] = {
             station_ip: stationDevice.ip,
             devices: stationDevice.devices,
         };

@@ -217,6 +217,8 @@ class Manager extends EventEmitter {
     }
 
     async getStationConfig(ip: string) {
+
+        console.log("AAAAAAAa")
         let msg: any = {};
         const globals = await this.getGlobals();
 
@@ -224,6 +226,8 @@ class Manager extends EventEmitter {
         let station = await Station.findOne({
             laneNumber: stationDevice.laneNumber,
         }).exec();
+
+        console.log("BBBBBBB")
         const stations = {
             ...station,
             configs: {
@@ -239,8 +243,9 @@ class Manager extends EventEmitter {
                 devices: stationDevice.devices,
             },
         });
+        console.log("CCCCCCCC")
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
-
+        console.log("DDDDDDD")
         return { globals, stations, workouts };
     }
 

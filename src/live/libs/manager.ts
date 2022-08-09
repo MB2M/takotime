@@ -127,13 +127,11 @@ class Manager extends EventEmitter {
 
     async sendOnStationConnection(data: any) {
         console.log("send on station connection!");
-        console.log(data);
+
         const { ip, responseTopic } = data;
         if (!ip || !responseTopic) return;
 
         const stationConfig = await this.getStationConfig(ip);
-
-        console.log(stationConfig);
 
         if (data.responseTopic) {
             try {
@@ -218,34 +216,28 @@ class Manager extends EventEmitter {
     }
 
     async getStationConfig(ip: string) {
-        console.log("AAAAAAAa");
         let msg: any = {};
         const globals = await this.getGlobals();
 
         const stationDevice = await StationDevices.findOne({ ip }).exec();
-        let station = await Station.findOne({
+        const stations = await Station.findOne({
             laneNumber: stationDevice.laneNumber,
         }).exec();
 
-        console.log("BBBBBBB");
-        const stations = {
-            ...station,
-            configs: {
-                station_ip: stationDevice.ip,
-                devices: stationDevice.devices,
-            },
+        stations.configs = {
+            station_ip: stationDevice.ip,
+            devices: stationDevice.devices,
         };
-        console.log(stations);
         console.log({
-            ...station,
+            ...stations,
             configs: {
                 station_ip: stationDevice.ip,
                 devices: stationDevice.devices,
             },
         });
-        console.log("CCCCCCCC");
+
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
-        console.log("DDDDDDD");
+
         return { globals, stations, workouts };
     }
 

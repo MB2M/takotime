@@ -127,6 +127,7 @@ class Manager extends EventEmitter {
 
     async sendOnStationConnection(data: any) {
         console.log("send on station connection");
+        console.log(data);
         const { ip, responseTopic } = data;
         if (!ip || !responseTopic) return;
 
@@ -217,8 +218,7 @@ class Manager extends EventEmitter {
     }
 
     async getStationConfig(ip: string) {
-
-        console.log("AAAAAAAa")
+        console.log("AAAAAAAa");
         let msg: any = {};
         const globals = await this.getGlobals();
 
@@ -227,7 +227,7 @@ class Manager extends EventEmitter {
             laneNumber: stationDevice.laneNumber,
         }).exec();
 
-        console.log("BBBBBBB")
+        console.log("BBBBBBB");
         const stations = {
             ...station,
             configs: {
@@ -243,9 +243,9 @@ class Manager extends EventEmitter {
                 devices: stationDevice.devices,
             },
         });
-        console.log("CCCCCCCC")
+        console.log("CCCCCCCC");
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
-        console.log("DDDDDDD")
+        console.log("DDDDDDD");
         return { globals, stations, workouts };
     }
 

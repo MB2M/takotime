@@ -28,7 +28,7 @@ class WodTimerSubscription extends AbstractEventsubscription {
                     liveApp.manager.sendGlobalsToChannel();
                     const rankInterval = setInterval(() => {
                         liveApp.manager.publishRank();
-                    }, 100000);
+                    }, 300);
                     liveApp.manager.timeOuts?.push(rankInterval);
                     break;
                 case "finish":

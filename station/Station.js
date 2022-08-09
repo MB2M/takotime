@@ -389,7 +389,7 @@ class Station {
         // );
 
         this.mqttClient.client.publish(topic, JSON.stringify(station), {
-            qos: 1,
+            qos: 0,
         });
     }
 

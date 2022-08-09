@@ -299,6 +299,53 @@ class Station {
         }
     }
 
+    setStationWodConfig(data) {
+        if (data.stations?.dynamics) {
+            data.stations.dynamics.appVersion =
+                loadJsonFileSync("package.json").version;
+
+            // first time init
+            if (!data.stations.dynamics.currentWodPosition) {
+                data.stations.dynamics.currentWodPosition = {
+                    block: 0,
+                    round: 0,
+                    movement: 0,
+                    reps: 0,
+                    repsPerBlock: [],
+                };
+            }
+            if (!data.stations.dynamics.measurements) {
+                data.stations.dynamics.measurements = [];
+            }
+        }
+        this.updateDB(data);
+
+        const devices = this.getRequiredDevices();
+        this.bleServices.connectTo(devices);
+
+        try {
+            this.wodInterpreter.load(this.db.getData("/workouts"));
+            if (data.stations.dynamics.state < 2) {
+                this.wodInterpreter.getRepsInfo(
+                    data.stations.dynamics.currentWodPosition
+                );
+                // save db
+                this.db.save();
+            }
+            if (
+                data.globals.duration !== 0
+                // && data.stations.dynamics.result === ""
+            ) {
+                this.initTimer(json.globals);
+            } else {
+                this.timer && this.timer.stopTimer();
+                this.updateBoard();
+            }
+        } catch (err) {
+            console.log("No workout to load");
+        }
+    }
+
     initButtons() {
         this.buzzer.watch((err, value) => {
             if (err) {

@@ -223,18 +223,11 @@ class Manager extends EventEmitter {
         let stations = await Station.findOne({
             laneNumber: stationDevice.laneNumber,
         }).exec();
-
+        stations = JSON.parse(JSON.stringify(stations));
         stations["configs"] = {
             station_ip: stationDevice.ip,
             devices: stationDevice.devices,
         };
-        console.log({
-            ...stations,
-            configs: {
-                station_ip: stationDevice.ip,
-                devices: stationDevice.devices,
-            },
-        });
 
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
 

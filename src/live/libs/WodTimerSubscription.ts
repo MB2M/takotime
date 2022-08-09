@@ -33,10 +33,10 @@ class WodTimerSubscription extends AbstractEventsubscription {
                     break;
                 case "finish":
                     liveApp.manager.sendGlobalsToChannel();
+                    liveApp.manager.clearAlltimeout();
                     setTimeout(() => {
-                        liveApp.manager.clearAlltimeout();
-                    }, 5000);
-                    liveApp.manager.publishRank();
+                        liveApp.manager.publishRank();
+                    }, 4000);
                     break;
                 case "reset":
                     liveApp.manager.clearAlltimeout();

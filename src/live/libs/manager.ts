@@ -224,10 +224,19 @@ class Manager extends EventEmitter {
         }).exec();
         const stations = {
             ...station,
-            station_ip: stationDevice.ip,
-            devices: stationDevice.devices,
+            configs: {
+                station_ip: stationDevice.ip,
+                devices: stationDevice.devices,
+            },
         };
         console.log(stations);
+        console.log({
+            ...station,
+            configs: {
+                station_ip: stationDevice.ip,
+                devices: stationDevice.devices,
+            },
+        });
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
 
         return { globals, stations, workouts };

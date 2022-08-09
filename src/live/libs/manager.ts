@@ -219,12 +219,13 @@ class Manager extends EventEmitter {
         const globals = await this.getGlobals();
 
         const stationDevice = await StationDevices.findOne({ ip }).exec();
-        let stations = await Station.findOne({
+        let station = await Station.findOne({
             laneNumber: stationDevice.laneNumber,
         }).exec();
-        stations["configs"] = {
-            station_ip: stationDevice.ip,
-            devices: stationDevice.devices,
+        const stations = {
+            ...station,
+                station_ip: stationDevice.ip,
+                devices: stationDevice.devices,,
         };
         console.log(stations);
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);

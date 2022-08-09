@@ -226,6 +226,7 @@ class Manager extends EventEmitter {
             station_ip: stationDevice.ip,
             devices: stationDevice.devices,
         };
+        console.log(stations);
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
 
         return { globals, stations, workouts };

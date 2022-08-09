@@ -126,7 +126,7 @@ class Manager extends EventEmitter {
     }
 
     async sendOnStationConnection(data: any) {
-        console.log("send on station connection");
+        console.log("send on station connectionvvv");
         console.log(data);
         const { ip, responseTopic } = data;
         if (!ip || !responseTopic) return;

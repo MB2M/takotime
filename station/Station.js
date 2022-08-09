@@ -388,16 +388,9 @@ class Station {
         //     { qos: 1 }
         // );
 
-        this.mqttClient.client.publish(
-            topic,
-            JSON.stringify(station),
-            {
-                qos: 1,
-            },
-            () => {
-                console.log("msg sent");
-            }
-        );
+        this.mqttClient.client.publish(topic, JSON.stringify(station), {
+            qos: 1,
+        });
     }
 
     extractRelativesInfo(json) {

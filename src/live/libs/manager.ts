@@ -132,6 +132,8 @@ class Manager extends EventEmitter {
 
         const stationConfig = await this.getStationConfig(ip);
 
+        console.log(stationConfig);
+
         if (data.responseTopic) {
             try {
                 this.mqttServices.send(

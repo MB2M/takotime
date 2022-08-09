@@ -130,9 +130,69 @@ class Station {
         );
     }
 
+    setStationWodConfig(data) {
+        if (data.stations?.dynamics) {
+            data.stations.dynamics.appVersion =
+                loadJsonFileSync("package.json").version;
+
+            // first time init
+            if (!data.stations.dynamics.currentWodPosition) {
+                data.stations.dynamics.currentWodPosition = {
+                    block: 0,
+                    round: 0,
+                    movement: 0,
+                    reps: 0,
+                    repsPerBlock: [],
+                };
+            }
+            if (!data.stations.dynamics.measurements) {
+                data.stations.dynamics.measurements = [];
+            }
+        }
+        this.updateDB(data);
+
+        const devices = this.getRequiredDevices();
+        this.bleServices.connectTo(devices);
+
+        try {
+            this.wodInterpreter.load(this.db.getData("/workouts"));
+            if (data.stations.dynamics.state < 2) {
+                this.wodInterpreter.getRepsInfo(
+                    data.stations.dynamics.currentWodPosition
+                );
+                // save db
+                this.db.save();
+            }
+            if (
+                data.globals.duration !== 0
+                // && data.stations.dynamics.result === ""
+            ) {
+                this.initTimer(json.globals);
+            } else {
+                this.timer && this.timer.stopTimer();
+                this.updateBoard();
+            }
+        } catch (err) {
+            console.log("No workout to load");
+        }
+    }
+
     initMqttEventListener() {
         this.mqttClient.client.on("message", async (topic, message) => {
             console.log("Topic Received:", topic);
+            if (topic === `server/wodConfig/${this.ip}`) {
+                const json = JSON.parse(message.toString());
+
+                let myWorkout;
+                for (const workout of json.workouts) {
+                    if (workout.categories.includes(json.stations.category)) {
+                        myWorkout = workout;
+                    }
+                }
+                json.workouts = myWorkout;
+
+                setStationWodConfig(json);
+            }
 
             if (
                 topic === "server/wodConfig" ||
@@ -140,50 +200,51 @@ class Station {
             ) {
                 const json = JSON.parse(message.toString());
                 const data = this.extractRelativesInfo(json);
-                if (data.stations && data.stations.dynamics) {
-                    data.stations.dynamics.appVersion =
-                        loadJsonFileSync("package.json").version;
+                setStationWodConfig(data);
+                // if (data.stations?.dynamics) {
+                //     data.stations.dynamics.appVersion =
+                //         loadJsonFileSync("package.json").version;
 
-                    // first time init
-                    if (!data.stations.dynamics.currentWodPosition) {
-                        data.stations.dynamics.currentWodPosition = {
-                            block: 0,
-                            round: 0,
-                            movement: 0,
-                            reps: 0,
-                            repsPerBlock: [],
-                        };
-                    }
-                    if (!data.stations.dynamics.measurements) {
-                        data.stations.dynamics.measurements = [];
-                    }
-                }
-                this.updateDB(data);
+                //     // first time init
+                //     if (!data.stations.dynamics.currentWodPosition) {
+                //         data.stations.dynamics.currentWodPosition = {
+                //             block: 0,
+                //             round: 0,
+                //             movement: 0,
+                //             reps: 0,
+                //             repsPerBlock: [],
+                //         };
+                //     }
+                //     if (!data.stations.dynamics.measurements) {
+                //         data.stations.dynamics.measurements = [];
+                //     }
+                // }
+                // this.updateDB(data);
 
-                const devices = this.getRequiredDevices();
-                this.bleServices.connectTo(devices);
+                // const devices = this.getRequiredDevices();
+                // this.bleServices.connectTo(devices);
 
-                try {
-                    this.wodInterpreter.load(this.db.getData("/workouts"));
-                    if (data.stations.dynamics.state < 2) {
-                        this.wodInterpreter.getRepsInfo(
-                            data.stations.dynamics.currentWodPosition
-                        );
-                        // save db
-                        this.db.save();
-                    }
-                    if (
-                        data.globals.duration !== 0
-                        // && data.stations.dynamics.result === ""
-                    ) {
-                        this.initTimer(json.globals);
-                    } else {
-                        this.timer && this.timer.stopTimer();
-                        this.updateBoard();
-                    }
-                } catch (err) {
-                    console.log("No workout to load");
-                }
+                // try {
+                //     this.wodInterpreter.load(this.db.getData("/workouts"));
+                //     if (data.stations.dynamics.state < 2) {
+                //         this.wodInterpreter.getRepsInfo(
+                //             data.stations.dynamics.currentWodPosition
+                //         );
+                //         // save db
+                //         this.db.save();
+                //     }
+                //     if (
+                //         data.globals.duration !== 0
+                //         // && data.stations.dynamics.result === ""
+                //     ) {
+                //         this.initTimer(json.globals);
+                //     } else {
+                //         this.timer && this.timer.stopTimer();
+                //         this.updateBoard();
+                //     }
+                // } catch (err) {
+                //     console.log("No workout to load");
+                // }
             }
 
             if (topic === "server/wodGlobals") {
@@ -397,7 +458,7 @@ class Station {
         let myStation;
         let myWorkout;
         for (const station of json.stations) {
-            if (station.configs && station.configs.station_ip === this.ip) {
+            if (station.configs?.station_ip === this.ip) {
                 myStation = station;
                 // myStation.state = json.globals.state;
             }

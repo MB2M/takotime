@@ -7,9 +7,16 @@ class MqttClient {
             this.client.on("connect", () => {
                 console.log("connected to MQTT broker");
                 this.subscribe(topics);
+
+                this.client.publish(
+                    "station/connection",
+                    JSON.stringify({
+                        ip: {options.clientId},
+                        responseTopic: `server/wodConfig/${options.clientId}`,
+                    })
+                );
             });
         }
-        
     }
 
     subscribe(topics) {

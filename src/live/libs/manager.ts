@@ -13,7 +13,7 @@ import WebSocketMessages from "../services/websocketMessages";
 import { Client } from "aedes";
 
 class Manager extends EventEmitter {
-    topics = ["station/blePeripheral", "station/generic"];
+    topics = ["station/blePeripheral", "station/generic", "station/connection"];
 
     wodTimerServices: WodTimerServices;
     mqttServices: MqttServices;
@@ -58,6 +58,10 @@ class Manager extends EventEmitter {
         this.mqttServices.registerListener(
             "station/generic",
             this.updateDynamics.bind(this)
+        );
+        this.mqttServices.registerListener(
+            "station/connection",
+            this.sendOnStationConnection.bind(this)
         );
     }
 
@@ -118,6 +122,25 @@ class Manager extends EventEmitter {
             this.websocketMessages.sendStationsToAllClients();
         } catch (err) {
             console.log(err);
+        }
+    }
+
+    async sendOnStationConnection(data: any) {
+        console.log("send on station connection");
+        const { ip, responseTopic } = data;
+        if (!ip || !responseTopic) return;
+
+        const stationConfig = await this.getStationConfig(ip);
+
+        if (data.responseTopic) {
+            try {
+                this.mqttServices.send(
+                    data.responseTopic,
+                    JSON.stringify(stationConfig)
+                );
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 
@@ -189,6 +212,23 @@ class Manager extends EventEmitter {
 
     clearAlltimeout() {
         this.timeOuts?.forEach(clearTimeout);
+    }
+
+    async getStationConfig(ip: string) {
+        let msg: any = {};
+        const globals = await this.getGlobals();
+
+        const stationDevice = await StationDevices.findOne({ ip }).exec();
+        const stations = await Station.findOne({
+            lanenumer: stationDevice.laneNumber,
+        }).exec();
+        const configs = {
+            station_ip: stationDevice.ip,
+            devices: stationDevice.devices,
+        };
+        const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
+
+        return { globals, stations, workouts };
     }
 
     async sendFullConfig(channel: string) {

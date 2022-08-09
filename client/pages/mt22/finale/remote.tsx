@@ -21,8 +21,6 @@ function FinaleRemote() {
             message = id;
         }
 
-        sendMessage()
-
         sendMessage(
             JSON.stringify({ topic: "client/remoteFinaleAthlete", message })
         );

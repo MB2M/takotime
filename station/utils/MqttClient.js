@@ -11,7 +11,7 @@ class MqttClient {
                 this.client.publish(
                     "station/connection",
                     JSON.stringify({
-                        ip: {options.clientId},
+                        ip: options.clientId,
                         responseTopic: `server/wodConfig/${options.clientId}`,
                     })
                 );

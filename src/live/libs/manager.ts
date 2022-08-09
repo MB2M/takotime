@@ -220,7 +220,7 @@ class Manager extends EventEmitter {
 
         const stationDevice = await StationDevices.findOne({ ip }).exec();
         const stations = await Station.findOne({
-            lanenumer: stationDevice.laneNumber,
+            laneNumber: stationDevice.laneNumber,
         }).exec();
         stations.configs = {
             station_ip: stationDevice.ip,

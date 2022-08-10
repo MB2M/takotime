@@ -51,6 +51,8 @@ const delTournament = async (id: string) => {
 const calculateTournamentRank = async (id: string) => {
     const tournament = await Tournament.findById(id).exec();
 
+    if (!tournament) return;
+
     tournament.rounds.forEach(
         (round: {
             customId: string;
@@ -208,7 +210,6 @@ const calculateTournamentRank = async (id: string) => {
                                             result.state === "DP"
                                     )?.[Number(rank) - 1];
 
-                                console.log(foundResult);
                                 if (["DP"].includes(foundResult?.state)) {
                                     result.participant =
                                         foundResult.participant;
@@ -279,6 +280,7 @@ const calculateTournamentRank = async (id: string) => {
         }
     );
     tournament.save();
+    return tournament;
 };
 
 const sortResult = (a: { result: string }, b: { result: string }) => {

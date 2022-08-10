@@ -4,19 +4,23 @@ import admin from "firebase-admin";
 import serviceAccount from "./firebase-credentials.json";
 // const serviceAccount = require(`../../../../../${process.env.FIREBASE_CREDENTIAL}.json`);
 
+
+// REALTIME DB
+// FIRESTORE
 if (!admin.apps.length) {
     try {
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount as any),
-            databaseURL: process.env.FIREBASE_DB,
-            databaseAuthVariableOverride: {
-                uid: "exos-server",
-            },
+            // databaseURL: process.env.FIREBASE_DB, // ONLY REALTIME DB
+
         });
     } catch (error) {
         console.log("Firebase admin initialization error", error);
     }
 }
+
+
+
 // const initAdminApp = (apiKey: string) => {
 
 //     admin.initializeApp(

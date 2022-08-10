@@ -1,13 +1,9 @@
 import admin from "./adminConfig";
+import { getFirestore } from "firebase-admin/firestore";
 
 export async function updateFirebase(payload: any, cb: Function) {
-    console.log("PAYLAOD", payload.rounds[0].heats[0].results[0].participant);
-    const db = admin.database().ref();
-    const tryRef = db.child("try");
-    await tryRef.set(
-        payload.rounds[0].heats[0].results[0].participant,
-        (error: any) => {
-            cb(error);
-        }
-    );
+    // const db = admin.database().ref(); //REALTIME DB
+    const db = admin.firestore(); //FIRESTORE
+    const tryRef = db.collection("tournaments").doc(payload.id);
+    await tryRef.set(payload, { merge: true });
 }

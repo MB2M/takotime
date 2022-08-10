@@ -13,19 +13,23 @@ import {
     TableCell,
 } from "@mui/material";
 import mtBackground from "../../../public/img/mtBackground.jpg";
+import { useLiveDataContext } from "../../../context/liveData/livedata";
 
 const Warmup = () => {
-    const { eventId, currentHeatId } = useEventContext();
+    const { globals } = useLiveDataContext();
     const planning = usePlanning(45000);
     const [allowedHeats, setAllowedHeats] = useState<PlanningHeat[]>([]);
 
+
+    console.log(globals?.externalHeatId)
+
     useEffect(() => {
-        if (planning && currentHeatId) {
+        if (planning && globals?.externalHeatId) {
             let allowedHeats = [];
 
             for (let i = 0; i < planning.length; i++) {
                 let heat = planning[i];
-                if (heat.id.toString() === currentHeatId) {
+                if (heat.id === globals.externalHeatId) {
                     if (i + 1 < planning.length) {
                         allowedHeats.push(planning[i + 1]);
                     }
@@ -39,7 +43,7 @@ const Warmup = () => {
             }
             setAllowedHeats(allowedHeats);
         }
-    }, [planning, currentHeatId]);
+    }, [planning, globals?.externalHeatId]);
 
     return (
         <>

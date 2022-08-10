@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+import { IHeat, IParticipant, IRound, ITournament } from "../../types/mt";
 
-const participantSchema = new mongoose.Schema({
+const participantSchema = new mongoose.Schema<IParticipant>({
     customId: String,
     name: String,
 });
 
-const heatSchema = new mongoose.Schema({
+const heatSchema = new mongoose.Schema<IHeat>({
     customId: String,
     name: String,
     order: Number,
@@ -27,7 +28,7 @@ const heatSchema = new mongoose.Schema({
     },
 });
 
-const roundSchema = new mongoose.Schema({
+const roundSchema = new mongoose.Schema<IRound>({
     customId: String,
     name: String,
     finished: Boolean,
@@ -35,7 +36,7 @@ const roundSchema = new mongoose.Schema({
     draftQualifiedOverallNumber: Number,
     eliminatedNumber: Number,
     stationNumber: Number,
-    points:[Number],
+    points: [Number],
     ranking: {
         start: Number,
         end: Number,
@@ -53,11 +54,11 @@ const roundSchema = new mongoose.Schema({
     heats: [heatSchema],
 });
 
-const tournamentSchema = new mongoose.Schema({
+const tournamentSchema = new mongoose.Schema<ITournament>({
     name: String,
     rounds: [roundSchema],
 });
 
 //AJOUTER FONCTION DE CLASSEMENT DU ROUND
 
-export default mongoose.model("Tournament", tournamentSchema);
+export default mongoose.model<ITournament>("Tournament", tournamentSchema);

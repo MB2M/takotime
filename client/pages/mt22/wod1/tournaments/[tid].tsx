@@ -25,14 +25,14 @@ const Tournament = () => {
         }
     };
 
-    useEffect(() => {
-        if (!tournament) return;
-        (async () =>
-            await fetch("/api/testfirebase", {
-                method: "POST",
-                body: JSON.stringify({ payload: tournament }),
-            }))();
-    }, [tournament]);
+    // useEffect(() => {
+    //     if (!tournament) return;
+    //     (async () =>
+    //         await fetch("/api/testfirebase", {
+    //             method: "POST",
+    //             body: JSON.stringify({ payload: tournament }),
+    //         }))();
+    // }, [tournament]);
 
     useEffect(() => {
         retrieveTournament();

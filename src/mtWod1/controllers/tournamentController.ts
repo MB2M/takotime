@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import { updateFirebase } from "../services/firebase/admin/requests";
+import { formatTournamentsPayload } from "../services/firebase/formaterFirestore";
 import {
     newTournament,
     viewTournaments,
@@ -62,12 +63,22 @@ export async function updateTournament(req: Request, res: Response) {
             const tournament = await changeTournament(body, id as string);
             if (!!tournament) {
                 if (validation) {
-                    await calculateTournamentRank(id);
+                    let tournamentUpdated = await calculateTournamentRank(id);
+                    // let tournamentUpdated = await viewTournament(id);
+                    if (!!tournamentUpdated) {
+                        const tournamentUp = JSON.parse(
+                            JSON.stringify(tournamentUpdated)
+                        );
+
+                        await updateFirebase(
+                            formatTournamentsPayload(tournamentUp),
+                            (error: any) => {
+                                if (error) console.log(error);
+                            }
+                            
+                        );
+                    }
                 }
-                // const tournamentUpdated = await viewTournament(id);
-                // await updateFirebase(tournamentUpdated, (error: any) => {
-                //     if (error) console.log(error);
-                // });
                 res.status(202).json(tournament);
             } else {
                 res.status(404).json("tournament not found");

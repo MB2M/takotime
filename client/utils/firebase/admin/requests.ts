@@ -7,3 +7,6 @@ export async function updateFirebase(payload: any, cb: Function) {
         cb(error);
     });
 }
+
+
+

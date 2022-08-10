@@ -4,7 +4,6 @@ import { loadPlanning } from "./planning";
 
 export function usePlanning(
     interval = 30000,
-    // eventId: string,
     workoutNameExcludeFilter?: string[]
 ) {
     const { globals } = useLiveDataContext();
@@ -38,6 +37,8 @@ export function usePlanning(
 
         return () => clearInterval(timer);
     }, [globals]);
+
+    console.log(planning)
 
     return planning;
 }

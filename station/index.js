@@ -9,7 +9,7 @@ const MQTT_URL = process.env.MQTT_URL;
 const mqttOptions = {
     username: process.env.BROKER_USERNAME,
     password: process.env.BROKER_PASSWORD,
-    clean: false,
+    clean: true,
     keepalive: 3600,
 };
 

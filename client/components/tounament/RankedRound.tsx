@@ -58,6 +58,7 @@ const RankedRound = ({
 
         return { results: newResults };
     }, [heats]);
+    
     return (
         <TableContainer>
             <Table size="small" aria-label="a dense table">

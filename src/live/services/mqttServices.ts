@@ -6,7 +6,7 @@ class MqttServices {
     options = {
         username: config.brokerUsername,
         password: config.brokerPassword,
-        clean: false,
+        clean: true,
         clientId: "TAKOTIME_SERVER",
     };
 

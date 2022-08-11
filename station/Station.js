@@ -22,7 +22,7 @@ class Station {
             },
             mqttTopics
         );
-        this.bleServices = new BLEServices();
+        // this.bleServices = new BLEServices();
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();
         this.buzzer = new onoff.Gpio(18, "in", "falling", {
@@ -34,7 +34,7 @@ class Station {
 
     async initProcess() {
         this.initWodInterpreterEventLister();
-        this.initBLEEventListener();
+        // this.initBLEEventListener();
         this.initTimerEventListener();
         this.initButtons();
         this.initMqttEventListener();
@@ -232,29 +232,29 @@ class Station {
         });
     }
 
-    initBLEEventListener() {
-        this.bleServices.on("stateChange", (device) => {
-            const state = device.peripheral.state;
-            try {
-                const index = this.db.getIndex(
-                    "/stations/configs/devices",
-                    device.role,
-                    "role"
-                );
-                // update DB
-                this.db.push(
-                    `/stations/configs/devices[${index}]/state`,
-                    state
-                );
-                // send to server
-                this.sendToServer("station/blePeripheral");
-            } catch {
-                console.error("can't update BLE status");
-            }
+    // initBLEEventListener() {
+    //     this.bleServices.on("stateChange", (device) => {
+    //         const state = device.peripheral.state;
+    //         try {
+    //             const index = this.db.getIndex(
+    //                 "/stations/configs/devices",
+    //                 device.role,
+    //                 "role"
+    //             );
+    //             // update DB
+    //             this.db.push(
+    //                 `/stations/configs/devices[${index}]/state`,
+    //                 state
+    //             );
+    //             // send to server
+    //             this.sendToServer("station/blePeripheral");
+    //         } catch {
+    //             console.error("can't update BLE status");
+    //         }
 
-            this.updateBoard();
-        });
-    }
+    //         this.updateBoard();
+    //     });
+    // }
 
     initTimerEventListener() {
         this.timer.on("countdown", (value) => {
@@ -335,8 +335,8 @@ class Station {
             this.stationNumberSubscribe = data.stations.laneNumber;
         }
 
-        const devices = this.getRequiredDevices();
-        this.bleServices.connectTo(devices);
+        // const devices = this.getRequiredDevices();
+        // this.bleServices.connectTo(devices);
 
         try {
             this.wodInterpreter.load(this.db.getData("/workouts"));

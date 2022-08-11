@@ -226,7 +226,7 @@ class Station {
             }
 
             if (topic === "buzzer/6") {
-                console.log(message);
+                console.log(message.toString());
                 this.publishData(message);
             }
         });

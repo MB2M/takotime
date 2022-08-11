@@ -429,13 +429,21 @@ class Station {
     }
 
     async updateBoard(value) {
-        const board = this.bleServices.connectedDevices.find(
-            (d) => d.role === "board"
-        );
+        // const board = this.bleServices.connectedDevices.find(
+        //     (d) => d.role === "board"
+        // );
 
-        if (board && board.charac) {
-            board.charac.write(displayBuffer(this.db, { value: value }), true);
-        }
+        // if (board && board.charac) {
+        //     board.charac.write(displayBuffer(this.db, { value: value }), true);
+        // }
+
+        this.mqttClient.client.publish(
+            "board/6",
+            displayBuffer(this.db, { value: value }),
+            {
+                qos: 0,
+            }
+        );
     }
 
     initTimer(json) {

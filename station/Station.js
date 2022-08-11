@@ -29,6 +29,7 @@ class Station {
             debounceTimeout: 10,
         });
         this.lastPush = 0;
+        this.stationNumberSubscribe = 0;
     }
 
     async initProcess() {
@@ -225,8 +226,7 @@ class Station {
                 }
             }
 
-            if (topic === "buzzer/6") {
-                console.log(message.toString());
+            if (topic === "counter/6") {
                 this.publishData(message);
             }
         });
@@ -324,6 +324,16 @@ class Station {
             }
         }
         this.updateDB(data);
+
+        if (data.stations.laneNumber !== this.stationNumberSubscribe) {
+            this.mqttClient.client.unsubscribe(
+                `counter/${this.stationNumberSubscribe}`
+            );
+            this.mqttClient.client.subscribe(
+                `counter/${data.stations.laneNumber}`
+            );
+            this.stationNumberSubscribe = data.stations.laneNumber;
+        }
 
         const devices = this.getRequiredDevices();
         this.bleServices.connectTo(devices);
@@ -438,7 +448,7 @@ class Station {
         // }
 
         this.mqttClient.client.publish(
-            "board/6",
+            `board/${this.stationNumberSubscribe}`,
             displayBuffer(this.db, { value: value }),
             {
                 qos: 0,

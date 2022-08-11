@@ -19,7 +19,6 @@ const mqttTopics = [
     "server/wodGlobals",
     "server/scriptReset",
     "server/restartUpdate",
-    `buzzer/6`,
 ];
 
 const main = async () => {

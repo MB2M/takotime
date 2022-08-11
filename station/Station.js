@@ -226,10 +226,9 @@ class Station {
             }
 
             if (topic === "buzzer/6") {
-                this.publishData(message)
+                console.log(message);
+                this.publishData(message);
             }
-
-            
         });
     }
 

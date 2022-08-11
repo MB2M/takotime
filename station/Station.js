@@ -226,7 +226,7 @@ class Station {
                 }
             }
 
-            if (topic === "counter/6") {
+            if (topic === `counter/${this.stationNumberSubscribe}`) {
                 this.publishData(message);
             }
         });

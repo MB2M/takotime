@@ -224,6 +224,12 @@ class Station {
                     );
                 }
             }
+
+            if (topic === "buzzer/6") {
+                this.publishData(message)
+            }
+
+            
         });
     }
 
@@ -300,7 +306,6 @@ class Station {
     }
 
     setStationWodConfig(data) {
-        console.log(data)
         if (data.stations?.dynamics) {
             data.stations.dynamics.appVersion =
                 loadJsonFileSync("package.json").version;

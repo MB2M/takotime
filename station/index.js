@@ -19,6 +19,7 @@ const mqttTopics = [
     "server/wodGlobals",
     "server/scriptReset",
     "server/restartUpdate",
+    `buzzer/6`,
 ];
 
 const main = async () => {
@@ -31,7 +32,10 @@ const main = async () => {
                 "error deleting livestation.json, file probably doesn't exist... if so ignore this error "
             );
         }
-        const station = new Station(ip, MQTT_URL, mqttOptions, [...mqttTopics, `server/wodConfig/${ip}`]);
+        const station = new Station(ip, MQTT_URL, mqttOptions, [
+            ...mqttTopics,
+            `server/wodConfig/${ip}`,
+        ]);
         station.initProcess();
     });
 };

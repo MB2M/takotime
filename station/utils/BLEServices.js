@@ -66,13 +66,15 @@ class BLEServices extends EventEmitter {
                 default:
                     break;
             }
-    
+
             if (subSuccess) this.emit("stateChange", blePeripheral);
         }
     }
 
     async scan() {
-        await noble.startScanningAsync().catch(() => {
+        try {
+            noble.startScanningAsync();
+        } catch (err) {
             noble.on("stateChange", async (state) => {
                 if (state === "poweredOn") {
                     await noble.startScanningAsync([
@@ -81,7 +83,7 @@ class BLEServices extends EventEmitter {
                     ]);
                 }
             });
-        });
+        }
     }
 
     async resetConnection(scan = true) {

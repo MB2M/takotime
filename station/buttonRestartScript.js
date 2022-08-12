@@ -10,7 +10,7 @@ resetScript.watch((err, value) => {
         throw err;
     }
 
-    exec("pm2 restart livestation", function (msg) {
+    exec("pm2 restart 0", function (msg) {
         console.log(msg);
     });
     // exec("sudo systemctl restart station", function (msg) {

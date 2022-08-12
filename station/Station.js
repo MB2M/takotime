@@ -209,6 +209,7 @@ class Station {
 
             if (topic === "server/scriptReset") {
                 if (this.ip === message.toString()) {
+                    this.mqttClient.client.end();
                     exec("pm2 restart livestation", function (msg) {
                         console.log(msg);
                     });
@@ -454,7 +455,6 @@ class Station {
                 qos: 0,
             }
         );
-        
     }
 
     initTimer(json) {

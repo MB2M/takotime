@@ -231,7 +231,7 @@ class Station {
                 this.publishData(message);
             }
 
-            if (topic === `board/${this.stationNumberSubscribe}`) {
+            if (topic === `board/${this.stationNumberSubscribe}/connect`) {
                 this.updateBoard();
             }
         });
@@ -335,13 +335,13 @@ class Station {
                 `counter/${this.stationNumberSubscribe}`
             );
             this.mqttClient.client.unsubscribe(
-                `board/${this.stationNumberSubscribe}`
+                `board/${this.stationNumberSubscribe}/connect`
             );
             this.mqttClient.client.subscribe(
                 `counter/${data.stations.laneNumber}`
             );
             this.mqttClient.client.subscribe(
-                `board/${data.stations.laneNumber}`
+                `board/${data.stations.laneNumber}/connect`
             );
             this.stationNumberSubscribe = data.stations.laneNumber;
         }

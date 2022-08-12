@@ -11,7 +11,7 @@ class WodTimer extends EventEmitter {
         const now = Date.now();
         if (now < Date.parse(startTime) + duration * 60000) {
             if (now < Date.parse(startTime)) {
-                const delay = 300;
+                const delay = 800;
                 const emitValue = "countdown";
                 const values = [
                     Date.parse(startTime) / 1000 - Math.floor(now / 1000),

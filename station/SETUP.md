@@ -163,14 +163,14 @@ Reboot and run:
 
 > nano .env
 
-> cd takotime/station; git pull origin main && sudo node index.js   
+> cd takotime/station; git pull origin main && sudo node index.js   // pour tester
 cd && sudo npm install pm2@latest -g
 
 cd takotime/station 
-sudo pm2 start npm --name "livestation" -- start
-sudo pm2 start npm --name "restart button" -- run restartButton
-sudo pm2 startup
-sudo pm2 save
+pm2 start npm --name "livestation" -- start
+pm2 start npm --name "restart button" -- run restartButton
+pm2 startup
+pm2 save
 
 <!-- ## Setup systemd services
 

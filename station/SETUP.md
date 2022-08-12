@@ -76,7 +76,7 @@ change user:
 
 # Install chrony
 
-    sudo apt install chrony -y
+    sudo apt-get install chrony -y
 
 ### config chrony
 

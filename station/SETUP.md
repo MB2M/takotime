@@ -167,10 +167,10 @@ Reboot and run:
 cd && sudo npm install pm2@latest -g
 
 cd takotime/station 
-pm2 start npm --name "livestation" -- start
-pm2 start npm --name "restart button" -- run restartButton
-pm2 startup
-pm2 save
+sudo pm2 start npm --name "livestation" -- start
+sudo pm2 start npm --name "restart button" -- run restartButton
+sudo pm2 startup
+sudo pm2 save
 
 <!-- ## Setup systemd services
 

@@ -210,7 +210,7 @@ class Station {
             if (topic === "server/scriptReset") {
                 if (this.ip === message.toString()) {
                     this.mqttClient.client.end();
-                    exec("pm2 restart all", function (msg) {
+                    exec("pm2 restart 0", function (msg) {
                         console.log(msg);
                     });
                 }

@@ -30,6 +30,7 @@ class Station {
         });
         this.lastPush = 0;
         this.stationNumberSubscribe = 0;
+        this.devicesSubscribe = [0, 0];
     }
 
     async initProcess() {
@@ -227,11 +228,11 @@ class Station {
                 }
             }
 
-            if (topic === `counter/${this.stationNumberSubscribe}`) {
+            if (topic === `counter/${this.devicesSubscribe[0]}`) {
                 this.publishData(message);
             }
 
-            if (topic === `board/${this.stationNumberSubscribe}/connect`) {
+            if (topic === `board/${this.devicesSubscribe[1]}/connect`) {
                 this.updateBoard();
             }
         });
@@ -330,20 +331,30 @@ class Station {
         }
         this.updateDB(data);
 
-        if (data.stations.laneNumber !== this.stationNumberSubscribe) {
+        const newCounterMac = data.stations.devices.find(
+            (device) => device.role === "counter"
+        ).mac;
+        const newBoardMac = data.stations.devices.find(
+            (device) => device.role === "board"
+        ).mac;
+
+        if (newCounterMac !== this.devicesSubscribe[0]) {
             this.mqttClient.client.unsubscribe(
-                `counter/${this.stationNumberSubscribe}`
+                `counter/${this.devicesSubscribe[0]}`
             );
+            this.mqttClient.client.subscribe(`counter/${newCounterMac}`);
+            this.devicesSubscribe[0] = newCounterMac;
+        }
+
+        if (
+            data.stations.devices.find((device) => device.role === "board")
+                .mac !== this.devicesSubscribe[1]
+        ) {
             this.mqttClient.client.unsubscribe(
-                `board/${this.stationNumberSubscribe}/connect`
+                `board/${this.devicesSubscribe[1]}/connect`
             );
-            this.mqttClient.client.subscribe(
-                `counter/${data.stations.laneNumber}`
-            );
-            this.mqttClient.client.subscribe(
-                `board/${data.stations.laneNumber}/connect`
-            );
-            this.stationNumberSubscribe = data.stations.laneNumber;
+            this.mqttClient.client.subscribe(`board/${newBoardMac}/connect`);
+            this.devicesSubscribe[1] = newBoardMac;
         }
 
         // const devices = this.getRequiredDevices();

@@ -23,7 +23,8 @@ const stationDevicesSchema = new mongoose.Schema({
             },
             mac: {
                 type: String,
-                validate: /^$|^([0-9]|[a-f]){12}$/,
+                // validate: /^$|^([0-9]|[a-f]){12}$/,
+                validate: /^$|^[0-9]*$/,
                 index: {
                     unique: true,
                     sparse: true,

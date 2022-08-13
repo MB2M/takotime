@@ -469,7 +469,7 @@ class Station {
         // }
 
         this.mqttClient.client.publish(
-            `board/${this.stationNumberSubscribe}`,
+            `board/${this.devicesSubscribe[1]}`,
             displayBuffer(this.db, { value: value }),
             {
                 qos: 0,

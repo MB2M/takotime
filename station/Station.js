@@ -311,7 +311,7 @@ class Station {
     }
 
     setStationWodConfig(data) {
-        console.log(data)
+        console.log(data);
         if (data.stations?.dynamics) {
             data.stations.dynamics.appVersion =
                 loadJsonFileSync("package.json").version;
@@ -332,10 +332,10 @@ class Station {
         }
         this.updateDB(data);
 
-        const newCounterMac = data.stations.devices?.find(
+        const newCounterMac = data.stations.configs?.devices?.find(
             (device) => device.role === "counter"
         )?.mac;
-        const newBoardMac = data.stations.devices?.find(
+        const newBoardMac = data.stations.configs?.devices?.find(
             (device) => device.role === "board"
         )?.mac;
 

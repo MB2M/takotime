@@ -331,12 +331,12 @@ class Station {
         }
         this.updateDB(data);
 
-        const newCounterMac = data.stations.devices.find(
+        const newCounterMac = data.stations.devices?.find(
             (device) => device.role === "counter"
-        ).mac;
-        const newBoardMac = data.stations.devices.find(
+        )?.mac;
+        const newBoardMac = data.stations.devices?.find(
             (device) => device.role === "board"
-        ).mac;
+        )?.mac;
 
         if (newCounterMac !== this.devicesSubscribe[0]) {
             this.mqttClient.client.unsubscribe(
@@ -346,10 +346,7 @@ class Station {
             this.devicesSubscribe[0] = newCounterMac;
         }
 
-        if (
-            data.stations.devices.find((device) => device.role === "board")
-                .mac !== this.devicesSubscribe[1]
-        ) {
+        if (newBoardMac !== this.devicesSubscribe[1]) {
             this.mqttClient.client.unsubscribe(
                 `board/${this.devicesSubscribe[1]}/connect`
             );

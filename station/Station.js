@@ -332,14 +332,14 @@ class Station {
         }
         this.updateDB(data);
 
-        console.log(data.stations.configs);
-
         const newCounterMac = data.stations.configs?.devices?.find(
             (device) => device.role === "counter"
         )?.mac;
         const newBoardMac = data.stations.configs?.devices?.find(
             (device) => device.role === "board"
         )?.mac;
+
+        console.log(newCounterMac);
 
         if (newCounterMac !== this.devicesSubscribe[0]) {
             this.mqttClient.client.unsubscribe(

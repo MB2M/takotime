@@ -338,8 +338,6 @@ class Station {
             (device) => device.role === "board"
         )?.mac;
 
-        console.log(newCounterMac);
-
         if (newCounterMac !== this.devicesSubscribe[0]) {
             this.mqttClient.client.unsubscribe(
                 `counter/${this.devicesSubscribe[0]}`

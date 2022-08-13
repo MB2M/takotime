@@ -80,6 +80,7 @@ const formatTournamentsPayload = (payload: ITournament & { _id: string }) => {
                         (
                             ph: any,
                             ch: {
+                                [x: string]: any;
                                 customId: any;
                                 name: any;
                                 results: any;
@@ -113,6 +114,7 @@ const formatTournamentsPayload = (payload: ITournament & { _id: string }) => {
                                     {}
                                 ),
                                 state: ch.state,
+                                date: ch.date,
                             },
                         }),
                         {}

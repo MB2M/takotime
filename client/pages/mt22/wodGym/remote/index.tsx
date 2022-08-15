@@ -1,5 +1,4 @@
 import { Box, Button, Link, Stack, Typography } from "@mui/material";
-import React from "react";
 import { useLiveDataContext } from "../../../../context/liveData/livedata";
 
 const Remote = () => {

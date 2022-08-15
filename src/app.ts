@@ -44,9 +44,13 @@ app.use("/wod1", router);
 import routerMax from "./mtWodMax/routes";
 app.use("/wodMax", routerMax);
 
-// wod Max MT
+// vote
 import routerVote from "./vote/routes";
 app.use("/vote", routerVote);
+
+// wod Gym
+import routerGym from "./mtWodGym/routes";
+app.use("/wodGym", routerGym);
 // try {
 //     WOD1App.start(app, server, "/wod1");
 // } catch (err) {

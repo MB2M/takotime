@@ -4,6 +4,7 @@ import { vote, getAll, resetAll, deleteAll } from "../services/voteService";
 export async function voteForChoice(req: Request, res: Response) {
     const { choice } = req.params;
 
+
     if (!choice) {
         res.status(401).json({ error: "unauthorized" });
     } else {

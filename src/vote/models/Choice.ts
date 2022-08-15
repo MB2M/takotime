@@ -4,7 +4,7 @@ import { ChoiceModel, IChoice } from "../../types/mt";
 const ChoiceSchema = new mongoose.Schema<IChoice, ChoiceModel>({
     name: {
         type: String,
-        enum: ["triangle", "rond"],
+        enum: ["carre", "rond"],
     },
     count: { type: Number, default: 0 },
 });

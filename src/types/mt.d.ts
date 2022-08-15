@@ -69,11 +69,28 @@ interface IScore extends Subdocument {
     state?: string;
 }
 
+interface IScoreGym extends Subdocument {
+    _id: string;
+    roundNumber: 1 | 2 | 3;
+    buyinRepCount: number;
+    gymRepCount: number;
+}
+
 interface IChoice {
     _id: string;
     name: string;
     count: number;
     addCount: ({ name: string }) => void;
+}
+
+interface IHeatConfig {
+    _id: string;
+    heatId: string;
+    rounds: {
+        roundNumber: 1 | 2 | 3;
+        pointsPerMovement: Number;
+        buyInReps: Number;
+    }[];
 }
 
 interface ChoiceModel extends Model<IChoice> {

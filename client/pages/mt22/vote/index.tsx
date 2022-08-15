@@ -11,10 +11,11 @@ import { useEffect, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
+import CropSquareIcon from '@mui/icons-material/CropSquare';
 
 const iconSelect = {
-    triangle: (
-        <ChangeHistoryIcon
+    carre: (
+        <CropSquareIcon
             fontSize="inherit"
             sx={{ width: "20em", height: "20em" }}
         />
@@ -28,7 +29,7 @@ const iconSelect = {
 };
 
 const color = {
-    triangle: "#c6316e",
+    carre: "#c6316e",
     rond: "#05c1de",
 };
 

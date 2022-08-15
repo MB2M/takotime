@@ -225,7 +225,7 @@ const LaneRemote = () => {
                             value={addWeight}
                             // getAriaValueText={valuetext}
                             valueLabelDisplay="auto"
-                            step={1}
+                            step={2.5}
                             // marks
                             min={10}
                             max={170}

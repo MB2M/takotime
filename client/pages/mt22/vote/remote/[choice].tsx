@@ -18,10 +18,11 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../../../context/liveData/livedata";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
+import CropSquareIcon from '@mui/icons-material/CropSquare';
 
 const iconSelect = {
-    triangle: (
-        <ChangeHistoryIcon
+    carre: (
+        <CropSquareIcon
             fontSize="inherit"
             sx={{ width: "15em", height: "15em" }}
         />
@@ -35,7 +36,7 @@ const iconSelect = {
 };
 
 const color = {
-    triangle: "#c6316e",
+    carre: "#c6316e",
     rond: "#05c1de",
 };
 
@@ -83,11 +84,11 @@ const LaneRemote = () => {
                     sx={{
                         width: "100vw",
                         height: "100vh",
-                        backgroundColor: color[choice as "triangle" | "rond"],
+                        backgroundColor: color[choice as "carre" | "rond"],
                         color: "white",
                         "&:hover": {
                             backgroundColor:
-                                color[choice as "triangle" | "rond"],
+                                color[choice as "carre" | "rond"],
                         },
                         "&:disabled": {
                             backgroundColor: "lightgray",
@@ -97,7 +98,7 @@ const LaneRemote = () => {
                     onClick={handleVote}
                     disabled={buttonDisable}
                 >
-                    {iconSelect[choice as "triangle" | "rond"]}
+                    {iconSelect[choice as "carre" | "rond"]}
                 </Button>
             )}
         </>

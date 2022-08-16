@@ -100,7 +100,7 @@ function MTHeatWinner({ stations }: { stations: any }) {
                                             Heat Winner
                                         </Typography>
                                         <Typography variant="h2">
-                                            {category}
+                                            {category as string}
                                         </Typography>
                                     </Box>
                                     <Typography

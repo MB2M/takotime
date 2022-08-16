@@ -207,7 +207,7 @@ const WodWeightOverlayRunningAthlete = ({
                 <Typography fontSize={"2rem"}>
                     {
                         wodWeightData?.scores.find(
-                            (score) => score.state === "Try"
+                            (score: { state: string; }) => score.state === "Try"
                         )?.weight
                     }
                 </Typography>

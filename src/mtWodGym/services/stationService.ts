@@ -11,11 +11,10 @@ const viewStation = async (heatId: string, laneNumber: number) => {
 };
 
 const update = async (data: IScoreGym, heatId: string, laneNumber: number) => {
-    const station = await Station.findOneAndUpdate(
-        { heatId, laneNumber },
-        data,
-        { upsert: true }
-    );
+    await Station.findOneAndUpdate({ heatId, laneNumber }, data, {
+        upsert: true,
+    });
+    const station = await Station.findOne({ heatId, laneNumber });
 
     return station;
 };

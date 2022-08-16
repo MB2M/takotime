@@ -65,68 +65,73 @@ const OverlayResult = () => {
                     Heat Recap
                 </Typography>
                 <List sx={{ width: "100%" }}>
-                    {CCData?.epHeat
-                        ?.sort((a: any, b: any) => a.station - b.station)
-                        .map((s) => (
-                            <ListItem
-                                key={s.station}
-                                sx={{
-                                    borderBottom: "2px solid white",
-                                    borderTop: "2px solid white",
-                                }}
-                            >
-                                <Box
-                                    display={"flex"}
-                                    justifyContent={"flex-end"}
-                                    width={"100%"}
-                                    color={
-                                        s.rank === "1"
-                                            ? "#FFD600"
-                                            : s.rank === "2"
-                                            ? "#05c1de"
-                                            : s.rank === "3"
-                                            ? "#fd1085"
-                                            : "white"
-                                    }
+                    {stationsUpgraded
+                        ?.sort((a: any, b: any) => a.laneNumber - b.laneNumber)
+                        .map((s) => {
+                            const CCEP = CCData?.epHeat?.find(
+                                (ep) => ep.station === s.laneNumber
+                            );
+                            return (
+                                <ListItem
+                                    key={s.laneNumber}
+                                    sx={{
+                                        borderBottom: "2px solid white",
+                                        borderTop: "2px solid white",
+                                    }}
                                 >
-                                    <Typography
-                                        variant="h5"
-                                        fontFamily={"CantoraOne"}
+                                    <Box
+                                        display={"flex"}
+                                        justifyContent={"flex-end"}
+                                        width={"100%"}
+                                        color={
+                                            CCEP?.rank === "1"
+                                                ? "#FFD600"
+                                                : CCEP?.rank === "2"
+                                                ? "#05c1de"
+                                                : CCEP?.rank === "3"
+                                                ? "#fd1085"
+                                                : "white"
+                                        }
                                     >
-                                        {s.station}
-                                    </Typography>
-                                    <Typography
-                                        variant="h5"
-                                        fontFamily={"CantoraOne"}
-                                        ml={"15px"}
-                                        mr="auto"
-                                        noWrap
-                                        maxWidth={"250px"}
-                                    >
-                                        {s.displayName.toUpperCase()}
-                                    </Typography>
-                                    <Box display="flex">
                                         <Typography
                                             variant="h5"
                                             fontFamily={"CantoraOne"}
-                                            mr="30px"
                                         >
-                                            {s.points
-                                                ? s.points + " pts"
-                                                : s.points}
+                                            {s.laneNumber}
                                         </Typography>
                                         <Typography
                                             variant="h5"
                                             fontFamily={"CantoraOne"}
-                                            width="20px"
-                                            textAlign={"end"}
+                                            ml={"15px"}
+                                            mr="auto"
+                                            noWrap
+                                            maxWidth={"250px"}
                                         >
-                                            {s.rank}
+                                            {s.participant.toUpperCase()}
                                         </Typography>
+                                        <Box display="flex">
+                                            <Typography
+                                                variant="h5"
+                                                fontFamily={"CantoraOne"}
+                                                mr="30px"
+                                            >
+                                                {CCEP?.points
+                                                    ? CCEP?.points + " pts"
+                                                    : CCEP?.points}
+                                            </Typography>
+                                            <Typography
+                                                variant="h5"
+                                                fontFamily={"CantoraOne"}
+                                                width="20px"
+                                                textAlign={"end"}
+                                            >
+                                                {CCEP?.rank}
+                                            </Typography>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            </ListItem>
-                        ))}
+                                </ListItem>
+                            );
+                        })}
                 </List>
             </Stack>
         </Box>

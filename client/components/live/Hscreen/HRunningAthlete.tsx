@@ -41,8 +41,6 @@ const useHRunningBackgroundSize = (
         return data.repsPerBlock?.reduce((p, c) => p + c, 0);
     }, [data]);
 
-    useEffect(() => {});
-
     if (!currentReps || !totalReps) return MIN_SIZE;
 
     if (data.result) return FULL_WIDTH;

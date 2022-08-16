@@ -227,6 +227,7 @@ const LaneRemote = () => {
                 }
             }),
         };
+        console.log(payload);
         try {
             const response = await fetch(
                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/wodGym/station/${laneNumber}?heatId=${globals?.externalHeatId}`,
@@ -277,6 +278,7 @@ const LaneRemote = () => {
                         //     globals?.externalHeatId &&
                         heatConfig?.rounds?.map((round) => (
                             <Button
+                                key={round.roundNumber}
                                 variant={
                                     selectedRoundNumber === round.roundNumber
                                         ? "contained"
@@ -381,6 +383,7 @@ const LaneRemote = () => {
                 >
                     {["buyin", "gym"].map((type: any) => (
                         <Button
+                            key={type}
                             variant={
                                 selectedType === type ? "contained" : "outlined"
                             }
@@ -400,11 +403,11 @@ const LaneRemote = () => {
                         fontFamily={"CantoraOne"}
                     >
                         {roundReps(selectedRoundNumber, selectedType)}
-                        <Typography variant="h5">
-                            {selectedType === "buyin" &&
-                                selectedRound &&
-                                `/${selectedRound?.buyInReps}`}
-                        </Typography>
+                    </Typography>
+                    <Typography variant="h5" textAlign="center">
+                        {selectedType === "buyin" &&
+                            selectedRound &&
+                            `/${selectedRound?.buyInReps}`}
                     </Typography>
                 </Box>
                 <Box

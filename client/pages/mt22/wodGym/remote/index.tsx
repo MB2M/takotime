@@ -14,7 +14,7 @@ const Remote = () => {
                     .map((station) => (
                         <Box key={station.laneNumber}>
                                 <Link
-                                    href={`/mt22/wodWeight/remote/${station.laneNumber}`}
+                                    href={`/mt22/wodGym/remote/${station.laneNumber}`}
                                 >
                             <Button variant="outlined" sx={{ width: "80vw" }}>
                                     {station.laneNumber} - {station.participant}

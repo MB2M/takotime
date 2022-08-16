@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import HeatPresentation from "../HeatPresentation";
 import HeatResult from "../HeatResult";

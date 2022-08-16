@@ -12,8 +12,6 @@ const HeatResult = () => {
     const stationsUpgraded = useStationPayload(stations, ranks);
     const CCData = useCompetitionCornerContext()
 
-    console.log(CCData)
-
     return (
         <Box
             className="displayZone"

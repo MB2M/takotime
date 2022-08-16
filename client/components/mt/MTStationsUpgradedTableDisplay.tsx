@@ -1,24 +1,22 @@
 import { List, ListItem, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { ReactChild, ReactFragment, ReactPortal } from "react";
-import { useLiveDataContext } from "../../context/liveData/livedata";
-import useStationPayload from "../../hooks/useStationPayload";
 
-const StationsUpgradedTableDisplay = ({
+
+const MTStationsUpgradedTableDisplay = ({
     sortBy,
+    stations,
 }: {
     sortBy: "laneNumber" | "rank";
+    stations: any;
 }) => {
-    const { stations, ranks } = useLiveDataContext();
-
-    const stationsUpgraded = useStationPayload(stations, ranks);
 
     return (
         <Stack direction={"row"} justifyContent="space-around" mt={5}>
-            {stationsUpgraded
-                .sort((a, b) => {
+            {stations
+                .sort((a:any, b:any) => {
                     return sortBy === "rank"
-                        ? a.rank[a.rank.length - 1] - b.rank[b.rank.length - 1]
+                        ? a.rank - b.rank
                         : a.laneNumber - b.laneNumber;
                 })
                 .reduce(
@@ -51,7 +49,7 @@ const StationsUpgradedTableDisplay = ({
                                     | null
                                     | undefined
                                 )[];
-                                result: string | any[];
+                                result: number;
                             }) => (
                                 <>
                                     <ListItem
@@ -70,7 +68,9 @@ const StationsUpgradedTableDisplay = ({
                                                 variant="h3"
                                                 fontFamily={"CantoraOne"}
                                             >
-                                                {sortBy === "laneNumber" ?s.laneNumber : s.rank[s.rank.length - 1]}
+                                                {sortBy === "laneNumber"
+                                                    ? s.laneNumber
+                                                    : s.rank}
                                             </Typography>
                                             <Typography
                                                 variant="h3"
@@ -86,10 +86,7 @@ const StationsUpgradedTableDisplay = ({
                                                 fontFamily={"CantoraOne"}
                                                 ml="auto"
                                             >
-                                                {s.result?.slice(
-                                                    0,
-                                                    s.result.length - 1
-                                                )}
+                                                {s.result}
                                             </Typography>
                                         </Box>
                                     </ListItem>
@@ -102,4 +99,4 @@ const StationsUpgradedTableDisplay = ({
     );
 };
 
-export default StationsUpgradedTableDisplay;
+export default MTStationsUpgradedTableDisplay;

@@ -13,7 +13,7 @@ const WodWeightRunningAthlete = ({
     divNumber,
     wodWeightData,
 }: {
-    data: WidescreenStation;
+    data: any;
     divNumber: number;
     wodWeightData: any;
 }) => {

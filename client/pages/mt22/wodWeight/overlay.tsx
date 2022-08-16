@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useChrono from "../../../hooks/useChrono";
@@ -11,9 +11,10 @@ import { useEffect, useMemo, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
 import HeatPresentation from "../../../components/live/HeatPresentation";
 import MTHeatWinner from "../../../components/mt/MTHeatWinner";
+import WodWeightOverlayRunningAthlete from "../../../components/mt/WodWeightOverlayRunningAthlete";
 
-function WodWeightRunning() {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
+function WodWeightRunningOverlay() {
+    const { globals, stations, ranks } = useLiveDataContext();
     const chrono = useChrono(globals?.startTime, globals?.duration);
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [wodWeightInfo, setWodWeightInfo] = useState<any[]>([]);
@@ -99,60 +100,59 @@ function WodWeightRunning() {
         default:
             return (
                 <Box
+                    className="displayZone"
+                    overflow={"hidden"}
                     sx={{
                         width: 1920,
                         height: 1080,
-                        backgroundColor: "#242424",
+                        flexDirection: "column",
+                        justifyContent: "space-evenly",
                     }}
                 >
-                    <Box
-                        className="displayZone"
-                        display={"flex"}
-                        overflow={"hidden"}
-                        gap={0}
-                        sx={{
-                            flexDirection: "column",
-                            justifyContent: "space-evenly",
-                            height: "100%",
-                        }}
+                    <Header
+                        // logo={mtLogo}
+                        chrono={chrono?.toString().slice(0, 5) || ""}
+                        chronoFontSize="4rem"
+                        // textTop={CCData?.epHeat?.[0].heatName}
+                        textTopFontSize="4rem"
+                        imageWidth={"110px"}
+                        backgroundColor="black"
+                    />
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                        spacing={2}
+                        height="100%"
                     >
-                        {fullStations
-                            ?.sort((a, b) => a.laneNumber - b.laneNumber)
-                            ?.map((s) => (
-                                <WodWeightRunningAthlete
-                                    key={s.laneNumber}
-                                    data={s}
-                                    wodWeightData={wodWeightInfo?.find(
-                                        (station) =>
-                                            station.laneNumber === s.laneNumber
-                                    )}
-                                    divNumber={stationsUpgraded.length}
-                                />
-                            ))}
-                    </Box>
-
-                    <Box
-                        zIndex={1}
-                        position="absolute"
-                        top={"50%"}
-                        width={"50%"}
-                        right={35}
-                        sx={{ transform: "translateY(-50%)" }}
-                    >
-                        {globals?.state === 1 && (
-                            <Typography
-                                color={"gray"}
-                                fontSize={"45rem"}
-                                fontFamily={"CantoraOne"}
-                                paddingRight={"200px"}
-                            >
-                                {chrono?.toString().slice(1) || ""}
-                            </Typography>
-                        )}
-                    </Box>
+                        <Stack
+                            direction="column"
+                            alignItems="flex-start"
+                            spacing={5.7}
+                            paddingTop={1}
+                            height="100%"
+                        >
+                            {stationsUpgraded
+                                ?.sort((a, b) => a.laneNumber - b.laneNumber)
+                                .slice(
+                                    0,
+                                    stationsUpgraded.length / 2 +
+                                        (stationsUpgraded.length % 2)
+                                )
+                                ?.map((s) => (
+                                    <WodWeightOverlayRunningAthlete
+                                        key={s.laneNumber}
+                                        data={s}
+                                        wodWeightData={wodWeightInfo?.find(
+                                            (station) => station.laneNumber ===
+                                                s.laneNumber
+                                        )} position={"left"}                                    />
+                                ))}
+                        </Stack>
+                    </Stack>
                 </Box>
             );
     }
 }
 
-export default WodWeightRunning;
+export default WodWeightRunningOverlay;

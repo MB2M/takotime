@@ -128,25 +128,28 @@ function WodWeightRunningOverlay() {
                         <Stack
                             direction="column"
                             alignItems="flex-start"
-                            spacing={5.7}
+                            spacing={2}
                             paddingTop={1}
                             height="100%"
                         >
-                            {stationsUpgraded
+                            {fullStations
                                 ?.sort((a, b) => a.laneNumber - b.laneNumber)
                                 .slice(
                                     0,
-                                    stationsUpgraded.length / 2 +
-                                        (stationsUpgraded.length % 2)
+                                    fullStations.length / 2 +
+                                        (fullStations.length % 2)
                                 )
                                 ?.map((s) => (
                                     <WodWeightOverlayRunningAthlete
                                         key={s.laneNumber}
                                         data={s}
                                         wodWeightData={wodWeightInfo?.find(
-                                            (station) => station.laneNumber ===
+                                            (station) =>
+                                                station.laneNumber ===
                                                 s.laneNumber
-                                        )} position={"left"}                                    />
+                                        )}
+                                        position={"left"}
+                                    />
                                 ))}
                         </Stack>
                     </Stack>

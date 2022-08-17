@@ -1,7 +1,10 @@
 import fetch from "node-fetch";
 import liveApp from "..";
 
-const loadFromTournament = async (stations: { results: any[] }) => {
+const loadFromTournament = async (
+    stations: { results: any[] },
+    category: string
+) => {
     try {
         await liveApp.manager.deleteAllStation();
         await Promise.all(
@@ -10,7 +13,7 @@ const loadFromTournament = async (stations: { results: any[] }) => {
                     const data = {
                         laneNumber: r.station,
                         participant: r.participant.name,
-                        category: "Tournament",
+                        category: category,
                         externalId: r.participant.customId,
                     };
                     await liveApp.manager.stationUpdate(data, "create");

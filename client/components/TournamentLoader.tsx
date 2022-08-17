@@ -31,6 +31,7 @@ const TournamentLoader = () => {
 
     const load = async () => {
         const payload = {
+            category: tournaments.find((t) => t._id === selectedTournamentId)?.name,
             stations: tournaments
                 .find((t) => t._id === selectedTournamentId)
                 ?.rounds.find((r) => r._id === selectedRoundId)

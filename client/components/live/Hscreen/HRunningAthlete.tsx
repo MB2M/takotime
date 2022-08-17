@@ -30,15 +30,22 @@ const colors = {
 
 const useHRunningBackgroundSize = (
     data: WidescreenStation,
-    workout: Workout | undefined
+    workout: Workout | undefined,
+    step: number = 0,
+    divider: number = 1
 ) => {
     const totalReps = useMemo(() => {
-        return workout?.blocks[workout.blocks.length - 1]?.measurements
-            ?.repsTot;
+        return (
+            (workout?.blocks[workout.blocks.length - 1]?.measurements
+                ?.repsTot || 0) -
+            step +
+            step / divider
+        );
     }, [workout]);
 
     const currentReps = useMemo(() => {
-        return data.repsPerBlock?.reduce((p, c) => p + c, 0);
+        const reps = data.repsPerBlock?.reduce((p, c) => p + c, 0);
+        return reps <= step ? reps / divider : step / divider + (reps % step);
     }, [data]);
 
     if (!currentReps || !totalReps) return MIN_SIZE;
@@ -71,7 +78,7 @@ const HorizontalRunningAthlete = ({
     const [borders, setBorders] = useState("");
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
-    const bgSize = useHRunningBackgroundSize(data, workout);
+    const bgSize = useHRunningBackgroundSize(data, workout, 25, 5);
 
     const colorOdd = "#747474";
     const colorEven = "#c0c0c0";
@@ -130,8 +137,8 @@ const HorizontalRunningAthlete = ({
                 position: "relative",
                 borderRadius: data.result
                     ? "0px"
-                    // : "100% 70px 70px 100% / 50% 50% 50% 50%",
-                    : "5px",
+                    : // : "100% 70px 70px 100% / 50% 50% 50% 50%",
+                      "5px",
                 // background: "linear-gradient(145deg, #dadd17, #ffff1b)",
                 boxShadow: "5px 5px 7px #151515, -5px -5px 7px #333333",
                 transition: "width 0.7s",
@@ -183,7 +190,7 @@ const HorizontalRunningAthlete = ({
                         textOverflow: "ellipsis",
                         fontFamily: "CantoraOne",
                         fontSize: "3.7rem",
-                        fontWeight:"800"
+                        fontWeight: "800",
                     }}
                     noWrap
                 >
@@ -211,7 +218,7 @@ const HorizontalRunningAthlete = ({
                         alignItems="center"
                         paddingTop={0.2}
                     >
-                        {data.rank[data.rank.length -1]}
+                        {data.rank[data.rank.length - 1]}
                     </Typography>
                 )}
             </Box>

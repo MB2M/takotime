@@ -29,26 +29,33 @@ const WodWeightOverlayRunningAthlete = ({
     const [keepScore, setKeepScore] = useState<boolean>(false);
 
     const lastScore = useMemo(() => {
-        return wodWeightData?.scores?.find((score: { state: string }) =>
-            ["Success", "Fail"].includes(score.state)
-        );
+        return wodWeightData?.scores
+            ?.sort((a: { _id: string; }, b: { _id: string; }) => parseInt(b._id, 16) - parseInt(a._id, 16))
+            .find((score: { state: string }) =>
+                ["Success", "Fail"].includes(score.state)
+            );
     }, [wodWeightData]);
 
-    // const currentTry = useMemo(
-    //     () =>
-    //         wodWeightData?.scores.find(
-    //             (score: { state: string }) => score.state === "Try"
-    //         ),
-    //     [wodWeightData]
-    // );
+    const currentTry = useMemo(
+        () =>
+            wodWeightData?.scores?.sort((a: { _id: string; }, b: { _id: string; }) => parseInt(b._id, 16) - parseInt(a._id, 16)).find(
+                (score: { state: string }) => score.state === "Try"
+            ),
+        [wodWeightData]
+    );
+
+    const currentTryRef = useRef<any>();
 
     useEffect(() => {
-        setKeepScore(true);
-        const timer = setTimeout(() => {
-            setKeepScore(false);
-        }, 5000);
-        return clearTimeout(timer);
-    }, [lastScore]);
+        if (!currentTry && currentTryRef.current?.state === "Try") {
+            setKeepScore(true);
+            const timer = setTimeout(() => {
+                setKeepScore(false);
+            }, 5000);
+        }
+        currentTryRef.current = currentTry;
+        // return clearTimeout(timer);
+    }, [currentTry]);
 
     const setupColors = (rank: number) => {
         switch (rank) {
@@ -81,6 +88,7 @@ const WodWeightOverlayRunningAthlete = ({
                 overflow: "hidden",
             }}
             display="flex"
+            flexDirection={position === "left" ? "row" : "row-reverse"}
         >
             <Grid
                 container
@@ -93,7 +101,7 @@ const WodWeightOverlayRunningAthlete = ({
                     color: "white",
                 }}
             >
-                <Grid container item xs={8} direction={`column`} width={250}>
+                <Grid container item xs={8} direction={`column`} width={280}>
                     <Grid
                         container
                         item
@@ -182,19 +190,20 @@ const WodWeightOverlayRunningAthlete = ({
             </Grid>
             <Box
                 width={"130px"}
-                sx={{ backgroundColor: "darkslategray", color: "white" }}
+                sx={{
+                    backgroundColor: keepScore
+                        ? lastScore.state === "Success"
+                            ? "green"
+                            : "red"
+                        : "#000000c0",
+                    color: "white",
+                }}
                 alignItems="center"
                 display="flex"
                 justifyContent="center"
             >
                 <Typography fontSize={"2rem"}>
-                    {keepScore.toString()}
-                    {keepScore
-                        ? lastScore?.weight
-                        : wodWeightData?.scores.find(
-                              (score: { state: string }) =>
-                                  score.state === "Try"
-                          )?.weight}
+                    {keepScore ? lastScore?.weight : currentTry?.weight}
                 </Typography>
             </Box>
         </Box>

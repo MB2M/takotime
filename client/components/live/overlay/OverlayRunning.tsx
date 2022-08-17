@@ -113,21 +113,6 @@ const OverlayRunning = ({ version }: { version?: OverlayVersion }) => {
                             }
                         })}
                 </Stack>
-                {/* <Typography
-                    variant="h3"
-                    component="div"
-                    padding={2}
-                    sx={{
-                        background: "#000000f2",
-                        color: "white",
-                        textAlign: "center",
-                        borderTop: 0,
-                        radius: 0,
-                        borderRadius: "0px 0px 50px 50px",
-                    }}
-                >
-                    {chrono?.toString().slice(0, 5)}
-                </Typography> */}
                 <Stack
                     direction="column"
                     alignItems="flex-end"

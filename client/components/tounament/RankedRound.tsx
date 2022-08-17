@@ -58,17 +58,24 @@ const RankedRound = ({
 
         return { results: newResults };
     }, [heats]);
-    
+
     return (
         <TableContainer>
             <Table size="small" aria-label="a dense table">
                 <TableBody>
-                    {sortedHeat.results?.map((r, i) => (
+                    {sortedHeat.results?.map((r, i, array) => (
                         <TableRow
                             key={`${r._id}-${r.station}-${r.participant.name}`}
                             sx={{ backgroundColor: STATE_COLOR_GRID[r.state] }}
                         >
-                            <TableCell>{i + 1}</TableCell>
+                            <TableCell>
+                                {1 +
+                                    array.findIndex(
+                                        (result) =>
+                                            Number(result.result.replace(":", "")) ===
+                                            Number(r.result.replace(":", ""))
+                                    )}
+                            </TableCell>
                             <TableCell>{r.participant?.name}</TableCell>
                             <TableCell>{r.result}</TableCell>
                             <TableCell>{r.state}</TableCell>

@@ -31,9 +31,14 @@ const RankedHeat = ({ heat }: { heat: Heat }) => {
             <TableContainer>
                 <Table size="small" aria-label="a dense table">
                     <TableBody>
-                        {sortedHeat.results?.map((r, i) => (
+                        {sortedHeat.results?.map((r, i, array) => (
                             <TableRow key={r.station}>
-                                <TableCell>{i + 1}</TableCell>
+                                <TableCell>{1 +
+                                    array.findIndex(
+                                        (result) =>
+                                            Number(result.result.replace(":", "")) ===
+                                            Number(r.result.replace(":", ""))
+                                    )}</TableCell>
                                 <TableCell>{r.participant.name}</TableCell>
                                 <TableCell>{r.result}</TableCell>
                                 {r.points && <TableCell>{r.points}</TableCell>}

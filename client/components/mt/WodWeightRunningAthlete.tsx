@@ -1,30 +1,68 @@
-import { Box, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { Box, Stack, Typography } from "@mui/material";
+import { useEffect, useMemo, useState, useRef } from "react";
+import styles from "../../styles/WodWeightRunningAthlete.module.css";
 
 const colors = {
-    first: "linear-gradient(145deg, #FFD600 , #FFD600)",
-    second: "linear-gradient(145deg, #05c1de , #05c1de)",
-    third: "linear-gradient(145deg, #fd1085 , #fd1085)",
-    other: "linear-gradient(145deg,#5C5C5C, #5C5C5C)",
+    first: "#FFD600",
+    second: "#05c1de",
+    third: "#fd1085",
+    other: "#5C5C5C",
 };
 
 const WodWeightRunningAthlete = ({
     data,
     divNumber,
     wodWeightData,
+    highestBar,
 }: {
     data: any;
     divNumber: number;
     wodWeightData: any;
+    highestBar: number;
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
-    const [color, setColor] = useState("#000");
+    const [textColor, setTextColor] = useState("#000");
     const [bg, setBg] = useState("");
+    const [keepScore, setKeepScore] = useState<boolean>(false);
+
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
-    const bgSize = "100%";
-
     const [rank, setRank] = useState<number | undefined>();
+
+    const lastScore = useMemo(() => {
+        return wodWeightData?.scores
+            ?.sort(
+                (a: { _id: string }, b: { _id: string }) =>
+                    parseInt(b._id, 16) - parseInt(a._id, 16)
+            )
+            .find((score: { state: string }) =>
+                ["Success", "Fail"].includes(score.state)
+            );
+    }, [wodWeightData]);
+
+    const currentTry = useMemo(
+        () =>
+            wodWeightData?.scores
+                ?.sort(
+                    (a: { _id: string }, b: { _id: string }) =>
+                        parseInt(b._id, 16) - parseInt(a._id, 16)
+                )
+                .find((score: { state: string }) => score.state === "Try"),
+        [wodWeightData]
+    );
+
+    const currentTryRef = useRef<any>();
+
+    useEffect(() => {
+        if (!currentTry && currentTryRef.current?.state === "Try") {
+            setKeepScore(true);
+            const timer = setTimeout(() => {
+                setKeepScore(false);
+            }, 5000);
+        }
+        currentTryRef.current = currentTry;
+        // return clearTimeout(timer);
+    }, [currentTry]);
 
     useEffect(() => {
         // setBgSize(getBgSize());
@@ -34,20 +72,25 @@ const WodWeightRunningAthlete = ({
     }, [data]);
 
     useEffect(() => {
-        switch (data.laneNumber % 2) {
-            case 0:
-                // setBg(colors.second);
-                setBg("lightgray");
-                setColor("#000");
-                break;
+        switch (data.rank) {
             case 1:
-                setBg("gray");
+                // setBg(colors.second);
+                setBg(colors.first);
+                setTextColor("#000");
+                break;
+            case 2:
+                setBg(colors.second);
+                setTextColor("#fff");
+                break;
+            case 3:
+                setBg(colors.third);
+                setTextColor("#fff");
+                break;
                 // setBg(colors.third);
-                setColor("#fff");
                 break;
             default:
                 setBg(colors.other);
-                setColor("#fff");
+                setTextColor("#fff");
                 break;
         }
     }, [data]);
@@ -56,125 +99,167 @@ const WodWeightRunningAthlete = ({
         return <div></div>;
     }
     return (
-        <Box
-            zIndex={10}
+        <Stack
+            className={
+                highestBar === currentTry?.weight && currentTry?.weight > 0
+                    ? styles.glowing_card
+                    : ""
+            }
             sx={{
-                width: `${bgSize}px`,
-                height: 1080 / divNumber - 5,
-                // maxHeight: "100px",
-                background: bg,
-                color: color,
-                // borderTop: "0.5px solid",
-                // borderImage:
-                // "linear-gradient(90deg, #fff 0%, #fff 98.5%, #00000000 98.5%) 1",
-                // borderBottom: "0.5px solid",
+                display: "flex",
+                height: "100%",
+                width: "100%",
                 justifyContent: "flex-start",
                 position: "relative",
-                borderRadius: data.result
-                    ? "0px"
-                    : // : "100% 70px 70px 100% / 50% 50% 50% 50%",
-                      "5px",
-                // background: "linear-gradient(145deg, #dadd17, #ffff1b)",
-                // boxShadow: "5px 5px 7px #151515, -5px -5px 7px #333333",
-                transition: "width 0.7s",
+                zIndex: highestBar === currentTry?.weight ? 1 : 0,
+                borderRadius: "6px",
+                border:
+                    highestBar === currentTry?.weight ? "" : `2px solid ${bg}`,
             }}
+            // ml={3}
         >
             <Box
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"flex-start"}
+                height="50px"
+                width="100%"
                 sx={{
-                    display: "flex",
-                    height: "100%",
-                    width: "100%",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
+                    backgroundColor: bg,
+                    color: textColor,
+                    borderRadius: "6px",
                 }}
-                ml={3}
+                pl={1}
             >
-                <Box
-                    display={"flex"}
-                    justifyContent={"flex-start"}
-                    width="500px"
+                <Typography
+                    component="div"
+                    sx={{ fontFamily: "CantoraOne" }}
+                    fontSize={"2.7rem"}
                 >
-                    <Typography
-                        component="div"
-                        sx={{ fontFamily: "CantoraOne" }}
-                        fontSize={"2.7rem"}
-                    >
-                        {data.laneNumber}
-                    </Typography>
+                    {data.laneNumber}
+                </Typography>
 
-                    <Typography
-                        component="div"
-                        sx={{
-                            ml: 2,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            fontFamily: "CantoraOne",
-                            maxWidth: "500px",
-                        }}
-                        fontSize={"2.7rem"}
-                        noWrap
-                    >
-                        {data.participant.toUpperCase()}{" "}
-                    </Typography>
-                </Box>
-                <Box ml={4} display={"flex"} gap={2}>
-                    {wodWeightData?.scores
-                        .filter(
-                            (score: { state: string }) =>
-                                score.state !== "Cancel"
-                        )
-                        .map((score: any) => (
-                            <Typography
-                                component="div"
-                                sx={{
-                                    px: 2,
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    fontFamily: "CantoraOne",
-                                    fontSize: "3rem",
-                                    fontWeight: "800",
-                                    backgroundColor:
-                                        score.state === "Success"
-                                            ? "green"
-                                            : score.state === "Fail"
-                                            ? "red"
-                                            : "",
-                                    lineHeight: "1.1",
-                                    color: "white",
-                                }}
-                                noWrap
-                            >
-                                {score.weight}
-                            </Typography>
-                        ))}
-                </Box>
-                {data.result && data.rank && (
-                    <Typography
-                        position="absolute"
-                        right={50}
-                        variant="h3"
-                        component="div"
-                        sx={{
-                            ml: 2,
-                            mr: 5,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            fontFamily: "CantoraOne",
-                        }}
-                        noWrap
-                        width={70}
-                        height={70}
-                        borderRadius={"50%"}
-                        border={"6px solid"}
-                        textAlign={"center"}
-                        alignItems="center"
-                        paddingTop={0.2}
-                    >
-                        {data.rank[data.rank.length - 1]}
-                    </Typography>
-                )}
+                <Typography
+                    component="div"
+                    sx={{
+                        ml: 2,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        fontFamily: "CantoraOne",
+                    }}
+                    fontSize={"2.7rem"}
+                    noWrap
+                >
+                    {data.participant.toUpperCase()}
+                </Typography>
             </Box>
-        </Box>
+            <Stack direction={"row"} gap={2} height={"100%"}>
+                <Box
+                    width={"50%"}
+                    height={"100%"}
+                    sx={{
+                        backgroundColor: keepScore
+                            ? lastScore.state === "Success"
+                                ? "green"
+                                : "red"
+                            : "#00000000",
+                        color: "white",
+                    }}
+                    display={"flex"}
+                    justifyContent="center"
+                    alignItems={"center"}
+                >
+                    <Typography fontSize={80}>
+                        {keepScore ? lastScore?.weight : currentTry?.weight}
+                    </Typography>
+                </Box>
+                <Stack gap={2} width={"50%"}>
+                    <Box
+                        width={"100%"}
+                        height={"50%"}
+                        display={"flex"}
+                        color="white"
+                        justifyContent="center"
+                        alignItems={"center"}
+                    >
+                        <Typography fontSize={50}>{data.result}</Typography>
+                    </Box>
+                    <Box
+                        width={"100%"}
+                        height={"50%"}
+                        // sx={{ backgroundColor: "orange" }}
+                        display={"flex"}
+                        justifyContent="center"
+                        alignItems={"center"}
+                        sx={{
+                            backgroundColor:
+                                lastScore?.state === "Success"
+                                    ? "green"
+                                    : lastScore?.state === "Fail"
+                                    ? "red"
+                                    : "ffffffff",
+                        }}
+                    >
+                        <Typography fontSize={50} noWrap>
+                            {lastScore?.weight}
+                        </Typography>
+                    </Box>
+                </Stack>
+                {/* {wodWeightData?.scores
+                    .filter(
+                        (score: { state: string }) => score.state !== "Cancel"
+                    )
+                    .map((score: any) => (
+                        <Typography
+                            component="div"
+                            sx={{
+                                px: 2,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                fontFamily: "CantoraOne",
+                                fontSize: "3rem",
+                                fontWeight: "800",
+                                backgroundColor:
+                                    score.state === "Success"
+                                        ? "green"
+                                        : score.state === "Fail"
+                                        ? "red"
+                                        : "",
+                                lineHeight: "1.1",
+                                color: "white",
+                            }}
+                            noWrap
+                        >
+                            {score.weight}
+                        </Typography>
+                    ))} */}
+            </Stack>
+            {/* {data.result && data.rank && (
+                <Typography
+                    position="absolute"
+                    right={50}
+                    variant="h3"
+                    component="div"
+                    sx={{
+                        ml: 2,
+                        mr: 5,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        fontFamily: "CantoraOne",
+                    }}
+                    noWrap
+                    width={70}
+                    height={70}
+                    borderRadius={"50%"}
+                    border={"6px solid"}
+                    textAlign={"center"}
+                    alignItems="center"
+                    paddingTop={0.2}
+                >
+                    {data.rank[data.rank.length - 1]}
+                </Typography>
+            )} */}
+        </Stack>
     );
 };
 

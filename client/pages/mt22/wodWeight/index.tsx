@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useChrono from "../../../hooks/useChrono";
@@ -65,6 +65,23 @@ function WodWeightRunning() {
         });
     }, [stationsUpgraded, wodWeightInfo, allScores]);
 
+    const allTry = useMemo(() => {
+        return wodWeightInfo
+            .map(
+                (station) =>
+                    station.scores
+                        ?.sort(
+                            (a: { weight: number }, b: { weight: number }) =>
+                                b.weight - a.weight
+                        )
+                        .find(
+                            (score: { state: string }) =>
+                                score.state === "Try"
+                        )?.weight
+            )
+            .sort((a, b) => (b || 0) - (a || 0));
+    }, [wodWeightInfo]);
+
     const restrieveWodWeightInfo = async () => {
         if (!globals?.externalHeatId) return;
         try {
@@ -105,33 +122,37 @@ function WodWeightRunning() {
                         backgroundColor: "#242424",
                     }}
                 >
-                    <Box
+                    <Grid
+                        container
                         className="displayZone"
-                        display={"flex"}
                         overflow={"hidden"}
                         gap={0}
+                        spacing={0}
+                        justifyContent="space-evenly"
                         sx={{
-                            flexDirection: "column",
-                            justifyContent: "space-evenly",
                             height: "100%",
                         }}
                     >
                         {fullStations
                             ?.sort((a, b) => a.laneNumber - b.laneNumber)
                             ?.map((s) => (
-                                <WodWeightRunningAthlete
-                                    key={s.laneNumber}
-                                    data={s}
-                                    wodWeightData={wodWeightInfo?.find(
-                                        (station) =>
-                                            station.laneNumber === s.laneNumber
-                                    )}
-                                    divNumber={stationsUpgraded.length}
-                                />
+                                <Grid item xs={3} >
+                                    <WodWeightRunningAthlete
+                                        key={s.laneNumber}
+                                        data={s}
+                                        wodWeightData={wodWeightInfo?.find(
+                                            (station) =>
+                                                station.laneNumber ===
+                                                s.laneNumber
+                                        )}
+                                        divNumber={stationsUpgraded.length}
+                                        highestBar={allTry[0]}
+                                    />
+                                </Grid>
                             ))}
-                    </Box>
+                    </Grid>
 
-                    <Box
+                    {/* <Box
                         zIndex={1}
                         position="absolute"
                         top={"50%"}
@@ -149,7 +170,7 @@ function WodWeightRunning() {
                                 {chrono?.toString().slice(1) || ""}
                             </Typography>
                         )}
-                    </Box>
+                    </Box> */}
                 </Box>
             );
     }

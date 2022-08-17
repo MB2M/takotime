@@ -31,7 +31,15 @@ const RankedTournament = ({ tournament }: { tournament: Tournament }) => {
             for (let i = 0; i <= r.ranking.end - r.ranking.start; i++) {
                 if (results[results.length - i - 1].state === "E") {
                     ranking[results[results.length - i - 1].participant.name] =
-                        r.ranking.end - i;
+                        r.ranking.end -
+                        (results.length - 1 - results.findIndex((result) => {
+                            console.log(result.result)
+                            console.log(results[results.length - i - 1].result)
+                            return (
+                                result.result ===
+                                results[results.length - i - 1].result
+                            );
+                        }))
                 }
             }
         });

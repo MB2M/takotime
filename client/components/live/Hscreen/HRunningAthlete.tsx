@@ -31,21 +31,17 @@ const colors = {
 const useHRunningBackgroundSize = (
     data: WidescreenStation,
     workout: Workout | undefined,
-    step: number = 0,
-    divider: number = 1
 ) => {
     const totalReps = useMemo(() => {
         return (
             (workout?.blocks[workout.blocks.length - 1]?.measurements
-                ?.repsTot || 0) -
-            step +
-            step / divider
+                ?.repsTot || 0)
         );
     }, [workout]);
 
     const currentReps = useMemo(() => {
         const reps = data.repsPerBlock?.reduce((p, c) => p + c, 0);
-        return reps <= step ? reps / divider : step / divider + (reps % step);
+        return reps;
     }, [data]);
 
     if (data.result) return FULL_WIDTH;
@@ -155,12 +151,13 @@ const HorizontalRunningAthlete = ({
                 }}
                 ml={3}
             >
-                <Box display={"flex"} justifyContent={"flex-end"}>
+                <Box display={"flex"} justifyContent={"space-between"} alignItems="center">
                     <Typography
                         variant="h3"
                         component="div"
                         sx={{ fontFamily: "CantoraOne" }}
                         fontSize={"3.5rem"}
+                        mr="auto"
                     >
                         {data.laneNumber}
                     </Typography>
@@ -175,7 +172,8 @@ const HorizontalRunningAthlete = ({
                             fontFamily: "CantoraOne",
                         }}
                         fontSize={"3.5rem"}
-                        noWrap
+                        // textAlign="end"
+                        // noWrap
                     >
                         {data.participant.toUpperCase()}{" "}
                     </Typography>

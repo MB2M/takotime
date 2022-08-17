@@ -58,7 +58,9 @@ function HorizontalRunningNoData() {
         >
             <Header
                 logo={mtLogo}
-                textTop={CCData?.epHeat?.[0].heatName}
+                imageWidth={"300px"}
+                textTop={[...new Set(stationsUpgraded?.map(station => station.category))].join(" / ")}
+                textTopFontSize={"6rem"}
                 chrono={chrono?.toString().slice(0, 5) || ""}
             />
             {(toggle === "participants" && (

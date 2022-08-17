@@ -49,7 +49,7 @@ const WidescreenHorizontal = ({
                     <HorizontalRunning  />
                 )
             ) : (
-                <HeatResult />
+                <HorizontalRunningNoData />
             );
         default:
             return <HorizontalRunning />;

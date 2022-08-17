@@ -10,7 +10,7 @@ const HeatResult = () => {
     const { stations, ranks } = useLiveDataContext();
 
     const stationsUpgraded = useStationPayload(stations, ranks);
-    const CCData = useCompetitionCornerContext()
+    const CCData = useCompetitionCornerContext();
 
     return (
         <Box
@@ -27,7 +27,13 @@ const HeatResult = () => {
         >
             <Header
                 logo={mtLogo}
-                textTop={CCData?.epHeat?.[0].heatName}
+                textTop={[
+                    ...new Set(
+                        stationsUpgraded?.map((station) => station.category)
+                    ),
+                ].join(" / ")}
+                textTopFontSize={"7rem"}
+                // textTop={CCData?.epHeat?.[0].heatName}
             />
             <StationsUpgradedTableDisplay sortBy={"rank"} />
         </Box>

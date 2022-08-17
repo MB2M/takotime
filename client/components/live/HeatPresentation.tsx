@@ -26,7 +26,9 @@ const HeatPresentation = () => {
         >
             <Header
                 logo={mtLogo}
-                textTop={stationsUpgraded?.[0]?.category || ""}
+                textTop={[...new Set(stationsUpgraded?.map(station => station.category))].join(" / ")}
+                textTopFontSize={"7rem"}
+                // textTop={stationsUpgraded?.[0]?.category || ""}
             />
             <StationsUpgradedTableDisplay sortBy={"laneNumber"} />
         </Box>

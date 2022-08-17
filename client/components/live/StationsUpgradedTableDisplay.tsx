@@ -18,7 +18,10 @@ const StationsUpgradedTableDisplay = ({
             {stationsUpgraded
                 .sort((a, b) => {
                     return sortBy === "rank"
-                        ? a.rank[a.rank.length - 1] - b.rank[b.rank.length - 1]
+                        ? a.category === b.category
+                            ? a.rank[a.rank.length - 1] -
+                              b.rank[b.rank.length - 1]
+                            : -1
                         : a.laneNumber - b.laneNumber;
                 })
                 .reduce(
@@ -70,7 +73,9 @@ const StationsUpgradedTableDisplay = ({
                                                 variant="h3"
                                                 fontFamily={"CantoraOne"}
                                             >
-                                                {sortBy === "laneNumber" ?s.laneNumber : s.rank[s.rank.length - 1]}
+                                                {sortBy === "laneNumber"
+                                                    ? s.laneNumber
+                                                    : s.rank[s.rank.length - 1]}
                                             </Typography>
                                             <Typography
                                                 variant="h3"

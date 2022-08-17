@@ -48,9 +48,9 @@ const useHRunningBackgroundSize = (
         return reps <= step ? reps / divider : step / divider + (reps % step);
     }, [data]);
 
-    if (!currentReps || !totalReps) return MIN_SIZE;
-
     if (data.result) return FULL_WIDTH;
+
+    if (!currentReps || !totalReps) return MIN_SIZE;
 
     return MIN_SIZE + ((FULL_WIDTH - MIN_SIZE) * currentReps) / totalReps;
 };
@@ -78,7 +78,7 @@ const HorizontalRunningAthlete = ({
     const [borders, setBorders] = useState("");
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
-    const bgSize = useHRunningBackgroundSize(data, workout, 25, 5);
+    const bgSize = useHRunningBackgroundSize(data, workout, 0, 1);
 
     const colorOdd = "#747474";
     const colorEven = "#c0c0c0";

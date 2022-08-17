@@ -11,7 +11,7 @@ const loaderTournament = async (req: Request, res: Response) => {
     // const liveWodManager = global.liveWodManager;
 
     try {
-        loadFromTournament(body.stations, body.caategory);
+        loadFromTournament(body.stations, body.category);
         res.status(200).json({ message: "loaded" });
     } catch (err) {
         res.status(400).send(`An error occured:${err}`);

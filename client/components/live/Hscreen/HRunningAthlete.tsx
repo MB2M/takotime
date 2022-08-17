@@ -78,7 +78,7 @@ const HorizontalRunningAthlete = ({
     const [borders, setBorders] = useState("");
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
-    const bgSize = useHRunningBackgroundSize(data, workout, workout., 1);
+    const bgSize = useHRunningBackgroundSize(data, workout, 0, 1);
 
     const colorOdd = "#747474";
     const colorEven = "#c0c0c0";

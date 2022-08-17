@@ -17,15 +17,6 @@ const loadFromTournament = async (
                         externalId: r.participant.customId,
                     };
                     await liveApp.manager.stationUpdate(data, "create");
-                    // const resp = await StationStatics.findOneAndUpdate(
-                    //     { laneNumber: s.station },
-                    //     {
-                    //         participant: s.participantName,
-                    //         category: s.division,
-                    //         externalId: s.participantId,
-                    //     },
-                    //     { upsert: true, runValidators: true }
-                    // ).exec();
                 } catch (err) {
                     console.log(err);
                 }

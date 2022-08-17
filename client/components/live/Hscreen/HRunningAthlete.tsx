@@ -30,12 +30,12 @@ const colors = {
 
 const useHRunningBackgroundSize = (
     data: WidescreenStation,
-    workout: Workout | undefined,
+    workout: Workout | undefined
 ) => {
     const totalReps = useMemo(() => {
         return (
-            (workout?.blocks[workout.blocks.length - 1]?.measurements
-                ?.repsTot || 0)
+            workout?.blocks[workout.blocks.length - 1]?.measurements?.repsTot ||
+            0
         );
     }, [workout]);
 
@@ -74,7 +74,7 @@ const HorizontalRunningAthlete = ({
     const [borders, setBorders] = useState("");
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
-    const bgSize = useHRunningBackgroundSize(data, workout, 0, 1);
+    const bgSize = useHRunningBackgroundSize(data, workout);
 
     const colorOdd = "#747474";
     const colorEven = "#c0c0c0";
@@ -151,7 +151,11 @@ const HorizontalRunningAthlete = ({
                 }}
                 ml={3}
             >
-                <Box display={"flex"} justifyContent={"space-between"} alignItems="center">
+                <Box
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    alignItems="center"
+                >
                     <Typography
                         variant="h3"
                         component="div"

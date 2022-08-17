@@ -33,8 +33,6 @@ const RankedTournament = ({ tournament }: { tournament: Tournament }) => {
                     ranking[results[results.length - i - 1].participant.name] =
                         r.ranking.end -
                         (results.length - 1 - results.findIndex((result) => {
-                            console.log(result.result)
-                            console.log(results[results.length - i - 1].result)
                             return (
                                 result.result ===
                                 results[results.length - i - 1].result

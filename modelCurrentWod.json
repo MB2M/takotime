@@ -1,0 +1,70 @@
+{
+    "workouts": [
+        {
+            "categories": [
+                "master 55+"
+            ],
+            "scoring": [
+                {
+                    "name": "partA",
+                    "method": "forTime",
+                    "type": "normal",
+                    "sources": [
+                        0
+                    ]
+                }
+            ],
+            "blocks": [
+                {
+                    "blockName": "A",
+                    "rounds": 5,
+                    "movements": [
+                        {
+                            "name": "Muscle up bar @3",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Muscle up bar @2",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Muscle up bar Relay",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Squat Clean @3",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Squat Clean @2",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        },
+                        {
+                            "name": "Squat Clean Relay",
+                            "reps": 5,
+                            "varEachRounds": -1
+                        }
+                    ],
+                    "measurements": {
+                        "id": 0,
+                        "type": "forTime",
+                        "blocksId": [
+                            0
+                        ],
+                        "from": 0,
+                        "at": 20,
+                        "repsFrom": 0,
+                        "repsTot": 225,
+                        "device": "buzzer",
+                        "save": true
+                    }
+                }
+            ]
+        }
+    ]
+}

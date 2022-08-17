@@ -1,0 +1,263 @@
+
+
+.hrs{
+    position: absolute;
+    top:0px;
+    left:0px;
+    height: 100%;
+    width: 100%;
+}
+
+hr {
+    height: 4px;
+    margin: 0.00rem 0rem;
+    opacity: 0.35;
+}
+
+.progressbar{
+    background-image:linear-gradient(-45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-size: 1rem 1rem;
+    background-color: brown;
+    border-radius: 50px 50px 10px 10px;
+}
+
+/* .progressbar:after{
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-bottom: 13px solid #eee;
+      border-left: 55px solid transparent;
+      border-right: 55px solid transparent;
+} */
+
+.base {
+    background-color:#fbb355b4;
+    /* border: 1px solid gold; */
+    border-radius: 50px 50px 3px 3px;
+    position: absolute;
+    width: 90%;
+    height: 8px;
+    z-index: 2;
+    box-shadow: 5px 8px 5px #191919;
+    transition: bottom .8s;
+}
+
+.base:before {
+    position: relative;
+    content: "";
+    border-radius: 0px;
+    /* border-radius: 0px 0px 50px 50px; */
+    top: 6px;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.755), transparent);
+    height: 120px;
+    display: block;
+    border-left: inherit
+}
+
+.base-wod2{
+    background-color:#fbb355b4;
+    /* border: 1px solid gold; */
+    border-radius: 3px;
+    position: absolute;
+    width: 90%;
+    height: 8px;
+    z-index: 2;
+    box-shadow: 5px 8px 5px #191919;
+    transition: bottom .8s;
+}
+
+.base-wod2:before {
+    position: relative;
+    content: "";
+    border-radius: 0px;
+    /* border-radius: 0px 0px 50px 50px; */
+    top: 6px;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.755), transparent);
+    height: 40px;
+    display: block;
+    border-left: inherit
+}
+
+.roundbox{
+    background-color:#fbb355b4;
+    /* border: 1px solid gold; */
+    border-radius: 3px;
+    position: absolute;
+    width: 90%;
+    height: 105px;
+    z-index: 2;
+    /* box-shadow: 5px 8px 5px #191919; */
+}
+
+.base-content-round{
+    position: absolute;
+    transform: translate(-50%, -120%);
+    top: 50%;
+    left: 50%;
+}
+
+.base-content-bottom {
+    position: absolute;
+    transform: translate(-50%, 100%);
+    top: 50%;
+    left: 50%;
+    /* width: 100%;
+    height: 100%; */
+}
+
+.base-content-top {
+    font-size: 2rem;
+    position: absolute;
+    transform: translate(-50%, -5%);
+    display: inline;
+    top: 50%;
+    left: 50%;
+}
+
+.base-content-ergo{
+    font-size: 2.8rem;
+    position: absolute;
+    display: inline;
+    top: 50%;
+    left: 50%;
+    transform: rotate(-75deg) translate(50%, -180%);
+    background-color: rgba(0, 0, 255, 0.548);
+    color:#c0c0c0;
+    height: 650%;
+    width: 160px;
+    z-index: -100000;
+    border-radius: 20px;
+}
+/* .base:before {
+    border-bottom: 35px solid red;
+    border-left: 46px solid transparent;
+    border-right: 46px solid transparent;
+    content: "";
+    height: 0;
+    left: 0;
+    position: absolute;
+    top: -35px;
+    width: 0;
+  } */
+
+.livescore{
+    font-family: strasua;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+}
+
+.live-result{
+    position: absolute;
+    font-size: 4rem;
+    font-family: strasua;
+    top: 50%; 
+    left: 50%;
+    /* width: 100%;
+    height: 100%; */
+    transform: translate(-50%, -50%) rotate(-90deg);
+    /* background-color: cadetblue; */
+    /* transform-origin: 0 0; */
+    /* transform: rotate(-90deg); */
+    color:rgb(0, 0, 0);
+    letter-spacing: 0.8rem;
+    z-index: 5;
+}
+
+.livelane{
+    font-family: strasua;
+    position:relative;
+    /* bottom: 0px; */
+    /* left: 50%; */
+    /* transform: translate(-50%, -0%); */
+    width: 100%;
+    vertical-align: auto;
+    /* height: 65px; */
+    /* color: black;*/
+    color: black;
+    background-color: #fbb255;
+    font-size: 2.5rem;
+    border-radius: 25px 25px 0px 0px;
+    border: 1px solid grey;
+    z-index: 2;
+}
+
+.liveathletezone{
+    font-family: strasua;
+    position: relative;
+    color:rgb(255, 255, 255);
+    /* background-image: radial-gradient(transparent, #fbb255a5); */
+    /* background-image: linear-gradient(to right, #fbb3551e, transparent 10% 90%, #fbb3551e ) */
+    /* border-left: 1px solid rgb(40, 40, 40);
+    border-right: 1px solid rgb(40, 40, 40); */
+}
+
+.live-mvt-name{
+    font-family: strasua;
+    font-size: 3.0rem;
+    position: absolute;
+    /* left: 0px; */
+    width: 800px;
+    color:rgba(169, 169, 169, 0.144);
+    transform: translate(0%, -50%);
+    letter-spacing: 0.12rem;
+}
+
+.live-mvt-name.left{
+    left:4px;
+    text-align: start;
+}
+
+.live-mvt-name.right{
+    right:4px;
+    text-align: end;
+}
+
+.live-ready{
+    position: absolute;
+    background: linear-gradient(110deg, transparent 80%, white 70%);
+    /* background: linear-gradient(110deg, transparent 70%, white); */
+    height: 100%;
+    width: 100%;
+    top:0;
+    left:-100%;
+    transition: left 1s ease-in-out;
+    font-size: 2.5rem;
+}
+
+.liveresult{
+    position:relative;
+    overflow: hidden;
+    height:75px;
+}
+
+.live-standing-lane{
+    width: 40px;
+    text-align: end;
+}
+
+.live-standing-name{
+    width: 600px;
+}
+
+.standing-division{
+    transform: translate(-50%) rotate(-90deg);
+}
+
+.standing-col-division{
+    width: 80px;
+}
+
+.standing-col-start{
+    width: 900px;
+}
+
+.standing-col-end{
+    width: 900px;
+}

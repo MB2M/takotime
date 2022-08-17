@@ -1,0 +1,26 @@
+.athletedata {
+    background-color: #000000da;
+    color: #fd1085;
+    font-family: strasua;
+    height: 200px;
+    bottom: 0;
+    border-top: solid 1px;
+    /* border-bottom: solid 4px; */
+}
+
+.athletename {
+    position: relative;
+    font-size: 6.2rem;
+}
+
+.athletescore {
+    top: 100px;
+    height: 500px;
+}
+
+.gradiant {
+    background: -webkit-linear-gradient(45deg, #fd1085 25%, #05c1de 75%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

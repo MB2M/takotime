@@ -1,0 +1,811 @@
+{
+    "name": "Elite Women 1",
+    "rounds": [
+        {
+            "customId": "R1",
+            "name": "Qualifications 1",
+            "finished": false,
+            "topQualifPerHeatNumber": 4,
+            "draftQualifiedOverallNumber": 0,
+            "eliminatedNumber": 0,
+            "stationNumber": 8,
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "Heat 1",
+                    "results": []
+                },
+                {
+                    "customId": "H2",
+                    "name": "Heat 2",
+                    "results": []
+                },
+                {
+                    "customId": "H3",
+                    "name": "Heat 3",
+                    "results": []
+                },
+                {
+                    "customId": "H4",
+                    "name": "Heat 4",
+                    "results": []
+                }
+            ]
+        },
+        {
+            "customId": "R2",
+            "name": "Qualifications 2",
+            "finished": false,
+            "topQualifPerHeatNumber": 2,
+            "draftQualifiedOverallNumber": 2,
+            "eliminatedNumber": 0,
+            "stationNumber": 8,
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "Heat 1",
+                    "results": [
+                        {
+                            "athleteSources": ["R1_H2_3"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H3_4"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H4_5"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H1_5"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H2_6"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H3_7"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H4_8"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H1_8"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                },
+                {
+                    "customId": "H2",
+                    "name": "Heat 2",
+                    "results": [
+                        {
+                            "athleteSources": ["R1_H3_3"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H4_4"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H1_4"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H2_5"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H3_6"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H4_7"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H1_7"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H2_8"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                },
+                {
+                    "customId": "H3",
+                    "name": "Heat 3",
+                    "results": [
+                        {
+                            "athleteSources": ["R1_H4_3"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H1_3"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H2_4"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H3_5"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H4_6"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H1_6"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H2_7"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H3_8"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "customId": "R3",
+            "name": "B - SEMI FINALE",
+            "finished": false,
+            "topQualifPerHeatNumber": 4,
+            "draftQualifiedOverallNumber": 0,
+            "eliminatedNumber": 0,
+            "stationNumber": 8,
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "Heat 1",
+                    "results": [
+                        {
+                            "athleteSources": ["R2_H1_3", "R2_H2_3", "R2_H3_3"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H1_4", "R2_H2_4"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H2_5"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H3_6"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H1_6"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H2_7"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H3_8"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H1_8"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                },
+                {
+                    "customId": "H2",
+                    "name": "Heat 2",
+                    "results": [
+                        {
+                            "athleteSources": ["R2_H2_3", "R2_H3_3", "R2_H3_4"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H2_4", "R2_H3_4"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H3_5"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H1_5"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H2_6"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H3_7"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H1_7"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H2_8"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "customId": "R4",
+            "name": "SEMI FINALE",
+            "finished": false,
+            "topQualifPerHeatNumber": 4,
+            "draftQualifiedOverallNumber": 0,
+            "eliminatedNumber": 0,
+            "stationNumber": 8,
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "Heat 1",
+                    "results": [
+                        {
+                            "athleteSources": ["R1_H1_1"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H3_1"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H2_2"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H4_2"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H1_1"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H3_1"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H2_2"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_DQ_1"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                },
+                {
+                    "customId": "H2",
+                    "name": "Heat 2",
+                    "results": [
+                        {
+                            "athleteSources": ["R1_H2_1"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H4_1"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H3_2"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R1_H1_2"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H2_1"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H1_2"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_H3_2"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R2_DQ_2"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "customId": "R5",
+            "name": "B - SMALL FINALE",
+            "finished": false,
+            "topQualifPerHeatNumber": 0,
+            "draftQualifiedOverallNumber": 0,
+            "eliminatedNumber": 8,
+            "stationNumber": 8,
+            "ranking": {
+                "start": 25,
+                "end": 32
+            },
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "B - Small Finale",
+                    "results": [
+                        {
+                            "athleteSources": ["R3_H1_5"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_5"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H1_6"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_6"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H1_7"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_7"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H1_8"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_8"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "customId": "R6",
+            "name": "B - FINALE",
+            "finished": false,
+            "topQualifPerHeatNumber": 0,
+            "draftQualifiedOverallNumber": 0,
+            "eliminatedNumber": 8,
+            "stationNumber": 8,
+            "ranking": {
+                "start": 17,
+                "end": 24
+            },
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "B - Finale",
+                    "results": [
+                        {
+                            "athleteSources": ["R3_H1_1"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_1"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H1_2"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_2"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H1_3"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_3"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H1_4"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R3_H2_4"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "customId": "R7",
+            "name": "SMALL FINALE",
+            "finished": false,
+            "topQualifPerHeatNumber": 0,
+            "draftQualifiedOverallNumber": 0,
+            "eliminatedNumber": 8,
+            "stationNumber": 8,
+            "ranking": {
+                "start": 9,
+                "end": 16
+            },
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "Small Finale",
+                    "results": [
+                        {
+                            "athleteSources": ["R4_H1_5"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_5"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H1_6"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_6"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H1_7"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_7"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H1_8"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_8"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "customId": "R8",
+            "name": "FINALE",
+            "finished": false,
+            "topQualifPerHeatNumber": 0,
+            "draftQualifiedOverallNumber": 0,
+            "eliminatedNumber": 8,
+            "stationNumber": 8,
+            "ranking": {
+                "start": 1,
+                "end": 8
+            },
+            "heats": [
+                {
+                    "customId": "H1",
+                    "name": "Finale",
+                    "results": [
+                        {
+                            "athleteSources": ["R4_H1_1"],
+                            "station": 1,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_1"],
+                            "station": 2,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H1_2"],
+                            "station": 3,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_2"],
+                            "station": 4,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H1_3"],
+                            "station": 5,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_3"],
+                            "station": 6,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H1_4"],
+                            "station": 7,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        },
+                        {
+                            "athleteSources": ["R4_H2_4"],
+                            "station": 8,
+                            "result": "",
+                            "state": "R",
+                            "participant": { "name": "TBD" }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

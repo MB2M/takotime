@@ -88,7 +88,7 @@ function HorizontalRunning() {
                                         <Typography
                                             key={index1 + "-" + index2}
                                             color={"gray"}
-                                            fontSize={"5.5rem"}
+                                            fontSize={"4.5rem"}
                                             fontFamily={"CantoraOne"}
                                         >
                                             {mvt}

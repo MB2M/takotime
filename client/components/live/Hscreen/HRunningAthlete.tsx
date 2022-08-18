@@ -160,7 +160,7 @@ const HorizontalRunningAthlete = ({
                         textOverflow: "ellipsis",
                         fontFamily: "CantoraOne",
                     }}
-                    width={600}
+                    width={data.result ? 800 : 600}
                     // textAlign="end"
                 >
                     <Typography

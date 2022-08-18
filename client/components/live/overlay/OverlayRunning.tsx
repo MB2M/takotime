@@ -35,7 +35,7 @@ const OverlayRunning = ({ version }: { version?: OverlayVersion }) => {
                 height: 1080,
                 flexDirection: "column",
                 justifyContent: "space-evenly",
-                
+
                 // border: "3px solid",
                 // borderColor: "red",
             }}
@@ -44,7 +44,12 @@ const OverlayRunning = ({ version }: { version?: OverlayVersion }) => {
                 // logo={mtLogo}
                 chrono={chrono?.toString().slice(0, 5) || ""}
                 chronoFontSize="4rem"
-                textTop={CCData?.epHeat?.[0].heatName}
+                textTop={[
+                    ...new Set(
+                        stationsUpgraded?.map((station) => station.category)
+                    ),
+                ].join(" / ")}
+                // textTop={CCData?.epHeat?.[0].heatName}
                 textTopFontSize="4rem"
                 imageWidth={"110px"}
                 backgroundColor="black"

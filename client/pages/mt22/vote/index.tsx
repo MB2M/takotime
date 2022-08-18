@@ -29,8 +29,8 @@ const iconSelect = {
 };
 
 const color = {
-    carre: "#c6316e",
-    rond: "#05c1de",
+    rond: "#c6316e",
+    carre: "#05c1de",
 };
 
 function Vote() {
@@ -60,7 +60,7 @@ function Vote() {
         }
     };
     useInterval(restrieveStationInfo, 1000);
-    console.log(votes);
+    
     return (
         <Grid container color="white" sx={{ width: 1920, height: 1080 }}>
             {votes.map((vote) => {

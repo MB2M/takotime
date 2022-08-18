@@ -36,8 +36,8 @@ const iconSelect = {
 };
 
 const color = {
-    carre: "#c6316e",
-    rond: "#05c1de",
+    rond: "#c6316e",
+    carre: "#05c1de",
 };
 
 const LaneRemote = () => {

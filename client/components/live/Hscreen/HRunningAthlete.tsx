@@ -155,13 +155,19 @@ const HorizontalRunningAthlete = ({
                     display={"flex"}
                     justifyContent={"space-between"}
                     alignItems="center"
+                    sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        fontFamily: "CantoraOne",
+                    }}
+                    width={600}
+                    // textAlign="end"
                 >
                     <Typography
                         variant="h3"
                         component="div"
                         sx={{ fontFamily: "CantoraOne" }}
                         fontSize={"3.5rem"}
-                        mr="auto"
                     >
                         {data.laneNumber}
                     </Typography>
@@ -176,8 +182,8 @@ const HorizontalRunningAthlete = ({
                             fontFamily: "CantoraOne",
                         }}
                         fontSize={"3.5rem"}
-                        // textAlign="end"
-                        // noWrap
+                        textAlign="end"
+                        
                     >
                         {data.participant.toUpperCase()}{" "}
                     </Typography>

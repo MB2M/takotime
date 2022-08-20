@@ -21,7 +21,7 @@ function HorizontalRunningNoData() {
     useEffect(() => {
         const intervalId = setInterval(() => {
             setToggle((toggle) => (toggle === "wod" ? "participants" : "wod"));
-        }, 40000);
+        }, 30000);
 
         return () => clearInterval(intervalId);
     }, []);
@@ -59,7 +59,11 @@ function HorizontalRunningNoData() {
             <Header
                 logo={mtLogo}
                 imageWidth={"300px"}
-                textTop={[...new Set(stationsUpgraded?.map(station => station.category))].join(" / ")}
+                textTop={[
+                    ...new Set(
+                        stationsUpgraded?.map((station) => station.category)
+                    ),
+                ].join(" / ")}
                 textTopFontSize={"6rem"}
                 chrono={chrono?.toString().slice(0, 5) || ""}
             />
@@ -68,6 +72,13 @@ function HorizontalRunningNoData() {
             )) ||
                 (toggle === "wod" && (
                     <Box textAlign="center">
+                        <Typography
+                            color={"white"}
+                            fontSize={"4.5rem"}
+                            fontFamily={"CantoraOne"}
+                        >
+                            {loadedWorkouts?.[0]?.scoring?.[0]?.method.toUpperCase()} {loadedWorkouts?.[0]?.blocks?.[0]?.measurements?.at}':
+                        </Typography>
                         {loadedWorkouts?.[0]?.blocks.flatMap(
                             (block, index1) => {
                                 let mvts: JSX.Element[][] = [];
@@ -89,7 +100,7 @@ function HorizontalRunningNoData() {
                                                             index2
                                                         }
                                                         color={"gray"}
-                                                        fontSize={"5.5rem"}
+                                                        fontSize={"3.7rem"}
                                                         fontFamily={
                                                             "CantoraOne"
                                                         }

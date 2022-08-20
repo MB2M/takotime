@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
@@ -42,22 +42,62 @@ function HorizontalRunning() {
                 sx={{
                     flexDirection: "column",
                     justifyContent: "space-evenly",
-                    height:"100%"
+                    height: "100%",
                 }}
             >
                 {stationsUpgraded
                     ?.sort((a, b) => a.laneNumber - b.laneNumber)
-                    ?.map((s) => (
-                        <HRunningAthlete
-                            key={s.laneNumber}
-                            data={s}
-                            workout={getWorkout(loadedWorkouts, s)}
-                            divNumber={stationsUpgraded.length}
-                        />
-                    ))}
+                    ?.map((s, i) => {
+                        return (
+                            <>
+                                <HRunningAthlete
+                                    key={s.laneNumber}
+                                    data={s}
+                                    workout={getWorkout(loadedWorkouts, s)}
+                                    divNumber={stationsUpgraded.length}
+                                    rankByFront={
+                                        1 +
+                                        stationsUpgraded
+                                            .filter(
+                                                (station) =>
+                                                    station.category ===
+                                                    s.category
+                                            )
+                                            .map(
+                                                (station) =>
+                                                    station.repsPerBlock?.[
+                                                        station.repsPerBlock
+                                                            ?.length - 1
+                                                    ]
+                                            )
+                                            .sort((a, b) => b - a)
+                                            .findIndex(
+                                                (reps) =>
+                                                    reps ===
+                                                    s.repsPerBlock?.[
+                                                        s.repsPerBlock.length -
+                                                            1
+                                                    ]
+                                            )
+                                    }
+                                />
+                                <div>
+                                    {i < stationsUpgraded.length - 1 &&
+                                        stationsUpgraded[i + 1].category !==
+                                            s.category && (
+                                            <Divider
+                                                sx={{
+                                                    backgroundColor: "white",
+                                                }}
+                                            ></Divider>
+                                        )}
+                                </div>
+                            </>
+                        );
+                    })}
             </Box>
 
-            <Box
+            {/* <Box
                 zIndex={1}
                 position="absolute"
                 top={"50%"}
@@ -100,7 +140,7 @@ function HorizontalRunning() {
                         return mvts;
                     })
                 )}
-            </Box>
+            </Box> */}
         </Box>
     );
 }

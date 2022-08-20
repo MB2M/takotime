@@ -16,8 +16,8 @@ const FULL_WIDTH = 1920;
 
 const colors = {
     first: "linear-gradient(145deg, #FFD600 , #FFD600)",
-    second: "linear-gradient(145deg, #05c1de , #05c1de)",
-    third: "linear-gradient(145deg, #fd1085 , #fd1085)",
+    second: "linear-gradient(145deg, #5C5C5C , #5C5C5C)",
+    third: "linear-gradient(145deg, #5C5C5C , #5C5C5C)",
     other: "linear-gradient(145deg,#5C5C5C, #5C5C5C)",
 };
 
@@ -53,8 +53,8 @@ const useHRunningBackgroundSize = (
 
 const chevColor = {
     first: "#EECD22",
-    second: "#5F9EFF",
-    third: "#FF5454",
+    second: "#989797",
+    third: "#989797",
     other: "#989797",
 };
 
@@ -62,10 +62,12 @@ const HorizontalRunningAthlete = ({
     data,
     workout,
     divNumber,
+    rankByFront,
 }: {
     data: WidescreenStation;
     workout: Workout | undefined;
     divNumber: number;
+    rankByFront: number;
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [color, setColor] = useState("#000");
@@ -89,7 +91,7 @@ const HorizontalRunningAthlete = ({
     }, [data]);
 
     useEffect(() => {
-        switch (rank) {
+        switch (rankByFront) {
             case 1:
                 setBg(colors.first);
                 setColor("#000000");
@@ -111,7 +113,7 @@ const HorizontalRunningAthlete = ({
                 setChevronColor(chevColor.other);
                 break;
         }
-    }, [rank]);
+    }, [rankByFront]);
 
     if (!data) {
         return <div></div>;
@@ -183,7 +185,6 @@ const HorizontalRunningAthlete = ({
                         }}
                         fontSize={"3.5rem"}
                         textAlign="end"
-                        
                     >
                         {data.participant.toUpperCase()}{" "}
                     </Typography>

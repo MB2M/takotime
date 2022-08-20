@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import LiveAthlete from "./RunningAthlete";
 import LiveWod from "./LiveWod";
+import { Divider } from "@mui/material";
 
 function Running({ data }: { data: WidescreenData }) {
     // const [isWod2, setIsWod2] = useState(false)
@@ -23,9 +24,20 @@ function Running({ data }: { data: WidescreenData }) {
                 <LiveWod data={data.workouts[0]} ali="left"></LiveWod>
                 {data.stations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
-                    .map((s) => (
-                        <LiveAthlete key={s.laneNumber} data={s} />
-                    ))}
+                    .map((s, i) => {
+                        return (
+                            <>
+                                <LiveAthlete key={s.laneNumber} data={s} />
+                                <div>
+                                    {i < data.stations.length - 1 &&
+                                        data.stations[i + 1].category !==
+                                            s.category && (
+                                            <Divider light></Divider>
+                                        )}
+                                </div>
+                            </>
+                        );
+                    })}
                 <LiveWod
                     data={data.workouts[data.workouts.length - 1]}
                     ali="right"

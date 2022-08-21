@@ -146,7 +146,7 @@ function HorizontalRunning() {
                     })}
             </Box>
 
-            {/* <Box
+            <Box
                 zIndex={1}
                 position="absolute"
                 top={"50%"}
@@ -154,7 +154,7 @@ function HorizontalRunning() {
                 right={35}
                 sx={{ transform: "translateY(-50%)" }}
             >
-                {globals?.state === 1 ? (
+                {globals?.state === 1 && (
                     <Typography
                         color={"gray"}
                         fontSize={"45rem"}
@@ -163,33 +163,8 @@ function HorizontalRunning() {
                     >
                         {chrono?.toString().slice(1) || ""}
                     </Typography>
-                ) : (
-                    loadedWorkouts?.[0]?.blocks.flatMap((block, index1) => {
-                        let mvts: JSX.Element[][] = [];
-                        for (let i = 0; i < block.rounds; i++) {
-                            mvts.push(
-                                block.movements.map((movement, index2) => {
-                                    const mvt = `${
-                                        movement.reps +
-                                        (movement.varEachRounds || 0) * i
-                                    } ${movement.name}`;
-                                    return (
-                                        <Typography
-                                            key={index1 + "-" + index2}
-                                            color={"gray"}
-                                            fontSize={"4.5rem"}
-                                            fontFamily={"CantoraOne"}
-                                        >
-                                            {mvt}
-                                        </Typography>
-                                    );
-                                })
-                            );
-                        }
-                        return mvts;
-                    })
                 )}
-            </Box> */}
+            </Box>
         </Box>
     );
 }

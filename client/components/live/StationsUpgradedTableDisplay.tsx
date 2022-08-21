@@ -44,6 +44,7 @@ const StationsUpgradedTableDisplay = ({
                     >
                         {l.map(
                             (s: {
+                                category: string;
                                 laneNumber: number;
                                 participant: string;
                                 rank: (
@@ -75,7 +76,34 @@ const StationsUpgradedTableDisplay = ({
                                             >
                                                 {sortBy === "laneNumber"
                                                     ? s.laneNumber
-                                                    : s.rank[s.rank.length - 1]}
+                                                    : stationsUpgraded
+                                                          .filter(
+                                                              (station) =>
+                                                                  station.category ===
+                                                                  s.category
+                                                          )
+                                                          .map(
+                                                              (
+                                                                  stationFiltered
+                                                              ) =>
+                                                                  stationFiltered
+                                                                      .rank[
+                                                                      stationFiltered
+                                                                          .rank
+                                                                          .length -
+                                                                          1
+                                                                  ]
+                                                          )
+                                                          .sort((a, b) => a - b)
+                                                          .findIndex(
+                                                              (rank) =>
+                                                                  rank ===
+                                                                  s.rank[
+                                                                      s.rank
+                                                                          .length -
+                                                                          1
+                                                                  ]
+                                                          ) + 1}
                                             </Typography>
                                             <Typography
                                                 variant="h3"

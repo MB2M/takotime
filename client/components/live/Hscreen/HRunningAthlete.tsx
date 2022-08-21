@@ -205,7 +205,7 @@ const HorizontalRunningAthlete = ({
                 >
                     {data.result?.slice(0, data.result?.length - 1)}
                 </Typography>
-                {data.result && data.rank && (
+                {data.result && rankByFront && (
                     <Typography
                         position="absolute"
                         right={50}
@@ -227,7 +227,7 @@ const HorizontalRunningAthlete = ({
                         alignItems="center"
                         paddingTop={0.2}
                     >
-                        {data.rank[data.rank.length - 1]}
+                        {rankByFront}
                     </Typography>
                 )}
             </Box>

@@ -82,12 +82,23 @@ function HeatWinner() {
                         {[
                             ...new Set(stationsUpgraded.map((s) => s.category)),
                         ].map((category) => {
+                            const winnerCategoryRank = stationsUpgraded
+                                .filter(
+                                    (station) => station.category === category
+                                )
+                                .map(
+                                    (stationFiltered) =>
+                                        stationFiltered.rank[
+                                            stationFiltered.rank.length - 1
+                                        ]
+                                )
+                                .sort((a, b) => a - b)[0];
                             const winner = stationsUpgraded.find(
                                 (station) =>
                                     station.category === category &&
                                     Number(
                                         station.rank[station.rank.length - 1]
-                                    ) === 1
+                                    ) === winnerCategoryRank
                             );
                             return (
                                 <Stack

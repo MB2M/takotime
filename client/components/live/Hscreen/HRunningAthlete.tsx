@@ -99,17 +99,17 @@ const HorizontalRunningAthlete = ({
                 break;
             case 2:
                 setBg(colors.second);
-                setColor("#000");
+                setColor("#fff");
                 setChevronColor(chevColor.second);
                 break;
             case 3:
                 setBg(colors.third);
-                setColor("#000");
+                setColor("#fff");
                 setChevronColor(chevColor.third);
                 break;
             default:
                 setBg(colors.other);
-                setColor("#000");
+                setColor("#fff");
                 setChevronColor(chevColor.other);
                 break;
         }

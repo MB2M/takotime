@@ -101,7 +101,7 @@ function HorizontalRunning() {
                                                                   .length - 1
                                                           ] !== ""
                                                   )
-                                                  .sort()
+                                                  .sort().reverse()
                                                   .findIndex(
                                                       (result) =>
                                                           result.result ===

@@ -71,16 +71,16 @@ function HorizontalRunning() {
                                                               station
                                                                   .repsPerBlock
                                                                   ?.length - 1
-                                                          ]
+                                                          ] || 0
                                                   )
                                                   .sort((a, b) => b - a)
                                                   .findIndex(
                                                       (reps) =>
                                                           reps ===
-                                                          s.repsPerBlock?.[
+                                                          (s.repsPerBlock?.[
                                                               s.repsPerBlock
                                                                   .length - 1
-                                                          ]
+                                                          ] || 0)
                                                   ) +
                                               stationsUpgraded.filter(
                                                   (station) =>

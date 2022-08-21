@@ -55,58 +55,79 @@ function HorizontalRunning() {
                                     data={s}
                                     workout={getWorkout(loadedWorkouts, s)}
                                     divNumber={stationsUpgraded.length}
+                                    // rankByFront={
+                                    //     1 +
+                                    //     (s.result?.[s.result?.length - 1] === ""
+                                    //         ? stationsUpgraded
+                                    //               .filter(
+                                    //                   (station) =>
+                                    //                       station.category ===
+                                    //                       s.category
+                                    //               )
+                                    //               .map(
+                                    //                   (station) =>
+                                    //                       station
+                                    //                           .repsPerBlock?.[
+                                    //                           station
+                                    //                               .repsPerBlock
+                                    //                               ?.length - 1
+                                    //                       ] || 0
+                                    //               )
+                                    //               .sort((a, b) => b - a)
+                                    //               .findIndex(
+                                    //                   (reps) =>
+                                    //                       reps ===
+                                    //                       (s.repsPerBlock?.[
+                                    //                           s.repsPerBlock
+                                    //                               .length - 1
+                                    //                       ] || 0)
+                                    //               ) +
+                                    //           stationsUpgraded.filter(
+                                    //               (station) =>
+                                    //                   station.category ===
+                                    //                       s.category &&
+                                    //                   station.result[
+                                    //                       station.result
+                                    //                           .length - 1
+                                    //                   ] !== ""
+                                    //           ).length
+                                    //         : stationsUpgraded
+                                    //               .filter(
+                                    //                   (station) =>
+                                    //                       station.category ===
+                                    //                           s.category &&
+                                    //                       station.result?.[
+                                    //                           station.result
+                                    //                               .length - 1
+                                    //                       ] !== ""
+                                    //               )
+                                    //               .sort().reverse()
+                                    //               .findIndex(
+                                    //                   (result) =>
+                                    //                       result.result ===
+                                    //                       s.result
+                                    //               ))
+                                    // }
                                     rankByFront={
-                                        1 +
-                                        (s.result?.[s.result?.length - 1] === ""
-                                            ? stationsUpgraded
-                                                  .filter(
-                                                      (station) =>
-                                                          station.category ===
-                                                          s.category
-                                                  )
-                                                  .map(
-                                                      (station) =>
-                                                          station
-                                                              .repsPerBlock?.[
-                                                              station
-                                                                  .repsPerBlock
-                                                                  ?.length - 1
-                                                          ] || 0
-                                                  )
-                                                  .sort((a, b) => b - a)
-                                                  .findIndex(
-                                                      (reps) =>
-                                                          reps ===
-                                                          (s.repsPerBlock?.[
-                                                              s.repsPerBlock
-                                                                  .length - 1
-                                                          ] || 0)
-                                                  ) +
-                                              stationsUpgraded.filter(
-                                                  (station) =>
-                                                      station.category ===
-                                                          s.category &&
-                                                      station.result[
-                                                          station.result
-                                                              .length - 1
-                                                      ] !== ""
-                                              ).length
-                                            : stationsUpgraded
-                                                  .filter(
-                                                      (station) =>
-                                                          station.category ===
-                                                              s.category &&
-                                                          station.result?.[
-                                                              station.result
-                                                                  .length - 1
-                                                          ] !== ""
-                                                  )
-                                                  .sort().reverse()
-                                                  .findIndex(
-                                                      (result) =>
-                                                          result.result ===
-                                                          s.result
-                                                  ))
+                                        stationsUpgraded
+                                            .filter(
+                                                (station) =>
+                                                    station.category ===
+                                                    s.category
+                                            )
+                                            .map(
+                                                (stationFiltered) =>
+                                                    stationFiltered.rank[
+                                                        stationFiltered.rank
+                                                            .length - 1
+                                                    ]
+                                            )
+                                            .sort((a, b) => a - b)
+                                            .findIndex(
+                                                (rank) =>
+                                                    rank ===
+                                                    s.rank[s.rank.length - 1]
+                                            ) + 1
                                     }
                                 />
                                 <div>

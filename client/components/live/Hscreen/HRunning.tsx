@@ -57,28 +57,56 @@ function HorizontalRunning() {
                                     divNumber={stationsUpgraded.length}
                                     rankByFront={
                                         1 +
-                                        stationsUpgraded
-                                            .filter(
-                                                (station) =>
-                                                    station.category ===
-                                                    s.category
-                                            )
-                                            .map(
-                                                (station) =>
-                                                    station.repsPerBlock?.[
-                                                        station.repsPerBlock
-                                                            ?.length - 1
-                                                    ]
-                                            )
-                                            .sort((a, b) => b - a)
-                                            .findIndex(
-                                                (reps) =>
-                                                    reps ===
-                                                    s.repsPerBlock?.[
-                                                        s.repsPerBlock.length -
-                                                            1
-                                                    ]
-                                            )
+                                        (s.result?.[s.result?.length - 1] === ""
+                                            ? stationsUpgraded
+                                                  .filter(
+                                                      (station) =>
+                                                          station.category ===
+                                                          s.category
+                                                  )
+                                                  .map(
+                                                      (station) =>
+                                                          station
+                                                              .repsPerBlock?.[
+                                                              station
+                                                                  .repsPerBlock
+                                                                  ?.length - 1
+                                                          ]
+                                                  )
+                                                  .sort((a, b) => b - a)
+                                                  .findIndex(
+                                                      (reps) =>
+                                                          reps ===
+                                                          s.repsPerBlock?.[
+                                                              s.repsPerBlock
+                                                                  .length - 1
+                                                          ]
+                                                  ) +
+                                              stationsUpgraded.filter(
+                                                  (station) =>
+                                                      station.category ===
+                                                          s.category &&
+                                                      station.result[
+                                                          station.result
+                                                              .length - 1
+                                                      ] !== ""
+                                              ).length
+                                            : stationsUpgraded
+                                                  .filter(
+                                                      (station) =>
+                                                          station.category ===
+                                                              s.category &&
+                                                          station.result?.[
+                                                              station.result
+                                                                  .length - 1
+                                                          ] !== ""
+                                                  )
+                                                  .sort()
+                                                  .findIndex(
+                                                      (result) =>
+                                                          result.result ===
+                                                          s.result
+                                                  ))
                                     }
                                 />
                                 <div>

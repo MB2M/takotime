@@ -10,7 +10,6 @@ import rankingServices from "../services/rankingServices";
 import WebsocketServices from "../services/websocketServices";
 import Station from "../models/Station";
 import WebSocketMessages from "../services/websocketMessages";
-import { Client } from "aedes";
 import Device from "../models/Device";
 
 class Manager extends EventEmitter {

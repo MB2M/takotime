@@ -13,6 +13,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
     workoutIds: [],
     loadedWorkouts: [],
     stationDevices: [],
+    devices: [],
     stations: [],
     brokerClients: {},
     ranks: [],
@@ -37,6 +38,7 @@ export interface LiveDataState {
     loadedWorkouts: Workout[];
     stationDevices: StationDevices[];
     stations: Station[];
+    devices: Device[];
     brokerClients: Broker;
     ranks: StationRanked;
     globals: Globals | undefined;
@@ -51,7 +53,7 @@ export const LiveDataContext = createContext<LiveDataState>(
 export const LiveDataProvider = ({ children }: { children: ReactNode }) => {
     const liveData = useLiveData();
     const hostname = process.env.NEXT_PUBLIC_LOCAL_HOSTNAME;
-    
+
     return (
         <LiveDataContext.Provider value={liveData}>
             <WebsocketConnection

@@ -38,6 +38,9 @@ class WebsocketServices {
             const workouts = await liveApp.manager.getLoadedWorkouts();
             this.sendToClient(ws, "loadedWorkouts", workouts);
 
+            const devices = await liveApp.manager.getAllDevices();
+            this.sendToClient(ws, "devices", devices);
+
             // const clients = await liveApp.manager.getAllBrokerClient();
             // this.sendToClient(ws, "brokerUpdate", clients);
 

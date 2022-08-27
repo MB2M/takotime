@@ -7,7 +7,10 @@ class MqttClient {
             this.client.on("connect", () => {
                 console.log("connected to MQTT broker");
                 this.subscribe(topics);
-
+                this.client.publish(
+                    `connected/station/${options.clientId}`,
+                    "1"
+                );
                 this.client.publish(
                     "station/connection",
                     JSON.stringify({

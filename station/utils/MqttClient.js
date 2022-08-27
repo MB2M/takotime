@@ -9,7 +9,8 @@ class MqttClient {
                 this.subscribe(topics);
                 this.client.publish(
                     `connected/station/${options.clientId}`,
-                    "1"
+                    "1",
+                    { retain: true }
                 );
                 this.client.publish(
                     "station/connection",

@@ -1,15 +1,7 @@
 import type { NextPage } from "next";
-import { WebSocket } from "nextjs-websocket";
-import { useState, useRef, useEffect, useCallback, Key } from "react";
+import { useState, useEffect, Key } from "react";
 import {
     Container,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
     Button,
     Grid,
     CardContent,
@@ -21,19 +13,15 @@ import {
     Chip,
     Tooltip,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 // import useSWR from "swr";
 import TimerForm from "./TimerForm";
 import * as timesync from "timesync";
-import HeatUpdate from "./HeatUpdate";
 import DevicesUpdate from "./DevicesUpdate";
-import StaticsUpdate from "./StaticsUpdate";
 import LiveWorkoutSelector from "./LiveWorkoutSelector";
 import LoadedWorkouts from "./LoadedWorkouts";
 import CCLoader from "./CCLoader";
-import WebsocketConnection from "./live/WebsocketConnection";
 import StationUpdate from "./StaticsUpdate";
-import { parseNextUrl } from "next/dist/shared/lib/router/utils/parse-next-url";
 import TournamentLoader from "./TournamentLoader";
 import { useLiveDataContext } from "../context/liveData/livedata";
 import useChrono from "../hooks/useChrono";
@@ -124,13 +112,18 @@ any) => {
         const dynamics = station.dynamics;
         const stationIp = stationDevice?.ip;
         const stationConnected =
-            (stationIp && brokerClients[stationIp]) || false;
+            devices.find((device) => {
+                return (
+                    device.role === "station" && device.ref === stationDevice?.ip
+                );
+            })?.state === 1;
+        // const stationConnected =
+        //     (stationIp && brokerClients[stationIp]) || false;
         const devicesConnected = stationDevice?.devices.map((d) => {
             return {
                 name: d.role,
                 connected:
                     devices.find((device) => {
-                        console.log(device.ref, d.mac);
                         return device.role === d.role && device.ref === d.mac;
                     })?.state === 1,
             };

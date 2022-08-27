@@ -10,10 +10,16 @@ import rankingServices from "../services/rankingServices";
 import WebsocketServices from "../services/websocketServices";
 import Station from "../models/Station";
 import WebSocketMessages from "../services/websocketMessages";
-import { Client } from "aedes";
+import Device from "../models/Device";
 
 class Manager extends EventEmitter {
-    topics = ["station/blePeripheral", "station/generic", "station/connection"];
+    topics = [
+        "station/blePeripheral",
+        "station/generic",
+        "station/connection",
+        "board/connected/#",
+        "connected/#",
+    ];
 
     wodTimerServices: WodTimerServices;
     mqttServices: MqttServices;
@@ -63,6 +69,11 @@ class Manager extends EventEmitter {
             "station/connection",
             this.sendOnStationConnection.bind(this)
         );
+
+        this.mqttServices.registerListener(
+            "connected/",
+            this.updateDevices.bind(this)
+        );
     }
 
     addOnWebsocketMessageListener() {
@@ -106,10 +117,10 @@ class Manager extends EventEmitter {
         });
     }
 
-    async updateDynamics(data: any) {
+    async updateDynamics(_topic: string, data: any) {
         console.log("update Dynamics");
         try {
-            const response = await Station.updateOne(
+            await Station.updateOne(
                 {
                     _id: data._id,
                 },
@@ -125,7 +136,32 @@ class Manager extends EventEmitter {
         }
     }
 
-    async sendOnStationConnection(data: any) {
+    async updateDevices(topic: string, data: any) {
+        const topicArray = topic.split("/");
+
+        if (!topicArray[1] || !topicArray[2]) return;
+        if (!["counter", "station", "board"].includes(topicArray[1])) return;
+        if (typeof data !== "number") return;
+
+        try {
+            await Device.updateOne(
+                {
+                    ref: topicArray[2],
+                    role: topicArray[1],
+                },
+                { state: data },
+                {
+                    runValidators: true,
+                    upsert: true,
+                }
+            );
+            this.websocketMessages.sendDevicesToAllClients();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async sendOnStationConnection(_topic: string, data: any) {
         console.log("send on station connection!");
 
         const { ip, responseTopic } = data;
@@ -145,7 +181,7 @@ class Manager extends EventEmitter {
         }
     }
 
-    async updateStationDevices(data: any) {
+    async updateStationDevices(_topic: string, data: any) {
         const stationDevice = await StationDevices.findOne(
             { ip: data.configs.station_ip },
             "devices"
@@ -371,6 +407,10 @@ class Manager extends EventEmitter {
 
     async getAllStationDevices() {
         return await StationDevices.find().exec();
+    }
+
+    async getAllDevices() {
+        return await Device.find().exec();
     }
 
     async getAllWorkouts() {

@@ -60,12 +60,12 @@ const columns = [
     },
 ];
 
-const StationUpdate = ({ station }: { station: Station[] }) => {
+const StationUpdate = ({ stations }: { stations: Station[] }) => {
     const [rows, setRows] = useState<Row[]>([]);
     const [newLane, setNewLane] = useState<number>();
 
     useEffect(() => {
-        const rows: Row[] = station.map((setBrokerClients) => {
+        const rows: Row[] = stations.map((setBrokerClients) => {
             return {
                 id: setBrokerClients._id,
                 laneNumber: setBrokerClients.laneNumber,
@@ -74,7 +74,7 @@ const StationUpdate = ({ station }: { station: Station[] }) => {
             };
         });
         setRows(rows);
-    }, [station]);
+    }, [stations]);
 
     const addRow = async () => {
         const laneNumber = newLane;

@@ -86,3 +86,9 @@ type Device = {
 };
 
 type AedesWithClients<T> = Partial<T> & { clients: object };
+
+interface IDevice {
+    ref: string;
+    role: string;
+    state: Number;
+}

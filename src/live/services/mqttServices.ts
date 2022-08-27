@@ -7,7 +7,7 @@ class MqttServices {
         username: config.brokerUsername,
         password: config.brokerPassword,
         clean: true,
-        clientId: "TAKOTIME_SERVER",
+        clientId: `TAKOTIME_SERVER_${Math.floor(Math.random() * 100)}`,
     };
 
     client: mqtt.MqttClient;
@@ -23,9 +23,13 @@ class MqttServices {
         this.client.subscribe(topics, { qos: 1 });
     }
 
-    registerListener(aimedTopic: string, listener: (arg0: any) => void) {
+    registerListener(
+        aimedTopic: string,
+        listener: (topic: string, message: any) => void
+    ) {
         this.client.on("message", async (topic, message) => {
-            if (topic === aimedTopic) listener(JSON.parse(message.toString()));
+            if (topic.includes(aimedTopic))
+                listener(topic, JSON.parse(message.toString()));
         });
     }
 

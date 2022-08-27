@@ -31,10 +31,20 @@ const main = async () => {
                 "error deleting livestation.json, file probably doesn't exist... if so ignore this error "
             );
         }
-        const station = new Station(ip, MQTT_URL, mqttOptions, [
-            ...mqttTopics,
-            `server/wodConfig/${ip}`,
-        ]);
+        const station = new Station(
+            ip,
+            MQTT_URL,
+            {
+                ...mqttOptions,
+                will: {
+                    topic: `connected/station/${ip}`,
+                    payload: "0",
+                    qos: 1,
+                    retain: true,
+                },
+            },
+            [...mqttTopics, `server/wodConfig/${ip}`]
+        );
         station.initProcess();
     });
 };

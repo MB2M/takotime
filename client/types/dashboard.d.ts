@@ -22,7 +22,7 @@ type StationDevices = {
     _id: string;
     laneNumber: number;
     ip: string;
-    devices: Device[];
+    devices: BLEDevice[];
 };
 
 type Station = {
@@ -80,10 +80,16 @@ type StationDynamics = {
     measurements: object;
 };
 
-type Device = {
+type BLEDevice = {
     role: string;
     mac: string;
     state: string;
+};
+
+type Device = {
+    ref: string;
+    role: "station" | "counter" | "board";
+    state: number;
 };
 
 type Workout = {
@@ -155,7 +161,6 @@ type Globals = {
     remoteWarmupHeat: number;
     remoteFinaleAthlete: number;
     state: number;
-    
 };
 
 interface WidescreenData {

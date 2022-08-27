@@ -9,7 +9,7 @@ class MqttClient {
         this.connect();
         setInterval(() => {
             console.log(this.client?.connected);
-            if (!this.client?.connected) this.connect();
+            // if (!this.client?.connected) this.connect();
         }, 5000);
         // this.client = mqtt.connect(mqttUrl, options);
         // if (topics) {

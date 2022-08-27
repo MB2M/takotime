@@ -38,21 +38,21 @@ class MqttClient {
     }
 
     connect() {
-        this.client = mqtt.connect(mqttUrl, options);
-        if (topics) {
+        this.client = mqtt.connect(this.mqttUrl, this.options);
+        if (this.topics) {
             this.client.on("connect", () => {
                 console.log("connected to MQTT broker");
-                this.subscribe(topics);
+                this.subscribe(this.topics);
                 this.client.publish(
-                    `connected/station/${options.clientId}`,
+                    `connected/station/${this.options.clientId}`,
                     "1",
                     { retain: true }
                 );
                 this.client.publish(
                     "station/connection",
                     JSON.stringify({
-                        ip: options.clientId,
-                        responseTopic: `server/wodConfig/${options.clientId}`,
+                        ip: this.options.clientId,
+                        responseTopic: `server/wodConfig/${this.options.clientId}`,
                     })
                 );
             });

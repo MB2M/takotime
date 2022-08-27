@@ -36,6 +36,7 @@ const main = async () => {
             MQTT_URL,
             {
                 ...mqttOptions,
+                reconnectPeriod: 1000,
                 will: {
                     topic: `connected/station/${ip}`,
                     payload: "0",

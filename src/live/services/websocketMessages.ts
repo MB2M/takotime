@@ -26,6 +26,11 @@ class WebSocketMessages {
         );
     }
 
+    async sendDevicesToAllClients() {
+        const devicesList = await liveApp.manager.getAllDevices();
+        this.websocketServices.sendToAllClients("devices", devicesList);
+    }
+
     async sendActiveWorkoutListToAllClients() {
         const workoutIds = await liveApp.manager.getAllWorkouts();
         this.websocketServices.sendToAllClients(

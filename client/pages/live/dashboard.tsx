@@ -5,9 +5,9 @@ import Dashboard from "../../components/dashboard2";
 
 const Test: NextPage<Props> = ({ hostname }: { hostname: string | undefined }) => {
     return (
-        <WebsocketWrapper hostname={hostname}>
+        // <WebsocketWrapper hostname={hostname}>
             <Dashboard></Dashboard>
-        </WebsocketWrapper>
+        // </WebsocketWrapper>
     );
 };
 

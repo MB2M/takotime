@@ -51,17 +51,25 @@ const toReadableTime = (timestamp: number) => {
     }:${seconds < 10 ? "0" + seconds : seconds}`;
 };
 
-
-const Dashboard: NextPage = ({
-    workoutIds,
-    loadedWorkouts,
-    stationDevices,
-    station,
-    brokerClients,
-    ranks,
-    globals,
-    // sendMessage,
-}: any) => {
+const Dashboard: NextPage = ({}: // workoutIds,
+// loadedWorkouts,
+// stationDevices,
+// station,
+// brokerClients,
+// ranks,
+// globals,
+// sendMessage,
+any) => {
+    const {
+        workoutIds,
+        loadedWorkouts,
+        stationDevices,
+        stations,
+        brokerClients,
+        ranks,
+        globals,
+        devices,
+    } = useLiveDataContext();
     const [tSync, setTSync] = useState<timesync.TimeSync>();
     const chrono = useChrono(globals?.startTime, globals?.duration);
     const [heatUpdateDrawerOpen, setHeatUpdateDrawerOpen] =
@@ -69,7 +77,7 @@ const Dashboard: NextPage = ({
     const [deviceConfigUpdateDrawerOpen, setDeviceConfigUpdateDrawerOpen] =
         useState<boolean>(false);
 
-        const {sendMessage} = useLiveDataContext()
+    const { sendMessage } = useLiveDataContext();
 
     useEffect(() => {
         const ts = timesync.create({
@@ -117,11 +125,16 @@ const Dashboard: NextPage = ({
         const stationIp = stationDevice?.ip;
         const stationConnected =
             (stationIp && brokerClients[stationIp]) || false;
-        const devicesConnected = !stationConnected
-            ? null
-            : stationDevice?.devices.map((d: { role: any; state: string }) => {
-                  return { name: d.role, connected: d.state === "connected" };
-              });
+        const devicesConnected = stationDevice?.devices.map((d) => {
+            return {
+                name: d.role,
+                connected:
+                    devices.find((device) => {
+                        console.log(device.ref, d.mac);
+                        return device.role === d.role && device.ref === d.mac;
+                    })?.state === 1,
+            };
+        });
         const rank =
             (ranks.length > 0 &&
                 ranks
@@ -208,15 +221,6 @@ const Dashboard: NextPage = ({
             setDeviceConfigUpdateDrawerOpen(open);
         };
 
-    // const handleAthleteChange = (
-    //     station: Station,
-    //     index: number,
-    //     event: any
-    // ) => {
-    //     const stationsCopy = stations;
-    //     stationsCopy[index].athlete = event?.target?.value;
-    //     setStations(stationsCopy);
-    // };
     return (
         // <ThemeProvider theme={darkTheme}>
         <Box sx={{ backgroundColor: "#3b3b3b" }}>
@@ -237,7 +241,7 @@ const Dashboard: NextPage = ({
                 }}
             >
                 <StationUpdate
-                    station={station}
+                    stations={stations}
                     // handleAthleteChange={handleAthleteChange}
                 ></StationUpdate>
             </Drawer>
@@ -275,7 +279,7 @@ const Dashboard: NextPage = ({
                     </Grid>
                     <Grid item xs={12} lg={10}>
                         <Grid container spacing={2}>
-                            {station
+                            {stations
                                 ?.sort(
                                     (
                                         a: { laneNumber: number },
@@ -477,6 +481,15 @@ const Dashboard: NextPage = ({
                     </Grid>
                 </Grid>
             </Container>
+            <Box>
+                <ul>
+                    {devices.map((device) => (
+                        <li>{`${device.role} ${device.ref}: ${
+                            device.state === 1 ? "✔️" : "⭕"
+                        }`}</li>
+                    ))}
+                </ul>
+            </Box>
             {/* <TableContainer component={Paper}>
                             <Table sx={{ minWidth: 650 }} size="small">
                                 <TableHead>

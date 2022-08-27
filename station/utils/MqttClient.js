@@ -6,7 +6,7 @@ class MqttClient {
         this.options = options;
         this.topics = topics;
 
-        connect();
+        this.connect();
         setInterval(() => {
             if (!this.client?.connected) this.connect(), 5000;
         });

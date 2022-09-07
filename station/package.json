@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node --es-module-specifier-resolution=node index.js",
+        "start": "sudo node --es-module-specifier-resolution=node index.js",
         "restartButton": "node --es-module-specifier-resolution=node buttonRestartScript.js"
     },
     "author": "",

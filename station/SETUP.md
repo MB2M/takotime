@@ -17,6 +17,16 @@ Setup sd Card :
     ```
     https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#4-boot-ubuntu-server
 
+
+
+RADXA SETUP:
+sudo nmcli r wifi on
+sudo nmcli dev wifi
+sudo nmcli dev wifi connect "Great Again" password "wifi_password"
+sudo nmcli c mod "Great Again" ipv4.method manual ipv4.addresses 192.168.3.111/24
+sudo nmcli c mod "Great Again" ipv4.gateway 192.168.3.1
+sudo nmcli c mod "Great Again" ipv4.dns 8.8.8.8
+sudo nmcli c up  "Great Again"
 <!-- # change password
 
     passwd -->

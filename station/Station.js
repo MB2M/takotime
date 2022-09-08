@@ -8,6 +8,10 @@ import displayBuffer from "./utils/displayHelper.js";
 import onoff from "onoff";
 import { exec } from "child_process";
 import { loadJsonFileSync } from "load-json-file";
+import * as dotenv from "dotenv";
+dotenv.config();
+
+const GPIO_PIN = process.env.GPIO_PIN || 18;
 
 class Station {
     constructor(ip, mqttUrl, mqttOptions, mqttTopics) {
@@ -25,7 +29,7 @@ class Station {
         // this.bleServices = new BLEServices();
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();
-        this.buzzer = new onoff.Gpio(18, "in", "falling", {
+        this.buzzer = new onoff.Gpio(GPIO_PIN, "in", "falling", {
             debounceTimeout: 10,
         });
         this.lastPush = 0;

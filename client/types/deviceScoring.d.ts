@@ -13,7 +13,8 @@ type BaseScore = {
 
 type WorkoutDescription = {
     name: string;
-    type: "forTime" | "amrap";
+    index: number;
+    type: "forTime" | "amrap" | "maxWeight";
     workoutIds: string[];
     buyIn?: WorkoutMovements;
     main: WorkoutMovements;

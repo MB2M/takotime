@@ -10,6 +10,7 @@ const LaneRemote = () => {
     const router = useRouter();
     const [stationInfo, setStationInfo] = useState<BaseStation | null>(null);
     const [scoreIndex, setScoreIndex] = useState<number>(0);
+    const [wodCount, setWodCount] = useState<number>(0);
 
     const { laneNumber }: any = useMemo(() => router.query, [router]);
 
@@ -20,30 +21,37 @@ const LaneRemote = () => {
         [stationInfo, scoreIndex]
     );
 
+    const workout = useMemo(
+        () =>
+            workouts.find(
+                (workout) =>
+                    workout.workoutIds.includes(
+                        globals?.externalWorkoutId.toString() || ""
+                    ) && scoreIndex === workout.index
+            ),
+        [workouts, globals?.externalWorkoutId, scoreIndex]
+    );
+
+    useEffect(() => {
+        const count = workouts.filter((workout) =>
+            workout.workoutIds.includes(
+                globals?.externalWorkoutId.toString() || ""
+            )
+        ).length;
+        setWodCount(count);
+    }, [workouts, globals?.externalWorkoutId]);
+
     const {
         totalReps,
         currentMovement,
         currentMovementReps,
         currentMovementTotalReps,
+        currentRound,
+        workoutType,
     } = useWorkout(
-        workouts,
-        globals?.externalWorkoutId.toString() || "",
-        repsCompleted
+        workout,
+        repsCompleted,
     );
-    // CREATE HOOKS
-    // const workout: WorkoutDescription = {
-    //     name: "Wod1",
-    //     main: {
-    //         movements: [],
-    //         reps: [],
-    //     },
-    // };
-
-    console.log(stationInfo);
-
-    // const totalReps = 55;
-    // const currentMovement = "WALL BALL";
-    // const currentMovementReps = "50";
 
     const stationData = useMemo(() => {
         return stations.find(
@@ -85,7 +93,10 @@ const LaneRemote = () => {
         const payload = {
             heatId: globals.externalHeatId.toString(),
             laneNumber,
-            score: Math.min(Math.max(repsCompleted + value, 0), totalReps),
+            score: Math.min(
+                Math.max(repsCompleted + value, 0),
+                workoutType === "forTime" ? totalReps : 10000000
+            ),
         };
         console.log(payload);
         try {
@@ -105,6 +116,10 @@ const LaneRemote = () => {
         } catch (err) {
             console.log(err);
         }
+    };
+
+    const handleVariantSelect = (index: number) => {
+        setScoreIndex(index);
     };
 
     return (
@@ -128,7 +143,37 @@ const LaneRemote = () => {
                         {stationData?.participant}
                     </Typography>
                 </Box>
+                <Box
+                    // my={3}
+                    display="flex"
+                    justifyContent={"center"}
+                >
+                    {[...Array(wodCount + 1).keys()]
+                        .splice(1)
+                        .map((_, index) => (
+                            <Button
+                                key={index}
+                                variant={
+                                    scoreIndex === index
+                                        ? "contained"
+                                        : "outlined"
+                                }
+                                size={"large"}
+                                onClick={() => handleVariantSelect(index)}
+                            >
+                                variant {index + 1}
+                            </Button>
+                        ))}
+                </Box>
                 <Box>
+                    {workoutType === "amrap" && currentRound > 0 && (
+                        <Typography
+                            textAlign="center"
+                            fontFamily={"CantoraOne"}
+                        >
+                            Round n° {currentRound}
+                        </Typography>
+                    )}
                     <Typography
                         textAlign="center"
                         variant="h1"

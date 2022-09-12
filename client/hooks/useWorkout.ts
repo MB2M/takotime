@@ -9,15 +9,11 @@ const runningSum = (numbers: number[]) => {
 };
 
 const useWorkout = (
-    workouts: WorkoutDescription[],
-    workoutId: string,
+    workout: WorkoutDescription | undefined,
     repsCompleted: number
 ) => {
-    const workout = useMemo(
-        () =>
-            workouts.find((workout) => workout.workoutIds.includes(workoutId)),
-        [workouts, workoutId]
-    );
+
+    const workoutType = useMemo(() => workout?.type, [workout]);
 
     const buyInReps = useMemo(
         () => workout?.buyIn?.reps?.reduce((p, c) => p + c, 0) || 0,
@@ -42,11 +38,13 @@ const useWorkout = (
     const [currentMovementReps, setCurrentMovementReps] = useState<number>(0);
     const [currentMovementTotalReps, setCurrentMovementTotalReps] =
         useState<number>(0);
+    const [currentRound, setCurrentRound] = useState<number>(1);
 
     useEffect(() => {
         let currentMovement;
         let currentMovementReps;
         let currentMovementTotalReps;
+        let currentRound = 1;
         switch (workout?.type) {
             case "forTime":
                 const allReps = [
@@ -75,6 +73,54 @@ const useWorkout = (
                     repsCompleted - (allRepsCum[index - 1] || 0);
                 break;
 
+            case "amrap":
+                const buyInRepsCum = runningSum(
+                    JSON.parse(JSON.stringify(workout.buyIn?.reps || []))
+                );
+
+                const mainRepsCum = runningSum(
+                    JSON.parse(JSON.stringify(workout.main.reps))
+                );
+
+                // const buyOutRepsCum = runningSum(
+                //     JSON.parse(JSON.stringify(buyOutReps))
+                // );
+
+                currentRound =
+                    Math.floor((repsCompleted - buyInReps) / mainReps) + 1;
+
+                if (repsCompleted < buyInReps) {
+                    let index = buyInRepsCum.findIndex(
+                        (repsCum) => repsCompleted - repsCum < 0
+                    );
+                    if (index === -1) {
+                        index = buyInRepsCum.length - 1;
+                    }
+                    currentMovement = (workout.buyIn?.movements || [])[index];
+                    currentMovementTotalReps = (workout.buyIn?.reps || [])[
+                        index
+                    ];
+                    currentMovementReps =
+                        repsCompleted - (buyInRepsCum[index - 1] || 0);
+                } else {
+                    let index = mainRepsCum.findIndex(
+                        (repsCum) =>
+                            ((repsCompleted - buyInReps) % mainReps) - repsCum <
+                            0
+                    );
+
+                    if (index === -1) {
+                        index = mainRepsCum.length - 1;
+                    }
+                    currentMovement = (workout.main.movements || [])[index];
+                    currentMovementTotalReps = workout.main.reps[index];
+                    currentMovementReps =
+                        ((repsCompleted - buyInReps) % mainReps) -
+                        (mainRepsCum[index - 1] || 0);
+                }
+
+                break;
+
             default:
                 currentMovement = "";
                 currentMovementTotalReps = 0;
@@ -84,6 +130,7 @@ const useWorkout = (
         setCurrentMovement(currentMovement);
         setCurrentMovementReps(currentMovementReps);
         setCurrentMovementTotalReps(currentMovementTotalReps);
+        setCurrentRound(currentRound);
     }, [repsCompleted, workout, totalReps]);
 
     return {
@@ -91,6 +138,8 @@ const useWorkout = (
         currentMovement,
         currentMovementReps,
         currentMovementTotalReps,
+        currentRound,
+        workoutType,
     };
 };
 

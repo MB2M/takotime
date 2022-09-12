@@ -25,7 +25,7 @@ class Station {
                 clientId: ip,
             },
             mqttTopics
-        );
+        );  
         // this.bleServices = new BLEServices();
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();

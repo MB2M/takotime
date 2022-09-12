@@ -209,7 +209,7 @@ class Manager extends EventEmitter {
     async resetDynamics() {
         const stations = await Station.find().exec();
         await Promise.all(
-            stations.map(async (s) => {
+            stations.map(async (s:any) => {
                 s.reset();
                 await s.save();
             })
@@ -256,15 +256,16 @@ class Manager extends EventEmitter {
         const globals = await this.getGlobals();
 
         const stationDevice = await StationDevices.findOne({ ip }).exec();
-        let stations = await Station.findOne({
-            laneNumber: stationDevice.laneNumber,
+        let stations: any = await Station.findOne({
+            laneNumber: stationDevice?.laneNumber,
         }).exec();
-        stations = JSON.parse(JSON.stringify(stations));
-        stations["configs"] = {
-            station_ip: stationDevice.ip,
-            devices: stationDevice.devices,
-        };
-
+        if (stations) {
+            stations = JSON.parse(JSON.stringify(stations));
+            stations["configs"] = {
+                station_ip: stationDevice?.ip,
+                devices: stationDevice?.devices,
+            };
+        }
         const workouts = await workoutServices.getLoadedWorkouts(this.keyv);
 
         return { globals, stations, workouts };

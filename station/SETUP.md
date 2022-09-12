@@ -17,16 +17,23 @@ Setup sd Card :
     ```
     https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#4-boot-ubuntu-server
 
-
-
 RADXA SETUP:
 sudo nmcli r wifi on
 sudo nmcli dev wifi
-sudo nmcli dev wifi connect "Great Again" password "wifi_password"
-sudo nmcli c mod "Great Again" ipv4.method manual ipv4.addresses 192.168.3.111/24
+sudo nmcli dev wifi connect Great\ Again password '<PWD>'
+sudo nmcli c mod "Great Again" ipv4.method manual ipv4.addresses 192.168.3.110/24
 sudo nmcli c mod "Great Again" ipv4.gateway 192.168.3.1
 sudo nmcli c mod "Great Again" ipv4.dns 8.8.8.8
-sudo nmcli c up  "Great Again"
+sudo nmcli c up "Great Again"
+
+sudo visudo
+rock ALL=(ALL) NOPASSWD: ALL
+
+sudo systemctl stop dhcpcd
+sudo systemctl disable dhcpcd
+
+sudo apt-get update && sudo apt-get upgrade
+
 <!-- # change password
 
     passwd -->
@@ -81,8 +88,7 @@ change user:
     \q
     exit -->
 
-
-    apt-get install -y build-essential
+    sudo apt-get install -y build-essential
 
 # Install chrony
 
@@ -147,7 +153,7 @@ Reboot and run:
 
 > sudo su
 
-> curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+> curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 
 > sudo su pi
 
@@ -173,16 +179,15 @@ Reboot and run:
 
 > nano .env
 
-> cd takotime/station; git pull origin main && sudo node index.js   // pour tester
-cd && sudo npm install pm2@latest -g
+> npm start// pour tester
+> cd && sudo npm install pm2@latest -g
 
-cd takotime/station 
+cd takotime/station
 pm2 start npm --name "livestation" -- start
 pm2 startup
 pm2 save
 
 <!-- pm2 start npm --name "restart button" -- run restartButton -->
-
 
 <!-- ## Setup systemd services
 

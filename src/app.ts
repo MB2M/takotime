@@ -36,21 +36,26 @@ try {
     console.error(err);
 }
 
-// wod 1 MT
-import router from "./mtWod1/routes";
-app.use("/wod1", router);
+// // wod 1 MT
+// import router from "./mtWod1/routes";
+// app.use("/wod1", router);
 
-// wod Max MT
-import routerMax from "./mtWodMax/routes";
-app.use("/wodMax", routerMax);
+// // wod Max MT
+// import routerMax from "./mtWodMax/routes";
+// app.use("/wodMax", routerMax);
 
-// vote
-import routerVote from "./vote/routes";
-app.use("/vote", routerVote);
+// // vote
+// import routerVote from "./vote/routes";
+// app.use("/vote", routerVote);
 
-// wod Gym
-import routerGym from "./mtWodGym/routes";
-app.use("/wodGym", routerGym);
+// // wod Gym
+// import routerGym from "./mtWodGym/routes";
+// app.use("/wodGym", routerGym);
+
+// mandelieu
+import routerGym from "./mandelieu/routes";
+app.use("/mandelieu", routerGym);
+
 // try {
 //     WOD1App.start(app, server, "/wod1");
 // } catch (err) {

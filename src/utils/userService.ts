@@ -39,9 +39,11 @@ export default {
     },
 
     async login(username: string, password: string) {
-        const user = await User.findOne({ username: username }).catch((err) => {
-            console.error(err);
-        });
+        const user: any = await User.findOne({ username: username }).catch(
+            (err) => {
+                console.error(err);
+            }
+        );
         if (!user) {
             return {
                 success: false,

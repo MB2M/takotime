@@ -31,10 +31,8 @@ const getMeasurementRank = async (
     const stations = await StationStatics.find().exec();
 
     stations.sort((a, b) => {
-        const aMeasurement =
-            a.dynamics.measurements && a.dynamics.measurements[measurementId];
-        const bMeasurement =
-            b.dynamics.measurements && b.dynamics.measurements[measurementId];
+        const aMeasurement: any = a.dynamics?.measurements?.[measurementId];
+        const bMeasurement: any = b.dynamics?.measurements?.[measurementId];
 
         if (!aMeasurement && bMeasurement) return 1;
 
@@ -69,11 +67,11 @@ const getMeasurementRank = async (
         }
 
         if (aMeasurement?.method === "time") {
-            return aMeasurement.value - bMeasurement.value;
+            return (aMeasurement?.value || 0) - (bMeasurement?.value || 0);
         }
 
         if (aMeasurement?.method === "reps")
-            return bMeasurement.value - aMeasurement.value;
+            return (bMeasurement?.value || 0) - (aMeasurement?.value || 0);
 
         return 0;
     });

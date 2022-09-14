@@ -244,9 +244,8 @@ class Station {
                 if (this.db.getData("/stations/dynamics/state") === 2) {
                     const now = parseInt(message);
 
-                    
                     if (now < this.lastPush + 20000) return;
-                    
+
                     this.lastPush = now;
                     console.log(now);
 
@@ -415,6 +414,7 @@ class Station {
                 if (now < this.lastPush + 20000) return;
 
                 this.lastPush = now;
+                console.log(now);
 
                 this.wodInterpreter.pressBuzzer(
                     now,

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../../../context/liveData/livedata";
 import { workouts } from "../config";
 import useWorkout from "../../../../hooks/useWorkout";
+import RemoteWeight from "../../../../components/mandelieu/RemoteWeight";
 
 const LaneRemote = () => {
     const { globals, stations } = useLiveDataContext();
@@ -48,10 +49,7 @@ const LaneRemote = () => {
         currentMovementTotalReps,
         currentRound,
         workoutType,
-    } = useWorkout(
-        workout,
-        repsCompleted,
-    );
+    } = useWorkout(workout, repsCompleted);
 
     const stationData = useMemo(() => {
         return stations.find(
@@ -124,12 +122,7 @@ const LaneRemote = () => {
 
     return (
         <Container sx={{ height: "100vh" }}>
-            <Stack
-                height="100%"
-                justifyContent={"space-between"}
-                gap={3}
-                py={5}
-            >
+            <Stack height="100%" gap={3} py={5}>
                 <Box
                     display="flex"
                     justifyContent={"flex-start"}
@@ -165,51 +158,66 @@ const LaneRemote = () => {
                             </Button>
                         ))}
                 </Box>
-                <Box>
-                    {workoutType === "amrap" && currentRound > 0 && (
-                        <Typography
-                            textAlign="center"
-                            fontFamily={"CantoraOne"}
+                {workoutType && ["amrap", "forTime"].includes(workoutType) && (
+                    <>
+                        <Box my={"auto"}>
+                            {workoutType === "amrap" && currentRound > 0 && (
+                                <Typography
+                                    textAlign="center"
+                                    fontFamily={"CantoraOne"}
+                                >
+                                    Round n° {currentRound}
+                                </Typography>
+                            )}
+                            <Typography
+                                textAlign="center"
+                                variant="h1"
+                                fontFamily={"CantoraOne"}
+                            >
+                                {currentMovementReps}
+                            </Typography>
+                            <Typography variant="h5" textAlign="center">
+                                {`/ ${currentMovementTotalReps} ${currentMovement}`}
+                            </Typography>
+                        </Box>
+                        <Box
+                            display="flex"
+                            justifyContent={"center"}
+                            mt={"auto"}
                         >
-                            Round n° {currentRound}
-                        </Typography>
-                    )}
-                    <Typography
-                        textAlign="center"
-                        variant="h1"
-                        fontFamily={"CantoraOne"}
-                    >
-                        {currentMovementReps}
-                    </Typography>
-                    <Typography variant="h5" textAlign="center">
-                        {`/ ${currentMovementTotalReps} ${currentMovement}`}
-                    </Typography>
-                </Box>
-                <Box display="flex" justifyContent={"center"}>
-                    <Stack gap={5}>
-                        <Button
-                            variant={"contained"}
-                            color="success"
-                            fullWidth
-                            sx={{
-                                height: "200px",
-                                width: "70vw",
-                                fontSize: "80px",
-                            }}
-                            onClick={() => handleRepsClick(1)}
-                        >
-                            +
-                        </Button>
-                        <Button
-                            variant={"contained"}
-                            color="error"
-                            sx={{ width: "70vw", fontSize: "20px" }}
-                            onClick={() => handleRepsClick(-1)}
-                        >
-                            -
-                        </Button>
-                    </Stack>
-                </Box>
+                            <Stack gap={5}>
+                                <Button
+                                    variant={"contained"}
+                                    color="success"
+                                    fullWidth
+                                    sx={{
+                                        height: "200px",
+                                        width: "70vw",
+                                        fontSize: "80px",
+                                    }}
+                                    onClick={() => handleRepsClick(1)}
+                                >
+                                    +
+                                </Button>
+                                <Button
+                                    variant={"contained"}
+                                    color="error"
+                                    sx={{ width: "70vw", fontSize: "20px" }}
+                                    onClick={() => handleRepsClick(-1)}
+                                >
+                                    -
+                                </Button>
+                            </Stack>
+                        </Box>
+                    </>
+                )}
+                {workoutType && ["maxWeight"].includes(workoutType) && (
+                    <RemoteWeight
+                        heatId={globals?.externalHeatId}
+                        laneNumber={laneNumber}
+                        numberOfPartner={2}
+                    />
+                )}
             </Stack>
         </Container>
     );

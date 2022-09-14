@@ -13,6 +13,7 @@ import { workouts } from "../config";
 // import MTHeatWinner from "../../../components/mt/MTHeatWinner";
 import Header from "../../../../components/mt/Header";
 import WodRunningAthlete from "../../../../components/mandelieu/WodRunningAthlete";
+import DisplayWeight from "../../../../components/mandelieu/displayWeight";
 
 function Display() {
     const { globals, stations } = useLiveDataContext();
@@ -152,164 +153,132 @@ function Display() {
                         textTopFontSize={"6rem"}
                         chrono={chrono?.toString().slice(0, 5) || ""}
                     />
-                    <Grid
-                        container
-                        display={"flex"}
-                        justifyContent={"space-between"}
-                        spacing={1}
-                    >
+                    {/* CHANGE SCREEN AFTER 6' */}
+                    {Number(chrono?.toString().replaceAll(":", "")) <
+                        100000 && (
                         <Grid
-                            item
-                            xs={6}
-                            className="displayZone"
+                            container
                             display={"flex"}
-                            overflow={"hidden"}
-                            gap={0}
-                            sx={{
-                                flexDirection: "column",
-                                justifyContent: "space-evenly",
-                                // height: "100%",
-                            }}
+                            justifyContent={"space-between"}
+                            spacing={1}
                         >
-                            <Typography
-                                fontSize="50px"
-                                textAlign={"center"}
-                                color={"white"}
-                                sx={{ fontFamily: "CantoraOne" }}
+                            <Grid
+                                item
+                                xs={12}
+                                className="displayZone"
+                                display={"flex"}
+                                overflow={"hidden"}
+                                gap={0}
+                                sx={{
+                                    flexDirection: "column",
+                                    justifyContent: "space-evenly",
+                                    // height: "100%",
+                                }}
                             >
-                                Wall Ball
-                            </Typography>
-                            {fullStations
-                                ?.sort((a, b) => a.laneNumber - b.laneNumber)
-                                .sort((a, b) => a.rank[0] - b.rank[0])
-                                .sort((a, b) => {
-                                    if (a.dynamics.result && !b.dynamics.result)
-                                        return -1;
-                                    if (!a.dynamics.result && b.dynamics.result)
-                                        return 1;
-                                    if (
-                                        !a.dynamics.result &&
-                                        !b.dynamics.result
-                                    )
-                                        return 0;
-
-                                    return (
-                                        Number(
-                                            a.dynamics.result?.replace(":", "")
-                                        ) -
-                                        Number(
-                                            b.dynamics.result?.replace(":", "")
-                                        )
-                                    );
-                                })
-                                ?.map((s) => {
-                                    const repsOfFirst = allScores[0][0];
-                                    const workout = workouts.find(
-                                        (workout) =>
-                                            workout.workoutIds.includes(
-                                                globals?.externalWorkoutId.toString() ||
-                                                    ""
-                                            ) && workout.index === 0
-                                    );
-                                    const scores = [
-                                        ...new Set(
-                                            fullStations.map(
-                                                (statio) =>
-                                                    statio.dynamics.result ||
-                                                    statio.result[0]
-                                            )
-                                        ),
-                                    ];
-
-                                    return (
-                                        <WodRunningAthlete
-                                            key={s.laneNumber}
-                                            workout={workout}
-                                            participant={s.participant}
-                                            laneNumber={s.laneNumber}
-                                            divNumber={stations.length}
-                                            repsCompleted={s.result[0]}
-                                            rank={
-                                                scores.findIndex(
-                                                    (score) =>
-                                                        score ===
-                                                        (s.dynamics.result ||
-                                                            s.result[0])
-                                                ) === -1
-                                                    ? scores.length + 1
-                                                    : scores.findIndex(
-                                                          (score) =>
-                                                              score ===
-                                                              (s.dynamics
-                                                                  .result ||
-                                                                  s.result[0])
-                                                      ) + 1
-                                            }
-                                            repsOfFirst={repsOfFirst}
-                                            titleHeight={75}
-                                            fullWidth={1920 / 2 - 8}
-                                            finishResult={s.dynamics.result}
-                                        />
-                                    );
-                                })}
-                        </Grid>
-                        <Grid
-                            item
-                            xs={6}
-                            className="displayZone"
-                            display={"flex"}
-                            overflow={"hidden"}
-                            gap={0}
-                            sx={{
-                                flexDirection: "column",
-                                justifyContent: "space-evenly",
-                                // height: "100%",
-                            }}
-                        >
-                            <Typography
-                                fontSize="50px"
-                                textAlign={"center"}
-                                color={"white"}
-                                sx={{ fontFamily: "CantoraOne" }}
-                            >
-                                Cal Row
-                            </Typography>
-                            {allScores.length > 1 &&
-                                fullStations
+                                <Typography
+                                    fontSize="50px"
+                                    textAlign={"center"}
+                                    color={"white"}
+                                    sx={{ fontFamily: "CantoraOne" }}
+                                ></Typography>
+                                {fullStations
                                     ?.sort(
                                         (a, b) => a.laneNumber - b.laneNumber
                                     )
                                     .sort((a, b) => a.rank[0] - b.rank[0])
-                                    ?.map((s) => {
-                                        const repsOfFirst = allScores[1][0];
+                                    .sort((a, b) => {
+                                        if (
+                                            a.dynamics.result &&
+                                            !b.dynamics.result
+                                        )
+                                            return -1;
+                                        if (
+                                            !a.dynamics.result &&
+                                            b.dynamics.result
+                                        )
+                                            return 1;
+                                        if (
+                                            !a.dynamics.result &&
+                                            !b.dynamics.result
+                                        )
+                                            return 0;
+
+                                        return (
+                                            Number(
+                                                a.dynamics.result?.replace(
+                                                    ":",
+                                                    ""
+                                                )
+                                            ) -
+                                            Number(
+                                                b.dynamics.result?.replace(
+                                                    ":",
+                                                    ""
+                                                )
+                                            )
+                                        );
+                                    })
+                                    .map((s) => {
+                                        const repsOfFirst = allScores[0][0];
                                         const workout = workouts.find(
                                             (workout) =>
                                                 workout.workoutIds.includes(
                                                     globals?.externalWorkoutId.toString() ||
                                                         ""
-                                                ) && workout.index === 1
+                                                ) && workout.index === 0
                                         );
-
+                                        const scores = [
+                                            ...new Set(
+                                                fullStations.map(
+                                                    (statio) =>
+                                                        statio.dynamics
+                                                            .result ||
+                                                        statio.result[0]
+                                                )
+                                            ),
+                                        ];
                                         return (
-                                            workout && (
-                                                <WodRunningAthlete
-                                                    key={s.laneNumber}
-                                                    workout={workout}
-                                                    participant={s.participant}
-                                                    laneNumber={s.laneNumber}
-                                                    divNumber={stations.length}
-                                                    repsCompleted={s.result[1]}
-                                                    rank={s.rank[1]}
-                                                    repsOfFirst={repsOfFirst}
-                                                    titleHeight={75}
-                                                    fullWidth={1920 / 2 - 8}
-                                                />
-                                            )
+                                            <WodRunningAthlete
+                                                key={s.laneNumber}
+                                                workout={workout}
+                                                participant={s.participant}
+                                                laneNumber={s.laneNumber}
+                                                divNumber={stations.length}
+                                                repsCompleted={s.result[0]}
+                                                rank={
+                                                    scores.findIndex(
+                                                        (score) =>
+                                                            score ===
+                                                            (s.dynamics
+                                                                .result ||
+                                                                s.result[0])
+                                                    ) === -1
+                                                        ? scores.length + 1
+                                                        : scores.findIndex(
+                                                              (score) =>
+                                                                  score ===
+                                                                  (s.dynamics
+                                                                      .result ||
+                                                                      s
+                                                                          .result[0])
+                                                          ) + 1
+                                                }
+                                                repsOfFirst={repsOfFirst}
+                                                fullWidth={1920}
+                                                finishResult={s.dynamics.result}
+                                            />
                                         );
                                     })}
+                            </Grid>
                         </Grid>
-                    </Grid>
-
+                    )}
+                    {Number(chrono?.toString().replaceAll(":", "")) >
+                        100000 && (
+                        <DisplayWeight
+                            heatId={globals?.externalHeatId}
+                            stations={stations}
+                        />
+                    )}
                     <Box
                         position="absolute"
                         top={"50%"}

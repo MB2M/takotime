@@ -67,6 +67,7 @@ interface IScore extends Subdocument {
     _id: string;
     weight?: number;
     state?: string;
+    partnerId?: number;
 }
 
 interface IScoreGym extends Subdocument {

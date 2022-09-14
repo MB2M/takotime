@@ -40,9 +40,9 @@ try {
 // import router from "./mtWod1/routes";
 // app.use("/wod1", router);
 
-// // wod Max MT
-// import routerMax from "./mtWodMax/routes";
-// app.use("/wodMax", routerMax);
+// wod Max
+import routerMax from "./mtWodMax/routes";
+app.use("/wodMax", routerMax);
 
 // // vote
 // import routerVote from "./vote/routes";

@@ -26,7 +26,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod2",
         type: "forTime",
-        workoutIds: ["43607"],
+        workoutIds: [],
         index: 0,
         main: {
             movements: [
@@ -42,7 +42,6 @@ export const workouts: WorkoutDescription[] = [
         name: "wod3",
         type: "amrap",
         workoutIds: [],
-
         index: 0,
         buyIn: {
             movements: ["DB 1-Arm OH lunges"],
@@ -56,7 +55,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod4",
         type: "amrap",
-        workoutIds: [],
+        workoutIds: ["43607"],
         index: 0,
         main: {
             movements: ["Rope Climb", "Clean & Jerk", "Box jump Over", "DU"],
@@ -66,7 +65,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod4",
         type: "maxWeight",
-        workoutIds: [],
+        workoutIds: ["43607"],
         index: 1,
         main: {
             movements: ["1 Power Clean + 1 Front Squat + 1 Hang Squat Clean "],

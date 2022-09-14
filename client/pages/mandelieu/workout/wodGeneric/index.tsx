@@ -160,7 +160,7 @@ function Display() {
                     >
                         <Grid
                             item
-                            xs={6}
+                            xs={12}
                             className="displayZone"
                             display={"flex"}
                             overflow={"hidden"}
@@ -176,9 +176,7 @@ function Display() {
                                 textAlign={"center"}
                                 color={"white"}
                                 sx={{ fontFamily: "CantoraOne" }}
-                            >
-                                Wall Ball
-                            </Typography>
+                            ></Typography>
                             {fullStations
                                 ?.sort((a, b) => a.laneNumber - b.laneNumber)
                                 .sort((a, b) => a.rank[0] - b.rank[0])
@@ -202,7 +200,7 @@ function Display() {
                                         )
                                     );
                                 })
-                                ?.map((s) => {
+                                .map((s) => {
                                     const repsOfFirst = allScores[0][0];
                                     const workout = workouts.find(
                                         (workout) =>
@@ -211,6 +209,7 @@ function Display() {
                                                     ""
                                             ) && workout.index === 0
                                     );
+
                                     const scores = [
                                         ...new Set(
                                             fullStations.map(
@@ -246,67 +245,11 @@ function Display() {
                                                       ) + 1
                                             }
                                             repsOfFirst={repsOfFirst}
-                                            titleHeight={75}
-                                            fullWidth={1920 / 2 - 8}
+                                            fullWidth={1920}
                                             finishResult={s.dynamics.result}
                                         />
                                     );
                                 })}
-                        </Grid>
-                        <Grid
-                            item
-                            xs={6}
-                            className="displayZone"
-                            display={"flex"}
-                            overflow={"hidden"}
-                            gap={0}
-                            sx={{
-                                flexDirection: "column",
-                                justifyContent: "space-evenly",
-                                // height: "100%",
-                            }}
-                        >
-                            <Typography
-                                fontSize="50px"
-                                textAlign={"center"}
-                                color={"white"}
-                                sx={{ fontFamily: "CantoraOne" }}
-                            >
-                                Cal Row
-                            </Typography>
-                            {allScores.length > 1 &&
-                                fullStations
-                                    ?.sort(
-                                        (a, b) => a.laneNumber - b.laneNumber
-                                    )
-                                    .sort((a, b) => a.rank[0] - b.rank[0])
-                                    ?.map((s) => {
-                                        const repsOfFirst = allScores[1][0];
-                                        const workout = workouts.find(
-                                            (workout) =>
-                                                workout.workoutIds.includes(
-                                                    globals?.externalWorkoutId.toString() ||
-                                                        ""
-                                                ) && workout.index === 1
-                                        );
-
-                                        return (
-                                            workout && (
-                                                <WodRunningAthlete
-                                                    key={s.laneNumber}
-                                                    workout={workout}
-                                                    participant={s.participant}
-                                                    laneNumber={s.laneNumber}
-                                                    divNumber={stations.length}
-                                                    repsCompleted={s.result[1]}
-                                                    rank={s.rank[1]}
-                                                    repsOfFirst={repsOfFirst}
-                                                    titleHeight={75}
-                                                    fullWidth={1920 / 2 - 8}
-                                                />
-                                            )
-                                        );
-                                    })}
                         </Grid>
                     </Grid>
 

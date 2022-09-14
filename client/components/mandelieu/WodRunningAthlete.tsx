@@ -4,7 +4,7 @@ import useWorkout from "../../hooks/useWorkout";
 import { workouts } from "../../pages/mandelieu/workout/config";
 
 const colors = {
-    first: "#FFD600",
+    first: "linear-gradient(45deg,#06943d, #FFD600 )",
     second: "#05c1de",
     third: "#fd1085",
     other: "#5C5C5C",
@@ -12,19 +12,36 @@ const colors = {
 
 const MIN_SIZE = 520;
 const FULL_WIDTH = 1920;
+const ROUND_WIDTH = 200;
 
 const globalScoreBoxWidth = 150;
 
 const useHRunningBackgroundSize = (
     totalReps: number,
     repsCompleted: number,
-    finishResult?: string
+    workoutType: "amrap" | "forTime" | "maxWeight" = "forTime",
+    repsOfFirst: number,
+    finishResult?: string,
+    fullWidth: number = 1920
 ) => {
-    if (finishResult) return FULL_WIDTH;
+    if (finishResult) return fullWidth;
 
     if (!repsCompleted || !totalReps) return MIN_SIZE;
 
-    return MIN_SIZE + ((FULL_WIDTH - MIN_SIZE) * repsCompleted) / totalReps;
+    switch (workoutType) {
+        case "forTime":
+            return (
+                MIN_SIZE + ((fullWidth - MIN_SIZE) * repsCompleted) / totalReps
+            );
+        case "amrap":
+            return (
+                MIN_SIZE +
+                ((fullWidth - ROUND_WIDTH - MIN_SIZE) * repsCompleted) /
+                    repsOfFirst
+            );
+        default:
+            return fullWidth - ROUND_WIDTH;
+    }
 };
 
 const WodRunningAthlete = ({
@@ -35,6 +52,9 @@ const WodRunningAthlete = ({
     divNumber,
     rank,
     repsOfFirst,
+    finishResult,
+    titleHeight = 0,
+    fullWidth = 1920,
 }: {
     participant: string;
     laneNumber: number;
@@ -43,6 +63,9 @@ const WodRunningAthlete = ({
     divNumber: number;
     rank: number;
     repsOfFirst: number;
+    finishResult?: string;
+    titleHeight?: number;
+    fullWidth?: number;
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [textColor, setTextColor] = useState("#000");
@@ -59,7 +82,14 @@ const WodRunningAthlete = ({
         workoutType,
     } = useWorkout(workout, repsCompleted);
 
-    const bgSize = useHRunningBackgroundSize(totalReps, repsCompleted);
+    const bgSize = useHRunningBackgroundSize(
+        totalReps,
+        repsCompleted,
+        workoutType,
+        repsOfFirst,
+        finishResult,
+        fullWidth
+    );
 
     // const [rank, setRank] = useState<number | undefined>();
 
@@ -94,31 +124,30 @@ const WodRunningAthlete = ({
         }
     }, [rank]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setShowMovement(true);
-        setTimeout(()=>setShowMovement(false), 4000)
-    }, [currentMovement])
+        setTimeout(() => setShowMovement(false), 4000);
+    }, [currentMovement]);
 
     if (!participant) {
         return <div></div>;
     }
     return (
-        <Box
-            zIndex={10}
-            sx={{
-                height: (1080 - 155) / divNumber,
-                color: textColor,
-                justifyContent: "flex-start",
-                display: "flex",
-                width: "100%",
-                alignItems: "center",
-                position: "relative",
-                paddingY: "5px",
-                // border: `3px solid ${bg}`,
-                borderRadius: "50px 50px 50px 50px",
-            }}
-        >
-            {/* <Box
+        <Box display="flex">
+            <Box
+                zIndex={10}
+                sx={{
+                    height: (1080 - 155 - titleHeight) / divNumber,
+                    color: textColor,
+                    justifyContent: "flex-start",
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    position: "relative",
+                    paddingY: "5px",
+                }}
+            >
+                {/* <Box
                 sx={{
                     display: "flex",
                     height: "100%",
@@ -128,66 +157,100 @@ const WodRunningAthlete = ({
                 }}
                 ml={3}
             > */}
-            <Box
-                display={"flex"}
-                justifyContent={"flex-start"}
-                alignItems={"center"}
-                px={2}
-                width={bgSize}
-                sx={{ backgroundColor: bg }}
-                height={"100%"}
-            >
-                <Typography
-                    component="div"
-                    sx={{ fontFamily: "CantoraOne" }}
-                    fontSize={"2.7rem"}
-                >
-                    {laneNumber}
-                </Typography>
-
-                <Typography
-                    component="div"
-                    sx={{
-                        ml: 2,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        fontFamily: "CantoraOne",
-                    }}
-                    fontSize={"2.7rem"}
-                    noWrap
-                >
-                    {participant.toUpperCase()}
-                </Typography>
-                <Typography
-                    component="div"
-                    sx={{ fontFamily: "CantoraOne" }}
-                    fontSize={"2.7rem"}
-                    ml={"auto"}
-                >
-                    {repsCompleted - repsOfFirst
-                        ? repsCompleted - repsOfFirst
-                        : ""}
-                </Typography>
-            </Box>
-            {showMovement && (
                 <Box
-                    sx={{ backgroundColor: "#06943d" }}
-                    p={0.5}
-                    borderRadius="5px"
-                    ml={2}
+                    display={"flex"}
+                    justifyContent={"flex-start"}
+                    alignItems={"center"}
+                    px={2}
+                    width={bgSize}
+                    sx={{
+                        borderRadius: "5px",
+                        background: bg,
+                        transition: "width 0.7s",
+                    }}
+                    height={"100%"}
                 >
                     <Typography
                         component="div"
                         sx={{ fontFamily: "CantoraOne" }}
-                        fontSize={"2rem"}
+                        fontSize={"2.7rem"}
+                    >
+                        {laneNumber}
+                    </Typography>
+
+                    <Typography
+                        component="div"
+                        sx={{
+                            ml: 2,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            fontFamily: "CantoraOne",
+                        }}
+                        fontSize={"2.7rem"}
                         noWrap
                     >
-                        {currentMovement}
+                        {participant.toUpperCase()}
                     </Typography>
-                </Box>
-            )}
 
-            {/* {data.result && data.rank && (
+                    {finishResult ? (
+                        <Typography
+                            component="div"
+                            sx={{ fontFamily: "CantoraOne" }}
+                            fontSize={"3.1rem"}
+                            mx={"auto"}
+                        >
+                            {finishResult.slice(0, finishResult.length - 1)}
+                        </Typography>
+                    ) : !showMovement ? (
+                        <Typography
+                            component="div"
+                            sx={{ fontFamily: "CantoraOne" }}
+                            fontSize={"2.7rem"}
+                            ml={"auto"}
+                        >
+                            {repsCompleted - repsOfFirst
+                                ? repsCompleted - repsOfFirst
+                                : currentMovementReps}
+                        </Typography>
+                    ) : (
+                        <Box
+                            sx={{ backgroundColor: "#06943d" }}
+                            p={0.5}
+                            borderRadius="5px"
+                            ml={"auto"}
+                            display="flex"
+                        >
+                            <Typography
+                                component="div"
+                                sx={{ fontFamily: "CantoraOne" }}
+                                fontSize={"2rem"}
+                                noWrap
+                            >
+                                {currentMovementTotalReps} {currentMovement}
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
+                {/* {showMovement && (
+                    <Box
+                        sx={{ backgroundColor: "#06943d" }}
+                        p={0.5}
+                        borderRadius="5px"
+                        ml={2}
+                        display="flex"
+                    >
+                        <Typography
+                            component="div"
+                            sx={{ fontFamily: "CantoraOne" }}
+                            fontSize={"2rem"}
+                            noWrap
+                        >
+                            {currentMovementTotalReps} {currentMovement}
+                        </Typography>
+                    </Box>
+                )} */}
+
+                {/* {data.result && data.rank && (
                     <Typography
                         position="absolute"
                         right={50}
@@ -212,7 +275,29 @@ const WodRunningAthlete = ({
                         {data.rank[data.rank.length - 1]}
                     </Typography>
                 )} */}
-            {/* </Box> */}
+                {/* </Box> */}
+            </Box>
+            {workoutType === "amrap" && currentRound > 0 && (
+                <Box
+                    width={ROUND_WIDTH}
+                    justifyContent="center"
+                    alignItems="center"
+                    display="flex"
+                    borderLeft={"3px solid lightgray"}
+                >
+                    <Typography
+                        component="div"
+                        sx={{ fontFamily: "CantoraOne" }}
+                        fontSize={"2.5rem"}
+                        noWrap
+                        // mx={2}
+                        // ml={"auto"}
+                        color="white"
+                    >
+                        rd: {currentRound}
+                    </Typography>
+                </Box>
+            )}
         </Box>
     );
 };

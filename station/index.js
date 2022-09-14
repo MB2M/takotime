@@ -44,7 +44,11 @@ const main = async () => {
                     retain: true,
                 },
             },
-            [...mqttTopics, `server/wodConfig/${ip}`]
+            [
+                ...mqttTopics,
+                `server/wodConfig/${ip}`,
+                `buzzer/${this.ip.split(".")[3]}`,
+            ]
         );
         station.initProcess();
     });

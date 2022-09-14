@@ -244,6 +244,8 @@ class Station {
                 if (this.db.getData("/stations/dynamics/state") === 2) {
                     const now = message;
 
+                    console.log(now);
+
                     if (now < this.lastPush + 20000) return;
 
                     this.lastPush = now;

@@ -242,7 +242,7 @@ class Station {
 
             if (topic === `buzzer/${this.ip.split(".")[3]}`) {
                 if (this.db.getData("/stations/dynamics/state") === 2) {
-                    const now = message;
+                    const now = parseInt(message);
 
                     console.log(now);
 

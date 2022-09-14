@@ -25,7 +25,7 @@ class Station {
                 clientId: ip,
             },
             mqttTopics
-        );  
+        );
         // this.bleServices = new BLEServices();
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();
@@ -238,6 +238,23 @@ class Station {
 
             if (topic === `board/${this.devicesSubscribe[1]}/connect`) {
                 this.updateBoard();
+            }
+
+            if (topic === `buzzer/${this.ip.split(".")[3]}`) {
+                if (this.db.getData("/stations/dynamics/state") === 2) {
+                    const now = message;
+
+                    if (now < this.lastPush + 20000) return;
+
+                    this.lastPush = now;
+
+                    this.wodInterpreter.pressBuzzer(
+                        now,
+                        Date.parse(this.db.getData("/globals/startTime")),
+                        this.db.getData("/stations/dynamics/measurements"),
+                        this.db.getData("/stations/dynamics/currentWodPosition")
+                    );
+                }
             }
         });
     }

@@ -6,7 +6,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod1",
         type: "forTime",
-        workoutIds: [],
+        workoutIds: ["42555"],
         index: 0,
         main: {
             movements: ["Wall Ball"],
@@ -16,7 +16,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod1",
         type: "forTime",
-        workoutIds: [],
+        workoutIds: ["42555"],
         index: 1,
         main: {
             movements: ["Cal Row"],
@@ -26,7 +26,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod2",
         type: "forTime",
-        workoutIds: [],
+        workoutIds: ["43604"],
         index: 0,
         main: {
             movements: [
@@ -41,7 +41,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod3",
         type: "amrap",
-        workoutIds: [],
+        workoutIds: ["43606"],
         index: 0,
         buyIn: {
             movements: ["DB 1-Arm OH lunges"],
@@ -75,7 +75,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod5",
         type: "forTime",
-        workoutIds: [],
+        workoutIds: ["43769"],
         index: 0,
         main: {
             movements: [

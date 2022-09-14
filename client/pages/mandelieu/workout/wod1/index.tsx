@@ -6,7 +6,7 @@ import logo from "../../../../public/img/logoMandelieu.jpg";
 import useStationPayload from "../../../../hooks/useStationPayload";
 import { useEffect, useMemo, useState } from "react";
 import useInterval from "../../../../hooks/useInterval";
-import { workouts } from "../config";
+import { workouts } from "../../../../eventConfig/mandelieu/config";
 
 // import HeatPresentation from "../../../components/live/HeatPresentation";
 // import HeatResult from "../../../components/live/HeatResult";

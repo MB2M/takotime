@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import useWorkout from "../../hooks/useWorkout";
-import { workouts } from "../../pages/mandelieu/workout/config";
+import { workouts } from "../../eventConfig/mandelieu/config";
 
 const colors = {
     first: "linear-gradient(45deg,#06943d, #FFD600 )",

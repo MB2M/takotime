@@ -205,16 +205,14 @@ function Display() {
 
                                         return (
                                             Number(
-                                                a.dynamics.result?.replace(
-                                                    ":",
-                                                    ""
-                                                )
+                                                a.dynamics.result
+                                                    ?.replace(":", "")
+                                                    .replace("|", "")
                                             ) -
                                             Number(
-                                                b.dynamics.result?.replace(
-                                                    ":",
-                                                    ""
-                                                )
+                                                b.dynamics.result
+                                                    ?.replace(":", "")
+                                                    .replace("|", "")
                                             )
                                         );
                                     })

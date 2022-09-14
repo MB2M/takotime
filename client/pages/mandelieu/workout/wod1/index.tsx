@@ -195,10 +195,10 @@ function Display() {
 
                                     return (
                                         Number(
-                                            a.dynamics.result?.replace(":", "")
+                                            a.dynamics.result?.replace(":", "").replace("|","")
                                         ) -
                                         Number(
-                                            b.dynamics.result?.replace(":", "")
+                                            b.dynamics.result?.replace(":", "").replace("|","")
                                         )
                                     );
                                 })
@@ -279,7 +279,7 @@ function Display() {
                                     ?.sort(
                                         (a, b) => a.laneNumber - b.laneNumber
                                     )
-                                    .sort((a, b) => a.rank[0] - b.rank[0])
+                                    .sort((a, b) => a.rank[1] - b.rank[1])
                                     ?.map((s) => {
                                         const repsOfFirst = allScores[1][0];
                                         const workout = workouts.find(

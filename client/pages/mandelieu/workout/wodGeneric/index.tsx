@@ -190,13 +190,15 @@ function Display() {
                                         !b.dynamics.result
                                     )
                                         return 0;
-
+                                    console.log(Number(
+                                        a.dynamics.result?.replace(":", "").replace("|","")
+                                    ))
                                     return (
                                         Number(
-                                            a.dynamics.result?.replace(":", "")
+                                            a.dynamics.result?.replace(":", "").replace("|","")
                                         ) -
                                         Number(
-                                            b.dynamics.result?.replace(":", "")
+                                            b.dynamics.result?.replace(":", "").replace("|","")
                                         )
                                     );
                                 })

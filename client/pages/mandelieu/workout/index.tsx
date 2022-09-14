@@ -1,6 +1,6 @@
 import { Box, Button, Link, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { baseConfig } from "../../../eventConfig/mandelieu/config";
+import { baseConfig } from "./config";
 
 const Remote = () => {
     const {pathname} = useRouter();

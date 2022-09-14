@@ -47,7 +47,7 @@ const main = async () => {
             [
                 ...mqttTopics,
                 `server/wodConfig/${ip}`,
-                `buzzer/${this.ip.split(".")[3]}`,
+                `buzzer/${ip.split(".")[3]}`,
             ]
         );
         station.initProcess();

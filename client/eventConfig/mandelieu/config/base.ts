@@ -6,15 +6,13 @@ export const baseConfig = {
     wodNumber: 5,
 };
 
-
-export {logo, logoBlanc, bg}
-
+export { logo, logoBlanc, bg };
 
 export const workouts: WorkoutDescription[] = [
     {
         name: "wod1",
         type: "forTime",
-        workoutIds: ["42555"],
+        workoutIds: ["41714"],
         index: 0,
         main: {
             movements: ["Wall Ball"],
@@ -24,7 +22,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod1",
         type: "forTime",
-        workoutIds: ["42555"],
+        workoutIds: ["41714"],
         index: 1,
         main: {
             movements: ["Cal Row"],
@@ -34,7 +32,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod2",
         type: "forTime",
-        workoutIds: ["43604"],
+        workoutIds: ["41878"],
         index: 0,
         main: {
             movements: [
@@ -49,7 +47,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod3",
         type: "amrap",
-        workoutIds: ["43606"],
+        workoutIds: ["41879"],
         index: 0,
         buyIn: {
             movements: ["DB 1-Arm OH lunges"],
@@ -63,7 +61,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod4",
         type: "amrap",
-        workoutIds: ["43607"],
+        workoutIds: [],
         index: 0,
         main: {
             movements: ["Rope Climb", "Clean & Jerk", "Box jump Over", "DU"],
@@ -73,7 +71,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod4",
         type: "maxWeight",
-        workoutIds: ["43607"],
+        workoutIds: [],
         index: 1,
         main: {
             movements: ["1 Power Clean + 1 Front Squat + 1 Hang Squat Clean "],
@@ -83,7 +81,7 @@ export const workouts: WorkoutDescription[] = [
     {
         name: "wod5",
         type: "forTime",
-        workoutIds: ["43769"],
+        workoutIds: [],
         index: 0,
         main: {
             movements: [

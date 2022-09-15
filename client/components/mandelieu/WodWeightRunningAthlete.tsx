@@ -144,11 +144,11 @@ const WodWeightRunningAthlete = ({
     }
     return (
         <Stack
-            className={
-                highestBar === currentTry0?.weight && currentTry0?.weight > 0
-                    ? styles.glowing_card
-                    : ""
-            }
+            // className={
+            //     highestBar === currentTry0?.weight && currentTry0?.weight > 0
+            //         ? styles.glowing_card
+            //         : ""
+            // }
             sx={{
                 display: "flex",
                 height: "290px",
@@ -225,7 +225,7 @@ const WodWeightRunningAthlete = ({
                         justifyContent="center"
                         alignItems={"center"}
                         border={"1px solid gray"}
-                        sx={{ backgroundColor: "gray" }}
+                        sx={{ backgroundColor: colors.other }}
                     >
                         <Typography fontSize={50}>{data.result0}</Typography>
                     </Box>
@@ -257,6 +257,7 @@ const WodWeightRunningAthlete = ({
                         justifyContent="center"
                         alignItems={"center"}
                         border={"1px solid gray"}
+                        sx={{ backgroundColor: colors.other }}
                     >
                         <Typography fontSize={50}>{data.result1}</Typography>
                     </Box>

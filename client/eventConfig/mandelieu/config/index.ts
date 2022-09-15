@@ -1,1 +1,1 @@
-export {baseConfig, workouts} from "./base";
+export {baseConfig, workouts,bg, logo, logoBlanc} from "./base";

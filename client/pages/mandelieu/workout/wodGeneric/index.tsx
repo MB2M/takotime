@@ -2,7 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../../context/liveData/livedata";
 import useChrono from "../../../../hooks/useChrono";
-import logo from "../../../../public/img/logoMandelieu.jpg";
+import logo from "../../../../public/img/logoMandelieuBlanc.png";
 import useStationPayload from "../../../../hooks/useStationPayload";
 import { useEffect, useMemo, useState } from "react";
 import useInterval from "../../../../hooks/useInterval";

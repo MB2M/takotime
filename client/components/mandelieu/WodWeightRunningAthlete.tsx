@@ -197,8 +197,8 @@ const WodWeightRunningAthlete = ({
                     {data.participant.toUpperCase()}
                 </Typography>
             </Box>
-            <Stack direction={"row"} gap={2} height={"100%"}>
-                <Stack gap={2} width={"50%"}>
+            <Stack direction={"row"} gap={0} height={"100%"}>
+                <Stack gap={2} width={"50%"} border={"1px solid gray"}>
                     <Box
                         height={"70%"}
                         sx={{
@@ -224,11 +224,13 @@ const WodWeightRunningAthlete = ({
                         color="white"
                         justifyContent="center"
                         alignItems={"center"}
+                        border={"1px solid gray"}
+                        sx={{ backgroundColor: "gray" }}
                     >
                         <Typography fontSize={50}>{data.result0}</Typography>
                     </Box>
                 </Stack>
-                <Stack gap={2} width={"50%"}>
+                <Stack gap={2} width={"50%"} border={"1px solid gray"}>
                     <Box
                         height={"70%"}
                         sx={{
@@ -254,6 +256,7 @@ const WodWeightRunningAthlete = ({
                         color="white"
                         justifyContent="center"
                         alignItems={"center"}
+                        border={"1px solid gray"}
                     >
                         <Typography fontSize={50}>{data.result1}</Typography>
                     </Box>

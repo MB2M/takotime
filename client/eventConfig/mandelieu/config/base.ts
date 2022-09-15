@@ -1,6 +1,14 @@
+import bg from "../../../public/img/mandelieuBackground.jpg";
+import logo from "../../../public/img/logoMandelieu.png";
+import logoBlanc from "../../../public/img/logoMandelieuBlanc.png";
+
 export const baseConfig = {
     wodNumber: 5,
 };
+
+
+export {logo, logoBlanc, bg}
+
 
 export const workouts: WorkoutDescription[] = [
     {

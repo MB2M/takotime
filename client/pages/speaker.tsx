@@ -21,7 +21,6 @@ import Image from "next/image";
 import useWorkout from "../hooks/useWorkout";
 import { workouts } from "../eventConfig/mandelieu/config";
 
-
 const style = {
     position: "absolute",
     top: "50%",
@@ -36,21 +35,17 @@ const Speaker = () => {
     const EPInfo = useCompetitionCornerContext();
     const [stations, setStations] = useState<any>();
     const [open, setOpen] = useState<boolean>(false);
-    
+
     const workout = useMemo(
         () =>
-        workouts.find(
-            (workout) =>
-                workout.workoutIds.includes(
-                    globals?.externalWorkoutId.toString() ||
-                        ""
-                ) && workout.index === 0
-        ),
+            workouts.find(
+                (workout) =>
+                    workout.workoutIds.includes(
+                        globals?.externalWorkoutId.toString() || ""
+                    ) && workout.index === 0
+            ),
         [workouts, globals?.externalWorkoutId]
     );
-
-
-
 
     useEffect(() => {
         (async () => {
@@ -89,7 +84,7 @@ const Speaker = () => {
                     <Image
                         src={`/img/${workout?.name}.png`}
                         alt={workout?.name}
-                        width={1920 }
+                        width={1920}
                         height={1080}
                     />
                 </Box>
@@ -130,7 +125,9 @@ const Speaker = () => {
                         {EPInfo?.epHeat?.[0].heatTime}
                     </Typography>
                 </Box>
-                <Button onClick={handleClickWorkout}>View workout</Button>
+                <Box>
+                    <Button variant={"outlined"} onClick={handleClickWorkout}>View workout</Button>
+                </Box>
                 <Box>
                     <TableContainer>
                         <Table sx={{ p: 0 }} size={"small"}>

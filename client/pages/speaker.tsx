@@ -1,7 +1,9 @@
 import {
+    Button,
     Divider,
     List,
     ListItem,
+    Modal,
     Table,
     TableBody,
     TableCell,
@@ -11,16 +13,44 @@ import {
     Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../context/liveData/livedata";
-import { logo } from "../eventConfig/mandelieu/config";
+import { logoBlanc } from "../eventConfig/mandelieu/config";
 import Image from "next/image";
+import useWorkout from "../hooks/useWorkout";
+import { workouts } from "../eventConfig/mandelieu/config";
+
+
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    // py: 6,
+    // px: 2,
+};
 
 const Speaker = () => {
     const { globals } = useLiveDataContext();
     const EPInfo = useCompetitionCornerContext();
     const [stations, setStations] = useState<any>();
+    const [open, setOpen] = useState<boolean>(false);
+    
+    const workout = useMemo(
+        () =>
+        workouts.find(
+            (workout) =>
+                workout.workoutIds.includes(
+                    globals?.externalWorkoutId.toString() ||
+                        ""
+                ) && workout.index === 0
+        ),
+        [workouts, globals?.externalWorkoutId]
+    );
+
+
+
 
     useEffect(() => {
         (async () => {
@@ -44,78 +74,119 @@ const Speaker = () => {
         })();
     }, [globals]);
 
-    console.log(stations);
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleClickWorkout = () => {
+        setOpen(true);
+    };
 
     return (
-        <Box
-            height="100vh"
-            display={"flex"}
-            flexDirection={"column"}
-            justifyContent={"space-evenly"}
-            sx={{ backgroundColor: "#262626", color: "white" }}
-        >
-            <Box
-                display={"flex"}
-                justifyContent={"space-around"}
-                py={2}
-                height={200}
-                alignItems={"center"}
-            >
-                <Box width={200}>
-                    <Image src={logo} />
+        <>
+            <Modal open={open} onClose={handleClose}>
+                <Box sx={style}>
+                    <Image
+                        src={`/img/${workout?.name}.png`}
+                        alt={workout?.name}
+                        width={1920 }
+                        height={1080}
+                    />
                 </Box>
-                <Typography variant="h4">
-                    {EPInfo?.epHeat?.[0].heatName} (
-                    {EPInfo?.epHeat?.[0].division})
-                </Typography>
-                <Typography variant="h5">
-                    {EPInfo?.epHeat?.[0].heatTime}
-                </Typography>
-            </Box>
-            <TableContainer>
-                <Table sx={{ p: 0 }} size={"small"}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell sx={{ color: "white" }}>#</TableCell>
-                            <TableCell sx={{ color: "white" }}>
-                                Participant
-                            </TableCell>
-                            <TableCell sx={{ color: "white" }}>Box</TableCell>
-                            <TableCell sx={{ color: "white" }}>Rank</TableCell>
-                            <TableCell sx={{ color: "white" }}>
-                                Points
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {EPInfo.epHeat
-                            ?.sort((a, b) => a.station - b.station)
-                            .map((ep) => (
+            </Modal>
+            <Box
+                position={"absolute"}
+                height="100vh"
+                width="100vw"
+                sx={{
+                    backgroundImage: `url(${logoBlanc.src})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    filter: "opacity(10%) blur(4px)",
+                    webkitFilter: "opacity(10%) blur(4px)",
+                }}
+            ></Box>
+            <Box
+                height="100vh"
+                display={"flex"}
+                flexDirection={"column"}
+                // justifyContent={"space-evenly"}
+                sx={{
+                    backgroundColor: "#262626",
+                    color: "white",
+                }}
+            >
+                <Box
+                    display={"flex"}
+                    justifyContent={"space-around"}
+                    py={5}
+                    alignItems={"center"}
+                >
+                    <Typography variant="h4">
+                        {EPInfo?.epHeat?.[0].heatName} (
+                        {EPInfo?.epHeat?.[0].division})
+                    </Typography>
+                    <Typography variant="h5">
+                        {EPInfo?.epHeat?.[0].heatTime}
+                    </Typography>
+                </Box>
+                <Button onClick={handleClickWorkout}>View workout</Button>
+                <Box>
+                    <TableContainer>
+                        <Table sx={{ p: 0 }} size={"small"}>
+                            <TableHead>
                                 <TableRow>
                                     <TableCell sx={{ color: "white" }}>
-                                        {ep.station}
+                                        #
                                     </TableCell>
                                     <TableCell sx={{ color: "white" }}>
-                                        {ep.displayName}
+                                        Participant
                                     </TableCell>
                                     <TableCell sx={{ color: "white" }}>
-                                        {stations?.find(
-                                            (station: { station: number }) =>
-                                                station.station === ep.station
-                                        ).affiliate || ""}
+                                        Box
                                     </TableCell>
                                     <TableCell sx={{ color: "white" }}>
-                                        {ep.rank}
+                                        Rank
                                     </TableCell>
                                     <TableCell sx={{ color: "white" }}>
-                                        {ep.points}
+                                        Points
                                     </TableCell>
                                 </TableRow>
-                            ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Box>
+                            </TableHead>
+                            <TableBody>
+                                {EPInfo.epHeat
+                                    ?.sort((a, b) => a.station - b.station)
+                                    .map((ep) => (
+                                        <TableRow>
+                                            <TableCell sx={{ color: "white" }}>
+                                                {ep.station}
+                                            </TableCell>
+                                            <TableCell sx={{ color: "white" }}>
+                                                {ep.displayName}
+                                            </TableCell>
+                                            <TableCell sx={{ color: "white" }}>
+                                                {stations?.find(
+                                                    (station: {
+                                                        station: number;
+                                                    }) =>
+                                                        station.station ===
+                                                        ep.station
+                                                )?.affiliate || ""}
+                                            </TableCell>
+                                            <TableCell sx={{ color: "white" }}>
+                                                {ep.rank}
+                                            </TableCell>
+                                            <TableCell sx={{ color: "white" }}>
+                                                {ep.points}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Box>
+            </Box>
+        </>
     );
 };
 

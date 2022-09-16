@@ -10,7 +10,7 @@ const mqttOptions = {
     username: process.env.BROKER_USERNAME,
     password: process.env.BROKER_PASSWORD,
     clean: true,
-    keepalive: 5,
+    keepalive: 45,
 };
 
 const mqttTopics = [

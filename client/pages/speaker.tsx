@@ -14,6 +14,8 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../context/liveData/livedata";
+import { logo } from "../eventConfig/mandelieu/config";
+import Image from "next/image";
 
 const Speaker = () => {
     const { globals } = useLiveDataContext();
@@ -52,7 +54,16 @@ const Speaker = () => {
             justifyContent={"space-evenly"}
             sx={{ backgroundColor: "#262626", color: "white" }}
         >
-            <Box display={"flex"} justifyContent={"space-around"} py={2}>
+            <Box
+                display={"flex"}
+                justifyContent={"space-around"}
+                py={2}
+                height={200}
+                alignItems={"center"}
+            >
+                <Box width={200}>
+                    <Image src={logo} />
+                </Box>
                 <Typography variant="h4">
                     {EPInfo?.epHeat?.[0].heatName} (
                     {EPInfo?.epHeat?.[0].division})

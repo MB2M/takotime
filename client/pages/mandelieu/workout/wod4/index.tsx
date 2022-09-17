@@ -155,7 +155,7 @@ function Display() {
                     />
                     {/* CHANGE SCREEN AFTER 6' */}
                     {Number(chrono?.toString().replaceAll(":", "")) <
-                        650000 && (
+                        1250000 && (
                         <Grid
                             container
                             display={"flex"}
@@ -271,7 +271,7 @@ function Display() {
                         </Grid>
                     )}
                     {Number(chrono?.toString().replaceAll(":", "")) >
-                        650000 && (
+                        1250000 && (
                         <DisplayWeight
                             heatId={globals?.externalHeatId}
                             stations={stations}

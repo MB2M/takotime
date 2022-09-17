@@ -53,7 +53,6 @@ const update = async (
 };
 
 const deleteAll = async () => {
-    Station.collection.dropIndex("scores.index_1");
     const stations = await Station.remove();
     return stations;
 };

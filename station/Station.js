@@ -144,7 +144,7 @@ class Station {
 
                 let myWorkout;
                 for (const workout of json.workouts) {
-                    if (workout.categories.includes(json.stations.category)) {
+                    if (workout.categories.includes(json.stations?.category)) {
                         myWorkout = workout;
                     }
                 }

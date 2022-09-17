@@ -4,7 +4,6 @@ import { IBaseScore, IBaseStation } from "../../types/deviceScoring";
 const scoreSchema = new mongoose.Schema<IBaseScore>({
     index: {
         type: Number,
-        unique: true,
     },
     repCount: Number,
 });

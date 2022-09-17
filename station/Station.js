@@ -353,7 +353,7 @@ class Station {
         }
         this.updateDB(data);
 
-        const newCounterMac = data.stations.configs?.devices?.find(
+        const newCounterMac = data.stations?.configs?.devices?.find(
             (device) => device.role === "counter"
         )?.mac;
         const newBoardMac = data.stations.configs?.devices?.find(

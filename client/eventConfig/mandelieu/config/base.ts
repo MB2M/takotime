@@ -64,8 +64,8 @@ export const workouts: WorkoutDescription[] = [
         workoutIds: ["41880"],
         index: 0,
         main: {
-            movements: ["Rope Climb", "Clean & Jerk", "Box jump Over", "x10 DU"],
-            reps: [1, 3, 5, 3],
+            movements: ["Rope Climb", "Clean & Jerk", "Box jump Over", "x5 DU"],
+            reps: [1, 3, 5, 6],
         },
     },
     {
@@ -85,17 +85,17 @@ export const workouts: WorkoutDescription[] = [
         index: 0,
         main: {
             movements: [
-                "DU Heavy Rope",
+                "x5 DU Heavy Rope",
                 "Power Snatch",
                 "C2B",
-                "DU Heavy Rope",
+                "x5 DU Heavy Rope",
                 "Squat Snatch",
                 "Ring MU",
-                "DU Heavy Rope",
+                "x5 DU Heavy Rope",
                 "OHS",
                 "Handstand Walk",
             ],
-            reps: [60, 30, 30, 45, 15, 15, 60, 30, 30],
+            reps: [12, 30, 30, 9, 15, 15, 12, 30, 30],
         },
     },
 ];

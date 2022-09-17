@@ -356,7 +356,7 @@ class Station {
         const newCounterMac = data.stations?.configs?.devices?.find(
             (device) => device.role === "counter"
         )?.mac;
-        const newBoardMac = data.stations.configs?.devices?.find(
+        const newBoardMac = data.stations?.configs?.devices?.find(
             (device) => device.role === "board"
         )?.mac;
 

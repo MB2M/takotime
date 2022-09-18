@@ -203,7 +203,7 @@ const WodWeightRunningAthlete = ({
                         height={"70%"}
                         sx={{
                             backgroundColor: keepScore0
-                                ? lastScore0.state === "Success"
+                                ? lastScore0?.state === "Success"
                                     ? "green"
                                     : "red"
                                 : "#00000000",
@@ -235,7 +235,7 @@ const WodWeightRunningAthlete = ({
                         height={"70%"}
                         sx={{
                             backgroundColor: keepScore1
-                                ? lastScore1.state === "Success"
+                                ? lastScore1?.state === "Success"
                                     ? "green"
                                     : "red"
                                 : "#00000000",

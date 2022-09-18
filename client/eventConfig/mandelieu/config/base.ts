@@ -95,7 +95,7 @@ export const workouts: WorkoutDescription[] = [
                 "OHS",
                 "Handstand Walk",
             ],
-            reps: [12, 30, 30, 9, 15, 15, 12, 30, 30],
+            reps: [12, 30, 30, 9, 15, 15, 6, 30, 30],
         },
     },
 ];

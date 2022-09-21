@@ -111,9 +111,9 @@ const WarmupCurrent = () => {
                         <Grid
                             container
                             direction="row"
-                            justifyContent="space-around"
+                            justifyContent="center"
                             alignItems="center"
-                            spacing={5}
+                            gap={20}
                             paddingX={5}
                         >
                             {allowedHeats.map((allowedHeat, index) => {
@@ -125,7 +125,7 @@ const WarmupCurrent = () => {
                                             }}
                                         >
                                             <Typography
-                                                variant="h4"
+                                                fontSize={"2em"}
                                                 textAlign={"center"}
                                                 fontFamily={"CantoraOne"}
                                             >
@@ -136,7 +136,7 @@ const WarmupCurrent = () => {
                                                 } :`}
                                             </Typography>
                                             <Typography
-                                                variant="h3"
+                                                fontSize={"3em"}
                                                 textAlign={"center"}
                                                 fontFamily={"CantoraOne"}
                                                 marginBottom={3}
@@ -160,20 +160,18 @@ const WarmupCurrent = () => {
                                                             <TableRow>
                                                                 <TableCell>
                                                                     <Typography
-                                                                        variant="h5"
                                                                         textAlign={
                                                                             "center"
                                                                         }
                                                                         fontFamily={
                                                                             "CantoraOne"
                                                                         }
-                                                                        fontSize={
-                                                                            30
-                                                                        }
+                                                                        fontSize={"2.5em"}
                                                                     >
                                                                         {
                                                                             station.station
                                                                         }
+                                                                
                                                                     </Typography>
                                                                 </TableCell>
                                                                 <TableCell>

@@ -125,7 +125,7 @@ const WarmupCurrent = () => {
                                             }}
                                         >
                                             <Typography
-                                                fontSize={"2em"}
+                                                fontSize={"3.5vmin"}
                                                 textAlign={"center"}
                                                 fontFamily={"CantoraOne"}
                                             >
@@ -136,7 +136,7 @@ const WarmupCurrent = () => {
                                                 } :`}
                                             </Typography>
                                             <Typography
-                                                fontSize={"3em"}
+                                                fontSize={"5vmin"}
                                                 textAlign={"center"}
                                                 fontFamily={"CantoraOne"}
                                                 marginBottom={3}
@@ -166,7 +166,7 @@ const WarmupCurrent = () => {
                                                                         fontFamily={
                                                                             "CantoraOne"
                                                                         }
-                                                                        fontSize={"2.5em"}
+                                                                        fontSize={"3.8vmin"}
                                                                     >
                                                                         {
                                                                             station.station

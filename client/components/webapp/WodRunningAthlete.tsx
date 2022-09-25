@@ -22,7 +22,7 @@ const useHRunningBackgroundSize = (
     workoutType: "amrap" | "forTime" | "maxWeight" = "forTime",
     repsOfFirst: number,
     finishResult?: string,
-    fullWidth: number = 1920,
+    fullWidth: number = 1920
 ) => {
     if (finishResult) return fullWidth;
 
@@ -55,6 +55,8 @@ const WodRunningAthlete = ({
     finishResult,
     titleHeight = 0,
     fullWidth = 1920,
+    primaryColor,
+    secondaryColor,
 }: {
     participant: string;
     laneNumber: number;
@@ -66,6 +68,8 @@ const WodRunningAthlete = ({
     finishResult?: string;
     titleHeight?: number;
     fullWidth?: number;
+    primaryColor: string;
+    secondaryColor: string;
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [textColor, setTextColor] = useState("#000");
@@ -104,7 +108,9 @@ const WodRunningAthlete = ({
         } else {
             switch (rank) {
                 case 1:
-                    setBg(colors.first);
+                    setBg(
+                        `linear-gradient(45deg,${primaryColor}, ${secondaryColor} )`
+                    );
                     setTextColor("#000");
                     break;
 
@@ -122,7 +128,7 @@ const WodRunningAthlete = ({
                     break;
             }
         }
-    }, [rank]);
+    }, [rank, primaryColor, secondaryColor]);
 
     useEffect(() => {
         setShowMovement(true);

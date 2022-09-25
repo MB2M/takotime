@@ -5,6 +5,7 @@ import cors from "cors";
 import * as timesyncServer from "timesync/server/index.js";
 import dbConnect from "./config/dbConnect";
 import liveApp from "./live";
+import { WebSocket, WebSocketServer } from "ws";
 
 const app = express();
 
@@ -30,8 +31,9 @@ app.use("/timesync", timesyncServer.requestHandler);
 // Start App
 
 const server = initServer(app);
+export const wss = new WebSocketServer({ server });
 try {
-    liveApp.start(app, server, "/live");
+    liveApp.start(app, server, wss, "/live");
 } catch (err) {
     console.error(err);
 }
@@ -55,6 +57,12 @@ app.use("/wodMax", routerMax);
 // mandelieu
 import routerGym from "./mandelieu/routes";
 app.use("/mandelieu", routerGym);
+
+// webApp
+import webappRouter from "./webapp/routes";
+import { onConnection } from "./webapp/services/websocketService";
+app.use("/webapp", webappRouter);
+onConnection();
 
 // try {
 //     WOD1App.start(app, server, "/wod1");

@@ -29,12 +29,13 @@ class LiveApp {
     async start(
         expressApp: Express,
         server: Server,
+        wss: WebSocketServer,
         endpoint: string = "/live"
     ) {
         this.expressApp = expressApp;
         this.expressApp.use(endpoint, this.routes);
         // await this.initMqttBroker();
-        this.managerInit(server);
+        this.managerInit(wss);
     }
 
     // async initMqttBroker(): Promise<boolean> {
@@ -110,12 +111,12 @@ class LiveApp {
         }
     }
 
-    async managerInit(server: Server) {
+    async managerInit(wss: WebSocketServer) {
         const wodTimerServices = new WodTimerServices();
         const mqttServices = new MqttServices(
             // mqttBroker.socket as AedesWithClients<Aedes>
         );
-        const websocketServices = new WebsocketServices(server);
+        const websocketServices = new WebsocketServices(wss);
         this.manager = new Manager(
             wodTimerServices,
             mqttServices,

@@ -13,7 +13,7 @@ const Header = ({
     chronoFontSize = "6rem",
     backgroundColor = "ffffff00",
 }: {
-    logo?: StaticImageData;
+    logo?: StaticImageData | string;
     imageWidth?: string;
     textTop?: string;
     textTopFontSize?: string;
@@ -24,10 +24,19 @@ const Header = ({
     backgroundColor?: string;
 }) => {
     return (
-        <Stack direction="row" color={"white"} sx={{ backgroundColor }} height={155}>
+        <Stack
+            direction="row"
+            color={"white"}
+            sx={{ backgroundColor }}
+            height={155}
+        >
             {logo && (
-                <Box width={imageWidth} ml={3}>
-                    <Image src={logo} layout={"responsive"}></Image>
+                <Box width={imageWidth} ml={3} position={"relative"}>
+                    <Image
+                        src={logo}
+                        layout={"fill"}
+                        objectFit="contain"
+                    ></Image>
                 </Box>
             )}
             <Stack justifyContent={"space-around"} ml={5}>

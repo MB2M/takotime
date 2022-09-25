@@ -6,8 +6,8 @@ class WebsocketServices {
     wss: WebSocketServer;
     onMessageListeners: Array<(data: Buffer) => void>;
 
-    constructor(server: Server) {
-        this.wss = new WebSocketServer({ server });
+    constructor(wss: WebSocketServer) {
+        this.wss = wss;
         this.onMessageListeners = [];
         this.onConnection();
     }

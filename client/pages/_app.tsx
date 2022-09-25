@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { EventProvider } from "../context/event";
 import { LiveDataProvider } from "../context/liveData/livedata";
 import { CompetitionCornerProvider } from "../context/competitionCorner/data/competitionCorner";
+import CompetitionProvider from "../context/competition/provider";
 
 function MyApp({ Component, pageProps }: AppProps) {
     React.useEffect(() => {
@@ -32,7 +33,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <LiveDataProvider>
             <CompetitionCornerProvider>
-                <Component {...pageProps} />
+                <CompetitionProvider>
+                    <Component {...pageProps} />
+                </CompetitionProvider>
             </CompetitionCornerProvider>
         </LiveDataProvider>
     );

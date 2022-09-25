@@ -32,7 +32,6 @@ export const useLiveData = () => {
                 setStationDevices(message);
                 break;
             case "devices":
-                console.log(message)
                 setDevices(message);
                 break;
             case "activeWorkoutList":

@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import useStationPayload from "../../hooks/useStationPayload";
-import Header from "../mt/Header";
+import HeaderMT from "../mt/HeaderMT";
 import mtLogo from "../../public/img/logo.png";
 import StationsUpgradedTableDisplay from "./StationsUpgradedTableDisplay";
 import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
@@ -25,7 +25,7 @@ const HeatResult = () => {
                 flexDirection: "column",
             }}
         >
-            <Header
+            <HeaderMT
                 logo={mtLogo}
                 textTop={[
                     ...new Set(

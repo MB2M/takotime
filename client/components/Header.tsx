@@ -3,24 +3,26 @@ import { Box, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 
 const Header = ({
-    logo,
+    headerHeight = "155px",
+    leftZone,
     imageWidth = "400px",
     textTop,
     textTopFontSize = "9rem",
     textBottom,
     textBottomFontSize = "7rem",
-    chrono,
-    chronoFontSize = "6rem",
+    rightZone,
+    rightZoneFontSize = "6rem",
     backgroundColor = "ffffff00",
 }: {
-    logo?: StaticImageData | string;
+    headerHeight?: string;
+    leftZone?: StaticImageData | string;
     imageWidth?: string;
     textTop?: string;
     textTopFontSize?: string;
     textBottom?: string;
     textBottomFontSize?: string;
-    chrono?: string;
-    chronoFontSize?: string;
+    rightZone?: string;
+    rightZoneFontSize?: string;
     backgroundColor?: string;
 }) => {
     return (
@@ -28,36 +30,41 @@ const Header = ({
             direction="row"
             color={"white"}
             sx={{ backgroundColor }}
-            height={155}
+            height={headerHeight}
         >
-            {logo && (
+            {leftZone && (
                 <Box width={imageWidth} ml={3} position={"relative"}>
                     <Image
-                        src={logo}
+                        src={leftZone}
                         layout={"fill"}
                         objectFit="contain"
                     ></Image>
                 </Box>
             )}
-            <Stack justifyContent={"space-around"} ml={5}>
+            <Stack justifyContent={"space-evenly"} ml={5}>
                 <Typography
                     fontSize={textTopFontSize}
                     fontFamily={"CantoraOne"}
+                    lineHeight={1}
                 >
                     {textTop}
                 </Typography>
-                <Typography fontSize={"7rem"} fontFamily={"CantoraOne"}>
+                <Typography
+                    fontSize={textBottomFontSize}
+                    fontFamily={"CantoraOne"}
+                    lineHeight={1}
+                >
                     {textBottom}
                 </Typography>
             </Stack>
-            <Typography
+            {/* <Typography
                 fontSize={chronoFontSize}
                 fontFamily={"CantoraOne"}
                 ml="auto"
                 mr="50px"
             >
-                {chrono}
-            </Typography>
+                {rightZone}
+            </Typography> */}
         </Stack>
     );
 };

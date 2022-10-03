@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { ReactChild, ReactFragment, ReactPortal } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import useStationPayload from "../../hooks/useStationPayload";
-import Header from "../mt/Header";
+import HeaderMT from "../mt/HeaderMT";
 import mtLogo from "../../public/img/logo.png";
 import StationsUpgradedTableDisplay from "./StationsUpgradedTableDisplay";
 
@@ -24,9 +24,13 @@ const HeatPresentation = () => {
                 backgroundColor: "#242424",
             }}
         >
-            <Header
+            <HeaderMT
                 logo={mtLogo}
-                textTop={[...new Set(stationsUpgraded?.map(station => station.category))].join(" / ")}
+                textTop={[
+                    ...new Set(
+                        stationsUpgraded?.map((station) => station.category)
+                    ),
+                ].join(" / ")}
                 textTopFontSize={"7rem"}
                 // textTop={stationsUpgraded?.[0]?.category || ""}
             />

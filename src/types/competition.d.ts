@@ -9,7 +9,7 @@ interface ICompetition {
     logoDarkUrl?: string;
     primaryColor?: string;
     secondaryColor?: string;
-    workout: DocumentArray<IWorkout>;
+    workouts: DocumentArray<IWorkout>;
 }
 
 interface ICompetitionMethods {
@@ -26,12 +26,15 @@ interface IAdmin {
 interface IWorkout extends Subdocument {
     workoutId: string;
     layout: string;
+    duration: number;
     options: Document<workoutOptionSchema>;
 }
 
 interface IWorkoutOption extends Subdocument {
-    wodtype: string;
-    title: string;
+    wodtype: "amrap" | "forTime";
+    title: boolean;
+    titlePosition: "top" | "bottom";
+    titleType: "category" | "heat" | "heat-category" | "category-heat";
     logo: boolean;
     logoPosition:
         | "topLeft"
@@ -40,7 +43,15 @@ interface IWorkoutOption extends Subdocument {
         | "bottomLeft"
         | "bottomRight";
     chrono: boolean;
+    chronoPosition:
+        | "topLeft"
+        | "topRight"
+        | "background"
+        | "bottomLeft"
+        | "bottomRight";
+    chronoDirection: string;
+    rankBy: "repsCount" | "lineNumber";
     viewMovement: "none" | "flash" | "split";
-    movementFlashDureation: number;
+    movementFlashDuration: number;
     showRounds: boolean;
 }

@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import Header from "../mt/Header";
+import HeaderMT from "./HeaderMT";
 import mtLogo from "../../public/img/logo.png";
 import MTStationsUpgradedTableDisplay from "./MTStationsUpgradedTableDisplay";
 import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
@@ -22,8 +22,11 @@ const MTHeatResult = ({ stations }: { stations: any }) => {
                 flexDirection: "column",
             }}
         >
-            <Header logo={mtLogo} textTop={CCData?.epHeat?.[0].heatName} />
-            <MTStationsUpgradedTableDisplay stations={stations} sortBy={"rank"} />
+            <HeaderMT logo={mtLogo} textTop={CCData?.epHeat?.[0].heatName} />
+            <MTStationsUpgradedTableDisplay
+                stations={stations}
+                sortBy={"rank"}
+            />
         </Box>
     );
 };

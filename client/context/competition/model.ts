@@ -5,4 +5,5 @@ export const DEFAULT_COMPETITION_CONTEXT_VALUE: Competition = {
     platform: "CompetitionCorner",
     eventId: "",
     selected: true,
+    workouts: []
 };

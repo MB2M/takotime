@@ -4,11 +4,12 @@ import toReadableTime from "../utils/timeConverter";
 
 const useChrono = (
     // timesync: timesync.TimeSync | undefined,
-    startTime: string | undefined,
-    duration: number | undefined
+    startTime?: string,
+    duration?: number,
+    reverse: boolean = false
     // isOn: boolean
 ) => {
-    const [chrono, setChrono] = useState<number | string | null>(null);
+
     const [time, setTime] = useState<number>();
 
     const cc = useMemo(() => {
@@ -19,7 +20,9 @@ const useChrono = (
         if (diff < 0) {
             return Math.floor(diff / 1000);
         } else {
-            return toReadableTime(Math.min((duration || 0) * 60000, diff));
+            return reverse
+                ? toReadableTime(Math.max((duration || 0) * 60000 - diff, 0))
+                : toReadableTime(Math.min((duration || 0) * 60000, diff));
         }
     }, [time]);
 
@@ -35,32 +38,6 @@ const useChrono = (
 
         return () => clearInterval(serverT);
     }, []);
-
-    // useEffect(() => {
-    //     let timer: NodeJS.Timeout | undefined;
-    //     if (!startTime || startTime === "" || !time) {
-    //         setChrono(null);
-    //     } else {
-    //         timer = setInterval(() => {
-    //             const diff = time - Date.parse(startTime || "");
-    //             if (diff < 0) {
-    //                 // setChrono(
-    //                 //     toReadableTime(diff)
-    //                 // );
-    //                 setChrono(Math.floor(diff / 1000));
-    //             } else {
-    //                 setChrono(
-    //                     toReadableTime(Math.min((duration || 0) * 60000, diff))
-    //                 );
-    //             }
-    //         }, 100);
-    //     }
-    //     return () => {
-    //         if (typeof timer !== "undefined") {
-    //             clearInterval(timer);
-    //         }
-    //     };
-    // }, [time, startTime, duration]);
 
     return cc;
 };

@@ -11,7 +11,7 @@ import ReactPlayer from "react-player";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useStationPayload from "../../../hooks/useStationPayload";
 import styles from "../../../styles/HeatWinner.module.css";
-import Header from "../../mt/Header";
+import HeaderMT from "../../mt/HeaderMT";
 import mtLogo from "../../../public/img/logo.png";
 import HeatResult from "../HeatResult";
 

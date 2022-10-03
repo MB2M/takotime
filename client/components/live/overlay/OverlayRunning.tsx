@@ -7,7 +7,7 @@ import { Typography } from "@mui/material";
 import OverlayRunningDuelAthlete2 from "./OverlayRunningDuelAthlete2";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useStationPayload from "../../../hooks/useStationPayload";
-import Header from "../../mt/Header";
+import HeaderMT from "../../mt/HeaderMT";
 import mtLogo from "../../../public/img/logo.png";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 
@@ -40,7 +40,7 @@ const OverlayRunning = ({ version }: { version?: OverlayVersion }) => {
                 // borderColor: "red",
             }}
         >
-            <Header
+            <HeaderMT
                 // logo={mtLogo}
                 chrono={chrono?.toString().slice(0, 5) || ""}
                 chronoFontSize="4rem"

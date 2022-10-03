@@ -11,7 +11,7 @@ import { workouts } from "../../../../eventConfig/mandelieu/config";
 // import HeatPresentation from "../../../components/live/HeatPresentation";
 // import HeatResult from "../../../components/live/HeatResult";
 // import MTHeatWinner from "../../../components/mt/MTHeatWinner";
-import Header from "../../../../components/mt/Header";
+import HeaderMT from "../../../../components/mt/HeaderMT";
 import WodRunningAthlete from "../../../../components/mandelieu/WodRunningAthlete";
 
 function Display() {
@@ -141,7 +141,7 @@ function Display() {
                         backgroundColor: "#242424",
                     }}
                 >
-                    <Header
+                    <HeaderMT
                         logo={logo}
                         imageWidth={"200px"}
                         textTop={[
@@ -190,15 +190,23 @@ function Display() {
                                         !b.dynamics.result
                                     )
                                         return 0;
-                                    console.log(Number(
-                                        a.dynamics.result?.replace(":", "").replace("|","")
-                                    ))
+                                    console.log(
+                                        Number(
+                                            a.dynamics.result
+                                                ?.replace(":", "")
+                                                .replace("|", "")
+                                        )
+                                    );
                                     return (
                                         Number(
-                                            a.dynamics.result?.replace(":", "").replace("|","")
+                                            a.dynamics.result
+                                                ?.replace(":", "")
+                                                .replace("|", "")
                                         ) -
                                         Number(
-                                            b.dynamics.result?.replace(":", "").replace("|","")
+                                            b.dynamics.result
+                                                ?.replace(":", "")
+                                                .replace("|", "")
                                         )
                                     );
                                 })

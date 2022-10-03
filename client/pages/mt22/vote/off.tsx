@@ -5,7 +5,7 @@ import useChrono from "../../../hooks/useChrono";
 import mtLogo from "../../../public/img/logo.png";
 import useStationPayload from "../../../hooks/useStationPayload";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
-import Header from "../../../components/mt/Header";
+import HeaderMT from "../../../components/mt/HeaderMT";
 import WodWeightRunningAthlete from "../../../components/mt/WodWeightRunningAthlete";
 import { useEffect, useRef, useState } from "react";
 import useInterval from "../../../hooks/useInterval";

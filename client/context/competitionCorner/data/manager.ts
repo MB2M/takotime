@@ -5,8 +5,8 @@ export const useCompetitionCorner = (
     workoutId?: number,
     heatId?: number
 ) => {
-    // const [workouts, setWorkouts] = useState<CCWorkout[]>([]);
-    // const [heats, setHeats] = useState<CCHeat[]>([]);
+    const [workouts, setWorkouts] = useState<CCWorkout[]>([]);
+    const [heats, setHeats] = useState<CCHeat[]>([]);
     const [epHeat, setEpHeat] = useState<CCEPParticipant[]>();
 
     useEffect(() => {
@@ -49,22 +49,22 @@ export const useCompetitionCorner = (
             //     console.log(err);
             //     setWorkouts([]);
             // }
-            // try {
-            //     const response = await fetch(
-            //         `https://competitioncorner.net/api2/v1/schedule/workout/${workoutId}`
-            //     );
-            //     if (response.ok) {
-            //         const heats: CCHeat[] = await response.json();
-            //         setHeats(heats);
-            //     } else {
-            //         setHeats([]);
-            //     }
-            // } catch (err) {
-            //     console.log(err);
-            //     setHeats([]);
-            // }
+            try {
+                const response = await fetch(
+                    `https://competitioncorner.net/api2/v1/schedule/workout/${workoutId}`
+                );
+                if (response.ok) {
+                    const heats: CCHeat[] = await response.json();
+                    setHeats(heats);
+                } else {
+                    setHeats([]);
+                }
+            } catch (err) {
+                console.log(err);
+                setHeats([]);
+            }
         })();
     }, [eventId, workoutId, heatId]);
 
-    return { epHeat };
+    return { heats, epHeat };
 };

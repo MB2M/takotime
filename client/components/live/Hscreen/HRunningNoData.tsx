@@ -6,7 +6,7 @@ import useChrono from "../../../hooks/useChrono";
 import HRunningAthlete from "./HRunningAthlete";
 import useStationPayload from "../../../hooks/useStationPayload";
 import HeatPresentation from "../HeatPresentation";
-import Header from "../../mt/Header";
+import HeaderMT from "../../mt/HeaderMT";
 import mtLogo from "../../../public/img/logo.png";
 import StationsUpgradedTableDisplay from "../StationsUpgradedTableDisplay";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
@@ -56,7 +56,7 @@ function HorizontalRunningNoData() {
                 backgroundColor: "#242424",
             }}
         >
-            <Header
+            <HeaderMT
                 logo={mtLogo}
                 imageWidth={"300px"}
                 textTop={[
@@ -77,7 +77,9 @@ function HorizontalRunningNoData() {
                             fontSize={"4.5rem"}
                             fontFamily={"CantoraOne"}
                         >
-                            {loadedWorkouts?.[0]?.scoring?.[0]?.method.toUpperCase()} {loadedWorkouts?.[0]?.blocks?.[0]?.measurements?.at}':
+                            {loadedWorkouts?.[0]?.scoring?.[0]?.method.toUpperCase()}{" "}
+                            {loadedWorkouts?.[0]?.blocks?.[0]?.measurements?.at}
+                            ':
                         </Typography>
                         {loadedWorkouts?.[0]?.blocks.flatMap(
                             (block, index1) => {

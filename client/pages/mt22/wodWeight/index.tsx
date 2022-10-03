@@ -5,7 +5,7 @@ import useChrono from "../../../hooks/useChrono";
 import mtLogo from "../../../public/img/logo.png";
 import useStationPayload from "../../../hooks/useStationPayload";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
-import Header from "../../../components/mt/Header";
+import HeaderMT from "../../../components/mt/HeaderMT";
 import WodWeightRunningAthlete from "../../../components/mt/WodWeightRunningAthlete";
 import { useEffect, useMemo, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
@@ -75,8 +75,7 @@ function WodWeightRunning() {
                                 b.weight - a.weight
                         )
                         .find(
-                            (score: { state: string }) =>
-                                score.state === "Try"
+                            (score: { state: string }) => score.state === "Try"
                         )?.weight
             )
             .sort((a, b) => (b || 0) - (a || 0));
@@ -136,7 +135,7 @@ function WodWeightRunning() {
                         {fullStations
                             ?.sort((a, b) => a.laneNumber - b.laneNumber)
                             ?.map((s) => (
-                                <Grid item xs={3} >
+                                <Grid item xs={3}>
                                     <WodWeightRunningAthlete
                                         key={s.laneNumber}
                                         data={s}

@@ -9,6 +9,7 @@ import { EventProvider } from "../context/event";
 import { LiveDataProvider } from "../context/liveData/livedata";
 import { CompetitionCornerProvider } from "../context/competitionCorner/data/competitionCorner";
 import CompetitionProvider from "../context/competition/provider";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
     React.useEffect(() => {
@@ -34,6 +35,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <LiveDataProvider>
             <CompetitionCornerProvider>
                 <CompetitionProvider>
+                    <Head>
+                        <title>Takotime App</title>
+                        {/* <link rel="icon" href="/favicon.ico" /> */}
+                    </Head>
                     <Component {...pageProps} />
                 </CompetitionProvider>
             </CompetitionCornerProvider>

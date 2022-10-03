@@ -5,13 +5,13 @@ import useChrono from "../../../hooks/useChrono";
 import mtLogo from "../../../public/img/logo.png";
 import useStationPayload from "../../../hooks/useStationPayload";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
-import Header from "../../../components/mt/Header";
+import HeaderMT from "../../../components/mt/HeaderMT";
 import WodWeightRunningAthlete from "../../../components/mt/WodWeightRunningAthlete";
 import { useEffect, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
-import CropSquareIcon from '@mui/icons-material/CropSquare';
+import CropSquareIcon from "@mui/icons-material/CropSquare";
 
 const iconSelect = {
     carre: (
@@ -60,7 +60,7 @@ function Vote() {
         }
     };
     useInterval(restrieveStationInfo, 1000);
-    
+
     return (
         <Grid container color="white" sx={{ width: 1920, height: 1080 }}>
             {votes.map((vote) => {

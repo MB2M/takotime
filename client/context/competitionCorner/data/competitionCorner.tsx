@@ -4,11 +4,12 @@ import { useCompetitionCorner } from "./manager";
 
 const DEFAULT_CC_CONTEXT_VALUE: CompetitionCornerState = {
     epHeat: [],
+    heats: [],
 };
 
 export interface CompetitionCornerState {
     // workouts: CCWorkout[];
-    // heats: CCHeat[];
+    heats: CCHeat[];
     epHeat: CCEPParticipant[] | undefined;
 }
 

@@ -4,7 +4,7 @@ import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useChrono from "../../../hooks/useChrono";
 import useStationPayload from "../../../hooks/useStationPayload";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
-import Header from "../../../components/mt/Header";
+import HeaderMT from "../../../components/mt/HeaderMT";
 import { useMemo, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
 import WodGymOverlayRunningAthlete from "../../../components/mt/WodGymOverlayRunningAthlete";
@@ -147,7 +147,7 @@ function WodGymRunningOverlay() {
                             justifyContent: "space-evenly",
                         }}
                     >
-                        <Header
+                        <HeaderMT
                             // logo={mtLogo}
                             chrono={chrono?.toString().slice(0, 5) || ""}
                             chronoFontSize="4rem"

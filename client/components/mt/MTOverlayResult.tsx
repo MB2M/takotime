@@ -2,7 +2,7 @@ import { Box } from "@mui/system";
 import Stack from "@mui/material/Stack";
 import { List, ListItem, Typography } from "@mui/material";
 import { Key, ReactChild, ReactFragment, ReactPortal } from "react";
-import Header from "./Header";
+import HeaderMT from "./HeaderMT";
 import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
 
 const MTOverlayResult = ({ stations }: { stations: any }) => {
@@ -19,7 +19,7 @@ const MTOverlayResult = ({ stations }: { stations: any }) => {
                 justifyContent: "space-evenly",
             }}
         >
-            <Header
+            <HeaderMT
                 // logo={mtLogo}
                 chronoFontSize="4rem"
                 textTop={CCData?.epHeat?.[0].heatName}

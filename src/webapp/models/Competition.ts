@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
     wodtype: {
         type: String,
@@ -8,6 +7,15 @@ const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
         default: "forTime",
     },
     title: {
+        type: Boolean,
+        default: true,
+    },
+    titlePosition: {
+        type: String,
+        enum: ["top", "bottom"],
+        default: "top",
+    },
+    titleType: {
         type: String,
         enum: ["category", "heat", "heat-category", "category-heat"],
         default: "heat",
@@ -31,12 +39,36 @@ const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
         type: Boolean,
         default: true,
     },
+    chronoPosition: {
+        type: String,
+        enum: [
+            "topLeft",
+            "topRight",
+            "background",
+            "bottomLeft",
+            "bottomRight",
+        ],
+        default: "topRight",
+    },
+    chronoDirection: {
+        type: String,
+        enum: ["asc", "desc"],
+        defaut: "asc",
+    },
+    rankBy: {
+        type: String,
+        enum: ["repsCount", "lineNumber"],
+        default: "repsCount",
+    },
     viewMovement: {
         type: String,
-        default: "flash",
         enum: ["none", "flash", "split"],
+        default: "flash",
     },
-    movementFlashDureation: Number,
+    movementFlashDuration: {
+        type: Number,
+        default: 5,
+    },
     showRounds: {
         type: Boolean,
         default: true,
@@ -44,11 +76,12 @@ const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
 });
 
 const workoutSchema = new mongoose.Schema<IWorkout>({
-    workoutId: String,
+    workoutId: { type: String, unique: true },
     layout: {
         type: String,
         default: "default",
     },
+    duration: Number,
     options: workoutOptionSchema,
 });
 
@@ -78,7 +111,7 @@ const competitionSchema = new mongoose.Schema<
     logoUrl: String,
     logoDarkUrl: String,
     // workouts
-    workout: [workoutSchema],
+    workouts: [workoutSchema],
     //font
     //colors
     primaryColor: String,

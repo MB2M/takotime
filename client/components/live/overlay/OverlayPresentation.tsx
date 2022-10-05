@@ -12,7 +12,7 @@ import mtLogo from "../../../public/img/logo.png";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 import { ReactChild, ReactFragment, ReactPortal } from "react";
 
-const getWorkout = (workouts: Workout[], station: WidescreenStation) => {
+const getWorkout = (workouts: LiveWorkout[], station: WidescreenStation) => {
     for (let workout of workouts) {
         if (workout.categories.includes(station.category)) {
             return workout;

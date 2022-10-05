@@ -21,7 +21,7 @@ const OverlayRunningDuelAthlete = ({
     opposantData,
 }: {
     data: WidescreenStation;
-    workout: Workout | undefined;
+    workout: LiveWorkout | undefined;
     position: "left" | "right";
     opposantData: WidescreenStation;
 }) => {

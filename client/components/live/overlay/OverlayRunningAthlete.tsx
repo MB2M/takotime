@@ -14,7 +14,7 @@ const OverlayRunningAthlete = ({
     position,
 }: {
     data: WidescreenStation;
-    workout: Workout | undefined;
+    workout: LiveWorkout | undefined;
     position: "left" | "right";
 }) => {
     const [bg, setBg] = useState("");

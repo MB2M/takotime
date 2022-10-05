@@ -10,6 +10,9 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
             setStationsPayload([]);
             return;
         }
+
+
+
         setStationsPayload(
             stations.map((s) => {
                 const r = ranks.find((r) => r.lane === s.laneNumber);
@@ -20,12 +23,12 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
                 } else {
                     rank = r.rank;
                 }
-
                 return {
                     laneNumber: s.laneNumber,
                     externalId: s.externalId,
                     participant: s.participant,
                     category: s.category,
+                    reps: s.dynamics?.currentWodPosition?.reps,
                     repsPerBlock: s.dynamics?.currentWodPosition?.repsPerBlock,
                     currentMovement:
                         s.dynamics?.currentWodPosition?.currentMovement,

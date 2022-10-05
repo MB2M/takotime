@@ -35,7 +35,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
 
 export interface LiveDataState {
     workoutIds: WorkoutIds[];
-    loadedWorkouts: Workout[];
+    loadedWorkouts: LiveWorkout[];
     stationDevices: StationDevices[];
     stations: Station[];
     devices: Device[];

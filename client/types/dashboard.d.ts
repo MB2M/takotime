@@ -92,7 +92,7 @@ type Device = {
     state: number;
 };
 
-type Workout = {
+type LiveWorkout = {
     _id: string;
     name: string;
     customId: string;
@@ -181,6 +181,7 @@ interface WidescreenStation {
     externalId: number;
     participant: string;
     category: string;
+    reps: number;
     repsPerBlock: number[];
     currentMovement: string;
     repsOfMovement: number;

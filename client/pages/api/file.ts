@@ -25,7 +25,7 @@ export default async function handler(
 
     const asyncParse = (req: NextApiRequest) =>
         new Promise((resolve, reject) => {
-            const form = new formidable.IncomingForm({ multiples: true });
+            const form = new formidable.IncomingForm();
             form.parse(req, (err, fields, files) => {
                 if (err) return reject(err);
                 resolve({ fields, files });
@@ -56,6 +56,7 @@ export default async function handler(
         fields: formidable.Fields;
         files: formidable.Files;
     };
+
     await saveFile(result.files.file as formidable.File);
 
     return res.status(201).send("");

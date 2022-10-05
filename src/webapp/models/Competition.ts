@@ -82,6 +82,11 @@ const workoutSchema = new mongoose.Schema<IWorkout>({
         default: "default",
     },
     duration: Number,
+    dataSource: {
+        type: String,
+        enum: ["web", "iot"],
+        default: "iot",
+    },
     options: workoutOptionSchema,
 });
 

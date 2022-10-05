@@ -128,10 +128,8 @@ const CompetitionDetail = () => {
         try {
             await fetch(`/api/file?_id=${_id}${dark ? "&dark" : ""}`, {
                 method: "POST",
-                body,
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                body: body,
+
             });
         } catch (err) {
             console.error(err);

@@ -113,6 +113,12 @@ const WorkoutCard = ({
         handleUpdateWorkout({ duration: Number(event.target.value) });
     };
 
+    const handleDataSourceChange = (event: SelectChangeEvent) => {
+        handleUpdateWorkout({
+            dataSource: event.target.value as Workout["dataSource"],
+        });
+    };
+
     const handleWodtypeChange = (event: SelectChangeEvent) => {
         handleUpdateWorkoutOptions({
             wodtype: event.target.value as WorkoutOption["wodtype"],
@@ -248,6 +254,20 @@ const WorkoutCard = ({
                                     onChange={handleDurationChange}
                                     fullWidth
                                 />
+                            </Box>
+                            <Box>
+                                Data Source
+                                <Select
+                                    size="small"
+                                    value={workout.dataSource}
+                                    onChange={handleDataSourceChange}
+                                    fullWidth
+                                >
+                                    <MenuItem value={"iot"}>
+                                        tako counter
+                                    </MenuItem>
+                                    <MenuItem value={"web"}>phone</MenuItem>
+                                </Select>
                             </Box>
                             <Box>
                                 Workout type

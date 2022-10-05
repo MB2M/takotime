@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 export const useLiveData = () => {
     const [workoutIds, setWorkoutIds] = useState<WorkoutIds[]>([]);
-    const [loadedWorkouts, setLoadedWorkouts] = useState<Workout[]>([]);
+    const [loadedWorkouts, setLoadedWorkouts] = useState<LiveWorkout[]>([]);
     const [stationDevices, setStationDevices] = useState<StationDevices[]>([]);
     const [devices, setDevices] = useState<Device[]>([]);
     const [stations, setStations] = useState<Station[]>([]);
@@ -49,7 +49,6 @@ export const useLiveData = () => {
         ws?.current?.readyState;
         ws?.current?.sendMessage(message);
     };
-
 
     return {
         workoutIds,

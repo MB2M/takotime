@@ -30,7 +30,7 @@ const colors = {
 
 const useHRunningBackgroundSize = (
     data: WidescreenStation,
-    workout: Workout | undefined
+    workout: LiveWorkout | undefined
 ) => {
     const totalReps = useMemo(() => {
         return (
@@ -65,7 +65,7 @@ const HorizontalRunningAthlete = ({
     rankByFront,
 }: {
     data: WidescreenStation;
-    workout: Workout | undefined;
+    workout: LiveWorkout | undefined;
     divNumber: number;
     rankByFront: number;
 }) => {

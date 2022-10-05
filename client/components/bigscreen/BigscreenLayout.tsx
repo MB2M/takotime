@@ -1,10 +1,9 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { useState, useMemo, Children, ReactNode } from "react";
+import { useMemo, ReactNode } from "react";
 import { useCompetitionContext } from "../../context/competition";
 import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import useChrono from "../../hooks/useChrono";
 import BigscreenBar from "./BigscreenHeader";
 import Image from "next/image";
 import useCCWorkouts from "../../hooks/useCCWorkouts";
@@ -16,9 +15,8 @@ const BigscreenLayout = ({
     children: ReactNode;
     headerHeight: number;
 }) => {
-    const { globals, stations } = useLiveDataContext();
+    const { globals } = useLiveDataContext();
     const competition = useCompetitionContext();
-    const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
     const { heats } = useCompetitionCornerContext();
     const CCWorkouts = useCCWorkouts(competition?.eventId);
 

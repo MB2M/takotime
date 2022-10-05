@@ -54,7 +54,9 @@ const WodRunningAthlete = ({
     repsOfFirst,
     finishResult,
     titleHeight = 0,
-    fullWidth = 1920,
+    fullWidth = (1920 * 3) / 4,
+    primaryColor,
+    secondaryColor,
 }: {
     participant: string;
     laneNumber: number;
@@ -66,6 +68,8 @@ const WodRunningAthlete = ({
     finishResult?: string;
     titleHeight?: number;
     fullWidth?: number;
+    primaryColor: string;
+    secondaryColor: string;
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [textColor, setTextColor] = useState("#000");
@@ -91,6 +95,8 @@ const WodRunningAthlete = ({
         fullWidth
     );
 
+    // if (laneNumber ===5) console.log(repsCompleted - repsOfFirst)
+
     // const [rank, setRank] = useState<number | undefined>();
 
     useEffect(() => {
@@ -104,7 +110,9 @@ const WodRunningAthlete = ({
         } else {
             switch (rank) {
                 case 1:
-                    setBg(colors.first);
+                    setBg(
+                        `linear-gradient(45deg,${primaryColor}, ${secondaryColor} )`
+                    );
                     setTextColor("#000");
                     break;
 
@@ -208,7 +216,7 @@ const WodRunningAthlete = ({
                             fontSize={"2.7rem"}
                             ml={"auto"}
                         >
-                            {repsCompleted - repsOfFirst
+                            {repsCompleted - repsOfFirst < 0
                                 ? repsCompleted - repsOfFirst
                                 : currentMovementReps}
                         </Typography>

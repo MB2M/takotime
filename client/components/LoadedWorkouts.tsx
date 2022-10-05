@@ -1,4 +1,4 @@
-const LoadedWorkouts = ({ loadedWorkouts }: { loadedWorkouts: Workout[] }) => {
+const LoadedWorkouts = ({ loadedWorkouts }: { loadedWorkouts: LiveWorkout[] }) => {
     return (
         <>
             <h3>Loaded:</h3>

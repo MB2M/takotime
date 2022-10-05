@@ -125,7 +125,7 @@ const competitionSchema = new mongoose.Schema<
 });
 
 competitionSchema.methods = {
-    select: async function () {
+    select: async function (this: CompetitionModel) {
         const competitions = await mongoose
             .model("Competition")
             .find({ selected: true })

@@ -133,7 +133,7 @@ competitionSchema.methods = {
         competitions.forEach((competition) => {
             competition.updateOne({ selected: false }).exec();
         });
-        const competition = this.updateOne({ selected: true }).exec();
+        const competition = this.update({ selected: true }).exec();
         return competition;
     },
 };

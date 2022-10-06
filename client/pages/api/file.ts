@@ -49,7 +49,6 @@ export default async function handler(
                 },
             }
         );
-        return;
     };
 
     const result = (await asyncParse(req)) as {

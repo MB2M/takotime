@@ -16,13 +16,13 @@ export const workouts: WorkoutDescription[] = [
         index: 0,
         main: {
             movements: ["x100m Row", "Hang C&J", "Box Jump Over"],
-            reps: [6, 20, 16, 6, 20, 16],
+            reps: [6, 32, 16, 6, 32, 16],
         },
     },
     {
         name: "wod1b",
         type: "amrap",
-        workoutIds: ["46189"],
+        workoutIds: ["46188"],
         index: 1,
         main: {
             movements: [

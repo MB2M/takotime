@@ -189,7 +189,7 @@ const CompetitionDetail = () => {
                         <Box height={200} position={"relative"}>
                             {_id && (
                                 <Image
-                                    src={`/img/${
+                                    src={`public/img/${
                                         competition?.logoUrl || "tako.png"
                                     }`}
                                     layout="fill"

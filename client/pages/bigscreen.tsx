@@ -28,6 +28,8 @@ const BigScreen = () => {
         [competition, globals?.externalWorkoutId]
     );
 
+    const currentIndex = 0;
+
     const allScores = useMemo(() => {
         return [
             stationsInfo
@@ -146,7 +148,10 @@ const BigScreen = () => {
                 {workout?.dataSource === "web" &&
                     fullStations
                         ?.sort((a, b) => a.laneNumber - b.laneNumber)
-                        .sort((a, b) => a.rank[0] - b.rank[0])
+                        .sort(
+                            (a, b) =>
+                                a.rank[currentIndex] - b.rank[currentIndex]
+                        )
                         .sort((a, b) => {
                             if (a.dynamics.result && !b.dynamics.result)
                                 return -1;
@@ -168,13 +173,14 @@ const BigScreen = () => {
                             );
                         })
                         .map((s) => {
-                            const repsOfFirst = allScores[0][0];
+                            const repsOfFirst =
+                                allScores[currentIndex][currentIndex];
                             const workoutFlow = workouts.find(
                                 (workout) =>
                                     workout.workoutIds.includes(
                                         globals?.externalWorkoutId.toString() ||
                                             ""
-                                    ) && workout.index === 0
+                                    ) && workout.index === currentIndex
                             );
 
                             const scores = [
@@ -182,7 +188,7 @@ const BigScreen = () => {
                                     fullStations.map(
                                         (statio) =>
                                             statio.dynamics.result ||
-                                            statio.result[0]
+                                            statio.result[currentIndex]
                                     )
                                 ),
                             ];
@@ -194,20 +200,22 @@ const BigScreen = () => {
                                     participant={s.participant}
                                     laneNumber={s.laneNumber}
                                     height={1 / stations.length}
-                                    repsCompleted={s.result[0]}
+                                    repsCompleted={s.result[currentIndex]}
                                     rank={
                                         scores.findIndex(
                                             (score) =>
                                                 score ===
                                                 (s.dynamics.result ||
-                                                    s.result[0])
+                                                    s.result[currentIndex])
                                         ) === -1
                                             ? scores.length + 1
                                             : scores.findIndex(
                                                   (score) =>
                                                       score ===
                                                       (s.dynamics.result ||
-                                                          s.result[0])
+                                                          s.result[
+                                                              currentIndex
+                                                          ])
                                               ) + 1
                                     }
                                     repsOfFirst={repsOfFirst}
@@ -226,24 +234,24 @@ const BigScreen = () => {
                         ?.sort((a, b) => a.laneNumber - b.laneNumber)
                         .sort(
                             (a, b) =>
-                                a.rank[a.rank.length - 1] -
-                                b.rank[a.rank.length - 1]
+                                // a.rank[a.rank.length - 1] -
+                                // b.rank[a.rank.length - 1]
+                                a.rank[currentIndex] - b.rank[currentIndex]
                         )
                         ?.map((s, i) => {
                             const repsOfFirst = stationsUpgraded
-                                .map((station) =>
-                                    station.repsPerBlock?.reduce(
-                                        (p, c) => p + c,
-                                        0
-                                    )
+                                .map(
+                                    (station) =>
+                                        station.repsPerBlock[currentIndex]
                                 )
                                 .sort((a, b) => b - a)[0];
+
                             const workoutFlow = workouts.find(
                                 (workout) =>
                                     workout.workoutIds.includes(
                                         globals?.externalWorkoutId.toString() ||
                                             ""
-                                    ) && workout.index === 0
+                                    ) && workout.index === currentIndex
                             );
 
                             return (
@@ -252,10 +260,7 @@ const BigScreen = () => {
                                         key={s.laneNumber}
                                         workout={workoutFlow}
                                         repsCompleted={
-                                            s.repsPerBlock?.reduce(
-                                                (p, c) => p + c,
-                                                0
-                                            ) || 0
+                                            s.repsPerBlock[currentIndex] || 0
                                         }
                                         participant={s.participant}
                                         laneNumber={s.laneNumber}
@@ -279,17 +284,14 @@ const BigScreen = () => {
                                                 .map(
                                                     (stationFiltered) =>
                                                         stationFiltered.rank[
-                                                            stationFiltered.rank
-                                                                .length - 1
+                                                            currentIndex
                                                         ]
                                                 )
                                                 .sort((a, b) => a - b)
                                                 .findIndex(
                                                     (rank) =>
                                                         rank ===
-                                                        s.rank[
-                                                            s.rank.length - 1
-                                                        ]
+                                                        s.rank[currentIndex]
                                                 ) + 1
                                         }
                                     />

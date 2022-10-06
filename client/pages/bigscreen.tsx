@@ -213,10 +213,10 @@ const BigScreen = () => {
                                     repsOfFirst={repsOfFirst}
                                     finishResult={s.dynamics.result}
                                     primaryColor={
-                                        competition?.primaryColor || "white"
+                                        competition?.primaryColor || "red"
                                     }
                                     secondaryColor={
-                                        competition?.secondaryColor || "white"
+                                        competition?.secondaryColor || "blue"
                                     }
                                 />
                             );

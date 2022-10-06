@@ -16,7 +16,8 @@ type Workout = {
     workoutId?: string;
     layout?: string;
     duration?: number;
-    dataSource?: "web" | "iot"
+    dataSource?: "web" | "iot";
+    wodIndexSwitchMinute?: number;
     options?: WorkoutOption;
 };
 

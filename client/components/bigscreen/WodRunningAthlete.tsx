@@ -55,6 +55,7 @@ const WodRunningAthlete = ({
     finishResult,
     titleHeight = 0,
     fullWidth = (1920 * 3) / 4,
+    options,
     primaryColor,
     secondaryColor,
 }: {
@@ -64,6 +65,7 @@ const WodRunningAthlete = ({
     workout: WorkoutDescription | undefined;
     height: number;
     rank: number;
+    options?: WorkoutOption;
     repsOfFirst: number;
     finishResult?: string;
     titleHeight?: number;
@@ -285,7 +287,7 @@ const WodRunningAthlete = ({
                 )} */}
                 {/* </Box> */}
             </Box>
-            {workoutType === "amrap" && currentRound > 0 && (
+            {options?.showRounds &&  workoutType === "amrap" && currentRound > 0 && (
                 <Box
                     width={ROUND_WIDTH}
                     justifyContent="center"

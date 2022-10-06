@@ -28,6 +28,7 @@ interface IWorkout extends Subdocument {
     layout: string;
     duration: number;
     dataSource?: "web" | "iot";
+    wodIndexSwitchMinute: number;
     options: Document<workoutOptionSchema>;
 }
 

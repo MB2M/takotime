@@ -87,6 +87,10 @@ const workoutSchema = new mongoose.Schema<IWorkout>({
         enum: ["web", "iot"],
         default: "iot",
     },
+    wodIndexSwitchMinute: {
+        type: Number,
+        default: 0
+    },
     options: workoutOptionSchema,
 });
 

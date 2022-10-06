@@ -13,6 +13,23 @@ import useStationPayload from "../hooks/useStationPayload";
 
 const HEADER_HEIGHT = 150;
 
+const addZero = (x: string | number, n: number) => {
+    while (x.toString().length < n) {
+        x = "0" + x;
+    }
+    return x;
+};
+
+const toReadableTime = (timestamp: string | number | Date) => {
+    const asDate = new Date(timestamp);
+    const hours = addZero(asDate.getUTCHours(), 2);
+    const minutes = addZero(asDate.getUTCMinutes(), 2);
+    const seconds = addZero(asDate.getUTCSeconds(), 2);
+    const milli = addZero(asDate.getUTCMilliseconds(), 3);
+
+    return `${hours !== "00" ? hours + ":" : ""}${minutes}:${seconds}.${milli}`;
+};
+
 const BigScreen = () => {
     const { globals, stations, ranks } = useLiveDataContext();
     const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
@@ -28,7 +45,16 @@ const BigScreen = () => {
         [competition, globals?.externalWorkoutId]
     );
 
-    const currentIndex = 0;
+    const currentIndex = useMemo(
+        () =>
+        workout?.wodIndexSwitchMinute === 0
+        ? 0
+        : Number(chrono?.toString().replaceAll(":", "")) <
+          (workout?.wodIndexSwitchMinute || 0) * 100000
+        ? 0
+        : 1,
+        [chrono, workout?.wodIndexSwitchMinute]
+    );
 
     const allScores = useMemo(() => {
         return [
@@ -242,7 +268,7 @@ const BigScreen = () => {
                             const repsOfFirst = stationsUpgraded
                                 .map(
                                     (station) =>
-                                        station.repsPerBlock[currentIndex]
+                                        station.repsPerBlock?.[currentIndex]
                                 )
                                 .sort((a, b) => b - a)[0];
 
@@ -253,20 +279,35 @@ const BigScreen = () => {
                                             ""
                                     ) && workout.index === currentIndex
                             );
-
+                            console.log(s.measurements?.[currentIndex]?.method);
                             return (
                                 <>
                                     <WodRunningAthlete
                                         key={s.laneNumber}
+                                        options={workout.options}
                                         workout={workoutFlow}
                                         repsCompleted={
-                                            s.repsPerBlock[currentIndex] || 0
+                                            s.repsPerBlock?.[currentIndex] || 0
                                         }
                                         participant={s.participant}
                                         laneNumber={s.laneNumber}
                                         height={1 / stations.length}
                                         repsOfFirst={repsOfFirst}
-                                        finishResult={s.result}
+                                        finishResult={
+                                            s.result?.replace("|", " | ") ||
+                                            (!s.measurements?.[currentIndex]
+                                                ? undefined
+                                                : s.measurements[currentIndex]
+                                                      .method === "time"
+                                                ? toReadableTime(
+                                                      s.measurements[
+                                                          currentIndex
+                                                      ].value
+                                                  )
+                                                : `${s.measurements[
+                                                      currentIndex
+                                                  ].value.toString()} reps|`)
+                                        }
                                         primaryColor={
                                             competition?.primaryColor || "white"
                                         }

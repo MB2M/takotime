@@ -58,6 +58,12 @@ const WodRunningAthlete = ({
     options,
     primaryColor,
     secondaryColor,
+    totalReps = 0,
+    currentMovement,
+    currentMovementReps,
+    currentMovementTotalReps,
+    currentRound = 0,
+    workoutType,
 }: {
     participant: string;
     laneNumber: number;
@@ -72,6 +78,12 @@ const WodRunningAthlete = ({
     fullWidth?: number;
     primaryColor: string;
     secondaryColor: string;
+    totalReps?: number;
+    currentMovement?: string;
+    currentMovementReps?: number;
+    currentMovementTotalReps?: number;
+    currentRound?: number;
+    workoutType?: "amrap" | "forTime" | "maxWeight";
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [textColor, setTextColor] = useState("#000");
@@ -79,14 +91,18 @@ const WodRunningAthlete = ({
     const [showMovement, setShowMovement] = useState<boolean>(false);
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
-    const {
-        totalReps,
-        currentMovement,
-        currentMovementReps,
-        currentMovementTotalReps,
-        currentRound,
-        workoutType,
-    } = useWorkout(workout, repsCompleted);
+    // const {
+    //     totalReps,
+    //     currentMovement,
+    //     currentMovementReps,
+    //     currentMovementTotalReps,
+    //     currentRound,
+    //     workoutType,
+    // } = useWorkout(workout, repsCompleted);
+
+    if (laneNumber === 9) {
+        console.log(totalReps)
+    }
 
     const bgSize = useHRunningBackgroundSize(
         totalReps,
@@ -287,27 +303,29 @@ const WodRunningAthlete = ({
                 )} */}
                 {/* </Box> */}
             </Box>
-            {options?.showRounds &&  workoutType === "amrap" && currentRound > 0 && (
-                <Box
-                    width={ROUND_WIDTH}
-                    justifyContent="center"
-                    alignItems="center"
-                    display="flex"
-                    borderLeft={"3px solid lightgray"}
-                >
-                    <Typography
-                        component="div"
-                        sx={{ fontFamily: "CantoraOne" }}
-                        fontSize={"2.5rem"}
-                        noWrap
-                        // mx={2}
-                        // ml={"auto"}
-                        color="white"
+            {options?.showRounds &&
+                workoutType === "amrap" &&
+                currentRound > 0 && (
+                    <Box
+                        width={ROUND_WIDTH}
+                        justifyContent="center"
+                        alignItems="center"
+                        display="flex"
+                        borderLeft={"3px solid lightgray"}
                     >
-                        rd: {currentRound}
-                    </Typography>
-                </Box>
-            )}
+                        <Typography
+                            component="div"
+                            sx={{ fontFamily: "CantoraOne" }}
+                            fontSize={"2.5rem"}
+                            noWrap
+                            // mx={2}
+                            // ml={"auto"}
+                            color="white"
+                        >
+                            rd: {currentRound}
+                        </Typography>
+                    </Box>
+                )}
         </Box>
     );
 };

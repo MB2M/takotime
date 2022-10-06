@@ -61,16 +61,26 @@ export const workouts: WorkoutDescription[] = [
             ],
         },
     },
-    // {
-    //     name: "wod1",
-    //     type: "forTime",
-    //     workoutIds: ["41714"],
-    //     index: 1,
-    //     main: {
-    //         movements: ["Cal Row"],
-    //         reps: [150],
-    //     },
-    // },
+    {
+        name: "wod3",
+        type: "forTime",
+        workoutIds: ["46192"],
+        index: 0,
+        main: {
+            movements: ["Heavy DU", "Wall Ball", "Deadlift"],
+            reps: [60, 30, 30, 60, 30, 30, 60, 30, 30, 60, 30, 30],
+        },
+    },
+    {
+        name: "wod4",
+        type: "forTime",
+        workoutIds: ["46195"],
+        index: 0,
+        main: {
+            movements: ["Heavy DU", "Wall Ball", "Deadlift"],
+            reps: [60, 30, 30, 60, 30, 30, 60, 30, 30, 60, 30, 30],
+        },
+    },
     // {
     //     name: "wod2",
     //     type: "forTime",
@@ -110,16 +120,16 @@ export const workouts: WorkoutDescription[] = [
     //         reps: [1, 3, 5, 6],
     //     },
     // },
-    // {
-    //     name: "wod4",
-    //     type: "maxWeight",
-    //     workoutIds: ["41880"],
-    //     index: 1,
-    //     main: {
-    //         movements: ["1 Power Clean + 1 Front Squat + 1 Hang Squat Clean "],
-    //         reps: [1],
-    //     },
-    // },
+    {
+        name: "wod2",
+        type: "maxWeight",
+        workoutIds: ["46190"],
+        index: 0,
+        main: {
+            movements: ["Thruster", "Snatch"],
+            reps: [1],
+        },
+    },
     // {
     //     name: "wod5",
     //     type: "forTime",

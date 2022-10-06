@@ -31,7 +31,7 @@ const toReadableTime = (timestamp: string | number | Date) => {
 };
 
 const BigScreen = () => {
-    const { globals, stations, ranks } = useLiveDataContext();
+    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
     const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
     const chrono = useChrono(globals?.startTime, globals?.duration);
     const competition = useCompetitionContext();
@@ -47,14 +47,26 @@ const BigScreen = () => {
 
     const currentIndex = useMemo(
         () =>
-        workout?.wodIndexSwitchMinute === 0
-        ? 0
-        : Number(chrono?.toString().replaceAll(":", "")) <
-          (workout?.wodIndexSwitchMinute || 0) * 100000
-        ? 0
-        : 1,
+            workout?.wodIndexSwitchMinute === 0
+                ? 0
+                : Number(chrono?.toString().replaceAll(":", "")) <
+                  (workout?.wodIndexSwitchMinute || 0) * 100000
+                ? 0
+                : 1,
         [chrono, workout?.wodIndexSwitchMinute]
     );
+    const totalReps = useMemo(
+        () => loadedWorkouts?.[0]?.blocks[currentIndex]?.measurements?.repsTot || 0,
+        [currentIndex, loadedWorkouts]
+        );
+        
+
+    const workoutType = useMemo(
+        () => loadedWorkouts?.[0]?.scoring[currentIndex]?.method || "forTime",
+        [currentIndex, loadedWorkouts]
+    );
+
+    console.log(workoutType)
 
     const allScores = useMemo(() => {
         return [
@@ -279,7 +291,7 @@ const BigScreen = () => {
                                             ""
                                     ) && workout.index === currentIndex
                             );
-                            console.log(s.measurements?.[currentIndex]?.method);
+
                             return (
                                 <>
                                     <WodRunningAthlete
@@ -290,6 +302,19 @@ const BigScreen = () => {
                                             s.repsPerBlock?.[currentIndex] || 0
                                         }
                                         participant={s.participant}
+                                        totalReps={totalReps}
+                                        currentMovement={s.currentMovement}
+                                        currentMovementReps={s.repsOfMovement}
+                                        currentMovementTotalReps={
+                                            s.totalRepsOfMovement
+                                        }
+                                        currentRound={s.position.round + 1}
+                                        workoutType={
+                                            workoutType as
+                                                | "amrap"
+                                                | "forTime"
+                                                | "maxWeight"
+                                        }
                                         laneNumber={s.laneNumber}
                                         height={1 / stations.length}
                                         repsOfFirst={repsOfFirst}
@@ -306,7 +331,7 @@ const BigScreen = () => {
                                                   )
                                                 : `${s.measurements[
                                                       currentIndex
-                                                  ].value.toString()} reps|`)
+                                                  ].value?.toString()} reps|`)
                                         }
                                         primaryColor={
                                             competition?.primaryColor || "white"

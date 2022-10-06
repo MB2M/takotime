@@ -129,8 +129,12 @@ const CompetitionDetail = () => {
             await fetch(`/api/file?_id=${_id}${dark ? "&dark" : ""}`, {
                 method: "POST",
                 body: body,
-
             });
+            // await fetch(`http://${process.env.NEXT_PUBLIC_LIVE_API}/upload?_id=${_id}${dark ? "&dark" : ""}`, {
+            //     method: "POST",
+            //     body: body,
+
+            // });
         } catch (err) {
             console.error(err);
         }
@@ -189,7 +193,7 @@ const CompetitionDetail = () => {
                         <Box height={200} position={"relative"}>
                             {_id && (
                                 <Image
-                                    src={`public/img/${
+                                    src={`/api/images/${
                                         competition?.logoUrl || "tako.png"
                                     }`}
                                     layout="fill"

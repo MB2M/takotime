@@ -36,7 +36,7 @@ export default async function handler(
         const data = fs.readFileSync(file.filepath);
         const extension = file.originalFilename?.split(".").at(-1);
         const fileName = crypto.randomBytes(20).toString("hex");
-        fs.writeFileSync(`./public/img/${fileName}.${extension}`, data);
+        fs.writeFileSync(`./public/img/logo/${fileName}.${extension}`, data);
         fs.unlinkSync(file.filepath);
 
         await fetch(

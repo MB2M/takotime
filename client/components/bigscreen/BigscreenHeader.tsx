@@ -30,7 +30,7 @@ const BigscreenBar = ({
     );
 
     const logoUrl = useMemo(
-        () => (options?.logo ? `/img/${competition?.logoUrl}` : ""),
+        () => (options?.logo ? `/api/images/${competition?.logoUrl}` : ""),
         [options?.logo]
     );
 

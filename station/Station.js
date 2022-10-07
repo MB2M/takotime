@@ -392,7 +392,7 @@ class Station {
                 data.globals.duration !== 0
                 // && data.stations.dynamics.result === ""
             ) {
-                console.log("wod started")
+                
                 this.initTimer(json.globals);
             } else {
                 this.timer && this.timer.stopTimer();
@@ -500,7 +500,9 @@ class Station {
     }
 
     initTimer(json) {
+        console.log("before checkpoint")
         const checkPointTime = this.wodInterpreter.getCheckpointTime();
+        console.log("after checkpoint")
         this.timer.stopTimer();
         console.log("é")
         this.timer.launchTimer(json.startTime, json.duration, checkPointTime);

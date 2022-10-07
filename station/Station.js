@@ -392,6 +392,7 @@ class Station {
                 data.globals.duration !== 0
                 // && data.stations.dynamics.result === ""
             ) {
+                console.log("wod started")
                 this.initTimer(json.globals);
             } else {
                 this.timer && this.timer.stopTimer();

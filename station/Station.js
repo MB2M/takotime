@@ -297,7 +297,11 @@ class Station {
 
         this.timer.on("wodStarted", () => {
             console.log("WOD STARTED TIMER");
-            this.changeState(2);
+            if (this.db.getData("/stations/dynamics/result") !== "") {
+                this.changeState(3);
+            } else {
+                this.changeState(2);
+            }
         });
 
         this.timer.on("wodEnded", () => {

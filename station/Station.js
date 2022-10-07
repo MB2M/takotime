@@ -501,6 +501,7 @@ class Station {
     initTimer(json) {
         const checkPointTime = this.wodInterpreter.getCheckpointTime();
         this.timer.stopTimer();
+        console.log("é")
         this.timer.launchTimer(json.startTime, json.duration, checkPointTime);
     }
 

@@ -73,7 +73,7 @@ const BigscreenLayout = ({
                         {workout?.options?.logo &&
                             workout?.options?.logoPosition === "background" && (
                                 <Image
-                                    src={`/img/${competition?.logoUrl}`}
+                                    src={`/api/images/${competition?.logoUrl}`}
                                     alt="logo"
                                     layout="fill"
                                     objectFit="contain"

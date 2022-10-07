@@ -16,6 +16,23 @@ const ROUND_WIDTH = 200;
 
 const globalScoreBoxWidth = 150;
 
+const addZero = (x: string | number, n: number) => {
+    while (x.toString().length < n) {
+        x = "0" + x;
+    }
+    return x;
+};
+
+const toReadableTime = (timestamp: string | number | Date) => {
+    const asDate = new Date(timestamp);
+    const hours = addZero(asDate.getUTCHours(), 2);
+    const minutes = addZero(asDate.getUTCMinutes(), 2);
+    const seconds = addZero(asDate.getUTCSeconds(), 2);
+    const milli = addZero(asDate.getUTCMilliseconds(), 3);
+
+    return `${hours !== "00" ? hours + ":" : ""}${minutes}:${seconds}.${milli}`;
+};
+
 const useHRunningBackgroundSize = (
     totalReps: number,
     repsCompleted: number,
@@ -45,64 +62,101 @@ const useHRunningBackgroundSize = (
 };
 
 const WodRunningAthlete = ({
-    participant,
-    laneNumber,
+    // participant,
+    // laneNumber,
     workout,
-    repsCompleted,
+    // repsCompleted,
     height,
     rank,
     repsOfFirst,
-    finishResult,
+    // finishResult,
     titleHeight = 0,
     fullWidth = (1920 * 3) / 4,
     options,
     primaryColor,
     secondaryColor,
     totalReps = 0,
-    currentMovement,
-    currentMovementReps,
-    currentMovementTotalReps,
-    currentRound = 0,
+    // currentMovement,
+    // currentMovementReps,
+    // currentMovementTotalReps,
+    // currentRound = 0,
     workoutType,
+    station,
+    currentIndex,
+    dataSource,
 }: {
-    participant: string;
-    laneNumber: number;
-    repsCompleted: number;
+    // participant: string;
+    // laneNumber: number;
+    // repsCompleted: number;
     workout: WorkoutDescription | undefined;
     height: number;
     rank: number;
-    options?: WorkoutOption;
     repsOfFirst: number;
-    finishResult?: string;
+    // finishResult?: string;
     titleHeight?: number;
     fullWidth?: number;
+    options?: WorkoutOption;
     primaryColor: string;
     secondaryColor: string;
     totalReps?: number;
-    currentMovement?: string;
-    currentMovementReps?: number;
-    currentMovementTotalReps?: number;
-    currentRound?: number;
-    workoutType?: "amrap" | "forTime" | "maxWeight";
+    // currentMovement?: string;
+    // currentMovementReps?: number;
+    // currentMovementTotalReps?: number;
+    // currentRound?: number;
+    workoutType?: "amrap" | "forTime";
+    station: WidescreenStation;
+    currentIndex: number;
+    dataSource: Workout["dataSource"];
 }) => {
     // const [colors, setColors] = useState('linear-gradient(to top, transparent 60%, #c6316e)')
     const [textColor, setTextColor] = useState("#000");
     const [bg, setBg] = useState("");
     const [showMovement, setShowMovement] = useState<boolean>(false);
+    const {
+        laneNumber,
+        participant,
+        currentMovement,
+        repsOfMovement: currentMovementReps,
+        totalRepsOfMovement: currentMovementTotalReps,
+    } = station;
+    const repsCompleted = station.repsPerBlock?.[currentIndex] || 0; // OK
+    const currentRound = station.position.round + 1;
+    const finishResult =
+        station.result?.replace("|", " | ") ||
+        (!station.measurements?.[currentIndex]
+            ? undefined
+            : station.measurements[currentIndex].method === "time"
+            ? toReadableTime(station.measurements[currentIndex].value)
+            : `${station.measurements[currentIndex].value?.toString()} reps|`);
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
-    // const {
-    //     totalReps,
-    //     currentMovement,
-    //     currentMovementReps,
-    //     currentMovementTotalReps,
-    //     currentRound,
-    //     workoutType,
-    // } = useWorkout(workout, repsCompleted);
+    const {
+        // totalRepetitions,
+        movement,
+        movementReps,
+        movementTotalReps,
+        round,
+        // wodType,
+    } = useWorkout(workout, repsCompleted);
 
-    if (laneNumber === 9) {
-        console.log(totalReps)
-    }
+    const getWorkoutData = () => {
+        switch (dataSource) {
+            case "iot":
+                return {
+                    currentMovement: station.currentMovement,
+                    currentMovementReps: station.repsOfMovement,
+                    currentMovementTotalReps: station.totalRepsOfMovement,
+                    currentRound: station.position.round + 1,
+                };
+            case "web":
+                return {
+                    currentMovement: movement,
+                    currentMovementReps: movementReps,
+                    currentMovementTotalReps: movementTotalReps,
+                    currentRound: round,
+                };
+        }
+    };
 
     const bgSize = useHRunningBackgroundSize(
         totalReps,
@@ -112,10 +166,6 @@ const WodRunningAthlete = ({
         finishResult,
         fullWidth
     );
-
-    // if (laneNumber ===5) console.log(repsCompleted - repsOfFirst)
-
-    // const [rank, setRank] = useState<number | undefined>();
 
     useEffect(() => {
         if (rank > 3 || rank < 1) {
@@ -236,7 +286,7 @@ const WodRunningAthlete = ({
                         >
                             {repsCompleted - repsOfFirst < 0
                                 ? repsCompleted - repsOfFirst
-                                : currentMovementReps}
+                                : getWorkoutData()?.currentMovementReps}
                         </Typography>
                     ) : (
                         <Box
@@ -252,7 +302,8 @@ const WodRunningAthlete = ({
                                 fontSize={"2rem"}
                                 noWrap
                             >
-                                {currentMovementTotalReps} {currentMovement}
+                                {getWorkoutData()?.currentMovementTotalReps}{" "}
+                                {getWorkoutData()?.currentMovement}
                             </Typography>
                         </Box>
                     )}
@@ -322,7 +373,7 @@ const WodRunningAthlete = ({
                             // ml={"auto"}
                             color="white"
                         >
-                            rd: {currentRound}
+                            rd: {getWorkoutData()?.currentRound}
                         </Typography>
                     </Box>
                 )}

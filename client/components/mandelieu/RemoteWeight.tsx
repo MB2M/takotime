@@ -315,10 +315,10 @@ const RemoteWeight = ({
                         <List>
                             {stationInfo.scores
                                 .filter(
-                                    (score: wodWeightScore) =>
+                                    (score: WodWeightScore) =>
                                         score.partnerId === selectedPartnerId
                                 )
-                                .map((score: wodWeightScore) => (
+                                .map((score: WodWeightScore) => (
                                     <ListItem
                                         key={score._id}
                                         onClick={() =>

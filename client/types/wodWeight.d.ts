@@ -1,8 +1,15 @@
-type wodWeightState = "Cancel" | "Success" | "Fail" | "Try";
+type WodWeightState = "Cancel" | "Success" | "Fail" | "Try";
 
-type wodWeightScore = {
+type WodWeightScore = {
     partnerId: number;
     _id: string;
     weight: number;
-    state: wodWeightState;
+    state: WodWeightState;
+};
+
+type WodWeightStation = {
+    _id: string;
+    heatId?: string;
+    laneNumber?: number;
+    scores?: WodWeightScore[];
 };

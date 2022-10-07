@@ -85,13 +85,16 @@ const BigscreenLayout = ({
                         <Grid2
                             lg={3}
                             height={1}
+                            maxHeight={1}
                             display="flex"
                             alignItems="center"
+                            justifyContent={"center"}
                             sx={{ borderLeft: "1px solid gray" }}
                             p={2}
                         >
                             <Typography
-                                variant="h4"
+                                fontSize="1.35rem"
+                                lineHeight={1.1}
                                 color="white"
                                 textAlign={"center"}
                                 dangerouslySetInnerHTML={{
@@ -99,7 +102,7 @@ const BigscreenLayout = ({
                                         platformWorkout?.description ||
                                         "no workout description",
                                 }}
-                           />
+                            />
                         </Grid2>
                     </Grid2>
                 </Box>

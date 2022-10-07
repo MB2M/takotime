@@ -10,9 +10,7 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
             setStationsPayload([]);
             return;
         }
-
-
-
+        
         setStationsPayload(
             stations.map((s) => {
                 const r = ranks.find((r) => r.lane === s.laneNumber);

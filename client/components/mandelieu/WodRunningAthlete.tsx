@@ -74,12 +74,12 @@ const WodRunningAthlete = ({
     // const [bgSize, setBgSize] = useState(MIN_SIZE);
 
     const {
-        totalReps,
-        currentMovement,
-        currentMovementReps,
-        currentMovementTotalReps,
-        currentRound,
-        workoutType,
+        totalRepetitions: totalReps,
+        movement: currentMovement,
+        movementReps: currentMovementReps,
+        movementTotalReps: currentMovementTotalReps,
+        round: currentRound,
+        wodType: workoutType,
     } = useWorkout(workout, repsCompleted);
 
     const bgSize = useHRunningBackgroundSize(

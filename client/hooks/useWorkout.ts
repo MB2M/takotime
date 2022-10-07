@@ -13,7 +13,7 @@ const useWorkout = (
     repsCompleted: number
 ) => {
 
-    const workoutType = useMemo(() => workout?.type, [workout]);
+    const wodType = useMemo(() => workout?.type, [workout]);
 
     const buyInReps = useMemo(
         () => workout?.buyIn?.reps?.reduce((p, c) => p + c, 0) || 0,
@@ -29,22 +29,22 @@ const useWorkout = (
         [workout]
     );
 
-    const totalReps = useMemo(
+    const totalRepetitions = useMemo(
         () => buyInReps + mainReps + buyOutReps,
         [workout]
     );
 
-    const [currentMovement, setCurrentMovement] = useState<string>("");
-    const [currentMovementReps, setCurrentMovementReps] = useState<number>(0);
-    const [currentMovementTotalReps, setCurrentMovementTotalReps] =
+    const [movement, setMovement] = useState<string>("");
+    const [movementReps, setMovementReps] = useState<number>(0);
+    const [movementTotalReps, setMovementTotalReps] =
         useState<number>(0);
-    const [currentRound, setCurrentRound] = useState<number>(1);
+    const [round, setRound] = useState<number>(1);
 
     useEffect(() => {
-        let currentMovement;
-        let currentMovementReps;
-        let currentMovementTotalReps;
-        let currentRound = 1;
+        let movement;
+        let movementReps;
+        let movementTotalReps;
+        let round = 1;
         switch (workout?.type) {
             case "forTime":
                 const allReps = [
@@ -63,13 +63,13 @@ const useWorkout = (
                     index = allRepsCum.length - 1;
                 }
 
-                currentMovement = [
+                movement = [
                     ...(workout.buyIn?.movements || []),
                     ...workout.main.movements,
                     ...(workout.buyOut?.movements || []),
                 ][index];
-                currentMovementTotalReps = allReps[index];
-                currentMovementReps =
+                movementTotalReps = allReps[index];
+                movementReps =
                     repsCompleted - (allRepsCum[index - 1] || 0);
                 break;
 
@@ -86,7 +86,7 @@ const useWorkout = (
                 //     JSON.parse(JSON.stringify(buyOutReps))
                 // );
 
-                currentRound =
+                round =
                     Math.floor((repsCompleted - buyInReps) / mainReps) + 1;
 
                 if (repsCompleted < buyInReps) {
@@ -96,11 +96,11 @@ const useWorkout = (
                     if (index === -1) {
                         index = buyInRepsCum.length - 1;
                     }
-                    currentMovement = (workout.buyIn?.movements || [])[index];
-                    currentMovementTotalReps = (workout.buyIn?.reps || [])[
+                    movement = (workout.buyIn?.movements || [])[index];
+                    movementTotalReps = (workout.buyIn?.reps || [])[
                         index
                     ];
-                    currentMovementReps =
+                    movementReps =
                         repsCompleted - (buyInRepsCum[index - 1] || 0);
                 } else {
                     let index = mainRepsCum.findIndex(
@@ -112,9 +112,9 @@ const useWorkout = (
                     if (index === -1) {
                         index = mainRepsCum.length - 1;
                     }
-                    currentMovement = (workout.main.movements || [])[index];
-                    currentMovementTotalReps = workout.main.reps[index];
-                    currentMovementReps =
+                    movement = (workout.main.movements || [])[index];
+                    movementTotalReps = workout.main.reps[index];
+                    movementReps =
                         ((repsCompleted - buyInReps) % mainReps) -
                         (mainRepsCum[index - 1] || 0);
                 }
@@ -122,24 +122,24 @@ const useWorkout = (
                 break;
 
             default:
-                currentMovement = "";
-                currentMovementTotalReps = 0;
-                currentMovementReps = 0;
+                movement = "";
+                movementTotalReps = 0;
+                movementReps = 0;
                 break;
         }
-        setCurrentMovement(currentMovement);
-        setCurrentMovementReps(currentMovementReps);
-        setCurrentMovementTotalReps(currentMovementTotalReps);
-        setCurrentRound(currentRound);
-    }, [repsCompleted, workout, totalReps]);
+        setMovement(movement);
+        setMovementReps(movementReps);
+        setMovementTotalReps(movementTotalReps);
+        setRound(round);
+    }, [repsCompleted, workout, totalRepetitions]);
 
     return {
-        totalReps,
-        currentMovement,
-        currentMovementReps,
-        currentMovementTotalReps,
-        currentRound,
-        workoutType,
+        totalRepetitions,
+        movement,
+        movementReps,
+        movementTotalReps,
+        round,
+        wodType,
     };
 };
 

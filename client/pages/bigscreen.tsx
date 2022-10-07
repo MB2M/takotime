@@ -1,41 +1,21 @@
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import BigscreenLayout from "../components/bigscreen/BigscreenLayout";
+import MaxTonnage from "../components/bigscreen/MaxTonnage";
 import WodRunningAthlete from "../components/bigscreen/WodRunningAthlete";
-import HeaderMT from "../components/mt/HeaderMT";
 import { useCompetitionContext } from "../context/competition";
-import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../context/liveData/livedata";
 import { workouts } from "../eventConfig/massilia_contest_3/config";
+import useStationReady from "../hooks/bigscreen/useStationReady";
 import useChrono from "../hooks/useChrono";
 import useInterval from "../hooks/useInterval";
 import useStationPayload from "../hooks/useStationPayload";
 
 const HEADER_HEIGHT = 150;
 
-const addZero = (x: string | number, n: number) => {
-    while (x.toString().length < n) {
-        x = "0" + x;
-    }
-    return x;
-};
-
-const toReadableTime = (timestamp: string | number | Date) => {
-    const asDate = new Date(timestamp);
-    const hours = addZero(asDate.getUTCHours(), 2);
-    const minutes = addZero(asDate.getUTCMinutes(), 2);
-    const seconds = addZero(asDate.getUTCSeconds(), 2);
-    const milli = addZero(asDate.getUTCMilliseconds(), 3);
-
-    return `${hours !== "00" ? hours + ":" : ""}${minutes}:${seconds}.${milli}`;
-};
-
 const BigScreen = () => {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
-    const chrono = useChrono(globals?.startTime, globals?.duration);
     const competition = useCompetitionContext();
-    const stationsUpgraded = useStationPayload(stations, ranks);
     const workout = useMemo(
         () =>
             competition?.workouts.find(
@@ -44,6 +24,10 @@ const BigScreen = () => {
             ),
         [competition, globals?.externalWorkoutId]
     );
+
+    // const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
+    const chrono = useChrono(globals?.startTime, globals?.duration);
+    // const stationsUpgraded = useStationPayload(stations, ranks);
 
     const currentIndex = useMemo(
         () =>
@@ -56,91 +40,96 @@ const BigScreen = () => {
         [chrono, workout?.wodIndexSwitchMinute]
     );
     const totalReps = useMemo(
-        () => loadedWorkouts?.[0]?.blocks[currentIndex]?.measurements?.repsTot || 0,
+        () =>
+            loadedWorkouts?.[0]?.blocks[currentIndex]?.measurements?.repsTot ||
+            0,
         [currentIndex, loadedWorkouts]
-        );
-        
+    );
 
     const workoutType = useMemo(
         () => loadedWorkouts?.[0]?.scoring[currentIndex]?.method || "forTime",
         [currentIndex, loadedWorkouts]
     );
 
-    console.log(workoutType)
+    // const allScores = useMemo(() => {
+    //     return [
+    //         stationsInfo
+    //             .map(
+    //                 (station) =>
+    //                     station.scores?.find((score) => score.index === 0)
+    //                         ?.repCount || 0
+    //             )
+    //             .sort((a, b) => (b || 0) - (a || 0)),
+    //         stationsInfo
+    //             .map(
+    //                 (station) =>
+    //                     station.scores?.find((score) => score.index === 1)
+    //                         ?.repCount || 0
+    //             )
+    //             .sort((a, b) => (b || 0) - (a || 0)),
+    //     ];
+    // }, [stationsInfo]);
 
-    const allScores = useMemo(() => {
-        return [
-            stationsInfo
-                .map(
-                    (station) =>
-                        station.scores?.find((score) => score.index === 0)
-                            ?.repCount || 0
-                )
-                .sort((a, b) => (b || 0) - (a || 0)),
-            stationsInfo
-                .map(
-                    (station) =>
-                        station.scores?.find((score) => score.index === 1)
-                            ?.repCount || 0
-                )
-                .sort((a, b) => (b || 0) - (a || 0)),
-        ];
-    }, [stationsInfo]);
+    // const fullStations = useMemo(
+    //     () =>
+    //         stations.map((stationUp) => {
+    //             return {
+    //                 ...stationUp,
+    //                 repsPerBlock: [
+    //                     stationsInfo
+    //                         ?.find(
+    //                             (station) =>
+    //                                 station.laneNumber === stationUp.laneNumber
+    //                         )
+    //                         ?.scores?.find((score) => score.index === 0)
+    //                         ?.repCount || 0,
+    //                     stationsInfo
+    //                         ?.find(
+    //                             (station) =>
+    //                                 station.laneNumber === stationUp.laneNumber
+    //                         )
+    //                         ?.scores?.find((score) => score.index === 1)
+    //                         ?.repCount || 0,
+    //                 ],
+    //                 rank: allScores.map((scoreIndex, i) =>
+    //                     scoreIndex.findIndex((score, index) => {
+    //                         return (
+    //                             score ===
+    //                             stationsInfo
+    //                                 ?.find(
+    //                                     (station) =>
+    //                                         station.laneNumber ===
+    //                                         stationUp.laneNumber
+    //                                 )
+    //                                 ?.scores?.find((score) => score.index === i)
+    //                                 ?.repCount
+    //                         );
+    //                     }) === -1
+    //                         ? scoreIndex.length + 1
+    //                         : scoreIndex.findIndex((score) => {
+    //                               return (
+    //                                   score ===
+    //                                   stationsInfo
+    //                                       ?.find(
+    //                                           (station) =>
+    //                                               station.laneNumber ===
+    //                                               stationUp.laneNumber
+    //                                       )
+    //                                       ?.scores?.find(
+    //                                           (score) => score.index === i
+    //                                       )?.repCount
+    //                               );
+    //                           }) + 1
+    //                 ),
+    //             };
+    //         }),
+    //     [stationsInfo, allScores]
+    // );
 
-    const fullStations = useMemo(
-        () =>
-            stations.map((stationUp) => {
-                return {
-                    ...stationUp,
-                    result: [
-                        stationsInfo
-                            ?.find(
-                                (station) =>
-                                    station.laneNumber === stationUp.laneNumber
-                            )
-                            ?.scores?.find((score) => score.index === 0)
-                            ?.repCount || 0,
-                        stationsInfo
-                            ?.find(
-                                (station) =>
-                                    station.laneNumber === stationUp.laneNumber
-                            )
-                            ?.scores?.find((score) => score.index === 1)
-                            ?.repCount || 0,
-                    ],
-                    rank: allScores.map((scoreIndex, i) =>
-                        scoreIndex.findIndex((score, index) => {
-                            return (
-                                score ===
-                                stationsInfo
-                                    ?.find(
-                                        (station) =>
-                                            station.laneNumber ===
-                                            stationUp.laneNumber
-                                    )
-                                    ?.scores?.find((score) => score.index === i)
-                                    ?.repCount
-                            );
-                        }) === -1
-                            ? scoreIndex.length + 1
-                            : scoreIndex.findIndex((score) => {
-                                  return (
-                                      score ===
-                                      stationsInfo
-                                          ?.find(
-                                              (station) =>
-                                                  station.laneNumber ===
-                                                  stationUp.laneNumber
-                                          )
-                                          ?.scores?.find(
-                                              (score) => score.index === i
-                                          )?.repCount
-                                  );
-                              }) + 1
-                    ),
-                };
-            }),
-        [stationsInfo, allScores]
+    const stationsReady = useStationReady(
+        workout?.dataSource,
+        workout?.options?.rankBy,
+        currentIndex
     );
 
     // const stationsUpgradedRankedScores = useMemo(() => {
@@ -149,41 +138,121 @@ const BigScreen = () => {
     //         .sort((a, b) => a - b);
     // }, [stationsUpgraded]);
 
-    const restrieveWodGymInfo = async () => {
-        if (!globals?.externalHeatId) return;
-        try {
-            const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station?heatId=${globals?.externalHeatId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            if (response.ok) {
-                const json = await response.json();
-                setStationsInfo(json);
-            } else {
-                setStationsInfo([]);
-            }
-        } catch (err) {
-            console.log(err);
-            setStationsInfo([]);
-        }
-    };
+    // const restrieveWodGymInfo = async () => {
+    //     if (!globals?.externalHeatId) return;
+    //     try {
+    //         const response = await fetch(
+    //             `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station?heatId=${globals?.externalHeatId}`,
+    //             {
+    //                 method: "GET",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //             }
+    //         );
+    //         if (response.ok) {
+    //             const json = await response.json();
+    //             setStationsInfo(json);
+    //         } else {
+    //             setStationsInfo([]);
+    //         }
+    //     } catch (err) {
+    //         console.log(err);
+    //         setStationsInfo([]);
+    //     }
+    // };
 
-    useInterval(
-        () => {
-            restrieveWodGymInfo();
-        },
-        workout?.dataSource === "web" ? 1000 : 0
-    );
+    // useInterval(
+    //     () => {
+    //         restrieveWodGymInfo();
+    //     },
+    //     workout?.dataSource === "web" ? 1000 : 0
+    // );
 
     return (
         <BigscreenLayout headerHeight={HEADER_HEIGHT}>
             <Stack overflow={"hidden"} height={1}>
-                {workout?.dataSource === "web" &&
+                {workout?.layout === "MaxTonnage" && (
+                    <MaxTonnage
+                        heatId={globals?.externalHeatId}
+                        stations={stations}
+                    />
+                )}
+                {workout?.layout === "default" &&
+                    stationsReady?.map((station) => {
+                        const repsOfFirst = stationsReady
+                            .map(
+                                (station) =>
+                                    station.repsPerBlock?.[currentIndex]
+                            )
+                            .sort((a, b) => b - a)[0];
+                        const workoutFlow = workouts.find(
+                            (workout) =>
+                                workout.workoutIds.includes(
+                                    globals?.externalWorkoutId.toString() || ""
+                                ) && workout.index === currentIndex
+                        );
+                        return (
+                            <WodRunningAthlete
+                                key={station.laneNumber} //commun
+                                currentIndex={currentIndex}
+                                dataSource={workout?.dataSource}
+                                station={station}
+                                options={workout?.options} //commun
+                                workout={workoutFlow}
+                                // repsCompleted={s.repsPerBlock?.[currentIndex] || 0} // DIFFERENT
+                                // participant={s.participant} //commun
+                                totalReps={totalReps} // DIFFERENT
+                                // currentMovement={s.currentMovement} // DIFFERENT
+                                // currentMovementReps={s.repsOfMovement} // DIFFERENT
+                                // currentMovementTotalReps={s.totalRepsOfMovement} // DIFFERENT
+                                // currentRound={s.position.round + 1} // DIFFERENT
+                                workoutType={workoutType as "amrap" | "forTime"} // DIFFERENT
+                                // laneNumber={s.laneNumber} //commun
+                                height={1 / stationsReady.length} //commun
+                                repsOfFirst={repsOfFirst} //commun
+                                // finishResult={
+                                //     s.result?.replace("|", " | ") ||
+                                //     (!s.measurements?.[currentIndex]
+                                //         ? undefined
+                                //         : s.measurements[currentIndex].method ===
+                                //           "time"
+                                //         ? toReadableTime(
+                                //               s.measurements[currentIndex].value
+                                //           )
+                                //         : `${s.measurements[
+                                //               currentIndex
+                                //           ].value?.toString()} reps|`)
+                                // }
+                                primaryColor={
+                                    competition?.primaryColor || "white"
+                                } //commun
+                                secondaryColor={
+                                    competition?.secondaryColor || "white"
+                                } //commun
+                                rank={
+                                    stationsReady
+                                        .filter(
+                                            (sR) =>
+                                                sR.category === station.category
+                                        )
+                                        .map(
+                                            (stationFiltered) =>
+                                                stationFiltered.rank[
+                                                    currentIndex
+                                                ]
+                                        )
+                                        .sort((a, b) => a - b)
+                                        .findIndex(
+                                            (rank) =>
+                                                rank ===
+                                                station.rank[currentIndex]
+                                        ) + 1
+                                } // DIFFERENT
+                            />
+                        );
+                    })}
+                {/* {workout?.dataSource === "web" &&
                     fullStations
                         ?.sort((a, b) => a.laneNumber - b.laneNumber)
                         .sort(
@@ -226,44 +295,47 @@ const BigScreen = () => {
                                     fullStations.map(
                                         (statio) =>
                                             statio.dynamics.result ||
-                                            statio.result[currentIndex]
+                                            statio.repsPerBlock[currentIndex]
                                     )
                                 ),
                             ];
 
                             return (
                                 <WodRunningAthlete
-                                    key={s.laneNumber}
-                                    workout={workoutFlow}
-                                    participant={s.participant}
-                                    laneNumber={s.laneNumber}
-                                    height={1 / stations.length}
-                                    repsCompleted={s.result[currentIndex]}
+                                    key={s.laneNumber} //commun
+                                    // workout={workoutFlow}
+                                    options={workout.options} //commun
+                                    repsCompleted={s.repsPerBlock[currentIndex]} // DIFFERENT
+                                    participant={s.participant} //commun
+                                    laneNumber={s.laneNumber} //commun
+                                    height={1 / stations.length} //commun
                                     rank={
                                         scores.findIndex(
                                             (score) =>
                                                 score ===
                                                 (s.dynamics.result ||
-                                                    s.result[currentIndex])
+                                                    s.repsPerBlock[
+                                                        currentIndex
+                                                    ])
                                         ) === -1
                                             ? scores.length + 1
                                             : scores.findIndex(
                                                   (score) =>
                                                       score ===
                                                       (s.dynamics.result ||
-                                                          s.result[
+                                                          s.repsPerBlock[
                                                               currentIndex
                                                           ])
                                               ) + 1
                                     }
-                                    repsOfFirst={repsOfFirst}
-                                    finishResult={s.dynamics.result}
+                                    repsOfFirst={repsOfFirst} //commun
+                                    finishResult={s.dynamics.result} //DIFFERENT
                                     primaryColor={
                                         competition?.primaryColor || "red"
-                                    }
+                                    } //commun
                                     secondaryColor={
                                         competition?.secondaryColor || "blue"
-                                    }
+                                    } //commun
                                 />
                             );
                         })}
@@ -295,29 +367,29 @@ const BigScreen = () => {
                             return (
                                 <>
                                     <WodRunningAthlete
-                                        key={s.laneNumber}
-                                        options={workout.options}
-                                        workout={workoutFlow}
+                                        key={s.laneNumber} //commun
+                                        options={workout.options} //commun
+                                        // workout={workoutFlow}
                                         repsCompleted={
                                             s.repsPerBlock?.[currentIndex] || 0
-                                        }
-                                        participant={s.participant}
-                                        totalReps={totalReps}
-                                        currentMovement={s.currentMovement}
-                                        currentMovementReps={s.repsOfMovement}
+                                        } // DIFFERENT
+                                        participant={s.participant} //commun
+                                        totalReps={totalReps} // DIFFERENT
+                                        currentMovement={s.currentMovement} // DIFFERENT
+                                        currentMovementReps={s.repsOfMovement} // DIFFERENT
                                         currentMovementTotalReps={
                                             s.totalRepsOfMovement
-                                        }
-                                        currentRound={s.position.round + 1}
+                                        } // DIFFERENT
+                                        currentRound={s.position.round + 1} // DIFFERENT
                                         workoutType={
                                             workoutType as
                                                 | "amrap"
                                                 | "forTime"
                                                 | "maxWeight"
-                                        }
-                                        laneNumber={s.laneNumber}
-                                        height={1 / stations.length}
-                                        repsOfFirst={repsOfFirst}
+                                        } // DIFFERENT
+                                        laneNumber={s.laneNumber} //commun
+                                        height={1 / stations.length} //commun
+                                        repsOfFirst={repsOfFirst} //commun
                                         finishResult={
                                             s.result?.replace("|", " | ") ||
                                             (!s.measurements?.[currentIndex]
@@ -335,11 +407,11 @@ const BigScreen = () => {
                                         }
                                         primaryColor={
                                             competition?.primaryColor || "white"
-                                        }
+                                        } //commun
                                         secondaryColor={
                                             competition?.secondaryColor ||
                                             "white"
-                                        }
+                                        } //commun
                                         rank={
                                             stationsUpgraded
                                                 .filter(
@@ -359,11 +431,11 @@ const BigScreen = () => {
                                                         rank ===
                                                         s.rank[currentIndex]
                                                 ) + 1
-                                        }
+                                        } // DIFFERENT
                                     />
                                 </>
                             );
-                        })}
+                        })} */}
             </Stack>
             {/* </Grid> */}
 

@@ -13,9 +13,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { useLiveDataContext } from "../../../../context/liveData/livedata";
+import { useEffect, useMemo, useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -31,33 +29,34 @@ const style = {
     p: 4,
 };
 
-const LaneRemote = () => {
-    const { globals } = useLiveDataContext();
-    const { stations } = useLiveDataContext();
-    const router = useRouter();
-    const { laneNumber }: any = useMemo(() => router.query, [router]);
+const RemoteWeight = ({
+    heatId,
+    laneNumber,
+    numberOfPartner = 1,
+}: {
+    heatId: number | undefined;
+    laneNumber: string;
+    numberOfPartner?: number;
+}) => {
     const [stationInfo, setStationInfo] = useState<any>(null);
     const [addWeight, setAddWeight] = useState<number>(100);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [scoreEditId, setScoreEditId] = useState<string>("");
-
-    const stationData = useMemo(() => {
-        return stations.find(
-            (station) => station.laneNumber === Number(laneNumber)
-        );
-    }, [laneNumber, stations]);
+    const [selectedPartnerId, setSelectedPartnerId] = useState<number>(0);
 
     const lastStationInfo = useMemo(
-        () => stationInfo?.scores[0],
-        [stationInfo]
+        () =>
+            stationInfo?.scores.find(
+                (score: { partnerId: number }) =>
+                    score.partnerId === selectedPartnerId
+            ),
+        [stationInfo, selectedPartnerId]
     );
-
-    // useEffect(() => console.log(lastStationInfo), [lastStationInfo]); // to REMOVE
 
     const restrieveStationInfo = async () => {
         try {
             const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/wodMax/station/${laneNumber}?heatId=${globals?.externalHeatId}`,
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/wodMax/station/${laneNumber}?heatId=${heatId}`,
                 {
                     method: "GET",
                     headers: {
@@ -79,20 +78,24 @@ const LaneRemote = () => {
     };
 
     useEffect(() => {
-        if (!laneNumber || !globals?.externalHeatId) return;
+        if (!laneNumber || !heatId) return;
         restrieveStationInfo();
-    }, [globals?.externalHeatId, laneNumber]);
+    }, [heatId, laneNumber]);
 
     const handleAddScore = async () => {
         try {
             const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/wodMax/station/${laneNumber}?heatId=${globals?.externalHeatId}`,
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/wodMax/station/${laneNumber}?heatId=${heatId}`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ weight: addWeight, state: "Try" }),
+                    body: JSON.stringify({
+                        weight: addWeight,
+                        state: "Try",
+                        partnerId: selectedPartnerId,
+                    }),
                 }
             );
             if (response.ok) {
@@ -159,6 +162,10 @@ const LaneRemote = () => {
         setModalOpen(true);
     };
 
+    const handlePartnerSelect = (index: number) => {
+        setSelectedPartnerId(index);
+    };
+
     return (
         <Container>
             <Modal open={modalOpen} onClose={handleCloseModal}>
@@ -193,49 +200,57 @@ const LaneRemote = () => {
                 </Box>
             </Modal>
             <Box
+                // my={3}
                 display="flex"
-                justifyContent={"flex-start"}
-                textAlign="center"
-                paddingTop="20px"
+                justifyContent={"center"}
             >
-                <Typography variant="h4" fontFamily={"CantoraOne"}>
-                    {stationData?.laneNumber}
-                </Typography>
-                <Typography variant="h4" fontFamily={"CantoraOne"} ml={4}>
-                    {stationData?.participant}
-                </Typography>
-            </Box>
-            {laneNumber &&
-                globals?.externalHeatId &&
-                lastStationInfo?.state !== "Try" && (
-                    <Box
-                        marginTop={4}
-                        justifyContent="center"
-                        textAlign={"center"}
-                    >
-                        <TextField
-                            type={"number"}
-                            value={addWeight}
-                            onChange={handleAddTFChange}
-                            label="New weight"
-                        ></TextField>
-                        <Slider
-                            aria-label="Weight"
-                            defaultValue={100}
-                            value={addWeight}
-                            // getAriaValueText={valuetext}
-                            valueLabelDisplay="auto"
-                            step={2.5}
-                            // marks
-                            min={10}
-                            max={170}
-                            onChange={handleAddTFChange}
-                        />
-                        <Button onClick={handleAddScore} variant="outlined">
-                            add
+                {[...Array(numberOfPartner + 1).keys()]
+                    .splice(1)
+                    .map((_, index) => (
+                        <Button
+                            key={index}
+                            variant={
+                                selectedPartnerId === index
+                                    ? "contained"
+                                    : "outlined"
+                            }
+                            size={"large"}
+                            onClick={() => handlePartnerSelect(index)}
+                        >
+                            Partner {index + 1}
                         </Button>
-                    </Box>
-                )}
+                    ))}
+            </Box>
+            {laneNumber && heatId && lastStationInfo?.state !== "Try" && (
+                <Box
+                    marginTop={4}
+                    justifyContent="center"
+                    textAlign={"center"}
+                    mb={"auto"}
+                >
+                    <TextField
+                        type={"number"}
+                        value={addWeight}
+                        onChange={handleAddTFChange}
+                        label="New weight"
+                    ></TextField>
+                    <Slider
+                        aria-label="Weight"
+                        defaultValue={100}
+                        value={addWeight}
+                        // getAriaValueText={valuetext}
+                        valueLabelDisplay="auto"
+                        step={2.5}
+                        // marks
+                        min={10}
+                        max={170}
+                        onChange={handleAddTFChange}
+                    />
+                    <Button onClick={handleAddScore} variant="outlined">
+                        add
+                    </Button>
+                </Box>
+            )}
             {stationInfo && (
                 <>
                     {lastStationInfo?.state === "Try" && (
@@ -296,28 +311,33 @@ const LaneRemote = () => {
                     )}
                     <Box marginTop={4}>
                         <List>
-                            {stationInfo.scores.map((score: WodWeightScore) => (
-                                <ListItem
-                                    key={score._id}
-                                    onClick={() =>
-                                        handleEditResultModal(score._id)
-                                    }
-                                >
-                                    <ListItemIcon>
-                                        {score.state === "Success" ? (
-                                            <CheckCircleIcon color="success" />
-                                        ) : score.state === "Fail" ? (
-                                            <CancelIcon color="error" />
-                                        ) : (
-                                            <RemoveIcon />
-                                        )}
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={`${score.weight} kg`}
-                                    />
-                                    {score.state}
-                                </ListItem>
-                            ))}
+                            {stationInfo.scores
+                                .filter(
+                                    (score: WodWeightScore) =>
+                                        score.partnerId === selectedPartnerId
+                                )
+                                .map((score: WodWeightScore) => (
+                                    <ListItem
+                                        key={score._id}
+                                        onClick={() =>
+                                            handleEditResultModal(score._id)
+                                        }
+                                    >
+                                        <ListItemIcon>
+                                            {score.state === "Success" ? (
+                                                <CheckCircleIcon color="success" />
+                                            ) : score.state === "Fail" ? (
+                                                <CancelIcon color="error" />
+                                            ) : (
+                                                <RemoveIcon />
+                                            )}
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={`${score.weight} kg`}
+                                        />
+                                        {score.state}
+                                    </ListItem>
+                                ))}
                         </List>
                     </Box>
                 </>
@@ -326,4 +346,4 @@ const LaneRemote = () => {
     );
 };
 
-export default LaneRemote;
+export default RemoteWeight;

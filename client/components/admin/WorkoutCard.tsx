@@ -113,6 +113,10 @@ const WorkoutCard = ({
         handleUpdateWorkout({ duration: Number(event.target.value) });
     };
 
+    const handleLayoutChange = (event: ChangeEvent<HTMLInputElement>) => {
+        handleUpdateWorkout({ layout: event.target.value });
+    };
+
     const handleWodSwitchIndexMinuteChange = (
         event: ChangeEvent<HTMLInputElement>
     ) => {
@@ -253,6 +257,16 @@ const WorkoutCard = ({
                 <CardContent>
                     <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
                         <Box display="flex" gap={2} flexDirection={"column"}>
+                            <Box>
+                                Layout
+                                <TextField
+                                    type="text"
+                                    size="small"
+                                    value={workout.layout}
+                                    onChange={handleLayoutChange}
+                                    fullWidth
+                                />
+                            </Box>
                             <Box>
                                 Duration
                                 <TextField

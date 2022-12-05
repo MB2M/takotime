@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import admin from "firebase-admin";
 
-// import serviceAccount from "./firebase-credentials.json";
-const serviceAccount = require("./firebase-credentials.json");
+import serviceAccount from "./firebase-credentials.json" assert { type: "json" };
+
 
 if (!admin.apps.length) {
     try {

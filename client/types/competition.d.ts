@@ -24,6 +24,7 @@ type Workout = {
 type WorkoutOption = {
     wodtype?: "amrap" | "forTime";
     title?: boolean;
+    
     titlePosition?: "top" | "bottom";
     titleType?: "category" | "heat" | "heat-category" | "category-heat";
     logo?: boolean;

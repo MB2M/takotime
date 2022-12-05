@@ -19,6 +19,7 @@ export default async function handler(
                 "Content-Type": "application/json",
             },
         });
+
         if (response.ok) {
             const { access_token } = await response.json();
             const token = jwt.sign(

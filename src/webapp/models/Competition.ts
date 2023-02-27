@@ -89,7 +89,7 @@ const workoutSchema = new mongoose.Schema<IWorkout>({
     },
     wodIndexSwitchMinute: {
         type: Number,
-        default: 0
+        default: 0,
     },
     options: workoutOptionSchema,
 });
@@ -112,7 +112,7 @@ const competitionSchema = new mongoose.Schema<
     },
     platform: {
         type: String,
-        enum: ["CompetitionCorner"],
+        enum: ["CompetitionCorner", "None"],
         default: "CompetitionCorner",
     },
     eventId: { type: String, required: true, unique: true, minLength: 4 },

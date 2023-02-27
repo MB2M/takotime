@@ -1,12 +1,15 @@
 import type { GetServerSideProps, NextPage } from "next";
 import WebsocketWrapper from "../../components/live/WebSocketWrapper";
-import Dashboard from "../../components/dashboard2";
+import Dashboard from "../../components/dashboard/dashboard2";
 
-
-const Test: NextPage<Props> = ({ hostname }: { hostname: string | undefined }) => {
+const Test: NextPage<Props> = ({
+    hostname,
+}: {
+    hostname: string | undefined;
+}) => {
     return (
         // <WebsocketWrapper hostname={hostname}>
-            <Dashboard></Dashboard>
+        <Dashboard></Dashboard>
         // </WebsocketWrapper>
     );
 };

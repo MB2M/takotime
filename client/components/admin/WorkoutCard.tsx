@@ -19,8 +19,9 @@ import {
     MenuItem,
     SelectChangeEvent,
     FormControl,
+    Stack,
 } from "@mui/material";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
@@ -52,11 +53,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const WorkoutCard = ({
+    platform,
     workout,
     platformWorkouts,
     onUpdate,
     onDelete,
 }: {
+    platform?: Platform;
     workout: Workout;
     platformWorkouts: ICCWorkout[];
     onUpdate: (data: Partial<Workout>) => any;
@@ -74,6 +77,16 @@ const WorkoutCard = ({
             ),
         [platformWorkouts, workout]
     );
+    const [name, setName] = useState<string>("");
+    
+    const cardName = useMemo(() => {
+        switch (platform) {
+            case "CompetitionCorner":
+                return selectedPlatformWorkout?.name;
+            default:
+                return workout.workoutId;
+        }
+    }, [platform, workout, selectedPlatformWorkout]);
 
     const handleDeleteClick = () => {
         setOpenDeleteModal(true);
@@ -93,6 +106,12 @@ const WorkoutCard = ({
     };
 
     const handleSelectPlatformWorkoutClick = () => {
+        // switch (platform) {
+        //     case "CompetitionCorner":
+        //         default:
+        //             return workout.workoutId;
+        //             "break";
+        //         }
         setOpenSelectPlatformWorkoutModal(true);
     };
 
@@ -211,6 +230,12 @@ const WorkoutCard = ({
         });
     };
 
+    const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    };
+
+    console.log(workout)
+
     return (
         <>
             <Modal open={openDeleteModal} onClose={handleCloseDeleteModal}>
@@ -230,24 +255,42 @@ const WorkoutCard = ({
                 onClose={handleCloseSelectPlatformWorkoutModal}
             >
                 <Box sx={deleteModalStyle}>
-                    <List>
-                        {platformWorkouts?.map((workout) => (
-                            <ListItem
+                    {platform === "CompetitionCorner" && (
+                        <List>
+                            {platformWorkouts?.map((workout) => (
+                                <ListItem
+                                    onClick={() =>
+                                        handleUpdateWorkout({
+                                            workoutId: workout.id.toString(),
+                                        })
+                                    }
+                                >
+                                    {workout.name} ({workout.id})
+                                </ListItem>
+                            ))}
+                        </List>
+                    )}
+                    {platform === "None" && (
+                        <Stack spacing={2}>
+                            <Typography>Choose name:</Typography>
+                            <TextField onChange={handleNameChange} />
+                            <Button
+                                variant="contained"
                                 onClick={() =>
                                     handleUpdateWorkout({
-                                        workoutId: workout.id.toString(),
+                                        workoutId: name,
                                     })
                                 }
                             >
-                                {workout.name} ({workout.id})
-                            </ListItem>
-                        ))}
-                    </List>
+                                Save
+                            </Button>
+                        </Stack>
+                    )}
                 </Box>
             </Modal>
             <Card>
                 <CardHeader
-                    title={selectedPlatformWorkout?.name}
+                    title={cardName}
                     action={
                         <IconButton onClick={handleSelectPlatformWorkoutClick}>
                             <FitnessCenterIcon />

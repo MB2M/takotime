@@ -26,8 +26,10 @@ export const createWorkout: RequestHandler = async (
 export const updateWorkout = async (req: Request, res: Response) => {
     const body = req.body;
 
-    if (!body?.id) {
-        return res.status(400).json({ message: "'id' parameter is missing" });
+    if (!body?.customId) {
+        return res
+            .status(400)
+            .json({ message: "'customId' parameter is missing" });
     }
 
     try {
@@ -41,8 +43,10 @@ export const updateWorkout = async (req: Request, res: Response) => {
 export const deleteWorkout = async (req: Request, res: Response) => {
     const body = req.body;
 
-    if (!body?.id) {
-        return res.status(400).json({ message: "'id' parameter is missing" });
+    if (!body?.customId) {
+        return res
+            .status(400)
+            .json({ message: "'customId' parameter is missing" });
     }
 
     try {
@@ -78,7 +82,7 @@ export const loadWorkout = async (req: Request, res: Response) => {
         //         }
         //         res.status(400).json({ error: "one custom id is not valid" });
         //     })
-        // );
+        // )
 
         if (response.errors) {
             res.status(400).json(response);

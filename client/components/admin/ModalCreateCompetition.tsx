@@ -8,7 +8,7 @@ import {
     SelectChangeEvent,
     Typography,
 } from "@mui/material";
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, useCallback } from "react";
 
 const modalStyle = {
     position: "absolute",
@@ -36,20 +36,28 @@ const ModalCreateCompetition = ({
     const [competitionName, setCompetitionName] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
 
-    useEffect(() => {
+    const findCCEventName = useCallback(async () => {
         if (eventId.length <= 0) setEventName("");
-        (async () => {
-            try {
-                const response = await fetch(
-                    `https://competitioncorner.net/api2/v1/events/${eventId}`
-                );
-                const json = await response.json();
-                setEventName(json.name);
-            } catch (err) {
-                console.log(err);
-            }
-        })();
+        try {
+            const response = await fetch(
+                `https://competitioncorner.net/api2/v1/events/${eventId}`
+            );
+            const json = await response.json();
+            setEventName(json.name);
+        } catch (err) {
+            console.log(err);
+        }
     }, [eventId]);
+
+    useEffect(() => {
+        switch (platform) {
+            case "CompetitionCorner":
+                findCCEventName();
+                break;
+            default:
+                setEventName("");
+        }
+    }, [findCCEventName, platform]);
 
     const handleCompetitionName = (event: ChangeEvent<HTMLInputElement>) => {
         setCompetitionName(event.target.value);
@@ -123,6 +131,7 @@ const ModalCreateCompetition = ({
                         <MenuItem value="CompetitionCorner">
                             Competition Corner
                         </MenuItem>
+                        <MenuItem value="None">None</MenuItem>
                     </Select>
                     <TextField
                         label="event id"

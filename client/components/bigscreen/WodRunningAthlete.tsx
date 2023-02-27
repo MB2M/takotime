@@ -39,7 +39,7 @@ const useHRunningBackgroundSize = (
     workoutType: "amrap" | "forTime" | "maxWeight" = "forTime",
     repsOfFirst: number,
     finishResult?: string,
-    fullWidth: number = 1920
+    fullWidth: number = FULL_WIDTH
 ) => {
     if (finishResult) return fullWidth;
 
@@ -54,7 +54,7 @@ const useHRunningBackgroundSize = (
             return (
                 MIN_SIZE +
                 ((fullWidth - ROUND_WIDTH - MIN_SIZE) * repsCompleted) /
-                    repsOfFirst
+                    repsOfFirst -5
             );
         default:
             return fullWidth - ROUND_WIDTH;
@@ -71,7 +71,8 @@ const WodRunningAthlete = ({
     repsOfFirst,
     // finishResult,
     titleHeight = 0,
-    fullWidth = (1920 * 3) / 4,
+    // fullWidth = (1920 * 3) / 4,
+    fullWidth = FULL_WIDTH,
     options,
     primaryColor,
     secondaryColor,
@@ -121,6 +122,7 @@ const WodRunningAthlete = ({
     } = station;
     const repsCompleted = station.repsPerBlock?.[currentIndex] || 0; // OK
     const currentRound = station.position.round + 1;
+  
     const finishResult =
         station.result?.replace("|", " | ") ||
         (!station.measurements?.[currentIndex]
@@ -204,6 +206,7 @@ const WodRunningAthlete = ({
         setShowMovement(true);
         setTimeout(() => setShowMovement(false), 4000);
     }, [currentMovement]);
+
 
     if (!participant) {
         return <div></div>;
@@ -293,7 +296,7 @@ const WodRunningAthlete = ({
                             sx={{ backgroundColor: "#06943d" }}
                             p={0.5}
                             borderRadius="5px"
-                            ml={"auto"}
+                            ml={"auto"} 
                             display="flex"
                         >
                             <Typography
@@ -355,14 +358,16 @@ const WodRunningAthlete = ({
                 {/* </Box> */}
             </Box>
             {options?.showRounds &&
-                workoutType === "amrap" &&
-                currentRound > 0 && (
+                workoutType === "amrap"  && (
                     <Box
+                        minWidth={ROUND_WIDTH}
                         width={ROUND_WIDTH}
                         justifyContent="center"
                         alignItems="center"
                         display="flex"
+                        ml={"auto"}
                         borderLeft={"3px solid lightgray"}
+
                     >
                         <Typography
                             component="div"

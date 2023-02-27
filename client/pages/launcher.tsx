@@ -14,7 +14,7 @@ import {
 import { Box } from "@mui/system";
 import { ChangeEvent, useState, MouseEvent, useEffect, FormEvent } from "react";
 import { useCompetitionContext } from "../context/competition";
-import useCCWorkouts from "../hooks/useCCWorkouts";
+import useWorkouts from "../hooks/useCCWorkouts";
 
 const BASE_COUNTDOWN_BTN = [0, 1, 3, 5, 10, 15, 20];
 
@@ -25,7 +25,7 @@ const isNumberOrEmpty = (data: any): boolean => {
 
 const Launcher = () => {
     const competition = useCompetitionContext();
-    const CCWorkouts = useCCWorkouts(competition?.eventId);
+    const CCWorkouts = useWorkouts(competition?.platform, competition?.eventId);
     const [selectedWorkoutId, setSelectedWorkoutId] = useState<string>("");
     const [timerSetting, setTimerSetting] = useState<TimerSetting>({
         countdown: 10,

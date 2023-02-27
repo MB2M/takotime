@@ -209,7 +209,7 @@ class Manager extends EventEmitter {
     async resetDynamics() {
         const stations = await Station.find().exec();
         await Promise.all(
-            stations.map(async (s:any) => {
+            stations.map(async (s: any) => {
                 s.reset();
                 await s.save();
             })
@@ -366,12 +366,15 @@ class Manager extends EventEmitter {
                 workout = await Workout.create(data);
                 break;
             case "update":
-                workout = await Workout.findByIdAndUpdate(data.id, data, {
+                workout = await Workout.findOneAndUpdate(data.customId, data, {
                     runValidators: true,
                 }).exec();
                 break;
             case "delete":
-                workout = await Workout.findByIdAndDelete(data.id).exec();
+                workout = await Workout.findOneAndDelete(
+                    { customId: data.customId },
+                    data.id
+                ).exec();
                 break;
         }
 
@@ -380,7 +383,11 @@ class Manager extends EventEmitter {
         return workout;
     }
 
-    async stationUpdate(data: any, type: "create" | "update" | "delete") {
+    async stationUpdate(
+        data: any,
+        type: "create" | "update" | "delete",
+        update = true
+    ) {
         let station;
         switch (type) {
             case "create":
@@ -396,8 +403,10 @@ class Manager extends EventEmitter {
                 break;
         }
 
-        this.websocketMessages.sendStationsToAllClients();
-        this.sendFullConfig("server/wodConfigUpdate");
+        if (update) {
+            this.websocketMessages.sendStationsToAllClients();
+            this.sendFullConfig("server/wodConfigUpdate");
+        }
 
         return station;
     }

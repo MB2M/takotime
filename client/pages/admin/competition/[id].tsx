@@ -18,7 +18,7 @@ import {
     MuiColorInputColors,
     MuiColorInputValue,
 } from "mui-color-input";
-import useCCWorkouts from "../../../hooks/useCCWorkouts";
+import useWorkouts from "../../../hooks/useCCWorkouts";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import WorkoutCard from "../../../components/admin/WorkoutCard";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -58,7 +58,10 @@ const CompetitionDetail = () => {
     const [secondaryColor, setSecondaryColor] =
         useState<MuiColorInputValue>("#ffffff");
     const [newData, dispatch] = useReducer(reducer, {});
-    const CCWorkouts = useCCWorkouts(competition?.eventId);
+    const ExternalWorkouts = useWorkouts(
+        competition?.platform,
+        competition?.eventId
+    );
     const [workouts, setWorkouts] = useState<Workout[]>([]);
 
     const refreshCompetition = async () => {
@@ -157,6 +160,7 @@ const CompetitionDetail = () => {
     };
 
     const handleAddWorkout = () => {
+
         const newWorkouts = [...workouts, DEFAUT_WORKOUT];
         setWorkouts(newWorkouts);
         dispatch({ key: "workouts", value: newWorkouts });
@@ -230,34 +234,39 @@ const CompetitionDetail = () => {
                             />
                         </Box>
                     </Stack>
-                    <Box>
-                        <Accordion>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <Typography>CC workouts available</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <List>
-                                    {CCWorkouts.map((workout) => (
-                                        <ListItem key={workout.id}>
-                                            {workout.name} ({workout.id})
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </AccordionDetails>
-                        </Accordion>
-                    </Box>
+                    {competition?.platform === "CompetitionCorner" && (
+                        <Box>
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <Typography>
+                                        CC workouts available
+                                    </Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <List>
+                                        {ExternalWorkouts.map((workout) => (
+                                            <ListItem key={workout.id}>
+                                                {workout.name} ({workout.id})
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </AccordionDetails>
+                            </Accordion>
+                        </Box>
+                    )}
                     <Button onClick={handleAddWorkout}> Add a workout</Button>
                     <Box width={1}>
                         <Grid2 container spacing={2}>
                             {workouts.map((workout, index) => (
                                 <Grid2 xs={12} md={4}>
                                     <WorkoutCard
+                                        platform={competition?.platform}
                                         workout={workout}
-                                        platformWorkouts={CCWorkouts}
+                                        platformWorkouts={ExternalWorkouts}
                                         onUpdate={(data) =>
                                             handleWorkoutUpdate(data, index)
                                         }

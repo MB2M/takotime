@@ -9,7 +9,7 @@ import {
     TextField,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import CCLoader from "../CCLoader";
+import CCLoader from "../dashboard/CCLoader";
 import Result from "./Result";
 
 const style = {

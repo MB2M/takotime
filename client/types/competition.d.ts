@@ -2,7 +2,7 @@ type Competition = {
     _id: string;
     name: string;
     state: "active" | "inactive";
-    platform: "CompetitionCorner";
+    platform: "CompetitionCorner" | "None";
     eventId: string;
     selected: boolean;
     logoUrl?: string;
@@ -48,7 +48,7 @@ type WorkoutOption = {
     showRounds?: boolean;
 };
 
-type Platform = "CompetitionCorner";
+type Platform = "CompetitionCorner" | "None";
 
 type NameIdObject = {
     name: string;

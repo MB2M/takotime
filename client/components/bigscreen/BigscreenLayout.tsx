@@ -6,7 +6,7 @@ import { useCompetitionCornerContext } from "../../context/competitionCorner/dat
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import BigscreenBar from "./BigscreenHeader";
 import Image from "next/image";
-import useCCWorkouts from "../../hooks/useCCWorkouts";
+import useWorkouts from "../../hooks/useCCWorkouts";
 
 const BigscreenLayout = ({
     children,
@@ -18,7 +18,7 @@ const BigscreenLayout = ({
     const { globals } = useLiveDataContext();
     const competition = useCompetitionContext();
     const { heats } = useCompetitionCornerContext();
-    const CCWorkouts = useCCWorkouts(competition?.eventId);
+    const CCWorkouts = useWorkouts(competition?.platform,competition?.eventId);
 
     const workout = useMemo(
         () =>
@@ -81,8 +81,8 @@ const BigscreenLayout = ({
                             )}
                     </Box>
                     <Grid2 container height={1}>
-                        <Grid2 lg={9}>{children}</Grid2>
-                        <Grid2
+                        <Grid2 lg={12}>{children}</Grid2>
+                        {/* <Grid2
                             lg={3}
                             height={1}
                             maxHeight={1}
@@ -103,7 +103,7 @@ const BigscreenLayout = ({
                                         "no workout description",
                                 }}
                             />
-                        </Grid2>
+                        </Grid2> */}
                     </Grid2>
                 </Box>
                 <Box mt={"auto"} mb={0}>

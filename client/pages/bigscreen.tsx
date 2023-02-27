@@ -125,7 +125,6 @@ const BigScreen = () => {
     //         }),
     //     [stationsInfo, allScores]
     // );
-
     const stationsReady = useStationReady(
         workout?.dataSource,
         workout?.options?.rankBy,

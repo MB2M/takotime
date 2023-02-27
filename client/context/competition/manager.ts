@@ -6,7 +6,7 @@ const useCompetition = () => {
 
     const handleData = (data: string) => {
         const { topic, data: message } = JSON.parse(data);
-
+        
         switch (topic) {
             case "competition":
                 setCompetition(message);

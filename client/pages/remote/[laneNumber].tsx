@@ -96,7 +96,7 @@ const LaneRemote = () => {
                 workoutType === "forTime" ? totalReps : 10000000
             ),
         };
-  
+
         try {
             const response = await fetch(
                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station/${laneNumber}?heatId=${globals?.externalHeatId}&scoreIndex=${scoreIndex}`,
@@ -185,15 +185,16 @@ const LaneRemote = () => {
                             justifyContent={"center"}
                             mt={"auto"}
                         >
-                            <Stack gap={5}>
+                            <Stack gap={5} alignItems={"center"}>
                                 <Button
                                     variant={"contained"}
                                     color="success"
                                     fullWidth
                                     sx={{
-                                        height: "200px",
+                                        height: "70vw",
                                         width: "70vw",
                                         fontSize: "80px",
+                                        borderRadius: "50%",
                                     }}
                                     onClick={() => handleRepsClick(1)}
                                 >

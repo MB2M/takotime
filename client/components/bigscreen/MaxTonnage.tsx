@@ -14,6 +14,7 @@ function MaxTonnage({
 }) {
     const [wodWeightInfo, setWodWeightInfo] = useState<WodWeightStation[]>([]);
     const competition = useCompetitionContext();
+    
 
     // const workout = useMemo(
     //     () =>

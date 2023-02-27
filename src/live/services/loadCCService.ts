@@ -27,7 +27,7 @@ const loadFromCC = async (
                         category: s.division,
                         externalId: s.participantId,
                     };
-                    await liveApp.manager.stationUpdate(data, "create");
+                    await liveApp.manager.stationUpdate(data, "create", false);
                     // const resp = await StationStatics.findOneAndUpdate(
                     //     { laneNumber: s.station },
                     //     {
@@ -46,6 +46,8 @@ const loadFromCC = async (
         await liveApp.manager.keyv.set("externalHeatId", externalHeatId);
         await liveApp.manager.keyv.set("externalWorkoutId", externalWorkoutId);
         liveApp.manager.websocketMessages.sendGlobalsToAllClients();
+        liveApp.manager.websocketMessages.sendStationsToAllClients();
+        liveApp.manager.sendFullConfig("server/wodConfigUpdate");
     } catch (err) {
         console.error(err);
     }

@@ -116,7 +116,6 @@ const useStationReady = (
         },
         dataSource === "web" ? 1000 : 0
     );
-
     switch (dataSource) {
         case "iot":
             liveStations.sort((a, b) => a.laneNumber - b.laneNumber);

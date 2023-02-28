@@ -23,7 +23,7 @@ const addZero = (x: string | number, n: number) => {
     return x;
 };
 
-const toReadableTime = (timestamp: string | number | Date) => {
+export const toReadableTime = (timestamp: string | number | Date) => {
     const asDate = new Date(timestamp);
     const hours = addZero(asDate.getUTCHours(), 2);
     const minutes = addZero(asDate.getUTCMinutes(), 2);

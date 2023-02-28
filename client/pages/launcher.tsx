@@ -46,11 +46,12 @@ const Launcher = () => {
     const handleTimerChange =
         (settingKey: keyof TimerSetting) =>
         (event: ChangeEvent | MouseEvent, newVal?: string) => {
+            const targetEvent = event.target as any;
+            const eventValue = targetEvent.value ?? "";
+
             setTimerSetting((current) => ({
                 ...current,
-                [settingKey]:
-                    newVal ||
-                    ("value" in event?.target ? event.target.value : ""),
+                [settingKey]: newVal || eventValue,
             }));
         };
 

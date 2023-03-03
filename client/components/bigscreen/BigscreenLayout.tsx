@@ -54,7 +54,7 @@ const BigscreenLayout = ({
     const restrievePreviousHeatWodStationInfo = useCallback(async () => {
         if (!globals?.externalHeatId) return setPreviousHeats([]);
         const previousHeats: BaseStation[] = [];
-        for (let i = 0; i <= globals.externalHeatId; i++) {
+        for (let i = 0; i < globals.externalHeatId; i++) {
             try {
                 const response = await fetch(
                     `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station?heatId=${i}`,

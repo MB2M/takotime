@@ -470,7 +470,7 @@ any) => {
                     </Grid>
                 </Grid>
             </Container>
-            <Box>
+            {/* <Box>
                 <ul>
                     {devices.map((device) => (
                         <li>{`${device.role} ${device.ref}: ${
@@ -478,7 +478,7 @@ any) => {
                         }`}</li>
                     ))}
                 </ul>
-            </Box>
+            </Box> */}
             {/* <TableContainer component={Paper}>
                             <Table sx={{ minWidth: 650 }} size="small">
                                 <TableHead>

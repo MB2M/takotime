@@ -3,6 +3,7 @@ const LoadedWorkouts = ({ loadedWorkouts }: { loadedWorkouts: LiveWorkout[] }) =
         <>
             <h3>Loaded:</h3>
             {loadedWorkouts?.map((w) => {
+                if (!w) return null
                 return (
                     <div key={w._id}>
                         <h5>{w.name}</h5>

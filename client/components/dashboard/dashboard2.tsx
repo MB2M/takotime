@@ -266,9 +266,9 @@ any) => {
                         <LiveWorkoutSelector
                             workoutIds={workoutIds}
                         ></LiveWorkoutSelector>
-                        <LoadedWorkouts
+                        {/* <LoadedWorkouts
                             loadedWorkouts={loadedWorkouts}
-                        ></LoadedWorkouts>
+                        ></LoadedWorkouts> */}
                         <CCLoader></CCLoader>
                         {/* <TournamentLoader></TournamentLoader> */}
                         <LocalLoader></LocalLoader>

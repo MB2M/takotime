@@ -3,6 +3,7 @@ type BaseStation = {
     heatId?: string;
     laneNumber?: number;
     scores?: BaseScore[];
+    participant?: string;
 };
 
 type BaseScore = {

@@ -33,15 +33,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
     return (
         <LiveDataProvider>
-            <CompetitionCornerProvider>
-                <CompetitionProvider>
+            <CompetitionProvider>
+                <CompetitionCornerProvider>
                     <Head>
                         <title>Takotime App</title>
                         {/* <link rel="icon" href="/favicon.ico" /> */}
                     </Head>
                     <Component {...pageProps} />
-                </CompetitionProvider>
-            </CompetitionCornerProvider>
+                </CompetitionCornerProvider>
+            </CompetitionProvider>
         </LiveDataProvider>
     );
 }

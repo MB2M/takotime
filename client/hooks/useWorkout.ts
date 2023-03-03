@@ -31,7 +31,7 @@ const useWorkout = (
 
     const totalRepetitions = useMemo(
         () => buyInReps + mainReps + buyOutReps,
-        [workout]
+        [workout] 
     );
 
     const [movement, setMovement] = useState<string>("");

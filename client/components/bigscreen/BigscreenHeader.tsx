@@ -11,6 +11,7 @@ const BigscreenBar = ({
     options,
     heat,
     chrono,
+    customTitle,
 }: {
     position: "top" | "bottom";
     height: number;
@@ -18,6 +19,7 @@ const BigscreenBar = ({
     options?: WorkoutOption;
     heat?: CCHeat;
     chrono?: string;
+    customTitle?: string;
 }) => {
     const showHeader = useMemo(
         () =>
@@ -34,8 +36,10 @@ const BigscreenBar = ({
         [options?.logo]
     );
 
+    
     const titles = useMemo(() => {
         if (!options?.title) return { textTop: "", textBottom: "" };
+        if (customTitle) return { textTop: customTitle, textBottom:"" };
         switch (options?.titleType) {
             case "category":
                 return {
@@ -59,7 +63,7 @@ const BigscreenBar = ({
             default:
                 return { textTop: "", textBottom: "" };
         }
-    }, [heat, options?.titleType, options?.title]);
+    }, [heat, options?.titleType, options?.title,customTitle]);
 
     if (!showHeader) return null;
 
@@ -71,17 +75,18 @@ const BigscreenBar = ({
             <Title {...titles} />
         ),
         options?.chrono && options?.chronoPosition?.includes(position) && (
-            <Chrono reverse={options.chronoDirection === "desc"}/>
+            <Chrono reverse={options.chronoDirection === "desc"} />
         ),
     ];
 
     return (
-        <Stack direction="row" color={"white"} height={height} >
+        <Stack direction="row" color={"white"} height={height}>
             {(options?.logoPosition?.includes("Left")
                 ? headerNodes
                 : headerNodes.reverse()
             ).map((node, index) => (
                 <Box
+                    key={index}
                     ml={index === 2 ? "auto" : ""}
                     mr={index === 2 ? "30px" : ""}
                 >

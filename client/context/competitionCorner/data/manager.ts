@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useCompetitionContext } from "../../competition/context";
 
 export const useCompetitionCorner = (
     eventId?: number,
@@ -8,9 +9,11 @@ export const useCompetitionCorner = (
     const [workouts, setWorkouts] = useState<CCWorkout[]>([]);
     const [heats, setHeats] = useState<CCHeat[]>([]);
     const [epHeat, setEpHeat] = useState<CCEPParticipant[]>();
-
+    const competition = useCompetitionContext();
+    
     useEffect(() => {
         if (!eventId || !workoutId || !heatId) return;
+        if (competition?.platform !== "CompetitionCorner") return;
         (async () => {
             try {
                 const response = await fetch(
@@ -64,7 +67,7 @@ export const useCompetitionCorner = (
                 setHeats([]);
             }
         })();
-    }, [eventId, workoutId, heatId]);
+    }, [eventId, workoutId, heatId, competition]);
 
     return { heats, epHeat };
 };

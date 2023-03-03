@@ -15,14 +15,14 @@ const Title = ({
         <Stack justifyContent={"center"} height={1} ml={5}>
             <Typography
                 fontSize={textTopFontSize}
-                fontFamily={"CantoraOne"}
+                fontFamily={"Montserrat"}
                 lineHeight={0.9}
             >
                 {textTop}
             </Typography>
             <Typography
                 fontSize={textBottomFontSize}
-                fontFamily={"CantoraOne"}
+                fontFamily={"Montserrat"}
                 lineHeight={0.9}
             >
                 {textBottom}

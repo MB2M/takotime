@@ -2,7 +2,7 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import { workouts } from "../../eventConfig/massilia_contest_3/config";
+import { workouts } from "../../eventConfig/cannesBirthday/config";
 import useWorkout from "../../hooks/useWorkout";
 import RemoteWeight from "../../components/remote/RemoteWeight";
 
@@ -89,6 +89,7 @@ const LaneRemote = () => {
     const handleRepsClick = async (value: number) => {
         if (!globals?.externalHeatId) return;
         const payload = {
+            participant: stationData?.participant,
             heatId: globals.externalHeatId.toString(),
             laneNumber,
             score: Math.min(
@@ -97,6 +98,7 @@ const LaneRemote = () => {
             ),
         };
 
+        console.log(payload)
         try {
             const response = await fetch(
                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station/${laneNumber}?heatId=${globals?.externalHeatId}&scoreIndex=${scoreIndex}`,

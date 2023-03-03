@@ -10,13 +10,15 @@ const Athlete = ({
     station,
     currentIndex,
     dataSource,
+    height,
 }: {
     workout: WorkoutDescription | undefined;
     rank: number;
-    repsOfFirst: number;
+    repsOfFirst?: number;
     station: WidescreenStation;
     currentIndex: number;
     dataSource: Workout["dataSource"];
+    height: number | string;
 }) => {
     const [move, setMove] = useState<boolean>(false);
 
@@ -37,11 +39,11 @@ const Athlete = ({
     const rankRef = useRef(0);
 
     useEffect(() => {
-        if (rankRef.current !== rank) {
-            if (rankRef.current > rank) setMove(true);
-            rankRef.current = rank;
-            setTimeout(() => setMove(false), 200);
-        }
+        // if (rankRef.current !== rank) {
+        //     if (rankRef.current > rank) setMove(true);
+        //     rankRef.current = rank;
+        //     setTimeout(() => setMove(false), 200);
+        // }
     }, [rank]);
 
     const getWorkoutData = () => {
@@ -67,6 +69,7 @@ const Athlete = ({
         <Box>
             <Box
                 width={260}
+                height={height}
                 p={0.5}
                 sx={{
                     backgroundColor: "#eee",
@@ -77,31 +80,58 @@ const Athlete = ({
                 boxShadow={"4px 4px 9px "}
                 borderRadius={1}
                 display={"flex"}
-                alignItems={"center"}
+                // alignItems={"center"}
                 gap={1}
                 mt={move ? 15 : 0}
+                //
             >
                 <Typography
                     width={0.06}
                     fontSize={"1.5rem"}
+                    height={"2.4rem"}
+                    fontFamily={"BebasNeue"}
+                    display={"flex"}
+                    alignItems={"center"}
                 >
                     {rank}
                 </Typography>
-                <Typography width={0.8} fontSize={"1.5rem"} lineHeight={0.8}>
-                    {station.participant}
+                <Typography
+                    height={"2.4rem"}
+                    width={0.75}
+                    fontSize={"1.4rem"}
+                    lineHeight={"1.2rem"}
+                    fontFamily={"BebasNeue"}
+                    textOverflow={"ellipsis"}
+                    py={"auto"}
+                    overflow={"hidden"}
+                    display={"flex"}
+                    alignItems={
+                        station.participant?.length > 24
+                            ? "flex-start"
+                            : "center"
+                    }
+                    sx={{ wordBreak: "break-all" }}
+                >
+                    {station.participant?.toUpperCase()}
                 </Typography>
                 {
                     <Typography
+                        display={"flex"}
+                        alignItems={"center"}
                         fontSize={"1.5rem"}
                         lineHeight={0.8}
                         ml={"auto"}
                         textAlign={"end"}
+                        fontFamily={"BebasNeue"}
                     >
-                        {finishResult
+                        {/* {finishResult
                             ? finishResult.slice(0, finishResult.length - 1)
                             : rank > 1
-                            ? repsCompleted - repsOfFirst
-                            : ""}
+                            ? repsCompleted - Number(repsOfFirst)
+                            : ""} */}
+                        {finishResult
+                            ? finishResult.slice(0, finishResult.length - 1)
+                            : repsCompleted}
                     </Typography>
                 }
             </Box>
@@ -109,12 +139,20 @@ const Athlete = ({
             <Box
                 borderRadius={"0px 0px 50px 10px"}
                 px={0.5}
+                py={0}
                 width={250}
+                height={"1.8rem"}
                 boxShadow={"4px 4px 9px black"}
                 mx="auto"
                 sx={{ backgroundColor: "#505050" }}
             >
-                <Typography color={"white"}>
+                <Typography
+                    color={"white"}
+                    alignItems={"flex-end"}
+                    display={"flex"}
+                    height={1}
+                    fontSize={"0.9rem"}
+                >
                     {getWorkoutData()?.currentMovementReps} /{" "}
                     {getWorkoutData()?.currentMovementTotalReps}{" "}
                     {getWorkoutData()?.currentMovement}

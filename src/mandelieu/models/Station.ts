@@ -11,6 +11,7 @@ const scoreSchema = new mongoose.Schema<IBaseScore>({
 const StationSchema = new mongoose.Schema<IBaseStation>({
     heatId: String,
     laneNumber: Number,
+    participant: String,
     scores: [scoreSchema],
 });
 

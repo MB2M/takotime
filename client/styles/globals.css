@@ -1,16 +1,31 @@
 @font-face {
     font-family: "CantoraOne";
     src: url("/fonts/CantoraOne-Regular.ttf");
-  }
+}
 
+@font-face {
+    font-family: "BebasNeue";
+    src: url("/fonts/BebasNeue-Regular.ttf");
+}
+
+@font-face {
+    font-family: "StintultraCondensed";
+    src: url("/fonts/StintUltraCondensed-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("/fonts/Montserrat-VariableFont_wght.ttf");
+}
 
 html,
 body {
     color: black;
     padding: 0;
     margin: 0;
-    font-family: CantoraOne, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: CantoraOne, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+        Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+        sans-serif;
 }
 
 a {
@@ -21,5 +36,3 @@ a {
 * {
     box-sizing: border-box;
 }
-
-

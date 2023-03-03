@@ -5,6 +5,7 @@ interface IBaseStation extends Document {
     heatId?: string;
     laneNumber?: number;
     scores?: DocumentArray<IBaseScore>;
+    participant?: string;
 }
 
 interface IBaseScore extends Subdocument {

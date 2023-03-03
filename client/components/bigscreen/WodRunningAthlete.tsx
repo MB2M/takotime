@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import useWorkout from "../../hooks/useWorkout";
-import { workouts } from "../../eventConfig/mandelieu/config";
+import { useRouter } from "next/router";
 
 const colors = {
     first: "linear-gradient(45deg,#06943d, #FFD600 )",
@@ -45,6 +45,7 @@ const useHRunningBackgroundSize = (
 
     if (!repsCompleted || !totalReps) return MIN_SIZE;
 
+
     switch (workoutType) {
         case "forTime":
             return (
@@ -54,7 +55,8 @@ const useHRunningBackgroundSize = (
             return (
                 MIN_SIZE +
                 ((fullWidth - ROUND_WIDTH - MIN_SIZE) * repsCompleted) /
-                    repsOfFirst -5
+                    repsOfFirst -
+                5
             );
         default:
             return fullWidth - ROUND_WIDTH;
@@ -71,8 +73,8 @@ const WodRunningAthlete = ({
     repsOfFirst,
     // finishResult,
     titleHeight = 0,
-    // fullWidth = (1920 * 3) / 4,
-    fullWidth = FULL_WIDTH,
+    fullWidth = (1920 * 3) / 4,
+    // fullWidth = FULL_WIDTH,
     options,
     primaryColor,
     secondaryColor,
@@ -122,7 +124,7 @@ const WodRunningAthlete = ({
     } = station;
     const repsCompleted = station.repsPerBlock?.[currentIndex] || 0; // OK
     const currentRound = station.position.round + 1;
-  
+
     const finishResult =
         station.result?.replace("|", " | ") ||
         (!station.measurements?.[currentIndex]
@@ -169,6 +171,7 @@ const WodRunningAthlete = ({
         fullWidth
     );
 
+
     useEffect(() => {
         if (rank > 3 || rank < 1) {
             switch (laneNumber % 2) {
@@ -207,10 +210,10 @@ const WodRunningAthlete = ({
         setTimeout(() => setShowMovement(false), 4000);
     }, [currentMovement]);
 
-
     if (!participant) {
         return <div></div>;
     }
+
     return (
         <Box display="flex" height={height}>
             <Box
@@ -251,8 +254,9 @@ const WodRunningAthlete = ({
                 >
                     <Typography
                         component="div"
-                        sx={{ fontFamily: "CantoraOne" }}
-                        fontSize={"2.7rem"}
+                        sx={{ fontFamily: "BebasNeue" }}
+                        // fontSize={"2.7rem"}
+                        fontSize={"3.6rem"}
                     >
                         {laneNumber}
                     </Typography>
@@ -263,9 +267,10 @@ const WodRunningAthlete = ({
                             ml: 2,
                             overflow: "hidden",
                             textOverflow: "ellipsis",
-                            fontFamily: "CantoraOne",
+                            fontFamily: "BebasNeue",
                         }}
-                        fontSize={"2.7rem"}
+                        // fontSize={"2.7rem"}
+                        fontSize={"3.6rem"}
                         noWrap
                     >
                         {participant.toUpperCase()}
@@ -284,19 +289,21 @@ const WodRunningAthlete = ({
                         <Typography
                             component="div"
                             sx={{ fontFamily: "CantoraOne" }}
-                            fontSize={"2.7rem"}
+                            // fontSize={"2.7rem"}
+                            fontSize={"4.7rem"}
                             ml={"auto"}
                         >
-                            {repsCompleted - repsOfFirst < 0
+                            {/* {repsCompleted - repsOfFirst < 0
                                 ? repsCompleted - repsOfFirst
-                                : getWorkoutData()?.currentMovementReps}
+                                : getWorkoutData()?.currentMovementReps} */}
+                            {repsCompleted}
                         </Typography>
                     ) : (
                         <Box
                             sx={{ backgroundColor: "#06943d" }}
                             p={0.5}
                             borderRadius="5px"
-                            ml={"auto"} 
+                            ml={"auto"}
                             display="flex"
                         >
                             <Typography
@@ -357,31 +364,29 @@ const WodRunningAthlete = ({
                 )} */}
                 {/* </Box> */}
             </Box>
-            {options?.showRounds &&
-                workoutType === "amrap"  && (
-                    <Box
-                        minWidth={ROUND_WIDTH}
-                        width={ROUND_WIDTH}
-                        justifyContent="center"
-                        alignItems="center"
-                        display="flex"
-                        ml={"auto"}
-                        borderLeft={"3px solid lightgray"}
-
+            {options?.showRounds && workoutType === "amrap" && (
+                <Box
+                    minWidth={ROUND_WIDTH}
+                    width={ROUND_WIDTH}
+                    justifyContent="center"
+                    alignItems="center"
+                    display="flex"
+                    ml={"auto"}
+                    borderLeft={"3px solid lightgray"}
+                >
+                    <Typography
+                        component="div"
+                        sx={{ fontFamily: "CantoraOne" }}
+                        fontSize={"2.5rem"}
+                        noWrap
+                        // mx={2}
+                        // ml={"auto"}
+                        color="white"
                     >
-                        <Typography
-                            component="div"
-                            sx={{ fontFamily: "CantoraOne" }}
-                            fontSize={"2.5rem"}
-                            noWrap
-                            // mx={2}
-                            // ml={"auto"}
-                            color="white"
-                        >
-                            rd: {getWorkoutData()?.currentRound}
-                        </Typography>
-                    </Box>
-                )}
+                        rd: {getWorkoutData()?.currentRound}
+                    </Typography>
+                </Box>
+            )}
         </Box>
     );
 };

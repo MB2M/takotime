@@ -14,8 +14,9 @@ const update = async (
     score: number,
     heatId: string,
     scoreIndex: string,
-    laneNumber: number
-) => {
+    laneNumber: number,
+    participant: string
+    ) => {
     if (
         !(await Station.exists({
             heatId,
@@ -25,6 +26,7 @@ const update = async (
         await Station.create({
             heatId,
             laneNumber,
+            participant
         });
     }
 
@@ -36,12 +38,14 @@ const update = async (
         }))
     ) {
         await Station.updateOne(
-            { heatId, laneNumber },
+            { heatId, laneNumber, participant },
             { $push: { scores: { repCount: score, index: scoreIndex } } }
         );
     }
+
+
     const station = await Station.findOneAndUpdate(
-        { heatId, laneNumber, "scores.index": Number(scoreIndex) },
+        { heatId, laneNumber, participant, "scores.index": Number(scoreIndex) },
         {
             $set: {
                 "scores.$.repCount": score,

@@ -1,15 +1,16 @@
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import BigscreenLayout from "../components/bigscreen/BigscreenLayout";
 import MaxTonnage from "../components/bigscreen/MaxTonnage";
 import WodRunningAthlete from "../components/bigscreen/WodRunningAthlete";
 import { useCompetitionContext } from "../context/competition";
 import { useLiveDataContext } from "../context/liveData/livedata";
-import { workouts } from "../eventConfig/massilia_contest_3/config";
+import { workouts } from "../eventConfig/cannesBirthday/config";
 import useStationReady from "../hooks/bigscreen/useStationReady";
 import useChrono from "../hooks/useChrono";
 import useInterval from "../hooks/useInterval";
 import useStationPayload from "../hooks/useStationPayload";
+import { useRouter } from "next/router";
 
 const HEADER_HEIGHT = 150;
 
@@ -28,6 +29,11 @@ const BigScreen = () => {
     // const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
     const chrono = useChrono(globals?.startTime, globals?.duration);
     // const stationsUpgraded = useStationPayload(stations, ranks);
+
+    const router = useRouter();
+    const title = router.query.title as string | undefined;
+
+    
 
     const currentIndex = useMemo(
         () =>
@@ -131,6 +137,8 @@ const BigScreen = () => {
         currentIndex
     );
 
+    
+
     // const stationsUpgradedRankedScores = useMemo(() => {
     //     return stationsUpgraded
     //         .map((station) => station.rank[station.rank.length - 1])
@@ -169,7 +177,31 @@ const BigScreen = () => {
     // );
 
     return (
-        <BigscreenLayout headerHeight={HEADER_HEIGHT}>
+        <BigscreenLayout headerHeight={HEADER_HEIGHT} customTitle={title}>
+            <Box
+                width={5}
+                height={1080 - HEADER_HEIGHT}
+                sx={{ backgroundColor: "#1f96d6ff" }}
+                position="absolute"
+                left={520 + (70 / 292) * ((1920 * 3) / 4 - 520)}
+                zIndex={10}
+            ></Box>
+            <Box
+                width={5}
+                height={1080 - HEADER_HEIGHT}
+                sx={{ backgroundColor: "#1f96d6ff" }}
+                position="absolute"
+                left={520 + (137 / 292) * ((1920 * 3) / 4 - 520)}
+                zIndex={10}
+            ></Box>
+            <Box
+                width={5}
+                height={1080 - HEADER_HEIGHT}
+                sx={{ backgroundColor: "#1f96d6ff" }}
+                position="absolute"
+                left={520 + (216 / 292) * ((1920 * 3) / 4 - 520)}
+                zIndex={10}
+            ></Box>
             <Stack overflow={"hidden"} height={1}>
                 {workout?.layout === "MaxTonnage" && (
                     <MaxTonnage

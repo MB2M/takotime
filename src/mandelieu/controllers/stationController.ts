@@ -45,7 +45,6 @@ export async function updateScore(req: Request, res: Response) {
     const body = req.body;
     const { heatId, scoreIndex } = req.query;
     const { laneNumber } = req.params;
-
     if (!heatId || !scoreIndex) {
         res.status(401).json({ error: "unauthorized" });
     } else {
@@ -54,7 +53,8 @@ export async function updateScore(req: Request, res: Response) {
                 body.score,
                 heatId as string,
                 scoreIndex as string,
-                Number(laneNumber)
+                Number(laneNumber),
+                body.participant as string
             );
             if (!!station) {
                 res.status(202).json(station);

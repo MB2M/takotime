@@ -159,7 +159,7 @@ const BigscreenLayout = ({
                                         "no workout description",
                                 }}
                             /> */}
-                            {previousHeats.map((station) => (
+                            {previousHeats.slice(0, 21).map((station) => (
                                 <Box
                                     key={`${station.participant}${station.scores?.[0].repCount}`}
                                 >

@@ -1,13 +1,12 @@
-import { IBaseScore } from "../../types/deviceScoring";
+import { IBaseStation } from "../../types/deviceScoring";
 import Station from "../models/Station";
+import { QueryOptions } from "mongoose";
 
 const viewStations = async (heatId: string) => {
-    const stations = await Station.find({ heatId });
-    return stations;
+    return await Station.find({ heatId });
 };
 const viewStation = async (heatId: string, laneNumber: number) => {
-    const station = await Station.findOne({ heatId, laneNumber });
-    return station;
+    return await Station.findOne({ heatId, laneNumber });
 };
 
 const update = async (
@@ -15,9 +14,9 @@ const update = async (
     heatId: string,
     scoreIndex: string,
     laneNumber: number,
-    participant: string
-    ) => {
-        
+    participant: string,
+    time?: number
+) => {
     if (
         !(await Station.exists({
             heatId,
@@ -27,7 +26,7 @@ const update = async (
         await Station.create({
             heatId,
             laneNumber,
-            participant
+            participant,
         });
     }
 
@@ -44,23 +43,73 @@ const update = async (
         );
     }
 
+    let updateData: QueryOptions<IBaseStation> = {
+        $set: {
+            "scores.$.repCount": score,
+        },
+        participant,
+    };
+    // if (time) {
+    //     updateData = {
+    //         ...updateData,
+    //         times: {
+    //             $cond: [
+    //                 { times: { $elemMatch: { rep: { $eq: score } } } },
+    //
+    //                 {
+    //                     $reduce: {
+    //                         input: "$times",
+    //                         initialValue: [],
+    //                         in: {
+    //                             $concatArrays: [
+    //                                 "$$value",
+    //                                 [
+    //                                     {
+    //                                         $cond: [
+    //                                             {
+    //                                                 $eq: ["$$this.rep", score],
+    //                                             },
+    //                                             {
+    //                                                 $mergeObjects: [
+    //                                                     "$$this",
+    //                                                     { time: time },
+    //                                                 ],
+    //                                             },
+    //                                             "$$this",
+    //                                         ],
+    //                                     },
+    //                                 ],
+    //                             ],
+    //                         },
+    //                     },
+    //                 },
+    //                 {
+    //                     $concatArrays: ["$times", [{ rep: score, time: time }]],
+    //                 },
+    //             ],
+    //         },
+    //     };
+    // }
 
-    const station = await Station.findOneAndUpdate(
-        { heatId, laneNumber, "scores.index": Number(scoreIndex) },
-        {
-            $set: {
-                "scores.$.repCount": score,
+    if (time) {
+        updateData = {
+            ...updateData,
+            $addToSet: {
+                times: { rep: score, time: time, index: Number(scoreIndex) },
             },
-            participant
-        }
-    );
+        };
+    }
 
-    return station;
+    // console.log(updateData);
+    return Station.findOneAndUpdate(
+        { heatId, laneNumber, "scores.index": Number(scoreIndex) },
+        updateData
+        // { arrayFilters: [{ "elem.rep": score }] }
+    );
 };
 
 const deleteAll = async () => {
-    const stations = await Station.remove();
-    return stations;
+    return Station.remove();
 };
 
 export { viewStations, viewStation, update, deleteAll };

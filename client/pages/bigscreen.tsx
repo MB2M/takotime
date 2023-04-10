@@ -1,5 +1,5 @@
-import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
-import { useCallback, useMemo, useState } from "react";
+import { Box, Stack, Typography } from "@mui/material";
+import { useMemo } from "react";
 import BigscreenLayout from "../components/bigscreen/BigscreenLayout";
 import MaxTonnage from "../components/bigscreen/MaxTonnage";
 import WodRunningAthlete from "../components/bigscreen/WodRunningAthlete";
@@ -8,14 +8,12 @@ import { useLiveDataContext } from "../context/liveData/livedata";
 import { workouts } from "../eventConfig/cannesBirthday/config";
 import useStationReady from "../hooks/bigscreen/useStationReady";
 import useChrono from "../hooks/useChrono";
-import useInterval from "../hooks/useInterval";
-import useStationPayload from "../hooks/useStationPayload";
 import { useRouter } from "next/router";
 
 const HEADER_HEIGHT = 150;
 
 const BigScreen = () => {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
+    const { globals, stations, loadedWorkouts } = useLiveDataContext();
     const competition = useCompetitionContext();
     const workout = useMemo(
         () =>
@@ -27,23 +25,21 @@ const BigScreen = () => {
     );
 
     // const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     // const stationsUpgraded = useStationPayload(stations, ranks);
 
     const router = useRouter();
     const title = router.query.title as string | undefined;
 
-    
-
     const currentIndex = useMemo(
         () =>
             workout?.wodIndexSwitchMinute === 0
                 ? 0
-                : Number(chrono?.toString().replaceAll(":", "")) <
+                : Number(timer?.toString().replaceAll(":", "")) <
                   (workout?.wodIndexSwitchMinute || 0) * 100000
                 ? 0
                 : 1,
-        [chrono, workout?.wodIndexSwitchMinute]
+        [timer, workout?.wodIndexSwitchMinute]
     );
     const totalReps = useMemo(
         () =>
@@ -137,8 +133,6 @@ const BigScreen = () => {
         currentIndex
     );
 
-    
-
     // const stationsUpgradedRankedScores = useMemo(() => {
     //     return stationsUpgraded
     //         .map((station) => station.rank[station.rank.length - 1])
@@ -228,7 +222,7 @@ const BigScreen = () => {
                                 key={station.laneNumber} //commun
                                 currentIndex={currentIndex}
                                 dataSource={workout?.dataSource}
-                                station={station}
+                                station={station as WidescreenStation}
                                 options={workout?.options} //commun
                                 workout={workoutFlow}
                                 // repsCompleted={s.repsPerBlock?.[currentIndex] || 0} // DIFFERENT
@@ -484,7 +478,7 @@ const BigScreen = () => {
                         fontFamily={"CantoraOne"}
                         paddingRight={"200px"}
                     >
-                        {chrono?.toString().slice(1) || ""}
+                        {timer?.toString().slice(1) || ""}
                     </Typography>
                 )}
             </Box>

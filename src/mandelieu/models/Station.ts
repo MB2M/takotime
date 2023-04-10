@@ -13,6 +13,7 @@ const StationSchema = new mongoose.Schema<IBaseStation>({
     laneNumber: Number,
     participant: String,
     scores: [scoreSchema],
+    times: [{ rep: Number, time: Number, index: Number }],
 });
 
 export default mongoose.model<IBaseStation>("StationGym", StationSchema);

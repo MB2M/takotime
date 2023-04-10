@@ -3,8 +3,7 @@ import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../../context/liveData/livedata";
 import useChrono from "../../../../hooks/useChrono";
 import logo from "../../../../public/img/logoMandelieuBlanc.png";
-import useStationPayload from "../../../../hooks/useStationPayload";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useInterval from "../../../../hooks/useInterval";
 import { workouts } from "../../../../eventConfig/mandelieu/config";
 
@@ -16,7 +15,7 @@ import WodRunningAthlete from "../../../../components/mandelieu/WodRunningAthlet
 
 function Display() {
     const { globals, stations } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
 
     // const [wodCount, setWodCount] = useState<number>(0);
@@ -70,7 +69,7 @@ function Display() {
                         ?.repCount || 0,
                 ],
                 rank: allScores.map((scoreIndex, i) =>
-                    scoreIndex.findIndex((score, index) => {
+                    scoreIndex.findIndex((score) => {
                         return (
                             score ===
                             stationsInfo
@@ -150,7 +149,7 @@ function Display() {
                             ),
                         ].join(" / ")}
                         textTopFontSize={"6rem"}
-                        chrono={chrono?.toString().slice(0, 5) || ""}
+                        chrono={timer?.toString().slice(0, 5) || ""}
                     />
                     <Grid
                         container
@@ -328,7 +327,7 @@ function Display() {
                                 fontFamily={"CantoraOne"}
                                 paddingRight={"200px"}
                             >
-                                {chrono?.toString().slice(1) || ""}
+                                {timer?.toString().slice(1) || ""}
                             </Typography>
                         )}
                     </Box>

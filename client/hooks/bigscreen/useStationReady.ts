@@ -5,14 +5,15 @@ import useInterval from "../useInterval";
 import useStationPayload from "../useStationPayload";
 
 const useStationReady = (
-    dataSource: Workout["dataSource"],
-    rankingMethod: WorkoutOption["rankBy"],
+    dataSource: DataSource = "iot",
+    rankingMethod: WorkoutOption["rankBy"] = "lineNumber",
     currentIndex: number
 ) => {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
+    const { globals, stations, ranks } = useLiveDataContext();
     const liveStations = useStationPayload(stations, ranks);
 
     const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
+
     const allPhoneScores = useMemo(() => {
         return [
             stationsInfo
@@ -52,8 +53,22 @@ const useStationReady = (
                             ?.scores?.find((score) => score.index === 1)
                             ?.repCount || 0,
                     ],
+                    times: [
+                        stationsInfo
+                            ?.find(
+                                (station) =>
+                                    station.laneNumber === stationUp.laneNumber
+                            )
+                            ?.times?.filter((time) => time.index === 0),
+                        stationsInfo
+                            ?.find(
+                                (station) =>
+                                    station.laneNumber === stationUp.laneNumber
+                            )
+                            ?.times?.filter((time) => time.index === 1),
+                    ],
                     rank: allPhoneScores.map((scoreIndex, i) =>
-                        scoreIndex.findIndex((score, index) => {
+                        scoreIndex.findIndex((score) => {
                             return (
                                 score ===
                                 stationsInfo
@@ -82,7 +97,6 @@ const useStationReady = (
                                   );
                               }) + 1
                     ),
-
                 };
             }),
         [stationsInfo, allPhoneScores]
@@ -114,7 +128,7 @@ const useStationReady = (
         () => {
             restrieveWodStationInfo();
         },
-        dataSource === "web" ? 1000 : 0
+        dataSource === "web" ? 1000 : null
     );
     switch (dataSource) {
         case "iot":

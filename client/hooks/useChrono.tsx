@@ -9,14 +9,16 @@ const useChrono = (
     reverse: boolean = false
     // isOn: boolean
 ) => {
-
     const [time, setTime] = useState<number>();
+    const [ts, setTs] = useState<timesync.TimeSync>();
+    const [plainTimer, setPlainTimer] = useState<number>(0);
 
-    const cc = useMemo(() => {
+    const timer = useMemo(() => {
         if (!startTime || startTime === "" || !time) {
             return null;
         }
         const diff = time - Date.parse(startTime || "");
+        setPlainTimer(diff);
         if (diff < 0) {
             return Math.floor(diff / 1000);
         } else {
@@ -31,6 +33,7 @@ const useChrono = (
             server: `http://${process.env.NEXT_PUBLIC_LIVE_API}/timesync`,
             interval: 100000,
         });
+        setTs(ts);
         const serverT = setInterval(function () {
             const now = ts.now();
             setTime(now);
@@ -39,7 +42,7 @@ const useChrono = (
         return () => clearInterval(serverT);
     }, []);
 
-    return cc;
+    return { timer, ts, plainTimer };
 };
 
 export default useChrono;

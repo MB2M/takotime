@@ -1,28 +1,25 @@
 import type { NextPage } from "next";
-import { useState, useEffect, Key } from "react";
+import { useState } from "react";
 import {
-    Container,
-    Button,
-    Grid,
-    CardContent,
-    Card,
-    Typography,
     Box,
+    Button,
+    Card,
     CardActions,
-    Drawer,
+    CardContent,
     Chip,
+    Container,
+    Drawer,
+    Grid,
     Tooltip,
+    Typography,
 } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
 // import useSWR from "swr";
 import TimerForm from "../TimerForm";
-import * as timesync from "timesync";
 import DevicesUpdate from "../DevicesUpdate";
 import LiveWorkoutSelector from "../LiveWorkoutSelector";
 import LoadedWorkouts from "../LoadedWorkouts";
 import CCLoader from "./CCLoader";
 import StationUpdate from "../StaticsUpdate";
-import TournamentLoader from "./TournamentLoader";
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import useChrono from "../../hooks/useChrono";
 import LocalLoader from "./LocalLoader";
@@ -54,28 +51,17 @@ any) => {
         loadedWorkouts,
         stationDevices,
         stations,
-        brokerClients,
         ranks,
         globals,
         devices,
     } = useLiveDataContext();
-    const [tSync, setTSync] = useState<timesync.TimeSync>();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const [heatUpdateDrawerOpen, setHeatUpdateDrawerOpen] =
         useState<boolean>(false);
     const [deviceConfigUpdateDrawerOpen, setDeviceConfigUpdateDrawerOpen] =
         useState<boolean>(false);
 
     const { sendMessage } = useLiveDataContext();
-
-    useEffect(() => {
-        const ts = timesync.create({
-            server: `http://${process.env.NEXT_PUBLIC_LIVE_API}/timesync`,
-            interval: 100000,
-        });
-
-        setTSync(ts);
-    }, []);
 
     const handleScriptRestart = (station: Station) => {
         const stationDevice = stationDevices.find(
@@ -111,7 +97,6 @@ any) => {
             (s: StationDevices) => s.laneNumber === lane
         );
         const dynamics = station.dynamics;
-        const stationIp = stationDevice?.ip;
         const stationConnected =
             devices.find((device) => {
                 return (
@@ -169,26 +154,6 @@ any) => {
             state: dynamics?.state,
         };
     };
-
-    const getChrono = () => {
-        if (!globals?.startTime || globals?.startTime === "" || !tSync?.now())
-            return;
-        // if (!globals?.startTime || globals?.startTime === "" || !time) return;
-
-        const diff = tSync.now() - Date.parse(globals?.startTime || "");
-        // const diff = time - Date.parse(globals?.startTime || "");
-        if (diff < 0) {
-            return Math.trunc(diff / 1000);
-        } else {
-            return toReadableTime(Math.min(globals?.duration * 60000, diff));
-        }
-    };
-
-    const darkTheme = createTheme({
-        palette: {
-            mode: "dark",
-        },
-    });
 
     const toggleDrawer =
         (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -261,7 +226,7 @@ any) => {
                     <Grid item xs={12} lg={2}>
                         <TimerForm
                             startTime={globals?.startTime}
-                            chrono={chrono}
+                            chrono={timer}
                         ></TimerForm>
                         <LiveWorkoutSelector
                             workoutIds={workoutIds}

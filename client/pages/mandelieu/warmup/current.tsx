@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
-import { useEventContext } from "../../../context/event";
 import { usePlanning } from "../../../utils/mt/usePlanning";
 import Clock from "react-live-clock";
 import {
     Box,
     Grid,
     Paper,
-    Typography,
     Table,
     TableBody,
-    TableRow,
     TableCell,
-    Stack,
+    TableRow,
+    Typography,
 } from "@mui/material";
 import { bg, logo } from "../../../eventConfig/mandelieu/config";
 import useChrono from "../../../hooks/useChrono";
@@ -23,7 +21,7 @@ const WarmupCurrent = () => {
     const planning = usePlanning(45000);
     const [allowedHeats, setAllowedHeats] = useState<PlanningHeat[]>([]);
     const liveData = useLiveDataContext();
-    const chrono = useChrono(
+    const { timer } = useChrono(
         liveData.globals?.startTime,
         liveData.globals?.duration
     );
@@ -145,9 +143,9 @@ const WarmupCurrent = () => {
                                                     index
                                                         ? " @ " +
                                                           allowedHeat.time
-                                                        : chrono
+                                                        : timer
                                                         ? " : " +
-                                                          chrono
+                                                          timer
                                                               ?.toLocaleString()
                                                               .slice(0, 5)
                                                         : ""
@@ -166,12 +164,13 @@ const WarmupCurrent = () => {
                                                                         fontFamily={
                                                                             "CantoraOne"
                                                                         }
-                                                                        fontSize={"3.8vmin"}
+                                                                        fontSize={
+                                                                            "3.8vmin"
+                                                                        }
                                                                     >
                                                                         {
                                                                             station.station
                                                                         }
-                                                                
                                                                     </Typography>
                                                                 </TableCell>
                                                                 <TableCell>

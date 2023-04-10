@@ -1,28 +1,15 @@
 import { Box } from "@mui/system";
 import Stack from "@mui/material/Stack";
-import OverlayRunningAthlete from "./OverlayRunningAthlete";
-import OverlayRunningDuelAthlete from "./OverlayRunningDuelAthlete";
 import useChrono from "../../../hooks/useChrono";
 import { List, ListItem, Typography } from "@mui/material";
-import OverlayRunningDuelAthlete2 from "./OverlayRunningDuelAthlete2";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useStationPayload from "../../../hooks/useStationPayload";
 import HeaderMT from "../../mt/HeaderMT";
-import mtLogo from "../../../public/img/logo.png";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
-import { ReactChild, ReactFragment, ReactPortal } from "react";
-
-const getWorkout = (workouts: LiveWorkout[], station: WidescreenStation) => {
-    for (let workout of workouts) {
-        if (workout.categories.includes(station.category)) {
-            return workout;
-        }
-    }
-};
 
 const OverlayResult = () => {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { globals, stations, ranks } = useLiveDataContext();
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
 
     const stationsUpgraded = useStationPayload(stations, ranks);
     const CCData = useCompetitionCornerContext();
@@ -40,7 +27,7 @@ const OverlayResult = () => {
         >
             <HeaderMT
                 // logo={mtLogo}
-                chrono={chrono?.toString().slice(0, 5) || ""}
+                chrono={timer?.toString().slice(0, 5) || ""}
                 chronoFontSize="4rem"
                 textTop={[
                     ...new Set(

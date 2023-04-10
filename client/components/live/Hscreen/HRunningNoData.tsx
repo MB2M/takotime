@@ -3,20 +3,17 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useChrono from "../../../hooks/useChrono";
-import HRunningAthlete from "./HRunningAthlete";
 import useStationPayload from "../../../hooks/useStationPayload";
-import HeatPresentation from "../HeatPresentation";
 import HeaderMT from "../../mt/HeaderMT";
 import mtLogo from "../../../public/img/logo.png";
 import StationsUpgradedTableDisplay from "../StationsUpgradedTableDisplay";
-import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 
 function HorizontalRunningNoData() {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [toggle, setToggle] = useState<"wod" | "participants">("wod");
-    const CCData = useCompetitionCornerContext();
+    // const CCData = useCompetitionCornerContext();
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -38,7 +35,7 @@ function HorizontalRunningNoData() {
                     fontFamily={"CantoraOne"}
                     textAlign="center"
                 >
-                    {chrono?.toString().slice(1) || ""}
+                    {timer?.toString().slice(1) || ""}
                 </Typography>
             </Box>
         );
@@ -65,7 +62,7 @@ function HorizontalRunningNoData() {
                     ),
                 ].join(" / ")}
                 textTopFontSize={"6rem"}
-                chrono={chrono?.toString().slice(0, 5) || ""}
+                chrono={timer?.toString().slice(0, 5) || ""}
             />
             {(toggle === "participants" && (
                 <StationsUpgradedTableDisplay sortBy={"laneNumber"} />

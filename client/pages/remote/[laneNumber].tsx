@@ -2,9 +2,10 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import { workouts } from "../../eventConfig/cannesBirthday/config";
+import { workouts } from "../../eventConfig/FTD23Qualif/config";
 import useWorkout from "../../hooks/useWorkout";
 import RemoteWeight from "../../components/remote/RemoteWeight";
+import useChrono from "../../hooks/useChrono";
 
 const LaneRemote = () => {
     const { globals, stations } = useLiveDataContext();
@@ -12,6 +13,7 @@ const LaneRemote = () => {
     const [stationInfo, setStationInfo] = useState<BaseStation | null>(null);
     const [scoreIndex, setScoreIndex] = useState<number>(0);
     const [wodCount, setWodCount] = useState<number>(0);
+    const { ts } = useChrono(globals?.startTime, globals?.duration);
 
     const { laneNumber }: any = useMemo(() => router.query, [router]);
 
@@ -96,9 +98,15 @@ const LaneRemote = () => {
                 Math.max(repsCompleted + value, 0),
                 workoutType === "forTime" ? totalReps : 10000000
             ),
+            time:
+                globals && ts
+                    ? Math.min(
+                          ts.now() - Date.parse(globals.startTime),
+                          globals.duration * 60 * 1000
+                      )
+                    : undefined,
         };
 
-        console.log(payload)
         try {
             const response = await fetch(
                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station/${laneNumber}?heatId=${globals?.externalHeatId}&scoreIndex=${scoreIndex}`,
@@ -143,22 +151,23 @@ const LaneRemote = () => {
                     display="flex"
                     justifyContent={"center"}
                 >
-                    {[...Array(wodCount + 1).keys()]
-                        .splice(1)
-                        .map((_, index) => (
-                            <Button
-                                key={index}
-                                variant={
-                                    scoreIndex === index
-                                        ? "contained"
-                                        : "outlined"
-                                }
-                                size={"large"}
-                                onClick={() => handleVariantSelect(index)}
-                            >
-                                variant {index + 1}
-                            </Button>
-                        ))}
+                    {wodCount > 1 &&
+                        [...Array(wodCount + 1).keys()]
+                            .splice(1)
+                            .map((_, index) => (
+                                <Button
+                                    key={index}
+                                    variant={
+                                        scoreIndex === index
+                                            ? "contained"
+                                            : "outlined"
+                                    }
+                                    size={"large"}
+                                    onClick={() => handleVariantSelect(index)}
+                                >
+                                    variant {index + 1}
+                                </Button>
+                            ))}
                 </Box>
                 {workoutType && ["amrap", "forTime"].includes(workoutType) && (
                     <>

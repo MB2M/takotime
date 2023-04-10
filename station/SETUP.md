@@ -159,32 +159,24 @@ Reboot and run:
 
 > sudo apt-get install -y nodejs git
 
-> mkdir takotime && cd takotime
+mkdir takotime && cd takotime
+git init
+git remote add -f origin https://github.com/MB2M/takotime.git
+git config core.sparseCheckout true
+echo "station/" >.git/info/sparse-checkout
+git config pull.rebase true
+git pull origin main
+git checkout main
+cd station; npm install
 
-> git init
+nano .env
 
-> git remote add -f origin https://github.com/MB2M/takotime.git
-
-> git config core.sparseCheckout true
-
-> echo "station/" >> .git/info/sparse-checkout
-
-> git config pull.rebase true
-
-> git pull origin main
-
-> git checkout main
-
-> cd station; npm install
-
-> nano .env
-
-> npm start// pour tester
-> cd && sudo npm install pm2@latest -g
-
+<!-- npm start// pour tester -->
+cd && sudo npm install pm2@latest -g
 cd takotime/station
 pm2 start npm --name "livestation" -- start
 pm2 startup
+
 pm2 save
 
 <!-- pm2 start npm --name "restart button" -- run restartButton -->

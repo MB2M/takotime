@@ -12,11 +12,13 @@ type Competition = {
     workouts: Workout[];
 };
 
+type DataSource = "web" | "iot";
+
 type Workout = {
     workoutId?: string;
     layout?: string;
     duration?: number;
-    dataSource?: "web" | "iot";
+    dataSource: DataSource;
     wodIndexSwitchMinute?: number;
     options?: WorkoutOption;
 };
@@ -24,7 +26,7 @@ type Workout = {
 type WorkoutOption = {
     wodtype?: "amrap" | "forTime";
     title?: boolean;
-    
+
     titlePosition?: "top" | "bottom";
     titleType?: "category" | "heat" | "heat-category" | "category-heat";
     logo?: boolean;

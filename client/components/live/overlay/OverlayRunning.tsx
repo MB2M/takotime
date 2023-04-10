@@ -3,13 +3,10 @@ import Stack from "@mui/material/Stack";
 import OverlayRunningAthlete from "./OverlayRunningAthlete";
 import OverlayRunningDuelAthlete from "./OverlayRunningDuelAthlete";
 import useChrono from "../../../hooks/useChrono";
-import { Typography } from "@mui/material";
 import OverlayRunningDuelAthlete2 from "./OverlayRunningDuelAthlete2";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useStationPayload from "../../../hooks/useStationPayload";
 import HeaderMT from "../../mt/HeaderMT";
-import mtLogo from "../../../public/img/logo.png";
-import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 
 const getWorkout = (workouts: LiveWorkout[], station: WidescreenStation) => {
     for (let workout of workouts) {
@@ -21,10 +18,10 @@ const getWorkout = (workouts: LiveWorkout[], station: WidescreenStation) => {
 
 const OverlayRunning = ({ version }: { version?: OverlayVersion }) => {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const timer = useChrono(globals?.startTime, globals?.duration);
 
     const stationsUpgraded = useStationPayload(stations, ranks);
-    const CCData = useCompetitionCornerContext();
+    // const CCData = useCompetitionCornerContext();
 
     return (
         <Box
@@ -42,7 +39,7 @@ const OverlayRunning = ({ version }: { version?: OverlayVersion }) => {
         >
             <HeaderMT
                 // logo={mtLogo}
-                chrono={chrono?.toString().slice(0, 5) || ""}
+                chrono={timer?.toString().slice(0, 5) || ""}
                 chronoFontSize="4rem"
                 textTop={[
                     ...new Set(

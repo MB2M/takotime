@@ -13,11 +13,7 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useMemo, useReducer, useState } from "react";
-import {
-    MuiColorInput,
-    MuiColorInputColors,
-    MuiColorInputValue,
-} from "mui-color-input";
+import { MuiColorInput, MuiColorInputValue } from "mui-color-input";
 import useWorkouts from "../../../hooks/useCCWorkouts";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import WorkoutCard from "../../../components/admin/WorkoutCard";
@@ -25,6 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const DEFAUT_WORKOUT: Workout = {
     workoutId: "",
+    dataSource: "web",
     layout: "default",
     duration: 0,
     options: {
@@ -84,7 +81,7 @@ const CompetitionDetail = () => {
 
     const updateCompetition = async () => {
         try {
-            const response = await fetch(
+            await fetch(
                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/webapp/competition/${_id}`,
                 {
                     method: "PUT",
@@ -144,23 +141,16 @@ const CompetitionDetail = () => {
         refreshCompetition();
     };
 
-    const handlePrimaryColorChange = (
-        newValue: string,
-        colors: MuiColorInputColors
-    ) => {
+    const handlePrimaryColorChange = (newValue: string) => {
         setPrimaryColor(newValue);
         dispatch({ key: "primaryColor", value: newValue });
     };
-    const handleSecondaryColorChange = (
-        newValue: string,
-        colors: MuiColorInputColors
-    ) => {
+    const handleSecondaryColorChange = (newValue: string) => {
         setSecondaryColor(newValue);
         dispatch({ key: "secondaryColor", value: newValue });
     };
 
     const handleAddWorkout = () => {
-
         const newWorkouts = [...workouts, DEFAUT_WORKOUT];
         setWorkouts(newWorkouts);
         dispatch({ key: "workouts", value: newWorkouts });
@@ -262,7 +252,7 @@ const CompetitionDetail = () => {
                     <Box width={1}>
                         <Grid2 container spacing={2}>
                             {workouts.map((workout, index) => (
-                                <Grid2 xs={12} md={4}>
+                                <Grid2 xs={12} md={4} key={workout.workoutId}>
                                     <WorkoutCard
                                         platform={competition?.platform}
                                         workout={workout}

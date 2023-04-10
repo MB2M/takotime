@@ -1,20 +1,15 @@
-import { Typography, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
-import useChrono from "../../../hooks/useChrono";
-import mtLogo from "../../../public/img/logo.png";
 import useStationPayload from "../../../hooks/useStationPayload";
-import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
-import HeaderMT from "../../../components/mt/HeaderMT";
 import WodWeightRunningAthlete from "../../../components/mt/WodWeightRunningAthlete";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
 import HeatPresentation from "../../../components/live/HeatPresentation";
 import MTHeatWinner from "../../../components/mt/MTHeatWinner";
 
 function WodWeightRunning() {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { globals, stations, ranks } = useLiveDataContext();
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [wodWeightInfo, setWodWeightInfo] = useState<any[]>([]);
 

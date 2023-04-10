@@ -206,6 +206,7 @@ interface WidescreenStation {
         reps: number;
     };
     rank: Ranks;
+    times: { rep: number; time: number; index: number }[][];
 }
 
 type Props = { hostname: string | undefined };

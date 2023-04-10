@@ -6,6 +6,8 @@ interface IBaseStation extends Document {
     laneNumber?: number;
     scores?: DocumentArray<IBaseScore>;
     participant?: string;
+
+    times?: { rep: number; time: number; index: number }[];
 }
 
 interface IBaseScore extends Subdocument {

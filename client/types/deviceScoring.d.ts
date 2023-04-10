@@ -4,6 +4,8 @@ type BaseStation = {
     laneNumber?: number;
     scores?: BaseScore[];
     participant?: string;
+
+    times?: { rep: number; time: number; index: number }[];
 };
 
 type BaseScore = {

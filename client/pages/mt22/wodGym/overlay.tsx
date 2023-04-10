@@ -14,7 +14,7 @@ import OverlayLogo from "../../../components/live/overlay/OverlayLogo";
 
 function WodGymRunningOverlay() {
     const { globals, stations, ranks } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [wodGymInfo, setWodGymInfo] = useState<GymStation[]>([]);
     const [heatConfig, setHeatConfig] = useState<HeatConfig | undefined>();
@@ -149,7 +149,7 @@ function WodGymRunningOverlay() {
                     >
                         <HeaderMT
                             // logo={mtLogo}
-                            chrono={chrono?.toString().slice(0, 5) || ""}
+                            chrono={timer?.toString().slice(0, 5) || ""}
                             chronoFontSize="4rem"
                             textTop={CCData?.epHeat?.[0].heatName}
                             textTopFontSize="4rem"

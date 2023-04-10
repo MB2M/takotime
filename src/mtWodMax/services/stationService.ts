@@ -2,12 +2,10 @@ import { IScore } from "../../types/mt";
 import Station from "../models/Station";
 
 const viewStations = async (heatId: string) => {
-    const stations = await Station.find({ heatId });
-    return stations;
+    return await Station.find({ heatId });
 };
 const viewStation = async (heatId: string, laneNumber: number) => {
-    const station = await Station.findOne({ heatId, laneNumber });
-    return station;
+    return await Station.findOne({ heatId, laneNumber });
 };
 
 const add = async (data: IScore, heatId: string, laneNumber: number) => {
@@ -28,8 +26,6 @@ const add = async (data: IScore, heatId: string, laneNumber: number) => {
     }
 
     station.scores.push(data);
-
-    console.log(station);
 
     await station.save();
     return station;
@@ -73,8 +69,7 @@ const update = async (data: IScore, scoreId: string) => {
 };
 
 const deleteAll = async () => {
-    const stations = await Station.remove();
-    return stations;
+    return await Station.remove();
 };
 
-export {viewStations, viewStation, add, update, deleteAll };
+export { viewStations, viewStation, add, update, deleteAll };

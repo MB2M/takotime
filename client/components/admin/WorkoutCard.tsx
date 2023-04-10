@@ -1,30 +1,29 @@
 import {
+    Box,
+    Button,
     Card,
     CardActions,
-    Button,
-    Box,
-    Modal,
-    Typography,
+    CardContent,
     CardHeader,
+    Checkbox,
+    Collapse,
+    FormControl,
     IconButton,
+    IconButtonProps,
     List,
     ListItem,
-    CardContent,
-    Collapse,
-    IconButtonProps,
+    MenuItem,
+    Modal,
+    Select,
+    SelectChangeEvent,
+    Stack,
     styled,
     TextField,
-    Checkbox,
-    Select,
-    MenuItem,
-    SelectChangeEvent,
-    FormControl,
-    Stack,
+    Typography,
 } from "@mui/material";
-import { ChangeEvent, useMemo, useRef, useState } from "react";
+import React, { ChangeEvent, useMemo, useState } from "react";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import React from "react";
 
 const deleteModalStyle = {
     position: "absolute",
@@ -78,7 +77,7 @@ const WorkoutCard = ({
         [platformWorkouts, workout]
     );
     const [name, setName] = useState<string>("");
-    
+
     const cardName = useMemo(() => {
         switch (platform) {
             case "CompetitionCorner":
@@ -233,8 +232,6 @@ const WorkoutCard = ({
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };
-
-    console.log(workout)
 
     return (
         <>

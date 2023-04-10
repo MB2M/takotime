@@ -1,6 +1,5 @@
 import { Divider, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useChrono from "../../../hooks/useChrono";
 import HRunningAthlete from "./HRunningAthlete";
@@ -16,7 +15,7 @@ const getWorkout = (workouts: LiveWorkout[], station: WidescreenStation) => {
 
 function HorizontalRunning() {
     const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
 
     const stationsUpgraded = useStationPayload(stations, ranks);
 
@@ -108,7 +107,7 @@ function HorizontalRunning() {
                         fontFamily={"CantoraOne"}
                         paddingRight={"200px"}
                     >
-                        {chrono?.toString().slice(1) || ""}
+                        {timer?.toString().slice(1) || ""}
                     </Typography>
                 )}
             </Box>

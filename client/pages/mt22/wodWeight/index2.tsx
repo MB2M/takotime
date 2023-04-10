@@ -7,11 +7,11 @@ import useInterval from "../../../hooks/useInterval";
 import HeatPresentation from "../../../components/live/HeatPresentation";
 import MTHeatWinner from "../../../components/mt/MTHeatWinner";
 import WodWeightRunningAthlete2 from "../../../components/mt/WodWeightRunningAthlete2";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 function WodWeightRunning() {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { globals, stations, ranks } = useLiveDataContext();
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [wodWeightInfo, setWodWeightInfo] = useState<any[]>([]);
 
@@ -143,7 +143,7 @@ function WodWeightRunning() {
                                 fontFamily={"CantoraOne"}
                                 paddingRight={"200px"}
                             >
-                                {chrono?.toString().slice(1) || ""}
+                                {timer?.toString().slice(1) || ""}
                             </Typography>
                         )}
                     </Box>

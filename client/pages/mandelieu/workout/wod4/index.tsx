@@ -3,8 +3,7 @@ import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../../context/liveData/livedata";
 import useChrono from "../../../../hooks/useChrono";
 import logo from "../../../../public/img/logoMandelieuBlanc.png";
-import useStationPayload from "../../../../hooks/useStationPayload";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useInterval from "../../../../hooks/useInterval";
 import { workouts } from "../../../../eventConfig/mandelieu/config";
 
@@ -17,7 +16,7 @@ import DisplayWeight from "../../../../components/mandelieu/displayWeight";
 
 function Display() {
     const { globals, stations } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
 
     // const [wodCount, setWodCount] = useState<number>(0);
@@ -71,7 +70,7 @@ function Display() {
                         ?.repCount || 0,
                 ],
                 rank: allScores.map((scoreIndex, i) =>
-                    scoreIndex.findIndex((score, index) => {
+                    scoreIndex.findIndex((score) => {
                         return (
                             score ===
                             stationsInfo
@@ -151,10 +150,10 @@ function Display() {
                             ),
                         ].join(" / ")}
                         textTopFontSize={"6rem"}
-                        chrono={chrono?.toString().slice(0, 5) || ""}
+                        chrono={timer?.toString().slice(0, 5) || ""}
                     />
                     {/* CHANGE SCREEN AFTER 6' */}
-                    {Number(chrono?.toString().replaceAll(":", "")) <
+                    {Number(timer?.toString().replaceAll(":", "")) <
                         1250000 && (
                         <Grid
                             container
@@ -270,7 +269,7 @@ function Display() {
                             </Grid>
                         </Grid>
                     )}
-                    {Number(chrono?.toString().replaceAll(":", "")) >
+                    {Number(timer?.toString().replaceAll(":", "")) >
                         1250000 && (
                         <DisplayWeight
                             heatId={globals?.externalHeatId}
@@ -291,7 +290,7 @@ function Display() {
                                 fontFamily={"CantoraOne"}
                                 paddingRight={"200px"}
                             >
-                                {chrono?.toString().slice(1) || ""}
+                                {timer?.toString().slice(1) || ""}
                             </Typography>
                         )}
                     </Box>

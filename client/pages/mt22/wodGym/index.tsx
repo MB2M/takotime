@@ -2,20 +2,16 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useChrono from "../../../hooks/useChrono";
-import mtLogo from "../../../public/img/logo.png";
 import useStationPayload from "../../../hooks/useStationPayload";
-import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
-import HeaderMT from "../../../components/mt/HeaderMT";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
 import WodGymRunningAthlete from "../../../components/mt/WodGymRunningAthlete";
 import HeatPresentation from "../../../components/live/HeatPresentation";
-import HeatResult from "../../../components/live/HeatResult";
 import MTHeatWinner from "../../../components/mt/MTHeatWinner";
 
 function WodGymRunning() {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { globals, stations, ranks } = useLiveDataContext();
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [wodGymInfo, setWodGymInfo] = useState<GymStation[]>([]);
     const [heatConfig, setHeatConfig] = useState<HeatConfig | undefined>();
@@ -162,7 +158,7 @@ function WodGymRunning() {
                                 fontFamily={"CantoraOne"}
                                 paddingRight={"200px"}
                             >
-                                {chrono?.toString().slice(1) || ""}
+                                {timer?.toString().slice(1) || ""}
                             </Typography>
                         )}
                     </Box>

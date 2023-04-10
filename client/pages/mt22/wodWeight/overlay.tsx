@@ -1,8 +1,7 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 import useChrono from "../../../hooks/useChrono";
-import mtLogo from "../../../public/img/logo.png";
 import useStationPayload from "../../../hooks/useStationPayload";
 import HeaderMT from "../../../components/mt/HeaderMT";
 import { useMemo, useState } from "react";
@@ -15,7 +14,7 @@ import { useCompetitionCornerContext } from "../../../context/competitionCorner/
 
 function WodWeightRunningOverlay() {
     const { globals, stations, ranks } = useLiveDataContext();
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
     const stationsUpgraded = useStationPayload(stations, ranks);
     const [wodWeightInfo, setWodWeightInfo] = useState<any[]>([]);
     const CCData = useCompetitionCornerContext();
@@ -124,7 +123,7 @@ function WodWeightRunningOverlay() {
                     >
                         <HeaderMT
                             // logo={mtLogo}
-                            chrono={chrono?.toString().slice(0, 5) || ""}
+                            chrono={timer?.toString().slice(0, 5) || ""}
                             chronoFontSize="4rem"
                             textTop={CCData?.epHeat?.[0].heatName}
                             textTopFontSize="4rem"

@@ -1,12 +1,11 @@
-import { Box, Divider, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { useMemo, ReactNode, useCallback, useState, useEffect } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { useCompetitionContext } from "../../context/competition";
 import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import BigscreenBar from "./BigscreenHeader";
 import Image from "next/image";
-import useWorkouts from "../../hooks/useCCWorkouts";
 
 const BigscreenLayout = ({
     children,
@@ -20,7 +19,7 @@ const BigscreenLayout = ({
     const { globals } = useLiveDataContext();
     const competition = useCompetitionContext();
     const { heats } = useCompetitionCornerContext();
-    const CCWorkouts = useWorkouts(competition?.platform, competition?.eventId);
+    // const CCWorkouts = useWorkouts(competition?.platform, competition?.eventId);
     const [previousHeats, setPreviousHeats] = useState<
         {
             participant?: string;
@@ -37,14 +36,14 @@ const BigscreenLayout = ({
         [competition, globals?.externalWorkoutId]
     );
 
-    const platformWorkout = useMemo(
-        () =>
-            CCWorkouts.find(
-                (platformWorkout) =>
-                    platformWorkout.id.toString() === workout?.workoutId
-            ),
-        [CCWorkouts, workout]
-    );
+    // const platformWorkout = useMemo(
+    //     () =>
+    //         CCWorkouts.find(
+    //             (platformWorkout) =>
+    //                 platformWorkout.id.toString() === workout?.workoutId
+    //         ),
+    //     [CCWorkouts, workout]
+    // );
 
     const heat = useMemo(
         () => heats.find((heat) => heat.id === globals?.externalHeatId),
@@ -157,7 +156,7 @@ const BigscreenLayout = ({
                                     __html:
                                         platformWorkout?.description ||
                                         "no workout description",
-                                }}
+                                }}  
                             /> */}
                             {previousHeats.slice(0, 21).map((station) => (
                                 <Box

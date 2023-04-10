@@ -54,7 +54,8 @@ export async function updateScore(req: Request, res: Response) {
                 heatId as string,
                 scoreIndex as string,
                 Number(laneNumber),
-                body.participant as string
+                body.participant as string,
+                body.time
             );
             if (!!station) {
                 res.status(202).json(station);

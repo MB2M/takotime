@@ -1,33 +1,21 @@
-import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
-import BigscreenLayout from "../components/bigscreen/BigscreenLayout";
-import MaxTonnage from "../components/bigscreen/MaxTonnage";
-import WodRunningAthlete, {
-    toReadableTime,
-} from "../components/bigscreen/WodRunningAthlete";
+import { Box, Stack, Typography } from "@mui/material";
+import { useMemo } from "react";
 import { useCompetitionContext } from "../context/competition";
 import { useLiveDataContext } from "../context/liveData/livedata";
 import { workouts } from "../eventConfig/cannesBirthday/config";
 import useStationReady from "../hooks/bigscreen/useStationReady";
 import useChrono from "../hooks/useChrono";
-import useInterval from "../hooks/useInterval";
-import useStationPayload from "../hooks/useStationPayload";
-import Logo from "../components/bigscreen/Logo";
 import Image from "next/image";
-import Title from "../components/bigscreen/Title";
-import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
 import { useRouter } from "next/router";
 import Chrono from "../components/bigscreen/Chrono";
 import Athlete from "../components/overlay/Athlete";
-import useWorkout from "../hooks/useWorkout";
 
 const HEADER_HEIGHT = 80;
 const ATHLETE_HEIGHT = 2.8 * 16;
 
 const Overlay = () => {
-    const { globals, stations, ranks, loadedWorkouts } = useLiveDataContext();
+    const { globals } = useLiveDataContext();
     const competition = useCompetitionContext();
-    const { heats } = useCompetitionCornerContext();
     const workout = useMemo(
         () =>
             competition?.workouts.find(
@@ -40,29 +28,29 @@ const Overlay = () => {
     const router = useRouter();
     const title = router.query.title;
 
-    const chrono = useChrono(globals?.startTime, globals?.duration);
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
 
     const currentIndex = useMemo(
         () =>
             workout?.wodIndexSwitchMinute === 0
                 ? 0
-                : Number(chrono?.toString().replaceAll(":", "")) <
+                : Number(timer?.toString().replaceAll(":", "")) <
                   (workout?.wodIndexSwitchMinute || 0) * 100000
                 ? 0
                 : 1,
-        [chrono, workout?.wodIndexSwitchMinute]
+        [timer, workout?.wodIndexSwitchMinute]
     );
-    const totalReps = useMemo(
-        () =>
-            loadedWorkouts?.[0]?.blocks[currentIndex]?.measurements?.repsTot ||
-            0,
-        [currentIndex, loadedWorkouts]
-    );
+    // const totalReps = useMemo(
+    //     () =>
+    //         loadedWorkouts?.[0]?.blocks[currentIndex]?.measurements?.repsTot ||
+    //         0,
+    //     [currentIndex, loadedWorkouts]
+    // );
 
-    const workoutType = useMemo(
-        () => loadedWorkouts?.[0]?.scoring[currentIndex]?.method || "forTime",
-        [currentIndex, loadedWorkouts]
-    );
+    // const workoutType = useMemo(
+    //     () => loadedWorkouts?.[0]?.scoring[currentIndex]?.method || "forTime",
+    //     [currentIndex, loadedWorkouts]
+    // );
 
     const stationsReady = useStationReady(
         workout?.dataSource,
@@ -148,13 +136,10 @@ const Overlay = () => {
         return movements.join(" - ");
     }, [workoutFlow]);
 
-
     // const { movement, movementTotalReps } = useWorkout(
     //     workoutFlow,
     //     repsOfFirst || 0
     // );
-
-    // console.log(workoutFlow);
 
     return (
         <Box height={1080} overflow={"hidden"}>
@@ -249,7 +234,9 @@ const Overlay = () => {
                                                 workout={workoutFlow}
                                                 rank={rank}
                                                 repsOfFirst={repsOfFirst}
-                                                station={station}
+                                                station={
+                                                    station as WidescreenStation
+                                                }
                                                 currentIndex={currentIndex}
                                                 dataSource={workout?.dataSource}
                                             />

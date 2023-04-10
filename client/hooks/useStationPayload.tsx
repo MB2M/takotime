@@ -10,12 +10,12 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
             setStationsPayload([]);
             return;
         }
-        
+
         setStationsPayload(
             stations.map((s) => {
                 const r = ranks.find((r) => r.lane === s.laneNumber);
 
-                let rank: Ranks = [];
+                let rank: Ranks;
                 if (!r) {
                     rank = [];
                 } else {
@@ -47,6 +47,7 @@ const useStationPayload = (stations: Station[], ranks: StationRanked) => {
                         reps: s.dynamics?.currentWodPosition?.reps,
                     },
                     rank: rank,
+                    times: [],
                 };
             })
         );

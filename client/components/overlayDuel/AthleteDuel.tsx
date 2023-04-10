@@ -123,19 +123,23 @@ export const AthleteDuel: React.FC<Props> = ({
                         : repsCompleted}
                 </Typography>
             </Box>
-            <Box
-                sx={{ color: "red" }}
-                display={"flex"}
-                justifyContent={"space-between"}
-            >
-                <Typography>
-                    Average pace: {Math.round(globalPace * 10) / 10} rep / min
-                </Typography>
+            {workout?.main.movements.length === 1 && (
+                <Box
+                    sx={{ color: "red" }}
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                >
+                    <Typography>
+                        Average pace: {Math.round(globalPace * 10) / 10} rep /
+                        min
+                    </Typography>
 
-                <Typography>
-                    Last 3 pace: {Math.round(currentPace * 10) / 10} rep / min
-                </Typography>
-            </Box>
+                    <Typography>
+                        Last 3 pace: {Math.round(currentPace * 10) / 10} rep /
+                        min
+                    </Typography>
+                </Box>
+            )}
         </>
     );
 };

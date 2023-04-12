@@ -48,7 +48,7 @@ export const workouts: WorkoutDescription[] = [
         workoutIds: ["wod3"],
         index: 0,
         main: {
-            movements: ["1 Clean "],
+            movements: ["Clean "],
             reps: [1],
         },
     },
@@ -68,7 +68,7 @@ export const workouts: WorkoutDescription[] = [
         workoutIds: ["wod3"],
         index: 2,
         main: {
-            movements: ["1 Clean + 1 STOH + 1 Front Squat + 1 STOH"],
+            movements: ["Clean + 1 STOH + 1 Front Squat + 1 STOH"],
             reps: [1],
         },
     },

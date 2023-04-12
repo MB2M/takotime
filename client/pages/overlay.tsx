@@ -9,11 +9,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Chrono from "../components/bigscreen/Chrono";
 import Athlete from "../components/overlay/Athlete";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const HEADER_HEIGHT = 80;
 const ATHLETE_HEIGHT = 2.8 * 16;
 
 const Overlay = () => {
+    const [parent] = useAutoAnimate({ duration: 500, easing: "ease-in-out" });
     const { globals } = useLiveDataContext();
     const competition = useCompetitionContext();
     const workout = useMemo(
@@ -186,7 +188,8 @@ const Overlay = () => {
                                 fontSize={"2.5rem"}
                             />
                         </Box>
-                        <Box display="flex" gap={2}>
+
+                        <Box display="flex" gap={2} ref={parent}>
                             {workout?.layout === "default" &&
                                 stationsReady?.slice(0, 6).map((station) => {
                                     // const repsOfFirst = stationsReady
@@ -227,6 +230,7 @@ const Overlay = () => {
                                         <Box
                                             position={"relative"}
                                             top={-ATHLETE_HEIGHT / 2}
+                                            key={station.laneNumber}
                                         >
                                             <Athlete
                                                 key={station.laneNumber}

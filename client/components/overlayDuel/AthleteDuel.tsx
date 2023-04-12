@@ -14,6 +14,7 @@ interface Props {
     height?: number | string;
     switchTime?: number;
     timer: number;
+    duration?: number;
 }
 
 export const AthleteDuel: React.FC<Props> = ({
@@ -27,6 +28,7 @@ export const AthleteDuel: React.FC<Props> = ({
     // height,
     switchTime = 0,
     timer,
+    duration,
 }) => {
     const repsCompleted = station?.repsPerBlock?.[currentIndex] || 0; // OK
     const finishResult = useFinishResult(station, currentIndex);
@@ -40,10 +42,21 @@ export const AthleteDuel: React.FC<Props> = ({
 
     const lastRepsTime = station.times?.[currentIndex]?.[0];
 
-    const globalPace =
-        (lastRepsTime?.rep /
-            (timer / 1000 - (currentIndex ? switchTime : 0) * 60)) *
-        60;
+    const globalPace = () => {
+        let time: number;
+
+        if (lastRepsTime?.rep === 150) {
+            time = lastRepsTime.time;
+        } else {
+            time = Math.min(timer, (duration || timer) * 60 * 1000);
+        }
+
+        return (
+            (lastRepsTime?.rep /
+                (time / 1000 - (currentIndex ? switchTime : 0) * 60)) *
+            60
+        );
+    };
 
     const currentPace =
         (Math.min(3, lastRepsTime?.rep) /
@@ -80,7 +93,7 @@ export const AthleteDuel: React.FC<Props> = ({
                                 fontFamily={"BebasNeue"}
                                 sx={{ color: "white" }}
                             >
-                                Rnd-{currentRound}
+                                Round-{currentRound}
                             </Typography>
                         )}
                         <Typography
@@ -130,13 +143,13 @@ export const AthleteDuel: React.FC<Props> = ({
                     justifyContent={"space-between"}
                 >
                     <Typography>
-                        Average pace: {Math.round(globalPace * 10) / 10} rep /
-                        min
+                        {/*Average pace: {Math.round(globalPace() * 10) / 10} rep /*/}
+                        Average pace: {globalPace()} rep / min
                     </Typography>
 
                     <Typography>
-                        Last 3 pace: {Math.round(currentPace * 10) / 10} rep /
-                        min
+                        {/*Last 3 pace: {Math.round(currentPace * 10) / 10} rep /*/}
+                        Last 3 pace: {currentPace} rep / min
                     </Typography>
                 </Box>
             )}

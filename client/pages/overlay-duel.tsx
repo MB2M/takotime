@@ -51,16 +51,17 @@ const Overlay = () => {
         globals?.duration
     );
 
-    const currentIndex = useMemo(
-        () =>
-            workout?.wodIndexSwitchMinute === 0
-                ? 0
-                : Number(timer?.toString().replaceAll(":", "")) <
-                  (workout?.wodIndexSwitchMinute || 0) * 100000
-                ? 0
-                : 1,
-        [timer, workout?.wodIndexSwitchMinute]
-    );
+    const currentIndex = useMemo(() => {
+        if (!workout?.wodIndexSwitchMinute) return 0;
+        if (workout.wodIndexSwitchMinute === 0) return 0;
+        if (plainTimer < workout.wodIndexSwitchMinute * 60 * 1000) return 0;
+
+        //ALERT: ONLY FOR WOD 3 QUALIFS FTD
+        if (workout.workoutId === "wod3" && plainTimer > 3 * 60 * 1000)
+            return 2;
+
+        return 1;
+    }, [timer, workout?.wodIndexSwitchMinute]);
 
     const workoutType = workout?.options?.wodtype;
 
@@ -69,8 +70,6 @@ const Overlay = () => {
         workout?.options?.rankBy,
         currentIndex
     );
-
-    // console.log(stationsReady);
 
     const logoUrl = useMemo(
         () =>
@@ -310,6 +309,7 @@ const Overlay = () => {
                                                 stationsReady[0] as WidescreenStation
                                             }
                                             workout={workoutFlow}
+                                            duration={globals?.duration}
                                         />
                                     )}
                             </Box>
@@ -328,6 +328,7 @@ const Overlay = () => {
                                                 stationsReady[1] as WidescreenStation
                                             }
                                             workout={workoutFlow}
+                                            duration={globals?.duration}
                                         />
                                     )}
                             </Box>
@@ -461,7 +462,7 @@ const Overlay = () => {
                     alignItems={"center"}
                 >
                     <Typography fontFamily={"BebasNeue"} fontSize={"1.4rem"}>
-                        {workoutType} {globals?.duration} mins :
+                        {workoutFlow?.type} {workout?.duration} mins :
                     </Typography>
                     {workoutDescription?.map((desc, index) => (
                         <Fragment key={index}>

@@ -11,6 +11,7 @@ import Chrono from "../components/bigscreen/Chrono";
 import { AthleteDuel } from "../components/overlayDuel/AthleteDuel";
 import toReadableTime from "../utils/timeConverter";
 import { cumulativeTable } from "../utils/cumulativeTable";
+import useInterval from "../hooks/useInterval";
 
 const HEADER_HEIGHT = 80;
 const FOOTER_HEIGHT = HEADER_HEIGHT / 2.8;
@@ -31,6 +32,7 @@ const getRoundRecord = (
 };
 
 const Overlay = () => {
+    const [wodWeightInfo, setWodWeightInfo] = useState<WodWeightStation[]>([]);
     const { globals } = useLiveDataContext();
     const competition = useCompetitionContext();
     // const { heats } = useCompetitionCornerContext();
@@ -57,7 +59,8 @@ const Overlay = () => {
         if (plainTimer < workout.wodIndexSwitchMinute * 60 * 1000) return 0;
 
         //ALERT: ONLY FOR WOD 3 QUALIFS FTD
-        if (workout.workoutId === "wod3" && plainTimer > 3 * 60 * 1000)
+        if (workout.workoutId === "wod3" && plainTimer > 2 * 60 * 1000)
+            // 5 minutes
             return 2;
 
         return 1;
@@ -154,6 +157,32 @@ const Overlay = () => {
         }
     }, [lastRoundTimes]);
 
+    const restrieveWodWeightInfo = async () => {
+        if (!globals?.externalHeatId) return;
+        try {
+            const response = await fetch(
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/wodMax/station?heatId=${globals.externalHeatId}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            if (response.ok) {
+                const json = await response.json();
+                setWodWeightInfo(json);
+            } else {
+                setWodWeightInfo([]);
+            }
+        } catch (err) {
+            console.log(err);
+            setWodWeightInfo([]);
+        }
+    };
+
+    useInterval(restrieveWodWeightInfo, 1000);
+
     return (
         <Box height={1080} overflow={"hidden"}>
             {workoutType === "amrap" && (
@@ -240,6 +269,124 @@ const Overlay = () => {
                     </Box>
                 </Grow>
             )}
+            {workout?.workoutId === "wod3" && currentIndex !== 1 && (
+                <Box
+                    position={"absolute"}
+                    bottom={FOOTER_HEIGHT}
+                    height={70}
+                    width={1}
+                    sx={{
+                        background:
+                            "linear-gradient(45deg, #393873 40%, #39387300 40%),linear-gradient(135deg, #39387300 60%,#393873 60%)",
+                    }}
+                    display={"flex"}
+                    justifyContent={"space-around"}
+                    alignItems={"center"}
+                >
+                    {wodWeightInfo
+                        .sort(
+                            (a, b) => (a.laneNumber || 0) - (b.laneNumber || 0)
+                        )
+                        .map((athleteWeightInfo, index) => (
+                            <Box
+                                key={index}
+                                display={"flex"}
+                                flexDirection={index ? "row-reverse" : "row"}
+                                justifyContent={"space-between"}
+                                alignItems={"center"}
+                                width={1}
+                                pr={index ? 5 : 30}
+                                pl={index ? 30 : 5}
+                            >
+                                <Box textAlign={index ? "end" : "start"}>
+                                    <Typography
+                                        color={"white"}
+                                        fontFamily={"BebasNeue"}
+                                        fontSize={"1.6rem"}
+                                        lineHeight={"2rem"}
+                                    >
+                                        Previous
+                                    </Typography>
+                                    <Box
+                                        display={"flex"}
+                                        flexDirection={
+                                            index ? "row" : "row-reverse"
+                                        }
+                                        gap={2}
+                                    >
+                                        {athleteWeightInfo.scores
+                                            ?.filter(
+                                                (score) =>
+                                                    [
+                                                        "Success",
+                                                        "Fail",
+                                                    ].includes(score.state) &&
+                                                    score.partnerId ===
+                                                        (!!currentIndex ? 1 : 0)
+                                            )
+                                            ?.slice(0, 7)
+                                            .sort((a, b) =>
+                                                a.weight === b.weight
+                                                    ? a.state === "Fail"
+                                                        ? 1
+                                                        : -1
+                                                    : b.weight - a.weight
+                                            )
+                                            .map((score, index) => (
+                                                <Box
+                                                    display={"flex"}
+                                                    key={index}
+                                                >
+                                                    <Typography
+                                                        color={"white"}
+                                                        fontFamily={"BebasNeue"}
+                                                        fontSize={"1.6rem"}
+                                                        lineHeight={"2rem"}
+                                                    >
+                                                        {score.weight || "-"} kg
+                                                    </Typography>
+
+                                                    <Typography
+                                                        fontSize={"0.8rem"}
+                                                        lineHeight={"2rem"}
+                                                    >
+                                                        {score.state ===
+                                                        "Success"
+                                                            ? "🟢"
+                                                            : "🔴"}
+                                                    </Typography>
+                                                </Box>
+                                            ))}
+                                    </Box>
+                                </Box>
+                                <Box textAlign={"center"}>
+                                    {/*<Typography*/}
+                                    {/*    color={"white"}*/}
+                                    {/*    fontFamily={"BebasNeue"}*/}
+                                    {/*    fontSize={"1.6rem"}*/}
+                                    {/*    lineHeight={"2rem"}*/}
+                                    {/*>*/}
+                                    {/*    Current try*/}
+                                    {/*</Typography>*/}
+                                    <Typography
+                                        color={"white"}
+                                        fontFamily={"BebasNeue"}
+                                        fontSize={"2rem"}
+                                        lineHeight={"2rem"}
+                                    >
+                                        {athleteWeightInfo.scores?.find(
+                                            (score) =>
+                                                score.state === "Try" &&
+                                                score.partnerId ===
+                                                    (!!currentIndex ? 1 : 0)
+                                        )?.weight || "-"}{" "}
+                                        kg
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        ))}
+                </Box>
+            )}
 
             <Stack height={1} justifyContent={"space-between"} my={0} py={0}>
                 <Box
@@ -310,10 +457,15 @@ const Overlay = () => {
                                             }
                                             workout={workoutFlow}
                                             duration={globals?.duration}
+                                            wodWeightData={wodWeightInfo.find(
+                                                (data) =>
+                                                    data.laneNumber ===
+                                                    stationsReady[0].laneNumber
+                                            )}
                                         />
                                     )}
                             </Box>
-                            <Box width={0.5} mx={"auto"}>
+                            <Box width={0.5} mx={"auto="}>
                                 {workout?.layout === "default" &&
                                     stationsReady?.[1] && (
                                         <AthleteDuel
@@ -329,6 +481,11 @@ const Overlay = () => {
                                             }
                                             workout={workoutFlow}
                                             duration={globals?.duration}
+                                            wodWeightData={wodWeightInfo.find(
+                                                (data) =>
+                                                    data.laneNumber ===
+                                                    stationsReady[1].laneNumber
+                                            )}
                                         />
                                     )}
                             </Box>

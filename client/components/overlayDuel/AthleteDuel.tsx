@@ -15,6 +15,7 @@ interface Props {
     switchTime?: number;
     timer: number;
     duration?: number;
+    wodWeightData?: WodWeightStation;
 }
 
 export const AthleteDuel: React.FC<Props> = ({
@@ -29,6 +30,7 @@ export const AthleteDuel: React.FC<Props> = ({
     switchTime = 0,
     timer,
     duration,
+    wodWeightData,
 }) => {
     const repsCompleted = station?.repsPerBlock?.[currentIndex] || 0; // OK
     const finishResult = useFinishResult(station, currentIndex);
@@ -41,6 +43,12 @@ export const AthleteDuel: React.FC<Props> = ({
     } = useWorkoutData(station, repsCompleted, dataSource, workout);
 
     const lastRepsTime = station.times?.[currentIndex]?.[0];
+
+    const bestWeightScore = wodWeightData?.scores?.find(
+        (score) =>
+            score.state === "Success" &&
+            score.partnerId === (!!currentIndex ? 1 : 0)
+    );
 
     const globalPace = () => {
         let time: number;
@@ -85,38 +93,107 @@ export const AthleteDuel: React.FC<Props> = ({
                         mr={reverse ? "" : "auto"}
                         ml={reverse ? "auto" : ""}
                         textAlign={reverse ? "end" : "start"}
+                        height={1}
+                        py={1}
                     >
-                        {workout?.type === "amrap" && (
-                            <Typography
-                                fontSize={"1.8rem"}
-                                lineHeight={"1.8rem"}
-                                fontFamily={"BebasNeue"}
-                                sx={{ color: "white" }}
+                        {workout?.name !== "wod3" ? (
+                            <>
+                                {workout?.type === "amrap" && (
+                                    <Typography
+                                        fontSize={"1.8rem"}
+                                        lineHeight={"1.8rem"}
+                                        fontFamily={"BebasNeue"}
+                                        sx={{ color: "white" }}
+                                    >
+                                        Round-{currentRound}
+                                    </Typography>
+                                )}
+                                <Typography
+                                    fontSize={"1.5rem"}
+                                    lineHeight={"1.3rem"}
+                                    fontFamily={"BebasNeue"}
+                                    sx={{ color: "white" }}
+                                    noWrap
+                                    // maxWidth={60}
+                                >
+                                    {currentMovementReps} /{" "}
+                                    {currentMovementTotalReps}{" "}
+                                </Typography>
+                                <Typography
+                                    fontSize={"1.3rem"}
+                                    lineHeight={"1.3rem"}
+                                    fontFamily={"BebasNeue"}
+                                    sx={{ color: "white" }}
+                                    noWrap
+                                >
+                                    {currentMovement}
+                                </Typography>
+                            </>
+                        ) : currentIndex === 1 ? (
+                            <Box
+                                display={"flex"}
+                                flexDirection={"column"}
+                                justifyContent={"space-between"}
                             >
-                                Round-{currentRound}
-                            </Typography>
-                        )}
-                        <Typography
-                            fontSize={"1.5rem"}
-                            lineHeight={"1.3rem"}
-                            fontFamily={"BebasNeue"}
-                            sx={{ color: "white" }}
-                            noWrap
-                            // maxWidth={60}
-                        >
-                            {currentMovementReps} / {currentMovementTotalReps}{" "}
-                        </Typography>
-                        <Typography
-                            fontSize={"1.3rem"}
-                            lineHeight={"1.3rem"}
-                            fontFamily={"BebasNeue"}
-                            sx={{ color: "white" }}
-                            noWrap
-                        >
-                            {currentMovement}
-                        </Typography>
+                                <Box
+                                    display={"flex"}
+                                    flexDirection={
+                                        reverse ? "row-reverse" : "row"
+                                    }
+                                    gap={6}
+                                >
+                                    <Box
+                                        display={"flex"}
+                                        flexDirection={"column"}
+                                        alignItems={"center"}
+                                    >
+                                        <Typography
+                                            fontSize={"1.2rem"}
+                                            fontFamily={"BebasNeue"}
+                                        >
+                                            Average
+                                        </Typography>
+                                        <Typography
+                                            fontSize={"1.9rem"}
+                                            lineHeight={"1.8rem"}
+                                            fontFamily={"BebasNeue"}
+                                        >
+                                            {Math.floor(globalPace()) || "-"}
+                                        </Typography>
+                                    </Box>
+                                    <Box
+                                        display={"flex"}
+                                        flexDirection={"column"}
+                                        alignItems={"center"}
+                                    >
+                                        <Typography
+                                            fontSize={"1.2rem"}
+                                            fontFamily={"BebasNeue"}
+                                        >
+                                            Current
+                                        </Typography>
+                                        <Typography
+                                            fontSize={"1.9rem"}
+                                            lineHeight={"1.8rem"}
+                                            fontFamily={"BebasNeue"}
+                                        >
+                                            {Math.floor(currentPace) || "-"}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                                <Box display={"flex"} justifyContent={"center"}>
+                                    <Typography
+                                        fontSize={"0.8rem"}
+                                        lineHeight={"0.9rem"}
+                                    >
+                                        reps / min
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        ) : null}
                     </Box>
                 )}
+
                 <Typography
                     fontSize={"3rem"}
                     lineHeight={"3rem"}
@@ -129,30 +206,16 @@ export const AthleteDuel: React.FC<Props> = ({
                 <Typography
                     fontSize={"3rem"}
                     fontFamily={"BebasNeue"}
+                    lineHeight={"3rem"}
                     sx={{ color: "white" }}
                 >
-                    {finishResult
+                    {workout?.name === "wod3" && currentIndex !== 1
+                        ? `${bestWeightScore?.weight || 0} kg`
+                        : finishResult
                         ? finishResult.slice(0, finishResult.length - 2)
                         : repsCompleted}
                 </Typography>
             </Box>
-            {workout?.main.movements.length === 1 && (
-                <Box
-                    sx={{ color: "red" }}
-                    display={"flex"}
-                    justifyContent={"space-between"}
-                >
-                    <Typography>
-                        {/*Average pace: {Math.round(globalPace() * 10) / 10} rep /*/}
-                        Average pace: {globalPace()} rep / min
-                    </Typography>
-
-                    <Typography>
-                        {/*Last 3 pace: {Math.round(currentPace * 10) / 10} rep /*/}
-                        Last 3 pace: {currentPace} rep / min
-                    </Typography>
-                </Box>
-            )}
         </>
     );
 };

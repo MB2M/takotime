@@ -332,7 +332,7 @@ const Overlay = () => {
                                             //         : 1
                                             // )
                                             ?.reverse()
-                                            .slice(0, 7)
+                                            .slice(0, 6)
                                             .map((score, index) => (
                                                 <Box
                                                     display={"flex"}

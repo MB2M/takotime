@@ -325,13 +325,13 @@ const Overlay = () => {
                                                         (!!currentIndex ? 1 : 0)
                                             )
                                             ?.slice(0, 7)
-                                            .sort((a, b) =>
-                                                a.weight === b.weight
-                                                    ? a.state === "Fail"
-                                                        ? 1
-                                                        : -1
-                                                    : 0
-                                            )
+                                            // .sort((a, b) =>
+                                            //     a.weight === b.weight
+                                            //         ? a.state === "Fail"
+                                            //             ? 1
+                                            //             : -1
+                                            //         : 0
+                                            // )
                                             .map((score, index) => (
                                                 <Box
                                                     display={"flex"}

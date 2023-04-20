@@ -142,54 +142,70 @@ export const AthleteDuel: React.FC<Props> = ({
                                     flexDirection={
                                         reverse ? "row-reverse" : "row"
                                     }
-                                    gap={6}
+                                    gap={3}
+                                    // alignItems={"center"}
                                 >
+                                    {/*<Typography*/}
+                                    {/*    py={0}*/}
+                                    {/*    fontSize={"1.2rem"}*/}
+                                    {/*    fontFamily={"BebasNeue"}*/}
+                                    {/*>*/}
+                                    {/*    Average*/}
+                                    {/*</Typography>*/}
                                     <Box
                                         display={"flex"}
                                         flexDirection={"column"}
                                         alignItems={"center"}
+                                        height={1}
+                                        py={1}
+                                        px={2}
                                     >
                                         <Typography
-                                            fontSize={"1.2rem"}
-                                            fontFamily={"BebasNeue"}
-                                        >
-                                            Average
-                                        </Typography>
-                                        <Typography
-                                            fontSize={"1.9rem"}
+                                            fontSize={"2.6rem"}
                                             lineHeight={"1.8rem"}
                                             fontFamily={"BebasNeue"}
                                         >
-                                            {Math.floor(globalPace()) || "-"}
-                                        </Typography>
-                                    </Box>
-                                    <Box
-                                        display={"flex"}
-                                        flexDirection={"column"}
-                                        alignItems={"center"}
-                                    >
-                                        <Typography
-                                            fontSize={"1.2rem"}
-                                            fontFamily={"BebasNeue"}
-                                        >
-                                            Current
+                                            {`${Math.floor(globalPace())}` ||
+                                                "-"}
                                         </Typography>
                                         <Typography
-                                            fontSize={"1.9rem"}
+                                            fontSize={"1.1rem"}
                                             lineHeight={"1.8rem"}
                                             fontFamily={"BebasNeue"}
                                         >
-                                            {Math.floor(currentPace) || "-"}
+                                            reps / min
                                         </Typography>
                                     </Box>
-                                </Box>
-                                <Box display={"flex"} justifyContent={"center"}>
-                                    <Typography
-                                        fontSize={"0.8rem"}
-                                        lineHeight={"0.9rem"}
-                                    >
-                                        reps / min
-                                    </Typography>
+                                    {/*<Box*/}
+                                    {/*    display={"flex"}*/}
+                                    {/*    flexDirection={"column"}*/}
+                                    {/*    alignItems={"center"}*/}
+                                    {/*>*/}
+                                    {/*    <Typography*/}
+                                    {/*        fontSize={"1.2rem"}*/}
+                                    {/*        fontFamily={"BebasNeue"}*/}
+                                    {/*    >*/}
+                                    {/*        Current*/}
+                                    {/*    </Typography>*/}
+                                    {/*    <Typography*/}
+                                    {/*        fontSize={"1.9rem"}*/}
+                                    {/*        lineHeight={"1.8rem"}*/}
+                                    {/*        fontFamily={"BebasNeue"}*/}
+                                    {/*    >*/}
+                                    {/*        {Math.floor(currentPace) || "-"}*/}
+                                    {/*    </Typography>*/}
+                                    {/*</Box>*/}
+                                    {/*<Box*/}
+                                    {/*    display={"flex"}*/}
+                                    {/*    justifyContent={"center"}*/}
+                                    {/*>*/}
+                                    {/*    <Typography*/}
+                                    {/*        fontSize={"1rem"}*/}
+                                    {/*        lineHeight={"0.9rem"}*/}
+                                    {/*    >*/}
+                                    {/*        reps / min*/}
+                                    {/*    </Typography>*/}
+                                    {/*</Box>*/}
                                 </Box>
                             </Box>
                         ) : null}

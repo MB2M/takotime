@@ -59,7 +59,7 @@ const Overlay = () => {
         if (plainTimer < workout.wodIndexSwitchMinute * 60 * 1000) return 0;
 
         //ALERT: ONLY FOR WOD 3 QUALIFS FTD
-        if (workout.workoutId === "wod3" && plainTimer > 2 * 60 * 1000)
+        if (workout.workoutId === "wod3" && plainTimer > 14 * 60 * 1000)
             // 5 minutes
             return 2;
 

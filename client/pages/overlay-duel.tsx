@@ -330,8 +330,9 @@ const Overlay = () => {
                                             //         ? a.state === "Fail"
                                             //             ? 1
                                             //             : -1
-                                            //         : 0
+                                            //         : 1
                                             // )
+                                            .reverse()
                                             .map((score, index) => (
                                                 <Box
                                                     display={"flex"}

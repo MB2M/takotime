@@ -45,12 +45,12 @@ export const AthleteDuel: React.FC<Props> = ({
     const lastRepsTime = station.times?.[currentIndex]?.[0];
 
     const bestWeightScore = wodWeightData?.scores
-        ?.sort((a, b) => b.weight - a.weight)
-        .find(
+        ?.filter(
             (score) =>
                 score.state === "Success" &&
                 score.partnerId === (!!currentIndex ? 1 : 0)
-        );
+        )
+        ?.sort((a, b) => b.weight - a.weight)[0];
 
     const globalPace = () => {
         let time: number;

@@ -610,39 +610,39 @@ const Overlay = () => {
     )}
 </Box> */}
                 </Box>
-                <Box
-                    height={FOOTER_HEIGHT}
-                    sx={{ backgroundColor: "#393873fa", color: "white" }}
-                    display={"flex"}
-                    gap={2}
-                    px={2}
-                    alignItems={"center"}
-                >
-                    <Typography fontFamily={"BebasNeue"} fontSize={"1.4rem"}>
-                        {workoutFlow?.type} {workout?.duration} mins :
-                    </Typography>
-                    {workoutDescription?.map((desc, index) => (
-                        <Fragment key={index}>
-                            <Typography
-                                fontFamily={"BebasNeue"}
-                                color={
-                                    index === mvtsIndexOfFirst
-                                        ? "#f50e2f"
-                                        : "white"
-                                }
-                                fontWeight={
-                                    index === mvtsIndexOfFirst ? "900" : "400"
-                                }
-                                fontSize={"1.4rem"}
-                            >
-                                {desc}
-                            </Typography>
-                            {index < workoutDescription.length - 1 && (
-                                <Typography>-</Typography>
-                            )}
-                        </Fragment>
-                    ))}
-                </Box>
+                {/*<Box*/}
+                {/*    height={FOOTER_HEIGHT}*/}
+                {/*    sx={{ backgroundColor: "#393873fa", color: "white" }}*/}
+                {/*    display={"flex"}*/}
+                {/*    gap={2}*/}
+                {/*    px={2}*/}
+                {/*    alignItems={"center"}*/}
+                {/*>*/}
+                {/*    <Typography fontFamily={"BebasNeue"} fontSize={"1.4rem"}>*/}
+                {/*        {workoutFlow?.type} {workout?.duration} mins :*/}
+                {/*    </Typography>*/}
+                {/*    {workoutDescription?.map((desc, index) => (*/}
+                {/*        <Fragment key={index}>*/}
+                {/*            <Typography*/}
+                {/*                fontFamily={"BebasNeue"}*/}
+                {/*                color={*/}
+                {/*                    index === mvtsIndexOfFirst*/}
+                {/*                        ? "#f50e2f"*/}
+                {/*                        : "white"*/}
+                {/*                }*/}
+                {/*                fontWeight={*/}
+                {/*                    index === mvtsIndexOfFirst ? "900" : "400"*/}
+                {/*                }*/}
+                {/*                fontSize={"1.4rem"}*/}
+                {/*            >*/}
+                {/*                {desc}*/}
+                {/*            </Typography>*/}
+                {/*            {index < workoutDescription.length - 1 && (*/}
+                {/*                <Typography>-</Typography>*/}
+                {/*            )}*/}
+                {/*        </Fragment>*/}
+                {/*    ))}*/}
+                {/*</Box>*/}
             </Stack>
             {/*<Box*/}
             {/*    // width={90}*/}

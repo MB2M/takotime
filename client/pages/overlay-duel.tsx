@@ -330,7 +330,7 @@ const Overlay = () => {
                                                     ? a.state === "Fail"
                                                         ? 1
                                                         : -1
-                                                    : b.weight - a.weight
+                                                    : 0
                                             )
                                             .map((score, index) => (
                                                 <Box

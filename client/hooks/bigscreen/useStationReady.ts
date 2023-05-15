@@ -52,6 +52,13 @@ const useStationReady = (
                             )
                             ?.scores?.find((score) => score.index === 1)
                             ?.repCount || 0,
+                        stationsInfo
+                            ?.find(
+                                (station) =>
+                                    station.laneNumber === stationUp.laneNumber
+                            )
+                            ?.scores?.find((score) => score.index === 2)
+                            ?.repCount || 0,
                     ],
                     times: [
                         stationsInfo
@@ -66,6 +73,12 @@ const useStationReady = (
                                     station.laneNumber === stationUp.laneNumber
                             )
                             ?.times?.filter((time) => time.index === 1),
+                        stationsInfo
+                            ?.find(
+                                (station) =>
+                                    station.laneNumber === stationUp.laneNumber
+                            )
+                            ?.times?.filter((time) => time.index === 2),
                     ],
                     rank: allPhoneScores.map((scoreIndex, i) =>
                         scoreIndex.findIndex((score) => {

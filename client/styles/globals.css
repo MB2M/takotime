@@ -18,6 +18,11 @@
     src: url("/fonts/Montserrat-VariableFont_wght.ttf");
 }
 
+@font-face {
+    font-family: "wwDigital";
+    src: url("/fonts/wwDigital.ttf");
+}
+
 html,
 body {
     color: black;

@@ -2,7 +2,7 @@ import { Box, Grow, Stack, Typography } from "@mui/material";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useCompetitionContext } from "../context/competition";
 import { useLiveDataContext } from "../context/liveData/livedata";
-import { workouts } from "../eventConfig/FTD23Qualif/config";
+import { workouts } from "../eventConfig/MT23Qualif/config";
 import useStationReady from "../hooks/bigscreen/useStationReady";
 import useChrono from "../hooks/useChrono";
 import Image from "next/image";
@@ -12,6 +12,9 @@ import { AthleteDuel } from "../components/overlayDuel/AthleteDuel";
 import toReadableTime from "../utils/timeConverter";
 import { cumulativeTable } from "../utils/cumulativeTable";
 import useInterval from "../hooks/useInterval";
+
+import MT23Header from "/img/MT23-Qualif-duel-header.png";
+import { AthleteDuelMT } from "../components/overlayDuel/AthleteDuelMT";
 
 const HEADER_HEIGHT = 80;
 const FOOTER_HEIGHT = HEADER_HEIGHT / 2.8;
@@ -361,14 +364,6 @@ const Overlay = () => {
                                     </Box>
                                 </Box>
                                 <Box textAlign={"center"}>
-                                    {/*<Typography*/}
-                                    {/*    color={"white"}*/}
-                                    {/*    fontFamily={"BebasNeue"}*/}
-                                    {/*    fontSize={"1.6rem"}*/}
-                                    {/*    lineHeight={"2rem"}*/}
-                                    {/*>*/}
-                                    {/*    Current try*/}
-                                    {/*</Typography>*/}
                                     <Typography
                                         color={"white"}
                                         fontFamily={"BebasNeue"}
@@ -389,127 +384,172 @@ const Overlay = () => {
                 </Box>
             )}
 
-            <Stack height={1} justifyContent={"space-between"} my={0} py={0}>
-                <Box
-                    height={HEADER_HEIGHT}
-                    sx={{
-                        background:
-                            "linear-gradient(45deg, rgba(245,14,47,1) 0%, rgba(245,14,47,1) 16%,#fff 16%,#fff 17%, #393873 17%, #393873 55%, #39387300 55%),linear-gradient(135deg, #39387300 45%, #393873 45%,#393873 83%,#fff 83%, #fff 84%,rgba(245,14,47,1) 84%,rgba(245,14,47,1) 100%)",
-                        color: "white",
-                    }}
-                    display={"flex"}
-                    gap={2}
-                    position={"relative"}
-                >
-                    {/*<Box width={10} sx={{backgroundColor:"white", transform:"rotate(-45deg)"}} height={"140%"} position="absolute" left={240} top={-20}></Box>*/}
+            <Box position={"absolute"}>
+                <Image
+                    src={"/img/MT23-Qualif-duel-header.png"}
+                    width={1920}
+                    height={121}
+                />
+            </Box>
+            <Box
+                height={HEADER_HEIGHT}
+                sx={{
+                    //     background:
+                    //         "linear-gradient(45deg, rgba(245,14,47,1) 0%, rgba(245,14,47,1) 16%,#fff 16%,#fff 17%, #393873 17%, #393873 55%, #39387300 55%),linear-gradient(135deg, #39387300 45%, #393873 45%,#393873 83%,#fff 83%, #fff 84%,rgba(245,14,47,1) 84%,rgba(245,14,47,1) 100%)",
+                    color: "white",
+                }}
+                display={"flex"}
+                gap={2}
+                position={"relative"}
+            >
+                {/*<Box*/}
+                {/*    overflow={"hidden"}*/}
+                {/*    width={HEADER_HEIGHT + ATHLETE_HEIGHT + 90}*/}
+                {/*    height={HEADER_HEIGHT + ATHLETE_HEIGHT + 90}*/}
+                {/*    position={"absolute"}*/}
+                {/*    borderRadius={"10px"}*/}
+                {/*    sx={{ transform: "translateX(-50%)" }}*/}
+                {/*    left={"50vw"}*/}
+                {/*    top={-22}*/}
+                {/*>*/}
+                {/*    <Image*/}
+                {/*        src={logoUrl}*/}
+                {/*        layout={"fill"}*/}
+                {/*        objectFit="contain"*/}
+                {/*    />*/}
+                {/*</Box>*/}
+
+                <Box flexGrow={1} display={"flex"} height={1}>
+                    {/*<Box*/}
+                    {/*    display={"flex"}*/}
+                    {/*    width={0.15}*/}
+                    {/*    sx={{ color: "#393873" }}*/}
+                    {/*    pl={5}*/}
+                    {/*>*/}
+                    {/*    <Chrono*/}
+                    {/*        reverse={*/}
+                    {/*            workout?.options?.chronoDirection === "desc"*/}
+                    {/*        }*/}
+                    {/*        fontSize={"3.5rem"}*/}
+                    {/*        fontFamily={"BebasNeue"}*/}
+                    {/*        timeLeftColor={"white"}*/}
+                    {/*    />*/}
+                    {/*</Box>*/}
                     <Box
-                        overflow={"hidden"}
-                        width={HEADER_HEIGHT + ATHLETE_HEIGHT + 90}
-                        height={HEADER_HEIGHT + ATHLETE_HEIGHT + 90}
-                        position={"absolute"}
-                        borderRadius={"10px"}
-                        sx={{ transform: "translateX(-50%)" }}
-                        left={"50vw"}
-                        top={-22}
+                        display={"flex"}
+                        justifyContent={"space-evenly"}
+                        width={1}
+                        gap={26}
+                        height={1}
+                        px={2}
                     >
-                        <Image
-                            src={logoUrl}
-                            layout={"fill"}
-                            objectFit="contain"
-                        />
+                        <Box mx={"auto"} width={1}>
+                            {workout?.layout === "default" &&
+                                stationsReady?.[0] && (
+                                    <AthleteDuelMT
+                                        currentIndex={currentIndex}
+                                        dataSource={workout?.dataSource}
+                                        switchTime={
+                                            workout.wodIndexSwitchMinute
+                                        }
+                                        timer={plainTimer}
+                                        station={
+                                            stationsReady[0] as WidescreenStation
+                                        }
+                                        workout={workoutFlow}
+                                        duration={globals?.duration}
+                                        wodWeightData={wodWeightInfo.find(
+                                            (data) =>
+                                                data.laneNumber ===
+                                                stationsReady[0].laneNumber
+                                        )}
+                                    />
+                                )}
+                        </Box>
+                        <Box mx={"auto"} width={1}>
+                            {workout?.layout === "default" &&
+                                stationsReady?.[1] && (
+                                    <AthleteDuelMT
+                                        reverse
+                                        currentIndex={currentIndex}
+                                        dataSource={workout?.dataSource}
+                                        switchTime={
+                                            workout.wodIndexSwitchMinute
+                                        }
+                                        timer={plainTimer}
+                                        station={
+                                            stationsReady[1] as WidescreenStation
+                                        }
+                                        workout={workoutFlow}
+                                        duration={globals?.duration}
+                                        wodWeightData={wodWeightInfo.find(
+                                            (data) =>
+                                                data.laneNumber ===
+                                                stationsReady[1].laneNumber
+                                        )}
+                                    />
+                                )}
+                        </Box>
                     </Box>
 
-                    <Box flexGrow={1} display={"flex"} height={1}>
-                        <Box
-                            display={"flex"}
-                            width={0.15}
-                            sx={{ color: "#393873" }}
-                            pl={5}
-                        >
-                            <Chrono
-                                reverse={
-                                    workout?.options?.chronoDirection === "desc"
-                                }
-                                fontSize={"3.5rem"}
-                                fontFamily={"BebasNeue"}
-                                timeLeftColor={"white"}
-                            />
-                        </Box>
-                        <Box
-                            display={"flex"}
-                            justifyContent={"center"}
-                            width={0.7}
-                            gap={26}
-                            height={1}
-                            px={7}
-                        >
-                            <Box width={0.5} mx={"auto"}>
-                                {workout?.layout === "default" &&
-                                    stationsReady?.[0] && (
-                                        <AthleteDuel
-                                            currentIndex={currentIndex}
-                                            dataSource={workout?.dataSource}
-                                            switchTime={
-                                                workout.wodIndexSwitchMinute
-                                            }
-                                            timer={plainTimer}
-                                            station={
-                                                stationsReady[0] as WidescreenStation
-                                            }
-                                            workout={workoutFlow}
-                                            duration={globals?.duration}
-                                            wodWeightData={wodWeightInfo.find(
-                                                (data) =>
-                                                    data.laneNumber ===
-                                                    stationsReady[0].laneNumber
-                                            )}
-                                        />
-                                    )}
-                            </Box>
-                            <Box width={0.5} mx={"auto="}>
-                                {workout?.layout === "default" &&
-                                    stationsReady?.[1] && (
-                                        <AthleteDuel
-                                            reverse
-                                            currentIndex={currentIndex}
-                                            dataSource={workout?.dataSource}
-                                            switchTime={
-                                                workout.wodIndexSwitchMinute
-                                            }
-                                            timer={plainTimer}
-                                            station={
-                                                stationsReady[1] as WidescreenStation
-                                            }
-                                            workout={workoutFlow}
-                                            duration={globals?.duration}
-                                            wodWeightData={wodWeightInfo.find(
-                                                (data) =>
-                                                    data.laneNumber ===
-                                                    stationsReady[1].laneNumber
-                                            )}
-                                        />
-                                    )}
-                            </Box>
-                        </Box>
-                        <Box
-                            display={"flex"}
-                            height={HEADER_HEIGHT}
-                            width={0.15}
-                            sx={{ color: "#393873" }}
-                            justifyContent={"flex-end"}
-                            pr={5}
-                        >
-                            <Typography
-                                fontFamily={"BebasNeue"}
-                                fontSize={"3.5rem"}
-                            >
-                                {title}
-                            </Typography>
-                        </Box>
-                        {/* <Title {...titles} textTop={"dsqq"} /> */}
-                    </Box>
+                    {/*<Box*/}
+                    {/*    display={"flex"}*/}
+                    {/*    height={HEADER_HEIGHT}*/}
+                    {/*    width={0.15}*/}
+                    {/*    sx={{ color: "#393873" }}*/}
+                    {/*    justifyContent={"flex-end"}*/}
+                    {/*    pr={5}*/}
+                    {/*>*/}
+                    {/*    <Typography*/}
+                    {/*        fontFamily={"BebasNeue"}*/}
+                    {/*        fontSize={"3.5rem"}*/}
+                    {/*    >*/}
+                    {/*        {title}*/}
+                    {/*    </Typography>*/}
+                    {/*</Box>*/}
+                    {/* <Title {...titles} textTop={"dsqq"} /> */}
                 </Box>
-            </Stack>
+            </Box>
+            <Box
+                px={2}
+                bottom={5}
+                left={"50%"}
+                width={125}
+                sx={{
+                    color: "white",
+                    transform: "translateX(-50%)",
+                    backgroundColor: "#023A59",
+                    border: "6px solid white",
+                    textAlign: "end",
+                }}
+                position={"absolute"}
+            >
+                <Chrono
+                    reverse={workout?.options?.chronoDirection === "desc"}
+                    fontSize={"2rem"}
+                    fontFamily={"wwDigital"}
+                    timeLeftColor={"red"}
+                />
+            </Box>
+            <Box
+                px={2}
+                bottom={5}
+                left={"53%"}
+                position={"absolute"}
+                // display={"flex"}
+                textAlign={"center"}
+            >
+                <Image src={"/img/tako.png"} width={35} height={35} />
+                <Typography
+                    fontFamily={"CantoraOne"}
+                    fontSize={"1rem"}
+                    color={"black"}
+                    fontStyle={"italic"}
+                    mt={-1.4}
+                >
+                    by Tako
+                </Typography>
+            </Box>
             {/*<Box*/}
             {/*    // width={90}*/}
             {/*    // height={90}*/}

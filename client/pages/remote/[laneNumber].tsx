@@ -2,7 +2,7 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import { workouts } from "../../eventConfig/FTD23Qualif/config";
+import { workouts } from "../../eventConfig/MT23Qualif/config";
 import useWorkout from "../../hooks/useWorkout";
 import RemoteWeight from "../../components/remote/RemoteWeight";
 import useChrono from "../../hooks/useChrono";

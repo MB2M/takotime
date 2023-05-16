@@ -25,7 +25,7 @@ export const workouts: WorkoutDescription[] = [
         workoutIds: ["wod2Team"],
         index: 1,
         main: {
-            movements: ["Ground to overhead", "Toes to bar", "Pistols"],
+            movements: ["GTO", "T2B", "PTL"],
             reps: [12, 10, 14],
         },
     },

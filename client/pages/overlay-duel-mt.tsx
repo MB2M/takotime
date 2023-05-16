@@ -15,10 +15,13 @@ import useInterval from "../hooks/useInterval";
 
 import MT23Header from "/img/MT23-Qualif-duel-header.png";
 import { AthleteDuelMT } from "../components/overlayDuel/AthleteDuelMT";
+import useWorkoutData from "../hooks/useWorkoutData";
 
 const HEADER_HEIGHT = 80;
 const FOOTER_HEIGHT = HEADER_HEIGHT / 2.8;
 const ATHLETE_HEIGHT = 2.8 * 16;
+
+const BLUE = "#023A59";
 
 const getRoundRecord = (
     times: { rep: number; time: number; index: number }[],
@@ -62,9 +65,7 @@ const Overlay = () => {
         if (plainTimer < workout.wodIndexSwitchMinute * 60 * 1000) return 0;
 
         //ALERT: ONLY FOR WOD 3 QUALIFS FTD
-        if (workout.workoutId === "wod3" && plainTimer > 13 * 60 * 1000)
-            // 5 minutes
-            return 2;
+        if (plainTimer > 15 * 60 * 1000) return 2;
 
         return 1;
     }, [timer, workout?.wodIndexSwitchMinute]);
@@ -186,105 +187,113 @@ const Overlay = () => {
 
     useInterval(restrieveWodWeightInfo, 1000);
 
+    const station1WorkoutData = useWorkoutData(
+        stationsReady?.[0] as WidescreenStation,
+        stationsReady?.[0]?.repsPerBlock?.[currentIndex] || 0,
+        "web",
+        workoutFlow
+    );
+
+    const station2WorkoutData = useWorkoutData(
+        stationsReady?.[1] as WidescreenStation,
+        stationsReady?.[1]?.repsPerBlock?.[currentIndex] || 0,
+        "web",
+        workoutFlow
+    );
+
     return (
         <Box height={1080} overflow={"hidden"}>
-            {workoutType === "amrap" && (
-                <Grow in={showRoundTimer}>
-                    <Box
-                        position={"absolute"}
-                        bottom={FOOTER_HEIGHT + 30}
-                        height={90}
-                        width={1}
-                        sx={{
-                            background:
-                                "linear-gradient(135deg, #393873 40%, #39387300 40%),linear-gradient(45deg, #39387300 60%,#393873 60%)",
-                        }}
-                        display={"flex"}
-                        justifyContent={"space-around"}
-                        alignItems={"center"}
-                    >
-                        {lastRoundTimes.map((athleteTimer, index) => (
-                            <Box
-                                key={index}
-                                display={"flex"}
-                                flexDirection={index ? "row-reverse" : "row"}
-                                justifyContent={"center"}
-                                alignItems={"center"}
-                                gap={20}
-                                width={1}
-                            >
-                                <Box textAlign={"center"}>
-                                    <Typography
-                                        color={"white"}
-                                        fontFamily={"BebasNeue"}
-                                        fontSize={"2rem"}
-                                        lineHeight={"2rem"}
-                                    >
-                                        average round
-                                    </Typography>
-                                    <Typography
-                                        color={"white"}
-                                        fontFamily={"BebasNeue"}
-                                        fontSize={"2rem"}
-                                        lineHeight={"2rem"}
-                                    >
-                                        {athleteTimer.length > 0
-                                            ? toReadableTime(
-                                                  athleteTimer[
-                                                      athleteTimer.length - 1
-                                                  ]?.time / athleteTimer.length,
-                                                  false
-                                              )
-                                            : "-"}
-                                    </Typography>
-                                </Box>
-                                <Box textAlign={"center"}>
-                                    <Typography
-                                        color={"white"}
-                                        fontFamily={"BebasNeue"}
-                                        fontSize={"2rem"}
-                                        lineHeight={"2rem"}
-                                    >
-                                        Last round
-                                    </Typography>
-                                    <Typography
-                                        color={"white"}
-                                        fontFamily={"BebasNeue"}
-                                        fontSize={"2rem"}
-                                        lineHeight={"2rem"}
-                                    >
-                                        {athleteTimer.length
-                                            ? toReadableTime(
-                                                  athleteTimer[
-                                                      athleteTimer.length - 1
-                                                  ]?.time -
-                                                      (athleteTimer[
-                                                          athleteTimer.length -
-                                                              2
-                                                      ]?.time || 0),
-                                                  false
-                                              )
-                                            : "-"}
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        ))}
-                    </Box>
-                </Grow>
-            )}
-            {workout?.workoutId === "wod3" && currentIndex !== 1 && (
+            {/*{workoutType === "amrap" && (*/}
+            {/*    <Grow in={showRoundTimer}>*/}
+            {/*        <Box*/}
+            {/*            position={"absolute"}*/}
+            {/*            bottom={FOOTER_HEIGHT + 30}*/}
+            {/*            height={90}*/}
+            {/*            width={1}*/}
+            {/*            sx={{*/}
+            {/*                background:*/}
+            {/*                    "linear-gradient(135deg, #393873 40%, #39387300 40%),linear-gradient(45deg, #39387300 60%,#393873 60%)",*/}
+            {/*            }}*/}
+            {/*            display={"flex"}*/}
+            {/*            justifyContent={"space-around"}*/}
+            {/*            alignItems={"center"}*/}
+            {/*        >*/}
+            {/*            {lastRoundTimes.map((athleteTimer, index) => (*/}
+            {/*                <Box*/}
+            {/*                    key={index}*/}
+            {/*                    display={"flex"}*/}
+            {/*                    flexDirection={index ? "row-reverse" : "row"}*/}
+            {/*                    justifyContent={"center"}*/}
+            {/*                    alignItems={"center"}*/}
+            {/*                    gap={20}*/}
+            {/*                    width={1}*/}
+            {/*                >*/}
+            {/*                    <Box textAlign={"center"}>*/}
+            {/*                        <Typography*/}
+            {/*                            color={"white"}*/}
+            {/*                            fontFamily={"BebasNeue"}*/}
+            {/*                            fontSize={"2rem"}*/}
+            {/*                            lineHeight={"2rem"}*/}
+            {/*                        >*/}
+            {/*                            average round*/}
+            {/*                        </Typography>*/}
+            {/*                        <Typography*/}
+            {/*                            color={"white"}*/}
+            {/*                            fontFamily={"BebasNeue"}*/}
+            {/*                            fontSize={"2rem"}*/}
+            {/*                            lineHeight={"2rem"}*/}
+            {/*                        >*/}
+            {/*                            {athleteTimer.length > 0*/}
+            {/*                                ? toReadableTime(*/}
+            {/*                                      athleteTimer[*/}
+            {/*                                          athleteTimer.length - 1*/}
+            {/*                                      ]?.time / athleteTimer.length,*/}
+            {/*                                      false*/}
+            {/*                                  )*/}
+            {/*                                : "-"}*/}
+            {/*                        </Typography>*/}
+            {/*                    </Box>*/}
+            {/*                    <Box textAlign={"center"}>*/}
+            {/*                        <Typography*/}
+            {/*                            color={"white"}*/}
+            {/*                            fontFamily={"BebasNeue"}*/}
+            {/*                            fontSize={"2rem"}*/}
+            {/*                            lineHeight={"2rem"}*/}
+            {/*                        >*/}
+            {/*                            Last round*/}
+            {/*                        </Typography>*/}
+            {/*                        <Typography*/}
+            {/*                            color={"white"}*/}
+            {/*                            fontFamily={"BebasNeue"}*/}
+            {/*                            fontSize={"2rem"}*/}
+            {/*                            lineHeight={"2rem"}*/}
+            {/*                        >*/}
+            {/*                            {athleteTimer.length*/}
+            {/*                                ? toReadableTime(*/}
+            {/*                                      athleteTimer[*/}
+            {/*                                          athleteTimer.length - 1*/}
+            {/*                                      ]?.time -*/}
+            {/*                                          (athleteTimer[*/}
+            {/*                                              athleteTimer.length -*/}
+            {/*                                                  2*/}
+            {/*                                          ]?.time || 0),*/}
+            {/*                                      false*/}
+            {/*                                  )*/}
+            {/*                                : "-"}*/}
+            {/*                        </Typography>*/}
+            {/*                    </Box>*/}
+            {/*                </Box>*/}
+            {/*            ))}*/}
+            {/*        </Box>*/}
+            {/*    </Grow>*/}
+            {/*)}*/}
+            {currentIndex !== 1 && (
                 <Box
-                    position={"absolute"}
-                    bottom={FOOTER_HEIGHT}
-                    height={70}
-                    width={1}
-                    sx={{
-                        background:
-                            "linear-gradient(45deg, #393873 40%, #39387300 40%),linear-gradient(135deg, #39387300 60%,#393873 60%)",
-                    }}
                     display={"flex"}
-                    justifyContent={"space-around"}
-                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                    position={"absolute"}
+                    bottom={5}
+                    width={1}
                 >
                     {wodWeightInfo
                         .sort(
@@ -292,95 +301,81 @@ const Overlay = () => {
                         )
                         .map((athleteWeightInfo, index) => (
                             <Box
-                                key={index}
+                                key={athleteWeightInfo.laneNumber}
+                                height={60}
+                                width={150}
+                                sx={{
+                                    backgroundColor: "white",
+                                    border: `6px solid ${BLUE}`,
+                                }}
                                 display={"flex"}
-                                flexDirection={index ? "row-reverse" : "row"}
-                                justifyContent={"space-between"}
+                                justifyContent={"center"}
                                 alignItems={"center"}
-                                width={1}
-                                pr={index ? 5 : 30}
-                                pl={index ? 30 : 5}
                             >
-                                <Box textAlign={index ? "end" : "start"}>
-                                    <Typography
-                                        color={"white"}
-                                        fontFamily={"BebasNeue"}
-                                        fontSize={"1.6rem"}
-                                        lineHeight={"2rem"}
-                                    >
-                                        Previous
-                                    </Typography>
-                                    <Box
-                                        display={"flex"}
-                                        flexDirection={
-                                            index ? "row" : "row-reverse"
-                                        }
-                                        gap={2}
-                                    >
-                                        {athleteWeightInfo.scores
-                                            ?.filter(
-                                                (score) =>
-                                                    [
-                                                        "Success",
-                                                        "Fail",
-                                                    ].includes(score.state) &&
-                                                    score.partnerId ===
-                                                        (!!currentIndex ? 1 : 0)
-                                            )
-                                            // .sort((a, b) =>
-                                            //     a.weight === b.weight
-                                            //         ? a.state === "Fail"
-                                            //             ? 1
-                                            //             : -1
-                                            //         : 1
-                                            // )
-                                            ?.reverse()
-                                            .slice(0, 6)
-                                            .map((score, index) => (
-                                                <Box
-                                                    display={"flex"}
-                                                    key={index}
-                                                >
-                                                    <Typography
-                                                        color={"white"}
-                                                        fontFamily={"BebasNeue"}
-                                                        fontSize={"1.6rem"}
-                                                        lineHeight={"2rem"}
-                                                    >
-                                                        {score.weight || "-"} kg
-                                                    </Typography>
-
-                                                    <Typography
-                                                        fontSize={"0.8rem"}
-                                                        lineHeight={"2rem"}
-                                                    >
-                                                        {score.state ===
-                                                        "Success"
-                                                            ? "🟢"
-                                                            : "🔴"}
-                                                    </Typography>
-                                                </Box>
-                                            ))}
-                                    </Box>
-                                </Box>
-                                <Box textAlign={"center"}>
-                                    <Typography
-                                        color={"white"}
-                                        fontFamily={"BebasNeue"}
-                                        fontSize={"2rem"}
-                                        lineHeight={"2rem"}
-                                    >
-                                        {athleteWeightInfo.scores?.find(
-                                            (score) =>
-                                                score.state === "Try" &&
-                                                score.partnerId ===
-                                                    (!!currentIndex ? 1 : 0)
-                                        )?.weight || "-"}{" "}
-                                        kg
-                                    </Typography>
-                                </Box>
+                                <Typography
+                                    color={BLUE}
+                                    fontFamily={"BebasNeue"}
+                                    fontSize={"2.2rem"}
+                                    lineHeight={"2.2rem"}
+                                >
+                                    {athleteWeightInfo.scores?.find(
+                                        (score) =>
+                                            score.state === "Try" &&
+                                            score.partnerId ===
+                                                (!!currentIndex ? 1 : 0)
+                                    )?.weight || "-"}{" "}
+                                    kg
+                                </Typography>
                             </Box>
                         ))}
+                </Box>
+            )}
+
+            {currentIndex === 1 && (
+                <Box
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    position={"absolute"}
+                    bottom={5}
+                    width={1}
+                >
+                    {[station1WorkoutData, station2WorkoutData].map(
+                        (stationWorkout, index) => (
+                            <Box
+                                key={index}
+                                height={60}
+                                width={450}
+                                sx={{
+                                    backgroundColor: "white",
+                                    border: `6px solid ${BLUE}`,
+                                }}
+                                display={"flex"}
+                                justifyContent={"space-between"}
+                                flexDirection={index ? "row-reverse" : "row"}
+                                alignItems={"center"}
+                                px={3}
+                            >
+                                <Typography
+                                    color={BLUE}
+                                    fontFamily={"BebasNeue"}
+                                    fontSize={"2.2rem"}
+                                    lineHeight={"2.2rem"}
+                                >
+                                    Round-{stationWorkout.currentRound}
+                                </Typography>
+                                <Typography
+                                    color={BLUE}
+                                    fontFamily={"BebasNeue"}
+                                    fontSize={"2.2rem"}
+                                    lineHeight={"2.2rem"}
+                                >
+                                    {stationWorkout.currentMovementReps} /{" "}
+                                    {stationWorkout.currentMovementTotalReps}{" "}
+                                    {stationWorkout.currentMovement}
+                                </Typography>
+                            </Box>
+                        )
+                    )}
                 </Box>
             )}
 

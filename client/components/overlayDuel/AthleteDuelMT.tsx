@@ -265,9 +265,9 @@ export const AthleteDuelMT: React.FC<Props> = ({
                             {scoreA}
                         </Typography>
                         <Typography
-                            fontSize={"2rem"}
+                            fontSize={"3rem"}
                             fontFamily={"BebasNeue"}
-                            lineHeight={"2rem"}
+                            lineHeight={"3rem"}
                         >
                             Reps
                         </Typography>
@@ -294,9 +294,9 @@ export const AthleteDuelMT: React.FC<Props> = ({
                             {scoreB}
                         </Typography>
                         <Typography
-                            fontSize={"2rem"}
+                            fontSize={"3rem"}
                             fontFamily={"BebasNeue"}
-                            lineHeight={"2rem"}
+                            lineHeight={"3rem"}
                         >
                             Kg
                         </Typography>

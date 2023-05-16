@@ -6,6 +6,7 @@ import { workouts } from "../../eventConfig/MT23Qualif/config";
 import useWorkout from "../../hooks/useWorkout";
 import RemoteWeight from "../../components/remote/RemoteWeight";
 import useChrono from "../../hooks/useChrono";
+import useWorkoutData from "../../hooks/useWorkoutData";
 
 const LaneRemote = () => {
     const { globals, stations } = useLiveDataContext();

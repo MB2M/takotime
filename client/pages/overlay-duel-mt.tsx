@@ -64,8 +64,8 @@ const Overlay = () => {
         if (workout.wodIndexSwitchMinute === 0) return 0;
         if (plainTimer < workout.wodIndexSwitchMinute * 60 * 1000) return 0;
 
-        //ALERT: ONLY FOR WOD 3 QUALIFS FTD
-        if (plainTimer > 15 * 60 * 1000) return 2;
+        //ALERT: ONLY FOR WOD 2 QUALIFS MT23
+        if (plainTimer > 17 * 60 * 1000) return 2;
 
         return 1;
     }, [timer, workout?.wodIndexSwitchMinute]);
@@ -381,7 +381,7 @@ const Overlay = () => {
 
             <Box position={"absolute"}>
                 <Image
-                    src={"/img/MT23-Qualif-duel-header.png"}
+                    src={"/img/MT23-Qualif-duel-header-partners.png"}
                     width={1920}
                     height={121}
                 />
@@ -504,6 +504,16 @@ const Overlay = () => {
                     {/*</Box>*/}
                     {/* <Title {...titles} textTop={"dsqq"} /> */}
                 </Box>
+            </Box>
+            <Box
+                px={2}
+                bottom={5}
+                left={"42.5%"}
+                position={"absolute"}
+                // display={"flex"}
+                textAlign={"center"}
+            >
+                <Image src={"/img/fit_factory.png"} width={50} height={50} />
             </Box>
             <Box
                 px={2}

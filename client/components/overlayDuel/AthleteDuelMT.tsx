@@ -89,7 +89,7 @@ export const AthleteDuelMT: React.FC<Props> = ({
         <>
             <Box
                 display={"flex"}
-                justifyContent={"space-between"}
+                // justifyContent={"space-between"}
                 gap={4}
                 flexDirection={reverse ? "row-reverse" : "row"}
                 textAlign={reverse ? "end" : "start"}
@@ -242,7 +242,7 @@ export const AthleteDuelMT: React.FC<Props> = ({
                     fontFamily={"BebasNeue"}
                     alignItems={"center"}
                     height={1}
-                    width={1}
+                    width={0.7}
                 >
                     <Box
                         display={"flex"}

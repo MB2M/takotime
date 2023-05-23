@@ -242,7 +242,7 @@ export const AthleteDuelMT: React.FC<Props> = ({
                     fontFamily={"BebasNeue"}
                     alignItems={"center"}
                     height={1}
-                    width={0.7}
+                    width={0.62}
                 >
                     <Box
                         display={"flex"}

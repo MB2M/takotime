@@ -46,7 +46,6 @@ export async function updateScore(req: Request, res: Response) {
     const { heatId } = req.query;
     const { laneNumber } = req.params;
 
-
     if (!heatId) {
         res.status(401).json({ error: "unauthorized" });
     } else {

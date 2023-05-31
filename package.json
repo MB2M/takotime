@@ -48,6 +48,7 @@
         "mongoose": "^6.2.0",
         "mqtt": "^4.3.5",
         "node-json-db": "^1.4.1",
+        "onoff": "^6.0.3",
         "prettier": "^2.8.7",
         "timesync": "^1.0.10",
         "ws": "^8.5.0"

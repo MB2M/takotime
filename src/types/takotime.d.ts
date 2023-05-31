@@ -23,6 +23,7 @@ interface StartOptions {
     duration: number;
     startTime: Date;
     countdown: number;
+    saveResults: boolean;
 }
 
 interface WodData {

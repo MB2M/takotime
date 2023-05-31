@@ -10,6 +10,7 @@ import * as workoutController from "../../controllers/workoutController.js";
 import loaderCC from "./loaderCC.js";
 import loaderTournament from "./loaderTournament.js";
 import loaderLocal from "./loaderLocal.js";
+import { getResults } from "../../controllers/resultController";
 
 const api = express.Router();
 
@@ -36,6 +37,7 @@ api.post("/loadworkout", workoutController.loadWorkout);
 api.post("/loadCC", loaderCC);
 api.post("/loadTournament", loaderTournament);
 api.post("/loadLocal", loaderLocal);
+api.route("/results").get(getResults);
 // api.post("/setWod", setWod);
 // api.post("/setDevices", setDevices);
 export default api;

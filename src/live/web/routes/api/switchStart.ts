@@ -5,6 +5,7 @@ const switchStart = async (req: Request, res: Response) => {
     const action = req.query.action;
     const duration = parseInt(req.query.duration as string, 10);
     const countdown = parseInt(req.query.countdown as string, 10);
+    const saveResults = (req.query.saveResults as string) || "false";
     const liveWodManager = liveApp.manager;
 
     if (action === "start") {
@@ -12,10 +13,11 @@ const switchStart = async (req: Request, res: Response) => {
             Math.floor((Date.now() + countdown * 1000) / 1000) * 1000
         );
         try {
-            liveWodManager.startWod({
-                duration: duration,
-                startTime: startTime,
-                countdown: countdown,
+            await liveWodManager.startWod({
+                duration,
+                startTime,
+                countdown,
+                saveResults: saveResults === "true",
             });
             res.status(200).json({
                 startTime: startTime.toString(),
@@ -23,7 +25,7 @@ const switchStart = async (req: Request, res: Response) => {
                 countdown: countdown,
             });
         } catch (error) {
-            res.status(400).send(`An error occured:${error}`);
+            res.status(400).send(`An error occurred:${error}`);
         }
     } else if (action === "reset") {
         try {

@@ -1,4 +1,4 @@
-import { Button, Box, TextField } from "@mui/material";
+import { Button, Box, TextField, Checkbox } from "@mui/material";
 import { useState } from "react";
 
 const TimerForm = ({
@@ -10,6 +10,7 @@ const TimerForm = ({
 }) => {
     const [duration, setDuration] = useState("");
     const [countdown, setCountdown] = useState("");
+    const [saveResult, setSaveResult] = useState(false);
 
     const handleDurationChange = (e: any) => {
         if (isNumberOrEmpty(e.target.value)) setDuration(e.target.value);
@@ -27,7 +28,7 @@ const TimerForm = ({
     const handleStart = async () => {
         try {
             await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=start&duration=${duration}&countdown=${countdown}`
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=start&duration=${duration}&countdown=${countdown}&save=${saveResult}`
             );
         } catch (error) {
             console.error(error);
@@ -84,6 +85,11 @@ const TimerForm = ({
             >
                 Reset
             </Button>
+            <Checkbox
+                checked={saveResult}
+                onClick={() => setSaveResult((current) => !current)}
+            />{" "}
+            save results
         </Box>
     );
 };

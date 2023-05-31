@@ -228,6 +228,7 @@ any) => {
                             startTime={globals?.startTime}
                             chrono={timer}
                         ></TimerForm>
+
                         <LiveWorkoutSelector
                             workoutIds={workoutIds}
                         ></LiveWorkoutSelector>

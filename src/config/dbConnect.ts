@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const connectDB = () => {
     try {
         mongoose.connect("mongodb://localhost/db", (err) => {

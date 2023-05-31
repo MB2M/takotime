@@ -11,6 +11,8 @@ import WebsocketServices from "../services/websocketServices";
 import Station from "../models/Station";
 import WebSocketMessages from "../services/websocketMessages";
 import Device from "../models/Device";
+import Result from "../models/Result";
+import onoff from "onoff";
 
 class Manager extends EventEmitter {
     topics = [
@@ -27,6 +29,7 @@ class Manager extends EventEmitter {
     timeOuts: NodeJS.Timeout[];
     websocketServices: WebsocketServices;
     websocketMessages: WebSocketMessages;
+    buzzer;
 
     constructor(
         wodTimerServices: WodTimerServices,
@@ -35,6 +38,9 @@ class Manager extends EventEmitter {
         websocketServices: WebsocketServices
     ) {
         super();
+        this.buzzer = new onoff.Gpio(23, "out", "both", {
+            debounceTimeout: 5,
+        });
         this.wodTimerServices = wodTimerServices;
         this.mqttServices = mqttServices;
         this.keyv = keyv;
@@ -53,6 +59,13 @@ class Manager extends EventEmitter {
     async wodTimerEventSubscription() {
         const subscription = new WodTimerSubscription(this.wodTimerServices);
         subscription.load();
+    }
+
+    buzz() {
+        this.buzzer.writeSync(1);
+        setTimeout(() => {
+            this.buzzer.writeSync(0);
+        }, 1000);
     }
 
     async mqttInit() {
@@ -134,6 +147,34 @@ class Manager extends EventEmitter {
         } catch (err) {
             console.log(err);
         }
+
+        if (data.dynamics.result) {
+            try {
+                const externalEventId = await this.keyv.get("externalEventId");
+                const externalHeatId = await this.keyv.get("externalHeatId");
+                console.log(externalEventId, externalHeatId);
+                await Result.update(
+                    {
+                        eventId: externalEventId,
+                        heatId: externalHeatId,
+                        laneNumber: data.laneNumber,
+                    },
+                    {
+                        participant: data.participant,
+                        category: data.category,
+                        externalId: data.externalId,
+                        result: data.dynamics.result,
+                    },
+                    {
+                        upsert: true,
+                        setDefaultsOnInsert: true,
+                        runValidators: true,
+                    }
+                );
+            } catch (err) {
+                console.log(err);
+            }
+        }
     }
 
     async updateDevices(topic: string, data: any) {
@@ -197,6 +238,7 @@ class Manager extends EventEmitter {
     async startWod(options: StartOptions) {
         await this.keyv.set("startTime", options.startTime);
         await this.keyv.set("duration", options.duration);
+        await this.keyv.set("saveResults", options.saveResults);
         this.wodTimerServices.start(options);
     }
 
@@ -252,7 +294,6 @@ class Manager extends EventEmitter {
     }
 
     async getStationConfig(ip: string) {
-        let msg: any = {};
         const globals = await this.getGlobals();
 
         const stationDevice = await StationDevices.findOne({ ip }).exec();

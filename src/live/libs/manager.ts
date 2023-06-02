@@ -13,6 +13,8 @@ import WebSocketMessages from "../services/websocketMessages";
 import Device from "../models/Device";
 import Result from "../models/Result";
 import onoff from "onoff";
+import pigpio from "pigpio";
+import { updateResult } from "../services/firebase/results";
 
 class Manager extends EventEmitter {
     topics = [
@@ -38,9 +40,16 @@ class Manager extends EventEmitter {
         websocketServices: WebsocketServices
     ) {
         super();
-        this.buzzer = new onoff.Gpio(23, "out", "both", {
-            debounceTimeout: 5,
-        });
+        if (process.env.NODE_ENV !== "development") {
+            // this.buzzer = new onoff.Gpio(23, "out", "both", {
+            //     debounceTimeout: 5,
+            // });
+            this.buzzer = new pigpio.Gpio(23, {
+                mode: pigpio.Gpio.OUTPUT,
+                timeout: 5,
+            });
+            this.buzzer.pwmFrequency(523);
+        }
         this.wodTimerServices = wodTimerServices;
         this.mqttServices = mqttServices;
         this.keyv = keyv;
@@ -61,11 +70,21 @@ class Manager extends EventEmitter {
         subscription.load();
     }
 
+    // buzz() {
+    //     if (this.buzzer) {
+    //         this.buzzer.writeSync(1);
+    //         setTimeout(() => {
+    //             this.buzzer?.writeSync(0);
+    //         }, 2000);
+    //     }
+    // }
     buzz() {
-        this.buzzer.writeSync(1);
-        setTimeout(() => {
-            this.buzzer.writeSync(0);
-        }, 1000);
+        if (this.buzzer) {
+            this.buzzer.pwmWrite(255);
+            setTimeout(() => {
+                this.buzzer?.pwmWrite(0);
+            }, 2000);
+        }
     }
 
     async mqttInit() {
@@ -131,7 +150,6 @@ class Manager extends EventEmitter {
     }
 
     async updateDynamics(_topic: string, data: any) {
-        console.log("update Dynamics");
         try {
             await Station.updateOne(
                 {
@@ -148,11 +166,10 @@ class Manager extends EventEmitter {
             console.log(err);
         }
 
-        if (data.dynamics.result) {
+        if ((await this.keyv.get("saveResults")) && data.dynamics.result) {
             try {
                 const externalEventId = await this.keyv.get("externalEventId");
                 const externalHeatId = await this.keyv.get("externalHeatId");
-                console.log(externalEventId, externalHeatId);
                 await Result.update(
                     {
                         eventId: externalEventId,
@@ -240,6 +257,45 @@ class Manager extends EventEmitter {
         await this.keyv.set("duration", options.duration);
         await this.keyv.set("saveResults", options.saveResults);
         this.wodTimerServices.start(options);
+
+        if (options.saveResults) {
+            const externalEventId = await this.keyv.get("externalEventId");
+            const externalWorkoutId = await this.keyv.get("externalWorkoutId");
+            const externalHeatId = await this.keyv.get("externalHeatId");
+            const stations = await Station.find().exec();
+            await Promise.all(
+                stations.map(async (s: any) => {
+                    await Result.updateMany(
+                        {
+                            eventId: externalEventId,
+                            heatId: externalHeatId,
+                            laneNumber: s.laneNumber,
+                        },
+                        {
+                            participant: s.participant,
+                            category: s.category,
+                            externalId: s.externalId,
+                            result: s.dynamics.result || "",
+                        },
+                        {
+                            upsert: true,
+                            setDefaultsOnInsert: true,
+                            runValidators: true,
+                        }
+                    );
+                    await updateResult(externalEventId, externalWorkoutId, {
+                        participant: s.participant,
+                        category: s.category,
+                        heatId: externalHeatId,
+                        participantId: s.externalId,
+                        result: s.dynamics.result || "",
+                    });
+
+                    s.reset();
+                    await s.save();
+                })
+            );
+        }
     }
 
     async resetWod() {

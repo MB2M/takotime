@@ -48,7 +48,7 @@ class Manager extends EventEmitter {
                 mode: pigpio.Gpio.OUTPUT,
                 timeout: 5,
             });
-            this.buzzer.pwmFrequency(523);
+            this.buzzer.pwmFrequency(100);
         }
         this.wodTimerServices = wodTimerServices;
         this.mqttServices = mqttServices;

@@ -170,6 +170,9 @@ class Manager extends EventEmitter {
             try {
                 const externalEventId = await this.keyv.get("externalEventId");
                 const externalHeatId = await this.keyv.get("externalHeatId");
+                const externalWorkoutId = await this.keyv.get(
+                    "externalWorkoutId"
+                );
                 await Result.update(
                     {
                         eventId: externalEventId,
@@ -188,6 +191,13 @@ class Manager extends EventEmitter {
                         runValidators: true,
                     }
                 );
+                await updateResult(externalEventId, externalWorkoutId, {
+                    participant: data.participant,
+                    category: data.category,
+                    heatId: externalHeatId,
+                    participantId: data.externalId,
+                    result: data.dynamics.result || "",
+                });
             } catch (err) {
                 console.log(err);
             }

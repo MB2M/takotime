@@ -14,10 +14,10 @@ const useChrono = (
     const [plainTimer, setPlainTimer] = useState<number>(0);
 
     const timer = useMemo(() => {
-        if (!startTime || startTime === "" || !time) {
+        if (!startTime || startTime === "" || !time || !ts) {
             return null;
         }
-        const diff = time - Date.parse(startTime || "");
+        const diff = ts.now() - Date.parse(startTime || "");
         setPlainTimer(diff);
         if (diff < 0) {
             return Math.floor(diff / 1000);

@@ -136,17 +136,18 @@ class Manager extends EventEmitter {
         const duration = await this.keyv.get("duration");
         const start =
             // Date.parse(this.wod?.db.getData("/globals/startTime")) / 1000;
-            Date.parse(await this.keyv.get("startTime")) / 1000;
+            Date.parse(await this.keyv.get("startTime"));
         const end = (Date.parse(startTime) + duration * 60000) / 1000;
         // const end =
         //     (Date.parse(this.wod?.db.getData("/globals/startTime")) +
         //         this.wod?.db.getData("/globals/duration") * 60000) /
         //     1000;
 
-        return JSON.stringify({
+        return {
+            duration,
             startTime: start,
             endTime: end,
-        });
+        };
     }
 
     async updateDynamics(_topic: string, data: any) {

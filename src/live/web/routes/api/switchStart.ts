@@ -9,9 +9,11 @@ const switchStart = async (req: Request, res: Response) => {
     const liveWodManager = liveApp.manager;
 
     if (action === "start") {
-        const startTime = new Date(
-            Math.floor((Date.now() + countdown * 1000) / 1000) * 1000
-        );
+        // const startTime = new Date(
+        //     Math.floor((Date.now() + countdown * 1000) / 1000) * 1000
+        // );
+
+        const startTime = new Date(Date.now() + countdown * 1000);
         try {
             await liveWodManager.startWod({
                 duration,

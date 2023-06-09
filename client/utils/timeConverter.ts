@@ -10,7 +10,7 @@ const toReadableTime = (
     timestamp: string | number | Date,
     showMs: boolean = true
 ) => {
-    const asDate = new Date(timestamp);
+    // const asDate = new Date(timestamp);
     const hours = addZero(Math.floor(+timestamp / (3600 * 1000)), 2);
     const minutes = addZero(Math.floor(+timestamp / (60 * 1000)) % 60, 2);
     const seconds = addZero(Math.floor(+timestamp / 1000) % 60, 2);

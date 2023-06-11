@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import fetch from "node-fetch";
 
 export interface ScorePost {
     id: number;
@@ -27,7 +28,9 @@ const refreshAccessToken = async (): Promise<string> => {
         });
 
         if (response.ok) {
-            const { access_token } = await response.json();
+            const { access_token } = (await response.json()) as {
+                access_token: string;
+            };
             // const token = jwt.sign(
             //     { CCAccessToken: access_token },
             //     process.env.JWT_SECRET as string

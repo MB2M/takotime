@@ -80,3 +80,26 @@ type CCEPParticipant = {
         backsquat: string;
     };
 };
+
+interface CCResultParticipant {
+    id: number;
+    divisionName: string;
+    displayName: string;
+    result: CCResultParticipantResult[];
+}
+
+interface CCResultParticipantResult {
+    scores: CCResultParticipantScore[];
+}
+
+interface CCResultParticipantScore {
+    value: string;
+    timeCapCompletedReps: number | null;
+}
+
+interface CCSimpleResult {
+    participantId: number;
+    division: string;
+    participant: string;
+    scores: string[];
+}

@@ -16,16 +16,16 @@ export default async function handler(
         const accessToken = (await resp.json()).token;
 
         const response = await fetch(
-            `${BASE_URL}/events/${eventId}/workouts/${workoutId}/eligible-participants`,
+            `${BASE_URL}/events/${eventId}/onsite/scores-editor?workoutId=${workoutId}`,
             {
                 method: "GET",
                 headers: { Authorization: "Bearer " + accessToken }, //TODO
             }
         );
+
         if (response.ok) {
             const json = await response.json();
-            res.status(200).json(json);
-            return;
+            return res.status(200).json(json);
         } else {
             throw new Error("bad request");
         }

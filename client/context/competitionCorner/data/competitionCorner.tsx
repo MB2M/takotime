@@ -1,16 +1,18 @@
-import { createContext, ReactNode, useContext, useEffect } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import { useLiveDataContext } from "../../liveData/livedata";
 import { useCompetitionCorner } from "./manager";
 
 const DEFAULT_CC_CONTEXT_VALUE: CompetitionCornerState = {
     epHeat: [],
     heats: [],
+    results: [],
 };
 
 export interface CompetitionCornerState {
     // workouts: CCWorkout[];
     heats: CCHeat[];
     epHeat: CCEPParticipant[] | undefined;
+    results: CCSimpleResult[];
 }
 
 export const CompetitionCornerContext = createContext<CompetitionCornerState>(
@@ -28,22 +30,6 @@ export const CompetitionCornerProvider = ({
         globals?.externalWorkoutId,
         globals?.externalHeatId
     );
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const response = await fetch("/api/CCtoken");
-
-                if (response.ok) {
-                    sessionStorage.setItem("CC_TOKEN", await response.text());
-                } else {
-                    sessionStorage.removeItem("CC_TOKEN");
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        })();
-    }, []);
 
     return (
         <CompetitionCornerContext.Provider value={CCData}>

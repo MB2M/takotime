@@ -6,29 +6,57 @@ export const useCompetitionCorner = (
     workoutId?: number,
     heatId?: number
 ) => {
-    const [workouts, setWorkouts] = useState<CCWorkout[]>([]);
     const [heats, setHeats] = useState<CCHeat[]>([]);
     const [epHeat, setEpHeat] = useState<CCEPParticipant[]>();
+    const [results, setResults] = useState<CCSimpleResult[]>([]);
     const competition = useCompetitionContext();
-    
+
+    const getWorkoutResults = async () => {
+        try {
+            const response = await fetch(`/api/results`, {
+                method: "POST",
+
+                body: JSON.stringify({
+                    eventId,
+                    workoutId,
+                }),
+            });
+            if (response.ok) {
+                const participants: CCResultParticipant[] = (
+                    await response.json()
+                ).participants;
+                const results: CCSimpleResult[] = participants.map(
+                    (participant) => ({
+                        participantId: participant.id,
+                        division: participant.divisionName,
+                        participant: participant.displayName,
+                        scores: participant.result[0].scores.map((score) =>
+                            score.timeCapCompletedReps
+                                ? `Cap+ ${score.timeCapCompletedReps}`
+                                : score.value
+                        ),
+                    })
+                );
+                setResults(results);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     useEffect(() => {
         if (!eventId || !workoutId || !heatId) return;
         if (competition?.platform !== "CompetitionCorner") return;
         (async () => {
             try {
-                const response = await fetch(
-                    `/api/eligibleParticipant?token=${sessionStorage.getItem(
-                        "CC_TOKEN"
-                    )}`,
-                    {
-                        method: "POST",
+                const response = await fetch(`/api/eligibleParticipant`, {
+                    method: "POST",
 
-                        body: JSON.stringify({
-                            eventId,
-                            workoutId,
-                        }),
-                    }
-                );
+                    body: JSON.stringify({
+                        eventId,
+                        workoutId,
+                    }),
+                });
                 if (response.ok) {
                     const EPHeat: CCEPParticipant[] = await response.json();
                     setEpHeat(EPHeat.filter((ep) => ep.heatId === heatId));
@@ -67,7 +95,8 @@ export const useCompetitionCorner = (
                 setHeats([]);
             }
         })();
+        getWorkoutResults().then();
     }, [eventId, workoutId, heatId, competition]);
 
-    return { heats, epHeat };
+    return { heats, epHeat, results };
 };

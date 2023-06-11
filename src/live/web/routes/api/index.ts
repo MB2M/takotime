@@ -1,16 +1,17 @@
 import express from "express";
 import { authenticateToken } from "../../../../middleware/auth.js";
-import broker from "./broker.js";
-import login from "./login.js";
-import signup from "./signup.js";
-import switchStart from "./switchStart.js";
+import broker from "./broker";
+import login from "./login";
+import signup from "./signup";
+import switchStart from "./switchStart";
 import * as stationDevicesController from "../../controllers/stationDevicesController";
 import * as stationStaticsController from "../../controllers/stationController";
-import * as workoutController from "../../controllers/workoutController.js";
+import * as workoutController from "../../controllers/workoutController";
 import loaderCC from "./loaderCC.js";
-import loaderTournament from "./loaderTournament.js";
-import loaderLocal from "./loaderLocal.js";
+import loaderTournament from "./loaderTournament";
+import loaderLocal from "./loaderLocal";
 import { getResults } from "../../controllers/resultController";
+import { getCCToken } from "../../controllers/CCTokenController";
 
 const api = express.Router();
 
@@ -33,6 +34,7 @@ api.get("/broker", authenticateToken, broker);
 api.use("/login", login);
 api.use("/signup", signup);
 api.get("/switchStart", switchStart);
+api.get("/cc-token", getCCToken);
 api.post("/loadworkout", workoutController.loadWorkout);
 api.post("/loadCC", loaderCC);
 api.post("/loadTournament", loaderTournament);

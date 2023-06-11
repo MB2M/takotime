@@ -27,7 +27,7 @@ html,
 body {
     color: black;
     padding: 0;
-    margin: 0;
+    margin: 0 0 -20px;
     font-family: CantoraOne, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
         Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
         sans-serif;

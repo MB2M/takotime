@@ -15,6 +15,7 @@ import Result from "../models/Result";
 import onoff from "onoff";
 import pigpio from "pigpio";
 import { updateResult } from "../services/firebase/results";
+import { postScore, ScorePost } from "../services/CCTokenService";
 
 class Manager extends EventEmitter {
     topics = [
@@ -199,6 +200,37 @@ class Manager extends EventEmitter {
                     participantId: data.externalId,
                     result: data.dynamics.result || "",
                 });
+
+                let athleteScore: ScorePost = {
+                    score: 0,
+                    isCapped: false,
+                    id: data.externalId,
+                    secondaryScore: null,
+                    tiebreakerScore: null,
+                    scaled: false,
+                    didNotFinish: false,
+                };
+
+                let score = data.dynamics.result.split("|")[0];
+
+                athleteScore.isCapped = !score.includes(":");
+                if (score.includes(":")) {
+                    if (score.length <= 9) {
+                        score = `00:${score}`;
+                    }
+                } else {
+                    score = Number(score);
+                }
+
+                athleteScore.score = score;
+
+                const scorePayload: ScorePost[] = [athleteScore];
+
+                await postScore(
+                    externalEventId,
+                    externalWorkoutId,
+                    scorePayload
+                );
             } catch (err) {
                 console.log(err);
             }

@@ -41,6 +41,7 @@ class WodTimerSubscription extends AbstractEventsubscription {
                     break;
                 case "start":
                     liveApp.manager.buzz();
+                    liveApp.manager.mqttServices.send("server/buzzer", "buzz");
                     liveApp.manager.sendGlobalsToChannel();
                     const rankInterval = setInterval(() => {
                         liveApp.manager.publishRank();

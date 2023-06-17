@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import { useMemo } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import useChrono from "../../hooks/useChrono";
+import { formatChrono } from "../../utils/timeConverter";
 
 const Chrono = ({
     fontSize = "6rem",
@@ -20,31 +21,31 @@ const Chrono = ({
     const { timer } = useChrono(globals?.startTime, globals?.duration, reverse);
 
     const formatedChrono = useMemo(() => {
-        if (timer?.toString().slice(0, 1) === "-")
-            return timer?.toString().slice(1);
+        // if (timer?.toString().slice(0, 1) === "-")
+        //     return timer?.toString().slice(1);
+        //
+        // if (reverse) {
+        //     const ms = Number(timer?.toString().slice(6, 9));
+        //     let chronoArray = timer?.toString().slice(0, 5).split(":") || [];
+        //
+        //     if (chronoArray.length !== 2) return "";
+        //
+        //     if (chronoArray[1] === "00" && chronoArray[0] === "00" && ms === 0)
+        //         return "00:00";
+        //     if (chronoArray[1] === "59") {
+        //         chronoArray[1] = "00";
+        //         chronoArray[0] = (Number(chronoArray[0]) + 1).toString();
+        //     } else {
+        //         chronoArray[1] = (Number(chronoArray[1]) + 1).toString();
+        //     }
+        //     chronoArray = chronoArray.map(
+        //         (element: string) =>
+        //             `${element.length === 1 ? "0" : ""}${element}`
+        //     );
+        //     return chronoArray.join(":");
+        // }
 
-        if (reverse) {
-            const ms = Number(timer?.toString().slice(6, 9));
-            let chronoArray = timer?.toString().slice(0, 5).split(":") || [];
-
-            if (chronoArray.length !== 2) return "";
-
-            if (chronoArray[1] === "00" && chronoArray[0] === "00" && ms === 0)
-                return "00:00";
-            if (chronoArray[1] === "59") {
-                chronoArray[1] = "00";
-                chronoArray[0] = (Number(chronoArray[0]) + 1).toString();
-            } else {
-                chronoArray[1] = (Number(chronoArray[1]) + 1).toString();
-            }
-            chronoArray = chronoArray.map(
-                (element: string) =>
-                    `${element.length === 1 ? "0" : ""}${element}`
-            );
-            return chronoArray.join(":");
-        }
-
-        return timer?.toString().slice(0, 5);
+        return formatChrono(timer, reverse);
     }, [timer, reverse]);
 
     const isInTimeLeft = useMemo(() => {
@@ -67,6 +68,7 @@ const Chrono = ({
             fontSize={fontSize}
             fontFamily={fontFamily}
             color={isInTimeLeft ? timeLeftColor : "inherit"}
+            fontWeight="inherit"
         >
             {formatedChrono}
         </Typography>

@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
 
 const BASE_URL = "https://competitioncorner.net/api2/v1";
 
@@ -8,8 +7,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { eventId, workoutId, payload } = JSON.parse(req.body);
-    const { token } = req.query;
+    const { eventId, workoutId, payload } = req.body;
     // try {
     // const response = await fetch(BASE_LOGIN_URL, {
     //     method: "POST",
@@ -24,21 +22,22 @@ export default async function handler(
 
     // if (response.ok) {
     // const { access_token: accessToken } = await response.json();
+    console.log(req.body);
     try {
-        if (!token) throw new Error("token is missing");
-
-        const decoded: any = jwt.verify(
-            token as string,
-            process.env.JWT_SECRET as string
+        const resp = await fetch(
+            `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/cc-token`
         );
-        const accessToken = decoded.CCAccessToken;
+        const accessToken = (await resp.json()).token;
 
         const response = await fetch(
-            `${BASE_URL}//results/event/${eventId}/workout/${workoutId}?forcedUpdate=true`,
+            `${BASE_URL}/results/event/${eventId}/workout/${workoutId}?forcedUpdate=true`,
             {
                 method: "POST",
-                headers: { Authorization: "Bearer " + accessToken }, //TODO
-                body: JSON.stringify({ payload }),
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                    "Content-Type": "application/json",
+                }, //TODO
+                body: JSON.stringify(payload),
             }
         );
         if (response.ok) {

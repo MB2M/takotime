@@ -1,26 +1,36 @@
 @font-face {
     font-family: "CantoraOne";
-    src: url("/fonts/CantoraOne-Regular.ttf");
+    src: url("/client/public/fonts/CantoraOne-Regular.ttf");
 }
 
 @font-face {
     font-family: "BebasNeue";
-    src: url("/fonts/BebasNeue-Regular.ttf");
+    src: url("/client/public/fonts/BebasNeue-Regular.ttf");
 }
 
 @font-face {
     font-family: "StintultraCondensed";
-    src: url("/fonts/StintUltraCondensed-Regular.ttf");
+    src: url("/client/public/fonts/StintUltraCondensed-Regular.ttf");
 }
 
 @font-face {
     font-family: "Montserrat";
-    src: url("/fonts/Montserrat-VariableFont_wght.ttf");
+    src: url('/client/public/fonts/Montserrat-VariableFont_wght.ttf');
 }
 
 @font-face {
     font-family: "wwDigital";
-    src: url("/fonts/wwDigital.ttf");
+    src: url("/client/public/fonts/wwDigital.ttf");
+}
+
+@font-face {
+    font-family: "chakraPetchItalic";
+    src: url("/client/public/fonts/ChakraPetch-SemiBoldItalic.ttf");
+}
+
+@font-face {
+    font-family: "Inconsolata";
+    src: url("/client/public/fonts/Inconsolata-VariableFont_wdth,wght.ttf");
 }
 
 html,

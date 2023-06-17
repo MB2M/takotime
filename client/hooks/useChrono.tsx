@@ -42,7 +42,21 @@ const useChrono = (
         return () => clearInterval(serverT);
     }, []);
 
-    return { timer, ts, plainTimer };
+    const extractTimer = () => {
+        if (!startTime || startTime === "" || !time || !ts) {
+            return null;
+        }
+        const diff = ts.now() - Date.parse(startTime || "");
+        if (diff < 0) {
+            return Math.floor(diff / 1000);
+        } else {
+            return reverse
+                ? toReadableTime(Math.max((duration || 0) * 60000 - diff, 0))
+                : toReadableTime(Math.min((duration || 0) * 60000, diff));
+        }
+    };
+
+    return { timer, ts, plainTimer, extractTimer };
 };
 
 export default useChrono;

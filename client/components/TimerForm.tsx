@@ -1,5 +1,5 @@
 import { Button, Box, TextField, Checkbox } from "@mui/material";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 const TimerForm = ({
     startTime,
@@ -8,16 +8,16 @@ const TimerForm = ({
     startTime: string | undefined;
     chrono: string | number | null;
 }) => {
-    const [duration, setDuration] = useState("");
-    const [countdown, setCountdown] = useState("");
-    const [saveResult, setSaveResult] = useState(false);
+    const [duration, setDuration] = useState(1);
+    const [countdown, setCountdown] = useState(0);
+    const [saveResult, setSaveResult] = useState(true);
 
-    const handleDurationChange = (e: any) => {
-        if (isNumberOrEmpty(e.target.value)) setDuration(e.target.value);
+    const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (isNumberOrEmpty(e.target.value)) setDuration(+e.target.value);
     };
 
     const handleCountdownChange = (e: any) => {
-        if (isNumberOrEmpty(e.target.value)) setCountdown(e.target.value);
+        if (isNumberOrEmpty(e.target.value)) setCountdown(+e.target.value);
     };
 
     const isNumberOrEmpty = (data: any): boolean => {
@@ -58,6 +58,7 @@ const TimerForm = ({
                         id="outlined-size-small"
                         size="small"
                         type="number"
+                        value={duration}
                         onChange={handleDurationChange}
                     />
                     <TextField
@@ -66,6 +67,7 @@ const TimerForm = ({
                         size="small"
                         type="number"
                         onChange={handleCountdownChange}
+                        value={countdown}
                     />
                     <Button
                         variant="outlined"

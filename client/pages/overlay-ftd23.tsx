@@ -161,6 +161,7 @@ const OverlayFTD23 = () => {
                         return (
                             <Box
                                 width={1}
+                                maxWidth={0.2}
                                 mx={0.5}
                                 display={"flex"}
                                 flexDirection={"column"}
@@ -241,6 +242,7 @@ const OverlayFTD23 = () => {
                                         mx={"auto"}
                                         fontWeight={"bold"}
                                         textTransform={"uppercase"}
+                                        noWrap
                                     >
                                         {station.participant}
                                     </Typography>

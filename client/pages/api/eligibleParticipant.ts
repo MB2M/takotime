@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getBackendUrl } from "../../utils/requestHost";
 
 const BASE_URL = "https://competitioncorner.net/api2/v1";
 
@@ -11,7 +12,7 @@ export default async function handler(
 
     try {
         const resp = await fetch(
-            `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/cc-token`
+            `http://${getBackendUrl(req)}/live/api/cc-token`
         );
         const accessToken = (await resp.json()).token;
 

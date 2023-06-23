@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs";
 import crypto from "crypto";
+import { getBackendUrl } from "../../utils/requestHost";
 
 export const config = {
     api: {
@@ -17,7 +18,7 @@ export default async function handler(
         return res.status(404).send("Bad Method");
     }
 
-    const { _id, dark } = req.query;
+    const { _id } = req.query;
 
     if (!_id) {
         return res.status(404).send("_id is missing");
@@ -39,16 +40,13 @@ export default async function handler(
         fs.writeFileSync(`./uploaded/img/logo/${fileName}.${extension}`, data);
         fs.unlinkSync(file.filepath);
 
-        await fetch(
-            `http://${process.env.NEXT_PUBLIC_LIVE_API}/webapp/competition/${_id}`,
-            {
-                method: "PUT",
-                body: JSON.stringify({ logoUrl: `${fileName}.${extension}` }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        await fetch(`http://${getBackendUrl(req)}/webapp/competition/${_id}`, {
+            method: "PUT",
+            body: JSON.stringify({ logoUrl: `${fileName}.${extension}` }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
     };
 
     const result = (await asyncParse(req)) as {

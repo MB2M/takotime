@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useCompetitionContext } from "../../competition/context";
+import { useCompetitionContext } from "../../competition";
 
 export const useCompetitionCorner = (
     eventId?: number,
@@ -82,7 +82,8 @@ export const useCompetitionCorner = (
             // }
             try {
                 const response = await fetch(
-                    `https://competitioncorner.net/api2/v1/schedule/workout/${workoutId}`
+                    `https://competitioncorner.net/api2/v1/schedule/workout/${workoutId}?divisionId=all`,
+                    { mode: "cors" }
                 );
                 if (response.ok) {
                     const heats: CCHeat[] = await response.json();
@@ -96,7 +97,7 @@ export const useCompetitionCorner = (
             }
         })();
         getWorkoutResults().then();
-    }, [eventId, workoutId, heatId, competition]);
+    }, [eventId, workoutId, heatId, competition?.platform]);
 
     return { heats, epHeat, results };
 };

@@ -30,7 +30,9 @@ const useChrono = (
 
     useEffect(() => {
         const ts = timesync.create({
-            server: `http://${process.env.NEXT_PUBLIC_LIVE_API}/timesync`,
+            server: `http://${
+                typeof window !== "undefined" && window.location.hostname
+            }:3000/timesync`,
             interval: 100000,
         });
         setTs(ts);

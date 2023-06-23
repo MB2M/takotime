@@ -115,10 +115,12 @@ const useStationReady = (
         [stationsInfo, allPhoneScores]
     );
     const restrieveWodStationInfo = async () => {
+        if (typeof window === "undefined") return;
         if (!globals?.externalHeatId) return;
+
         try {
             const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station?heatId=${globals?.externalHeatId}`,
+                `http://${window.location.hostname}:3000/mandelieu/station?heatId=${globals?.externalHeatId}`,
                 {
                     method: "GET",
                     headers: {

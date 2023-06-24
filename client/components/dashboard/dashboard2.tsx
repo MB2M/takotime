@@ -183,7 +183,7 @@ any) => {
 
     return (
         // <ThemeProvider theme={darkTheme}>
-        <Box sx={{ backgroundColor: "#3b3b3b" }}>
+        <Box sx={{ backgroundColor: "#cfcfcf" }}>
             <Typography gutterBottom variant="h2" component="div">
                 Dashboard
                 {` / state: ${globals?.state}`}

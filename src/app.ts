@@ -14,7 +14,8 @@ dbConnect();
 app.use(
     cors({
         methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-        origin: process.env.CORS_ALLOWED_ORIGIN?.split(",") as string[],
+        // origin: process.env.CORS_ALLOWED_ORIGIN?.split(",") as string[],
+        origin: "*",
     })
 );
 

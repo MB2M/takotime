@@ -109,7 +109,7 @@ const OverlayFTD23 = () => {
                 textTransform={"uppercase"}
                 fontWeight={"bold"}
             >
-                TIME CAP 1 MIN
+                TIME CAP 2 MINS
             </Typography>
 
             <Box

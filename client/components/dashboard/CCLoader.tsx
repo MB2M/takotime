@@ -31,7 +31,8 @@ const CCLoader = ({
             if (event?.id) {
                 try {
                     const response = await fetch(
-                        `https://competitioncorner.net/api2/v1/schedule/events/${event.id}/workouts`
+                        `https://competitioncorner.net/api2/v1/schedule/events/${event.id}/workouts`,
+                        { mode: "cors" }
                     );
                     const json = await response.json();
                     const workouts = json.workouts.map((w: any) => ({
@@ -55,7 +56,8 @@ const CCLoader = ({
             if (selectedWorkout) {
                 try {
                     const response = await fetch(
-                        `https://competitioncorner.net/api2/v1/schedule/workout/${selectedWorkout}`
+                        `https://competitioncorner.net/api2/v1/schedule/workout/${selectedWorkout}`,
+                        { mode: "cors" }
                     );
                     const json = await response.json();
                     const heats = json.map((h: any) => ({

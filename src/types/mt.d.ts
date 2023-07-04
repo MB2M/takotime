@@ -1,13 +1,9 @@
 import {
-    Model,
-    Schema,
-    model,
-    HydratedDocument,
     Document,
-    Subdocument,
-    Embedded,
-    Types,
     DocumentArray,
+    HydratedDocument,
+    Model,
+    Subdocument,
 } from "mongoose";
 
 interface ITournament extends Document {
@@ -63,6 +59,7 @@ interface IStation extends Document {
     scores?: DocumentArray<IScore>;
 }
 
+//OLD
 interface IScore extends Subdocument {
     _id: string;
     weight?: number;
@@ -99,3 +96,5 @@ interface ChoiceModel extends Model<IChoice> {
     resetAll(): Promise<HydratedDocument<IChoice>>;
     addChoice(name: string): Promise<HydratedDocument<IChoice>>;
 }
+
+//NEW

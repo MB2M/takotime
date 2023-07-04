@@ -24,6 +24,12 @@ const DEFAUT_WORKOUT: Workout = {
     dataSource: "web",
     layout: "default",
     duration: 0,
+    wodIndexSwitchMinute: 0,
+    flow: {
+        buyIn: { reps: [], movements: [] },
+        main: { reps: [], movements: [] },
+        buyOut: { reps: [], movements: [] },
+    },
     options: {
         wodtype: "forTime",
         title: true,
@@ -38,6 +44,7 @@ const DEFAUT_WORKOUT: Workout = {
         viewMovement: "flash",
         movementFlashDuration: 5,
         showRounds: true,
+        columnDisplayNumber: 1,
     },
 };
 

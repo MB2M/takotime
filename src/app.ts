@@ -5,7 +5,7 @@ import cors from "cors";
 import * as timesyncServer from "timesync/server/index.js";
 import dbConnect from "./config/dbConnect";
 import liveApp from "./live";
-import { WebSocket, WebSocketServer } from "ws";
+import { WebSocketServer } from "ws";
 
 const app = express();
 
@@ -19,11 +19,11 @@ app.use(
     })
 );
 
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+// import path from "node:path";
+// import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -64,6 +64,9 @@ import webappRouter from "./webapp/routes";
 import { onConnection } from "./webapp/services/websocketService";
 app.use("/webapp", webappRouter);
 onConnection();
+
+import WebsocketScoringService from "./webapp/services/websocketScoringService";
+new WebsocketScoringService(wss);
 
 // try {
 //     WOD1App.start(app, server, "/wod1");

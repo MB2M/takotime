@@ -12,10 +12,8 @@ import Station from "../models/Station";
 import WebSocketMessages from "../services/websocketMessages";
 import Device from "../models/Device";
 import Result from "../models/Result";
-import onoff from "onoff";
-import pigpio from "pigpio";
+// import pigpio from "pigpio";
 import { updateResult } from "../services/firebase/results";
-import { postScore, ScorePost } from "../services/CCTokenService";
 
 class Manager extends EventEmitter {
     topics = [
@@ -32,7 +30,7 @@ class Manager extends EventEmitter {
     timeOuts: NodeJS.Timeout[];
     websocketServices: WebsocketServices;
     websocketMessages: WebSocketMessages;
-    buzzer;
+    // buzzer;
 
     constructor(
         wodTimerServices: WodTimerServices,
@@ -41,16 +39,16 @@ class Manager extends EventEmitter {
         websocketServices: WebsocketServices
     ) {
         super();
-        if (process.env.NODE_ENV !== "development") {
-            // this.buzzer = new onoff.Gpio(23, "out", "both", {
-            //     debounceTimeout: 5,
-            // });
-            this.buzzer = new pigpio.Gpio(23, {
-                mode: pigpio.Gpio.OUTPUT,
-                timeout: 5,
-            });
-            this.buzzer.pwmFrequency(100);
-        }
+        // if (process.env.NODE_ENV !== "development") {
+        //     // this.buzzer = new onoff.Gpio(23, "out", "both", {
+        //     //     debounceTimeout: 5,
+        //     // });
+        //     this.buzzer = new pigpio.Gpio(23, {
+        //         mode: pigpio.Gpio.OUTPUT,
+        //         timeout: 5,
+        //     });
+        //     this.buzzer.pwmFrequency(100);
+        // }
         this.wodTimerServices = wodTimerServices;
         this.mqttServices = mqttServices;
         this.keyv = keyv;
@@ -79,14 +77,14 @@ class Manager extends EventEmitter {
     //         }, 2000);
     //     }
     // }
-    buzz() {
-        if (this.buzzer) {
-            this.buzzer.pwmWrite(255);
-            setTimeout(() => {
-                this.buzzer?.pwmWrite(0);
-            }, 2000);
-        }
-    }
+    // buzz() {
+    //     if (this.buzzer) {
+    //         this.buzzer.pwmWrite(255);
+    //         setTimeout(() => {
+    //             this.buzzer?.pwmWrite(0);
+    //         }, 2000);
+    //     }
+    // }
 
     async mqttInit() {
         this.mqttServices.subscribe(this.topics);
@@ -168,69 +166,84 @@ class Manager extends EventEmitter {
             console.log(err);
         }
 
-        if ((await this.keyv.get("saveResults")) && data.dynamics.result) {
+        if (
+            (await this.keyv.get("saveResults")) &&
+            data.dynamics.measurements.length > 0
+        ) {
             try {
-                const externalEventId = await this.keyv.get("externalEventId");
+                // const externalEventId = await this.keyv.get("externalEventId");
                 const externalHeatId = await this.keyv.get("externalHeatId");
-                const externalWorkoutId = await this.keyv.get(
-                    "externalWorkoutId"
+                // const externalWorkoutId = await this.keyv.get(
+                //     "externalWorkoutId"
+                // );
+                this.emit(
+                    "updateResults",
+                    externalHeatId,
+                    data.laneNumber,
+                    data.externalId,
+                    data.dynamics.measurements
                 );
-                await Result.update(
-                    {
-                        eventId: externalEventId,
-                        heatId: externalHeatId,
-                        laneNumber: data.laneNumber,
-                    },
-                    {
-                        participant: data.participant,
-                        category: data.category,
-                        externalId: data.externalId,
-                        result: data.dynamics.result,
-                    },
-                    {
-                        upsert: true,
-                        setDefaultsOnInsert: true,
-                        runValidators: true,
-                    }
-                );
-                await updateResult(externalEventId, externalWorkoutId, {
-                    participant: data.participant,
-                    category: data.category,
-                    heatId: externalHeatId,
-                    participantId: data.externalId,
-                    result: data.dynamics.result || "",
-                });
 
-                let athleteScore: ScorePost = {
-                    score: 0,
-                    isCapped: false,
-                    id: data.externalId,
-                    secondaryScore: null,
-                    tiebreakerScore: null,
-                    scaled: false,
-                    didNotFinish: false,
-                };
+                // LOCAL
+                // await Result.update(
+                //     {
+                //         eventId: externalEventId,
+                //         heatId: externalHeatId,
+                //         laneNumber: data.laneNumber,
+                //     },
+                //     {
+                //         participant: data.participant,
+                //         category: data.category,
+                //         externalId: data.externalId,
+                //         result: data.dynamics.measurements,
+                //     },
+                //     {
+                //         upsert: true,
+                //         setDefaultsOnInsert: true,
+                //         runValidators: true,
+                //     }
+                //
 
-                let score = data.dynamics.result.split("|")[0];
+                // FIREBASE
+                // await updateResult(externalEventId, externalWorkoutId, {
+                //     participant: data.participant,
+                //     category: data.category,
+                //     heatId: externalHeatId,
+                //     participantId: data.externalId,
+                //     result: data.dynamics.measurements,
+                // });
 
-                athleteScore.isCapped = !score.includes(":");
-                if (score.includes(":")) {
-                    if (score.length <= 9) {
-                        score = `00:${score}`;
-                    }
-                } else {
-                    score = Number(score);
-                }
+                // DIRECT CC
+                // let athleteScore: ScorePost = {
+                //     score: 0,
+                //     isCapped: false,
+                //     id: data.externalId,
+                //     secondaryScore: null,
+                //     tiebreakerScore: null,
+                //     scaled: false,
+                //     didNotFinish: false,
+                // };
+                //
+                // let score = data.dynamics.result.split("|")[0];
+                //
+                // athleteScore.isCapped = !score.includes(":");
+                // if (score.includes(":")) {
+                //     if (score.length <= 9) {
+                //         score = `00:${score}`;
+                //     }
+                // } else {
+                //     score = Number(score);
+                // }
+                //
+                // athleteScore.score = score;
 
-                athleteScore.score = score;
+                // const scorePayload: ScorePost[] = [athleteScore];
 
-                const scorePayload: ScorePost[] = [athleteScore];
-
-                await postScore(
-                    externalEventId,
-                    externalWorkoutId,
-                    scorePayload
-                );
+                // await postScore(
+                //     externalEventId,
+                //     externalWorkoutId,
+                //     scorePayload
+                // );
             } catch (err) {
                 console.log(err);
             }
@@ -290,7 +303,7 @@ class Manager extends EventEmitter {
         if (stationDevice) {
             stationDevice.devices = data.configs.devices;
             await stationDevice.save();
-            this.websocketMessages.sendStationDevicesToAllClients();
+            await this.websocketMessages.sendStationDevicesToAllClients();
         }
     }
 
@@ -299,12 +312,14 @@ class Manager extends EventEmitter {
         await this.keyv.set("startTime", options.startTime);
         await this.keyv.set("duration", options.duration);
         await this.keyv.set("saveResults", options.saveResults);
+        const externalWorkoutId = await this.keyv.get("externalWorkoutId");
+        const externalHeatId = await this.keyv.get("externalHeatId");
         this.wodTimerServices.start(options);
 
+        this.emit("startWod", externalWorkoutId, externalHeatId, options.reset);
         if (options.saveResults) {
             const externalEventId = await this.keyv.get("externalEventId");
-            const externalWorkoutId = await this.keyv.get("externalWorkoutId");
-            const externalHeatId = await this.keyv.get("externalHeatId");
+
             const stations = await Station.find().exec();
             await Promise.all(
                 stations.map(async (s: any) => {

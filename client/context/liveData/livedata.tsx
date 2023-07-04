@@ -1,12 +1,4 @@
-import { useRouter } from "next/router";
-import {
-    Children,
-    createContext,
-    ReactNode,
-    useContext,
-    useReducer,
-} from "react";
-import WebsocketConnection from "../../components/live/WebsocketConnection";
+import { createContext, ReactNode, useContext } from "react";
 import { useLiveData } from "./manager";
 
 const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
@@ -31,6 +23,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
     },
     sendMessage: () => undefined,
     handleData: () => undefined,
+    registerListener: () => () => undefined,
 };
 
 export interface LiveDataState {
@@ -43,7 +36,13 @@ export interface LiveDataState {
     ranks: StationRanked;
     globals: Globals | undefined;
     sendMessage: (message: string) => void;
-    handleData: (data: string) => void;
+    handleData: (data: WebSocketReceivedMessage) => void;
+    registerListener: (
+        topic: string,
+        callback: (data: any) => void,
+        notifyBackend?: boolean
+    ) => () => void;
+    // ws?: MutableRefObject<WebSocket | undefined>;
 }
 
 export const LiveDataContext = createContext<LiveDataState>(
@@ -52,15 +51,9 @@ export const LiveDataContext = createContext<LiveDataState>(
 
 export const LiveDataProvider = ({ children }: { children: ReactNode }) => {
     const liveData = useLiveData();
-    const hostname = process.env.NEXT_PUBLIC_LOCAL_HOSTNAME;
 
     return (
-        <LiveDataContext.Provider value={liveData}>
-            <WebsocketConnection
-                handleData={liveData.handleData}
-                ws={liveData.ws}
-                hostname={hostname}
-            />
+        <LiveDataContext.Provider value={{ ...liveData }}>
             {children}
         </LiveDataContext.Provider>
     );

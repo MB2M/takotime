@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { IAdmin } from "../../types/competition";
 
 const AdminSchema = new mongoose.Schema<IAdmin>({
     key: String,

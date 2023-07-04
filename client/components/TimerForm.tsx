@@ -11,6 +11,7 @@ const TimerForm = ({
     const [duration, setDuration] = useState(1);
     const [countdown, setCountdown] = useState(0);
     const [saveResult, setSaveResult] = useState(true);
+    const [resetOnStart, setResetOnStart] = useState(false);
 
     const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (isNumberOrEmpty(e.target.value)) setDuration(+e.target.value);
@@ -28,7 +29,7 @@ const TimerForm = ({
     const handleStart = async () => {
         try {
             await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=start&duration=${duration}&countdown=${countdown}&save=${saveResult}`
+                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=start&duration=${duration}&countdown=${countdown}&save=${saveResult}&reset=${resetOnStart}`
             );
         } catch (error) {
             console.error(error);
@@ -92,6 +93,11 @@ const TimerForm = ({
                 onClick={() => setSaveResult((current) => !current)}
             />{" "}
             save results
+            <Checkbox
+                checked={resetOnStart}
+                onClick={() => setResetOnStart((current) => !current)}
+            />{" "}
+            reset
         </Box>
     );
 };

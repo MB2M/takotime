@@ -1,3 +1,5 @@
+import { Model, Subdocument, Types } from "mongoose";
+
 interface ICompetition {
     _id: string;
     name: string;
@@ -9,11 +11,12 @@ interface ICompetition {
     logoDarkUrl?: string;
     primaryColor?: string;
     secondaryColor?: string;
-    workouts: DocumentArray<IWorkout>;
+    workouts: IWorkout[];
 }
 
 interface ICompetitionMethods {
-    select(): Promise<ICompetition>;
+    select(): any;
+    workouts: Types.Subdocument<Types.ObjectId> & IWorkout;
 }
 
 type CompetitionModel = Model<ICompetition, {}, ICompetitionMethods>;
@@ -23,17 +26,30 @@ interface IAdmin {
     value: string;
 }
 
+interface baseWorkoutMovement {
+    reps: string[];
+    movements: string[];
+}
+
 interface IWorkout extends Subdocument {
     workoutId: string;
+    linkedWorkoutId: string;
     layout: string;
     duration: number;
     dataSource?: "web" | "iot";
     wodIndexSwitchMinute: number;
-    options: Document<workoutOptionSchema>;
+    options: IWorkoutOption;
+
+    flow: {
+        buyIn: baseWorkoutMovement;
+        main: baseWorkoutMovement;
+        buyOut: baseWorkoutMovement;
+    };
 }
 
 interface IWorkoutOption extends Subdocument {
     wodtype: "amrap" | "forTime";
+    rounds: number;
     title: boolean;
     titlePosition: "top" | "bottom";
     titleType: "category" | "heat" | "heat-category" | "category-heat";
@@ -56,4 +72,5 @@ interface IWorkoutOption extends Subdocument {
     viewMovement: "none" | "flash" | "split";
     movementFlashDuration: number;
     showRounds: boolean;
+    columnDisplayNumber: number;
 }

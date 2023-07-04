@@ -131,6 +131,50 @@ const WorkoutCard = ({
         handleUpdateWorkout({ duration: Number(event.target.value) });
     };
 
+    const handleRepsChange = (e: ChangeEvent<HTMLInputElement>) => {
+        handleUpdateWorkout({
+            flow: {
+                buyIn: {
+                    reps: workout.flow.buyIn.reps,
+                    movements: workout.flow.buyIn.movements,
+                },
+                main: {
+                    reps: e.target.value.split(","),
+                    movements: workout.flow.main.movements,
+                },
+                buyOut: {
+                    reps: workout.flow.buyOut.reps,
+                    movements: workout.flow.buyOut.movements,
+                },
+            },
+        });
+    };
+
+    const handleMovementsChange = (e: ChangeEvent<HTMLInputElement>) => {
+        handleUpdateWorkout({
+            flow: {
+                buyIn: {
+                    reps: workout.flow.buyIn.reps,
+                    movements: workout.flow.buyIn.movements,
+                },
+                main: {
+                    movements: e.target.value.split(","),
+                    reps: workout.flow.main.reps,
+                },
+                buyOut: {
+                    reps: workout.flow.buyOut.reps,
+                    movements: workout.flow.buyOut.movements,
+                },
+            },
+        });
+    };
+
+    const handleLinkedWorkoutChange = (
+        event: ChangeEvent<HTMLInputElement>
+    ) => {
+        handleUpdateWorkout({ linkedWorkoutId: event.target.value });
+    };
+
     const handleLayoutChange = (event: ChangeEvent<HTMLInputElement>) => {
         handleUpdateWorkout({ layout: event.target.value });
     };
@@ -152,6 +196,20 @@ const WorkoutCard = ({
     const handleWodtypeChange = (event: SelectChangeEvent) => {
         handleUpdateWorkoutOptions({
             wodtype: event.target.value as WorkoutOption["wodtype"],
+        });
+    };
+
+    function handleRoundsChange(event: ChangeEvent<HTMLInputElement>) {
+        handleUpdateWorkoutOptions({
+            rounds: +event.target.value as WorkoutOption["rounds"],
+        });
+    }
+
+    const handleColumnsNumberChange = (
+        event: ChangeEvent<HTMLInputElement>
+    ) => {
+        handleUpdateWorkoutOptions({
+            columnDisplayNumber: Number(event.target.value),
         });
     };
 
@@ -298,6 +356,16 @@ const WorkoutCard = ({
                     <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
                         <Box display="flex" gap={2} flexDirection={"column"}>
                             <Box>
+                                Start with wod id
+                                <TextField
+                                    type="text"
+                                    size="small"
+                                    value={workout.linkedWorkoutId}
+                                    onChange={handleLinkedWorkoutChange}
+                                    fullWidth
+                                />
+                            </Box>
+                            <Box>
                                 Layout
                                 <TextField
                                     type="text"
@@ -314,6 +382,26 @@ const WorkoutCard = ({
                                     size="small"
                                     value={workout.duration}
                                     onChange={handleDurationChange}
+                                    fullWidth
+                                />
+                            </Box>
+                            <Box>
+                                Reps
+                                <TextField
+                                    size="small"
+                                    value={workout.flow.main.reps.join(",")}
+                                    onChange={handleRepsChange}
+                                    fullWidth
+                                />
+                            </Box>
+                            <Box>
+                                Movements
+                                <TextField
+                                    size="small"
+                                    value={workout.flow.main.movements.join(
+                                        ","
+                                    )}
+                                    onChange={handleMovementsChange}
                                     fullWidth
                                 />
                             </Box>
@@ -354,6 +442,26 @@ const WorkoutCard = ({
                                     </MenuItem>
                                     <MenuItem value={"amrap"}>AMRAP</MenuItem>
                                 </Select>
+                            </Box>
+                            <Box>
+                                Rounds
+                                <TextField
+                                    type="number"
+                                    size="small"
+                                    value={workout.options?.rounds}
+                                    onChange={handleRoundsChange}
+                                    fullWidth
+                                />
+                            </Box>
+                            <Box>
+                                Number of columns
+                                <TextField
+                                    type="number"
+                                    size="small"
+                                    value={workout.options?.columnDisplayNumber}
+                                    onChange={handleColumnsNumberChange}
+                                    fullWidth
+                                />
                             </Box>
                             <Box
                                 component="span"

@@ -5,7 +5,8 @@ const switchStart = async (req: Request, res: Response) => {
     const action = req.query.action;
     const duration = parseInt(req.query.duration as string, 10);
     const countdown = parseInt(req.query.countdown as string, 10);
-    const saveResults = (req.query.save as string) || "false";
+    const saveResults = (req.query.save as string) === "true";
+    const resetData = (req.query.reset as string) === "true";
     const liveWodManager = liveApp.manager;
 
     if (action === "start") {
@@ -19,7 +20,8 @@ const switchStart = async (req: Request, res: Response) => {
                 duration,
                 startTime,
                 countdown,
-                saveResults: saveResults === "true",
+                saveResults,
+                reset: resetData,
             });
             res.status(200).json({
                 startTime: startTime.toString(),

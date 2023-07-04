@@ -2,45 +2,64 @@ import { Box, Stack, Typography } from "@mui/material";
 import { useMemo } from "react";
 import BigscreenLayout from "../components/bigscreen/BigscreenLayout";
 import MaxTonnage from "../components/bigscreen/MaxTonnage";
-import WodRunningAthlete from "../components/bigscreen/WodRunningAthlete";
+// import WodRunningAthlete from "../components/bigscreen/WodRunningAthlete";
 import { useCompetitionContext } from "../context/competition";
 import { useLiveDataContext } from "../context/liveData/livedata";
-import { workouts } from "../eventConfig/cannesBirthday/config";
+// import { workouts } from "../eventConfig/cannesBirthday/config";
 import useStationReady from "../hooks/bigscreen/useStationReady";
 import useChrono from "../hooks/useChrono";
 import { useRouter } from "next/router";
+import DefaultLayout from "../components/bigscreen/Layouts/DefaultLayout";
 
 const HEADER_HEIGHT = 150;
 
 const BigScreen = () => {
     const { globals, stations, loadedWorkouts } = useLiveDataContext();
     const competition = useCompetitionContext();
-    const workout = useMemo(
+    const { timer, plainTimer } = useChrono(
+        globals?.startTime,
+        globals?.duration
+    );
+    const workouts = useMemo(
         () =>
-            competition?.workouts.find(
+            competition?.workouts.filter(
                 (workout) =>
                     workout.workoutId === globals?.externalWorkoutId.toString()
-            ),
+            ) || [],
         [competition, globals?.externalWorkoutId]
     );
 
+    const workout = workouts
+        .sort((a, b) => a.wodIndexSwitchMinute - b.wodIndexSwitchMinute)
+        .findLast(
+            (workout) => workout.wodIndexSwitchMinute * 10000 <= plainTimer
+        );
+
     // const [stationsInfo, setStationsInfo] = useState<BaseStation[]>([]);
-    const { timer } = useChrono(globals?.startTime, globals?.duration);
+
     // const stationsUpgraded = useStationPayload(stations, ranks);
 
     const router = useRouter();
     const title = router.query.title as string | undefined;
 
-    const currentIndex = useMemo(
-        () =>
-            workout?.wodIndexSwitchMinute === 0
-                ? 0
-                : Number(timer?.toString().replaceAll(":", "")) <
-                  (workout?.wodIndexSwitchMinute || 0) * 100000
-                ? 0
-                : 1,
-        [timer, workout?.wodIndexSwitchMinute]
-    );
+    const currentIndex = useMemo(() => {
+        const switchMinutes = (workout?.wodIndexSwitchMinute || 0)
+            .toString()
+            .split(",");
+        return switchMinutes.findLastIndex(
+            (minute) => +minute * 100000 > plainTimer
+        );
+    }, [timer, workout?.wodIndexSwitchMinute]);
+
+    // const currentIndex = useMemo(
+    //     () =>
+    //         workout?.wodIndexSwitchMinute === 0
+    //             ? 0
+    //             : plainTimer < (workout?.wodIndexSwitchMinute || 0) * 100000
+    //             ? 0
+    //             : 1,
+    //     [timer, workout?.wodIndexSwitchMinute]
+    // );
     const totalReps = useMemo(
         () =>
             loadedWorkouts?.[0]?.blocks[currentIndex]?.measurements?.repsTot ||
@@ -170,32 +189,34 @@ const BigScreen = () => {
     //     workout?.dataSource === "web" ? 1000 : 0
     // );
 
+    if (!stationsReady) return null;
+
     return (
         <BigscreenLayout headerHeight={HEADER_HEIGHT} customTitle={title}>
-            <Box
-                width={5}
-                height={1080 - HEADER_HEIGHT}
-                sx={{ backgroundColor: "#1f96d6ff" }}
-                position="absolute"
-                left={520 + (70 / 292) * ((1920 * 3) / 4 - 520)}
-                zIndex={10}
-            ></Box>
-            <Box
-                width={5}
-                height={1080 - HEADER_HEIGHT}
-                sx={{ backgroundColor: "#1f96d6ff" }}
-                position="absolute"
-                left={520 + (137 / 292) * ((1920 * 3) / 4 - 520)}
-                zIndex={10}
-            ></Box>
-            <Box
-                width={5}
-                height={1080 - HEADER_HEIGHT}
-                sx={{ backgroundColor: "#1f96d6ff" }}
-                position="absolute"
-                left={520 + (216 / 292) * ((1920 * 3) / 4 - 520)}
-                zIndex={10}
-            ></Box>
+            {/*<Box*/}
+            {/*    width={5}*/}
+            {/*    height={1080 - HEADER_HEIGHT}*/}
+            {/*    sx={{ backgroundColor: "#1f96d6ff" }}*/}
+            {/*    position="absolute"*/}
+            {/*    left={520 + (70 / 292) * ((1920 * 3) / 4 - 520)}*/}
+            {/*    zIndex={10}*/}
+            {/*></Box>*/}
+            {/*<Box*/}
+            {/*    width={5}*/}
+            {/*    height={1080 - HEADER_HEIGHT}*/}
+            {/*    sx={{ backgroundColor: "#1f96d6ff" }}*/}
+            {/*    position="absolute"*/}
+            {/*    left={520 + (137 / 292) * ((1920 * 3) / 4 - 520)}*/}
+            {/*    zIndex={10}*/}
+            {/*></Box>*/}
+            {/*<Box*/}
+            {/*    width={5}*/}
+            {/*    height={1080 - HEADER_HEIGHT}*/}
+            {/*    sx={{ backgroundColor: "#1f96d6ff" }}*/}
+            {/*    position="absolute"*/}
+            {/*    left={520 + (216 / 292) * ((1920 * 3) / 4 - 520)}*/}
+            {/*    zIndex={10}*/}
+            {/*></Box>*/}
             <Stack overflow={"hidden"} height={1}>
                 {workout?.layout === "MaxTonnage" && (
                     <MaxTonnage
@@ -203,80 +224,85 @@ const BigScreen = () => {
                         stations={stations}
                     />
                 )}
-                {workout?.layout === "default" &&
-                    stationsReady?.map((station) => {
-                        const repsOfFirst = stationsReady
-                            .map(
-                                (station) =>
-                                    station.repsPerBlock?.[currentIndex]
-                            )
-                            .sort((a, b) => b - a)[0];
-                        const workoutFlow = workouts.find(
-                            (workout) =>
-                                workout.workoutIds.includes(
-                                    globals?.externalWorkoutId.toString() || ""
-                                ) && workout.index === currentIndex
-                        );
-                        return (
-                            <WodRunningAthlete
-                                key={station.laneNumber} //commun
-                                currentIndex={currentIndex}
-                                dataSource={workout?.dataSource}
-                                station={station as WidescreenStation}
-                                options={workout?.options} //commun
-                                workout={workoutFlow}
-                                // repsCompleted={s.repsPerBlock?.[currentIndex] || 0} // DIFFERENT
-                                // participant={s.participant} //commun
-                                totalReps={totalReps} // DIFFERENT
-                                // currentMovement={s.currentMovement} // DIFFERENT
-                                // currentMovementReps={s.repsOfMovement} // DIFFERENT
-                                // currentMovementTotalReps={s.totalRepsOfMovement} // DIFFERENT
-                                // currentRound={s.position.round + 1} // DIFFERENT
-                                workoutType={workoutType as "amrap" | "forTime"} // DIFFERENT
-                                // laneNumber={s.laneNumber} //commun
-                                height={1 / stationsReady.length} //commun
-                                repsOfFirst={repsOfFirst} //commun
-                                // finishResult={
-                                //     s.result?.replace("|", " | ") ||
-                                //     (!s.measurements?.[currentIndex]
-                                //         ? undefined
-                                //         : s.measurements[currentIndex].method ===
-                                //           "time"
-                                //         ? toReadableTime(
-                                //               s.measurements[currentIndex].value
-                                //           )
-                                //         : `${s.measurements[
-                                //               currentIndex
-                                //           ].value?.toString()} reps|`)
-                                // }
-                                primaryColor={
-                                    competition?.primaryColor || "white"
-                                } //commun
-                                secondaryColor={
-                                    competition?.secondaryColor || "white"
-                                } //commun
-                                rank={
-                                    stationsReady
-                                        .filter(
-                                            (sR) =>
-                                                sR.category === station.category
-                                        )
-                                        .map(
-                                            (stationFiltered) =>
-                                                stationFiltered.rank[
-                                                    currentIndex
-                                                ]
-                                        )
-                                        .sort((a, b) => a - b)
-                                        .findIndex(
-                                            (rank) =>
-                                                rank ===
-                                                station.rank[currentIndex]
-                                        ) + 1
-                                } // DIFFERENT
-                            />
-                        );
-                    })}
+                {workout?.layout === "default" && (
+                    <DefaultLayout stations={stationsReady} workout={workout} />
+                )}
+
+                {/*stationsReady?.map((station) => {*/}
+                {/*    const repsOfFirst = stationsReady*/}
+                {/*        .map(*/}
+                {/*            (station) =>*/}
+                {/*                station.repsPerBlock?.[currentIndex]*/}
+                {/*        )*/}
+                {/*        .sort((a, b) => b - a)[0];*/}
+                {/*    // const workoutFlow = workouts.find(*/}
+                {/*    //     (workout) =>*/}
+                {/*    //         workout.workoutIds.includes(*/}
+                {/*    //             globals?.externalWorkoutId.toString() || ""*/}
+                {/*    //         ) && workout.index === currentIndex*/}
+                {/*    // );*/}
+
+                {/*    return null;*/}
+                {/*    // return (*/}
+                {/*    //     <WodRunningAthlete*/}
+                {/*    //         key={station.laneNumber} //commun*/}
+                {/*    //         currentIndex={currentIndex}*/}
+                {/*    //         dataSource={workout?.dataSource}*/}
+                {/*    //         station={station as WidescreenStation}*/}
+                {/*    //         options={workout?.options} //commun*/}
+                {/*    //         workout={workoutFlow}*/}
+                {/*    //         // repsCompleted={s.repsPerBlock?.[currentIndex] || 0} // DIFFERENT*/}
+                {/*    //         // participant={s.participant} //commun*/}
+                {/*    //         totalReps={totalReps} // DIFFERENT*/}
+                {/*    //         // currentMovement={s.currentMovement} // DIFFERENT*/}
+                {/*    //         // currentMovementReps={s.repsOfMovement} // DIFFERENT*/}
+                {/*    //         // currentMovementTotalReps={s.totalRepsOfMovement} // DIFFERENT*/}
+                {/*    //         // currentRound={s.position.round + 1} // DIFFERENT*/}
+                {/*    //         workoutType={workoutType as "amrap" | "forTime"} // DIFFERENT*/}
+                {/*    //         // laneNumber={s.laneNumber} //commun*/}
+                {/*    //         height={1 / stationsReady.length} //commun*/}
+                {/*    //         repsOfFirst={repsOfFirst} //commun*/}
+                {/*    //         // finishResult={*/}
+                {/*    //         //     s.result?.replace("|", " | ") ||*/}
+                {/*    //         //     (!s.measurements?.[currentIndex]*/}
+                {/*    //         //         ? undefined*/}
+                {/*    //         //         : s.measurements[currentIndex].method ===*/}
+                {/*    //         //           "time"*/}
+                {/*    //         //         ? toReadableTime(*/}
+                {/*    //         //               s.measurements[currentIndex].value*/}
+                {/*    //         //           )*/}
+                {/*    //         //         : `${s.measurements[*/}
+                {/*    //         //               currentIndex*/}
+                {/*    //         //           ].value?.toString()} reps|`)*/}
+                {/*    //         // }*/}
+                {/*    //         primaryColor={*/}
+                {/*    //             competition?.primaryColor || "white"*/}
+                {/*    //         } //commun*/}
+                {/*    //         secondaryColor={*/}
+                {/*    //             competition?.secondaryColor || "white"*/}
+                {/*    //         } //commun*/}
+                {/*    //         rank={*/}
+                {/*    //             stationsReady*/}
+                {/*    //                 .filter(*/}
+                {/*    //                     (sR) =>*/}
+                {/*    //                         sR.category === station.category*/}
+                {/*    //                 )*/}
+                {/*    //                 .map(*/}
+                {/*    //                     (stationFiltered) =>*/}
+                {/*    //                         stationFiltered.rank[*/}
+                {/*    //                             currentIndex*/}
+                {/*    //                         ]*/}
+                {/*    //                 )*/}
+                {/*    //                 .sort((a, b) => a - b)*/}
+                {/*    //                 .findIndex(*/}
+                {/*    //                     (rank) =>*/}
+                {/*    //                         rank ===*/}
+                {/*    //                         station.rank[currentIndex]*/}
+                {/*    //                 ) + 1*/}
+                {/*    //         } // DIFFERENT*/}
+                {/*    //     />*/}
+                {/*    // );*/}
+                {/*})}*/}
                 {/* {workout?.dataSource === "web" &&
                     fullStations
                         ?.sort((a, b) => a.laneNumber - b.laneNumber)

@@ -22,8 +22,8 @@ const toReadableTime = (
     // const milli = addZero(asDate.getUTCMilliseconds(), 3);
 
     return `${hours !== "00" ? hours + ":" : ""}${minutes}:${seconds}${
-        showMs ? `:${milli}` : ""
-    } `;
+        showMs ? `.${milli}` : ""
+    }`;
 };
 
 export const formatChrono = (

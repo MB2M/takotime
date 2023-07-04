@@ -14,17 +14,31 @@ type Competition = {
 
 type DataSource = "web" | "iot";
 
+interface baseWorkoutMovement {
+    reps: string[];
+    movements: string[];
+}
+
 type Workout = {
     workoutId?: string;
+    linkedWorkoutId?: string;
     layout?: string;
     duration?: number;
     dataSource: DataSource;
-    wodIndexSwitchMinute?: number;
+    wodIndexSwitchMinute: number;
     options?: WorkoutOption;
+    flow: {
+        buyIn: baseWorkoutMovement;
+        main: baseWorkoutMovement;
+        buyOut: baseWorkoutMovement;
+    };
 };
+
+type WorkoutType = "amrap" | "forTime" | "maxWeight";
 
 type WorkoutOption = {
     wodtype?: "amrap" | "forTime";
+    rounds?: number;
     title?: boolean;
 
     titlePosition?: "top" | "bottom";
@@ -48,6 +62,7 @@ type WorkoutOption = {
     viewMovement?: "none" | "flash" | "split";
     movementFlashDuration?: number;
     showRounds?: boolean;
+    columnDisplayNumber?: number;
 };
 
 type Platform = "CompetitionCorner" | "None";

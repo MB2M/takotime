@@ -1,22 +1,19 @@
 import Competition from "../models/Competition";
+import { ICompetition } from "../../types/competition";
 
 const getAll = async () => {
-    const competitions = await Competition.find().exec();
-    return competitions;
+    return await Competition.find().exec();
 };
 const get = async (id: string) => {
-    const competition = await Competition.findById(id).exec();
-    return competition;
+    return await Competition.findById(id).exec();
 };
 
 const create = async (data: ICompetition) => {
-    const competition = await Competition.create(data);
-    return competition;
+    return await Competition.create(data);
 };
 
 const update = async (id: string, data: ICompetition) => {
-    const competition = await Competition.findByIdAndUpdate(id, data).exec();
-    return competition;
+    return await Competition.findByIdAndUpdate(id, data).exec();
 };
 
 const remove = async (id: string) => {
@@ -24,12 +21,12 @@ const remove = async (id: string) => {
 };
 
 const removeAll = async () => {
-    const competitions = await Competition.remove();
-    return competitions;
+    return await Competition.remove();
 };
 
 const select = async (id: string) => {
     const competition = await Competition.findById(id).exec();
+    if (!competition) return;
     return await competition.select();
 };
 

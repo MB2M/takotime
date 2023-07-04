@@ -132,10 +132,11 @@ const BigscreenLayout = ({
                             )}
                     </Box>
                     <Grid2 container height={1}>
-                        <Grid2 lg={9} position="relative">
+                        <Grid2 lg={12} position="relative">
                             {children}
                         </Grid2>
                         <Grid2
+                            hidden
                             lg={3}
                             height={1}
                             maxHeight={1}

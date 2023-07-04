@@ -1,4 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
+import {
+    CompetitionModel,
+    ICompetition,
+    ICompetitionMethods,
+    IWorkout,
+    IWorkoutOption,
+} from "../../types/competition";
 
 const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
     wodtype: {
@@ -6,6 +13,7 @@ const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
         enum: ["amrap", "forTime"],
         default: "forTime",
     },
+    rounds: { type: Number, default: 1 },
     title: {
         type: Boolean,
         default: true,
@@ -73,10 +81,17 @@ const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
         type: Boolean,
         default: true,
     },
+    columnDisplayNumber: {
+        type: Number,
+        default: 1,
+        min: 1,
+        max: 4,
+    },
 });
 
-const workoutSchema = new mongoose.Schema<IWorkout>({
+const workoutSchema = new mongoose.Schema<IWorkout, Model<IWorkout>>({
     workoutId: { type: String, unique: true },
+    linkedWorkoutId: { type: String },
     layout: {
         type: String,
         default: "default",
@@ -92,6 +107,20 @@ const workoutSchema = new mongoose.Schema<IWorkout>({
         default: 0,
     },
     options: workoutOptionSchema,
+    flow: {
+        buyIn: {
+            movements: [String],
+            reps: [String],
+        },
+        main: {
+            movements: [String],
+            reps: [String],
+        },
+        buyOut: {
+            movements: [String],
+            reps: [String],
+        },
+    },
 });
 
 const competitionSchema = new mongoose.Schema<
@@ -129,6 +158,7 @@ const competitionSchema = new mongoose.Schema<
 });
 
 competitionSchema.methods = {
+    ...competitionSchema.methods,
     select: async function (this: CompetitionModel) {
         const competitions = await mongoose
             .model("Competition")
@@ -137,8 +167,7 @@ competitionSchema.methods = {
         competitions.forEach((competition) => {
             competition.updateOne({ selected: false }).exec();
         });
-        const competition = this.update({ selected: true }).exec();
-        return competition;
+        return this.updateOne({ selected: true }, {}, { new: true }).exec();
     },
 };
 

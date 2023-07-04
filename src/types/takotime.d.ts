@@ -24,6 +24,7 @@ interface StartOptions {
     startTime: Date;
     countdown: number;
     saveResults: boolean;
+    reset: boolean;
 }
 
 interface WodData {

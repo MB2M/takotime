@@ -63,15 +63,12 @@ export const getCCAccessToken = async () => {
 };
 
 export const postScore = async (
-    eventId: number,
-    workoutId: number,
+    eventId: string,
+    workoutId: string,
     scorePayload: ScorePost[]
 ) => {
     const accessToken = await getCCAccessToken();
-    console.log(JSON.stringify(scorePayload));
-    console.log(
-        `https://competitioncorner.net/api2/v1/results/event/${eventId}/workout/${workoutId}?forcedUpdate=true`
-    );
+
     try {
         const response = await fetch(
             `https://competitioncorner.net/api2/v1/results/event/${eventId}/workout/${workoutId}?forcedUpdate=true`,
@@ -85,8 +82,9 @@ export const postScore = async (
             }
         );
         if (response.ok) {
-            return response.json();
+            return { success: await response.json() };
         } else {
+            console.log(response);
             throw new Error(response.statusText);
         }
     } catch (err) {

@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getBackendUrl } from "../../utils/requestHost";
+import { getBackendUrl } from "../../../utils/requestHost";
 
 const BASE_URL = "https://competitioncorner.net/api2/v1";
 
@@ -8,21 +8,8 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { eventId, workoutId, payload } = req.body;
-    // try {
-    // const response = await fetch(BASE_LOGIN_URL, {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         username: process.env.CC_LOGIN,
-    //         password: process.env.CC_PASSWORD,
-    //     }),
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    // });
+    const { eventId, workoutId } = req.query;
 
-    // if (response.ok) {
-    // const { access_token: accessToken } = await response.json();
     try {
         const resp = await fetch(
             `http://${getBackendUrl(req)}/live/api/cc-token`
@@ -30,20 +17,18 @@ export default async function handler(
         const accessToken = (await resp.json()).token;
 
         const response = await fetch(
-            `${BASE_URL}/results/event/${eventId}/workout/${workoutId}?forcedUpdate=true`,
+            `${BASE_URL}/events/${eventId}/workouts/${workoutId}/submit-heats`,
             {
                 method: "POST",
                 headers: {
                     Authorization: "Bearer " + accessToken,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(payload),
+                body: req.body,
             }
         );
         if (response.ok) {
-            const json = await response.json();
-            res.status(200).json(json);
-            return;
+            return res.status(200).json({ valid: "ok" });
         } else {
             throw new Error("bad request");
         }

@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getBackendUrl } from "../../utils/requestHost";
+import { getBackendUrl } from "../../../utils/requestHost";
 
 const BASE_URL = "https://competitioncorner.net/api2/v1";
 
@@ -8,7 +8,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { eventId, workoutId, payload } = req.body;
+    const { eventId, workoutId } = req.query;
     // try {
     // const response = await fetch(BASE_LOGIN_URL, {
     //     method: "POST",
@@ -37,7 +37,7 @@ export default async function handler(
                     Authorization: "Bearer " + accessToken,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(payload),
+                body: req.body,
             }
         );
         if (response.ok) {

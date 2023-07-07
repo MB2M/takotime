@@ -177,7 +177,6 @@ export const addTimerScore = async (
 
     await Promise.all(
         scores.map(async (score, index) => {
-            console.log(score);
             if (score === 0 || !score) return;
 
             const workoutId = forTimeWorkouts[index]?.workoutId;

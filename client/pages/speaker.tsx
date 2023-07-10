@@ -1,8 +1,5 @@
 import {
     Button,
-    Divider,
-    List,
-    ListItem,
     Modal,
     Table,
     TableBody,
@@ -16,10 +13,8 @@ import { Box } from "@mui/system";
 import { useEffect, useMemo, useState } from "react";
 import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../context/liveData/livedata";
-import { logoBlanc } from "../eventConfig/mandelieu/config";
+import { logoBlanc, workouts } from "../eventConfig/mandelieu/config";
 import Image from "next/image";
-import useWorkout from "../hooks/useWorkout";
-import { workouts } from "../eventConfig/mandelieu/config";
 
 const style = {
     position: "absolute",
@@ -35,6 +30,8 @@ const Speaker = () => {
     const EPInfo = useCompetitionCornerContext();
     const [stations, setStations] = useState<any>();
     const [open, setOpen] = useState<boolean>(false);
+
+    console.log(EPInfo);
 
     const workout = useMemo(
         () =>
@@ -118,15 +115,17 @@ const Speaker = () => {
                     alignItems={"center"}
                 >
                     <Typography variant="h4">
-                        {EPInfo?.epHeat?.[0].heatName} (
-                        {EPInfo?.epHeat?.[0].division})
+                        {EPInfo?.epHeat?.[0]?.heatName} (
+                        {EPInfo?.epHeat?.[0]?.division})
                     </Typography>
                     <Typography variant="h5">
-                        {EPInfo?.epHeat?.[0].heatTime}
+                        {EPInfo?.epHeat?.[0]?.heatTime}
                     </Typography>
                 </Box>
                 <Box>
-                    <Button variant={"outlined"} onClick={handleClickWorkout}>View workout</Button>
+                    <Button variant={"outlined"} onClick={handleClickWorkout}>
+                        View workout
+                    </Button>
                 </Box>
                 <Box>
                     <TableContainer>

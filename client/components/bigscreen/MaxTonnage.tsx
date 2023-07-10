@@ -1,7 +1,5 @@
-import { Grid, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import WodTonnageRunningAthlete from "./WodTonnageRunningAthlete";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import useInterval from "../../hooks/useInterval";
 import { useCompetitionContext } from "../../context/competition";
 
@@ -10,11 +8,10 @@ function MaxTonnage({
     stations,
 }: {
     heatId: number | undefined;
-    stations: Station[];
+    stations: Array<DisplayFullStation>;
 }) {
     const [wodWeightInfo, setWodWeightInfo] = useState<WodWeightStation[]>([]);
     const competition = useCompetitionContext();
-    
 
     // const workout = useMemo(
     //     () =>

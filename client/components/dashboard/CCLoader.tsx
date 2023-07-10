@@ -1,12 +1,4 @@
-import {
-    Button,
-    InputLabel,
-    MenuItem,
-    OutlinedInput,
-    Select,
-    SelectChangeEvent,
-    TextField,
-} from "@mui/material";
+import { Button, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
 type NameIdObject = {
@@ -82,7 +74,7 @@ const CCLoader = ({
         };
 
         try {
-            const response = await fetch(
+            await fetch(
                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/loadCC`,
                 {
                     method: "POST",
@@ -147,7 +139,7 @@ const CCLoader = ({
                     >
                         {workouts.map((w, i) => (
                             <MenuItem key={i} value={w.id}>
-                                {w.name}
+                                {w.name} ({w.id})
                             </MenuItem>
                         ))}
                     </Select>

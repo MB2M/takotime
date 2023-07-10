@@ -589,8 +589,11 @@ const Event1 = ({ divisions }: Props) => {
         workoutId?: number
     ) => {
         if (!workoutId) return;
+
         const heats =
-            selectedDivisionId !== 66923
+            level === "semi"
+                ? generateSemiHeats(athletes, selectedDivisionId, level)
+                : selectedDivisionId !== 66923
                 ? generateSemiHeats(athletes, selectedDivisionId, level)
                 : generateEliteMenFinaleHeats(athletes, selectedDivisionId);
 

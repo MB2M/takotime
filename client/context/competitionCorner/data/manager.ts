@@ -47,11 +47,11 @@ export const useCompetitionCorner = (
     useEffect(() => {
         if (!eventId || !workoutId || !heatId) return;
         if (competition?.platform !== "CompetitionCorner") return;
+
         (async () => {
             try {
                 const response = await fetch(`/api/eligibleParticipant`, {
                     method: "POST",
-
                     body: JSON.stringify({
                         eventId,
                         workoutId,

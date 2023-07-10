@@ -53,7 +53,7 @@ export const LiveDataProvider = ({ children }: { children: ReactNode }) => {
     const liveData = useLiveData();
 
     return (
-        <LiveDataContext.Provider value={{ ...liveData }}>
+        <LiveDataContext.Provider value={liveData}>
             {children}
         </LiveDataContext.Provider>
     );

@@ -563,6 +563,8 @@ class Manager extends EventEmitter {
             this.sendFullConfig("server/wodConfigUpdate");
         }
 
+        this.emit("stationUpdate");
+
         return station;
     }
 

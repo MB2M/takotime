@@ -2,6 +2,7 @@ import { WebSocket, WebSocketServer } from "ws";
 import {
     addScore,
     addTimerScore,
+    getAllStationsInfo,
     getStationInfo,
     resetScores,
     saveCC,
@@ -32,8 +33,12 @@ export default class WebsocketScoringService {
         );
 
         liveApp.manager.on("startWod", async (workoutId, heatId, reset) => {
-            console.log(reset);
             if (reset) await this.onReset(workoutId, heatId);
+            this.sendStationDataToAll();
+        });
+
+        liveApp.manager.on("stationUpdate", async () => {
+            this.sendStationDataToAll();
         });
     }
 
@@ -52,13 +57,26 @@ export default class WebsocketScoringService {
         const baseLevel = topic.split("/")[0]!;
         const topLevelRegistered = this.listeners.get(baseLevel) || [];
 
-        [...registered, ...topLevelRegistered]?.forEach((client) => {
+        registered?.forEach((client) => {
             client.send(JSON.stringify({ topic, data }));
+        });
+
+        topLevelRegistered?.forEach((client) => {
+            client.send(JSON.stringify({ topic: "station", data }));
         });
     }
 
     sendStationDataToAll() {
         this.listeners.forEach(async (client, key) => {
+            if (key === "station") {
+                const stations = await getAllStationsInfo();
+                return client.forEach((client) =>
+                    client.send(
+                        JSON.stringify({ topic: "station", data: stations })
+                    )
+                );
+            }
+
             const laneNumber = key.split("/")[1];
 
             if (!laneNumber || isNaN(+laneNumber)) return;
@@ -87,6 +105,13 @@ export default class WebsocketScoringService {
     async onRegister(ws: WebSocket, data: RegisterData) {
         const current = this.listeners.get(data.topic) || new Set();
         this.listeners.set(data.topic, current?.add(ws));
+
+        if (data.topic === "station") {
+            const stations = await getAllStationsInfo();
+            return ws.send(
+                JSON.stringify({ topic: "station", data: stations })
+            );
+        }
 
         const laneNumber = data.topic.split("/")?.[1];
 
@@ -180,6 +205,5 @@ export default class WebsocketScoringService {
 
     async onReset(workoutId: string, heatId: string) {
         await resetScores(workoutId, heatId);
-        this.sendStationDataToAll();
     }
 }

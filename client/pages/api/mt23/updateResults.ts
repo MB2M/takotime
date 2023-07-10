@@ -9,17 +9,6 @@ export default async function handler(
     res: NextApiResponse
 ) {
     const { eventId, workoutId } = req.query;
-    // try {
-    // const response = await fetch(BASE_LOGIN_URL, {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //         username: process.env.CC_LOGIN,
-    //         password: process.env.CC_PASSWORD,
-    //     }),
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    // });
 
     // if (response.ok) {
     // const { access_token: accessToken } = await response.json();

@@ -164,6 +164,7 @@ export const addTimerScore = async (
     participantId?: string
 ) => {
     const workouts = await currentWorkouts();
+
     if (!workouts) return;
 
     const forTimeWorkouts = workouts
@@ -203,7 +204,7 @@ export const addTimerScore = async (
     );
 };
 
-export const viewStation = async (
+const viewStation = async (
     heatId: string,
     laneNumber: number,
     participantId?: string
@@ -224,6 +225,11 @@ export const getStationInfo = async (
     participantId ??= await getParticipantId(laneNumber);
 
     return viewStation(heatId, laneNumber, participantId);
+};
+
+export const getAllStationsInfo = async () => {
+    const heatId = await getHeatId();
+    return Station.find({ heatId }).exec();
 };
 
 const getWorkoutMaxReps = (workout: IWorkout) => {
@@ -450,7 +456,17 @@ export const saveCC = async (laneNumber: number, participantId?: string) => {
         let finalScore: { value: string | number; capped: boolean };
         let capped;
 
+        let tiebreakerScore = null;
+
         switch (true) {
+            case workout.layout === "MTSprintLadder":
+                tiebreakerScore = calculateForTimeScore(
+                    stationInfo,
+                    workoutId
+                ).value;
+                finalScore = { value: 0, capped: false };
+                break;
+
             case workout.layout === "splitMT":
                 finalScore = await calculateSplitMTScore(
                     stationInfo,
@@ -484,7 +500,7 @@ export const saveCC = async (laneNumber: number, participantId?: string) => {
             isCapped: finalScore.capped,
             id: +participantId!,
             secondaryScore: null,
-            tiebreakerScore: null,
+            tiebreakerScore: tiebreakerScore,
             scaled: false,
             didNotFinish: false,
         };

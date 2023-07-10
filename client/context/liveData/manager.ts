@@ -31,41 +31,44 @@ export const useLiveData = () => {
         reconnectAttempts: 100,
     });
 
-    const handleData = (data: WebSocketReceivedMessage) => {
-        const topic = data.topic;
-        const message = data.data;
+    const handleData = useCallback(
+        (data: WebSocketReceivedMessage) => {
+            const topic = data.topic;
+            const message = data.data;
 
-        switch (topic) {
-            case "stationUpdate":
-                setStations(message);
-                break;
-            case "brokerUpdate":
-                setBrokerClients(message);
-                break;
-            case "rank":
-                setRanks(message);
-                break;
-            case "globalsUpdate":
-                setGlobals(message);
-                break;
-            case "devicesConfig":
-                setStationDevices(message);
-                break;
-            case "devices":
-                setDevices(message);
-                break;
-            case "activeWorkoutList":
-                setWorkoutIds(message);
-                break;
-            case "loadedWorkouts":
-                setLoadedWorkouts(message);
-                break;
-            default:
-                break;
-        }
+            switch (topic) {
+                case "stationUpdate":
+                    setStations(message);
+                    break;
+                case "brokerUpdate":
+                    setBrokerClients(message);
+                    break;
+                case "rank":
+                    setRanks(message);
+                    break;
+                case "globalsUpdate":
+                    setGlobals(message);
+                    break;
+                case "devicesConfig":
+                    setStationDevices(message);
+                    break;
+                case "devices":
+                    setDevices(message);
+                    break;
+                case "activeWorkoutList":
+                    setWorkoutIds(message);
+                    break;
+                case "loadedWorkouts":
+                    setLoadedWorkouts(message);
+                    break;
+                default:
+                    break;
+            }
 
-        topicListener.get(topic)?.forEach((listener) => listener(message));
-    };
+            topicListener.get(topic)?.forEach((listener) => listener(message));
+        },
+        [topicListener]
+    );
 
     const registerListener = useCallback(
         (topic: string, cb: (data: any) => void, notifyBackend = false) => {
@@ -85,7 +88,6 @@ export const useLiveData = () => {
                     const currentListeners = t.get(topic);
                     if (!currentListeners || currentListeners.length === 0) {
                         t.delete(topic);
-                        console.log(t);
                         return t;
                     }
 
@@ -98,11 +100,6 @@ export const useLiveData = () => {
         },
         [sendMessage]
     );
-
-    // const sendMessage = (message: string) => {
-    //     console.log(ws?.current?.readyState);
-    //     ws?.current?.sendMessage(message);
-    // };
 
     return {
         workoutIds,

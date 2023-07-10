@@ -47,3 +47,10 @@ type BaseStation2 = {
     };
     times?: { rep: number; time: number; index: number }[];
 };
+
+type DisplayFullStation = Pick<
+    Station,
+    "laneNumber" | "participant" | "category" | "externalId"
+> & {
+    scores?: BaseStation2["scores"];
+};

@@ -233,7 +233,16 @@ const LaneRemote = () => {
                                             </Button>
                                         ))}
                                 </Box>
-                                {workout && layout === "default" && (
+                                {layout === "MTSprintLadder" && (
+                                    <RemoteClassic
+                                        laneNumber={+laneNumber}
+                                        sendMessage={sendMessage}
+                                        station={stationInfo}
+                                        workout={workout}
+                                        participantId={stationData.externalId.toString()}
+                                    />
+                                )}
+                                {layout === "default" && (
                                     <RemoteClassic
                                         laneNumber={+laneNumber}
                                         sendMessage={sendMessage}

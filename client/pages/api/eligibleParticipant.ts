@@ -20,9 +20,10 @@ export default async function handler(
             `${BASE_URL}/events/${eventId}/workouts/${workoutId}/eligible-participants`,
             {
                 method: "GET",
-                headers: { Authorization: "Bearer " + accessToken }, //TODO
+                headers: { Authorization: "Bearer " + accessToken },
             }
         );
+
         if (response.ok) {
             const json = await response.json();
             res.status(200).json(json);

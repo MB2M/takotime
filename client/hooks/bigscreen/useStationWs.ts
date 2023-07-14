@@ -26,18 +26,20 @@ const useStationWs = () => {
             ) || [],
         [competition?.workouts, globals?.externalWorkoutId]
     );
-    const workout = workouts
-        .sort((a, b) => a.wodIndexSwitchMinute - b.wodIndexSwitchMinute)
-        .findLast(
-            (workout) => workout.wodIndexSwitchMinute * 10000 <= plainTimer
-        );
+    const workout =
+        workouts
+            .sort((a, b) => a.wodIndexSwitchMinute - b.wodIndexSwitchMinute)
+            .findLast(
+                (workout) => workout.wodIndexSwitchMinute * 10000 <= plainTimer
+            ) || workouts[0];
 
     useEffect(() => {
         const unregister = registerListener(
             `station`,
             (data) => {
                 if (!data) return;
-                if (Array.isArray(data) && data.length > 0) {
+                console.log(data);
+                if (Array.isArray(data)) {
                     setStationInfo(data);
                 } else {
                     setStationInfo((current) => [
@@ -69,7 +71,7 @@ const useStationWs = () => {
         setFullStations(fullStations);
     }, [stationInfo, stations]);
 
-    return { fullStations, workout };
+    return { fullStations, workout, workouts };
 };
 
 export default useStationWs;

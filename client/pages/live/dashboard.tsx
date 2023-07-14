@@ -23,6 +23,7 @@ import LiveWorkoutSelector from "../../components/LiveWorkoutSelector";
 import CCLoader from "../../components/dashboard/CCLoader";
 import LocalLoader from "../../components/dashboard/LocalLoader";
 import LoadedWorkouts from "../../components/LoadedWorkouts";
+import CCLoader2 from "../../components/dashboard/CCLoader2";
 
 const toReadableTime = (timestamp: number) => {
     const asDate = new Date(timestamp);
@@ -229,7 +230,7 @@ any) => {
                         />
                         <LiveWorkoutSelector workoutIds={workoutIds} />
                         <LoadedWorkouts loadedWorkouts={loadedWorkouts} />
-                        <CCLoader />
+                        <CCLoader2 />
                         {/* <TournamentLoader></TournamentLoader> */}
                         <LocalLoader />
                     </Grid>

@@ -32,6 +32,10 @@
     font-family: "Inconsolata";
     src: url("/fonts/Inconsolata-VariableFont_wdth,wght.ttf");
 }
+@font-face {
+    font-family: "ChivoMono";
+    src: url("/fonts/ChivoMono-VariableFont_wght.ttf");
+}
 
 html,
 body {

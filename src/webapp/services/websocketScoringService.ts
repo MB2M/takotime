@@ -108,6 +108,7 @@ export default class WebsocketScoringService {
 
         if (data.topic === "station") {
             const stations = await getAllStationsInfo();
+            console.log(stations);
             return ws.send(
                 JSON.stringify({ topic: "station", data: stations })
             );

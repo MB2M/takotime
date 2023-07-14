@@ -9,7 +9,7 @@ import { useLiveDataContext } from "../context/liveData/livedata";
 import useStationReady from "../hooks/bigscreen/useStationReady";
 import useChrono from "../hooks/useChrono";
 import { useRouter } from "next/router";
-import DefaultLayout from "../components/bigscreen/Layouts/DefaultLayout";
+import DefaultLayout from "../components/bigscreen/Layouts/default/DefaultLayout";
 
 const HEADER_HEIGHT = 150;
 

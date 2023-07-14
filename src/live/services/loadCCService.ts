@@ -1,29 +1,39 @@
 import fetch from "node-fetch";
 import liveApp from "..";
-
-const CCURL = `https://competitioncorner.net/api2/v1/schedule/workout/`;
+import { getCCAccessToken } from "./CCTokenService";
 
 const loadFromCC = async (
     externalEventId: number,
     externalWorkoutId: number,
     externalHeatId: number
 ) => {
-    const url = CCURL + externalWorkoutId;
     try {
-        const response = await fetch(url);
+        const response = await fetch(
+            `https://competitioncorner.net/api2/v1/events/${externalEventId}/workouts/${externalWorkoutId}/heats`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: "Bearer " + (await getCCAccessToken()),
+                    "Content-Type": "application/json",
+                },
+            }
+        );
         const json: any = await response.json();
 
         const heat = json.find((s: any) => s.id === externalHeatId);
+
         const stations = heat.stations;
         await liveApp.manager.deleteAllStation();
-        const data = await Promise.all(
-            stations.map(async (s: any) => ({
+        const data = stations
+            .filter((s: any) => !!s)
+            .map((s: any) => ({
                 laneNumber: s.station,
-                participant: s.participantName,
-                category: s.division,
-                externalId: s.participantId,
-            }))
-        );
+                // participant: s.participantName,
+                participant: s.fullName,
+                category: s.divisionName,
+                externalId: s.id,
+            }));
+
         await liveApp.manager.stationUpdate(data, "create", false);
         await liveApp.manager.keyv.set("externalEventId", externalEventId);
         await liveApp.manager.keyv.set("externalHeatId", externalHeatId);

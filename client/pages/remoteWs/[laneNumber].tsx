@@ -242,7 +242,7 @@ const LaneRemote = () => {
                                         participantId={stationData.externalId.toString()}
                                     />
                                 )}
-                                {layout === "default" && (
+                                {layout.includes("default") && (
                                     <RemoteClassic
                                         laneNumber={+laneNumber}
                                         sendMessage={sendMessage}

@@ -36,7 +36,7 @@ type BaseStation2 = {
     scores: {
         wodWeight: {}[];
         wodClassic: { _id: string; rep: number; index: string }[];
-        endTimer: { _id: string; time: number; index: string }[];
+        endTimer: { _id: string; time: string; index: string }[];
         wodSplit: {
             _id: string;
             rep: number;

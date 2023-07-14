@@ -176,32 +176,36 @@ export const addTimerScore = async (
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);
 
-    await Promise.all(
-        scores.map(async (score, index) => {
+    const timeScores = scores
+        .map((score, index) => {
             if (score === 0 || !score) return;
 
             const workoutId = forTimeWorkouts[index]?.workoutId;
             if (workoutId) {
-                const station = await Station.findOneAndUpdate(
-                    {
-                        heatId,
-                        laneNumber,
-                        participantId,
-                    },
-                    {
-                        $addToSet: {
-                            "scores.endTimer": {
-                                time: toReadableTime(score),
-                                index: workoutId,
-                            },
-                        },
-                    },
-                    { upsert: true, new: true }
-                ).exec();
-                return station.scores;
+                return {
+                    time: toReadableTime(score),
+                    index: workoutId,
+                };
             }
         })
-    );
+        .filter((score): score is { time: string; index: string } => !!score);
+
+    console.log(timeScores);
+
+    const station = await Station.findOneAndUpdate(
+        {
+            heatId,
+            laneNumber,
+            participantId,
+        },
+        {
+            $set: {
+                "scores.endTimer": timeScores,
+            },
+        },
+        { upsert: true, new: true }
+    ).exec();
+    return station.scores;
 };
 
 const viewStation = async (
@@ -518,7 +522,7 @@ export const saveCC = async (laneNumber: number, participantId?: string) => {
 };
 
 export const resetScores = async (workoutId: string, heatId: string) => {
-    await Station.updateMany(
+    await Station.deleteMany(
         {
             heatId,
         },
@@ -529,7 +533,9 @@ export const resetScores = async (workoutId: string, heatId: string) => {
                 "scores.endTimer": [],
                 "scores.wodSplit": [],
             },
-        },
-        { upsert: true, new: true }
+        }
+        // { upsert: true, new: true }
     ).exec();
+
+    console.log(await getAllStationsInfo());
 };

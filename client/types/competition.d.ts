@@ -58,7 +58,7 @@ type WorkoutOption = {
         | "bottomLeft"
         | "bottomRight";
     chronoDirection?: "asc" | "desc";
-    rankBy?: "repsCount" | "lineNumber";
+    rankBy?: "repsCount" | "laneNumber";
     viewMovement?: "none" | "flash" | "split";
     movementFlashDuration?: number;
     showRounds?: boolean;

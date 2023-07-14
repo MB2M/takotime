@@ -36,10 +36,9 @@ const BigscreenBar = ({
         [options?.logo]
     );
 
-    
     const titles = useMemo(() => {
         if (!options?.title) return { textTop: "", textBottom: "" };
-        if (customTitle) return { textTop: customTitle, textBottom:"" };
+        if (customTitle) return { textTop: customTitle, textBottom: "" };
         switch (options?.titleType) {
             case "category":
                 return {
@@ -63,7 +62,7 @@ const BigscreenBar = ({
             default:
                 return { textTop: "", textBottom: "" };
         }
-    }, [heat, options?.titleType, options?.title,customTitle]);
+    }, [heat, options?.titleType, options?.title, customTitle]);
 
     if (!showHeader) return null;
 
@@ -75,7 +74,10 @@ const BigscreenBar = ({
             <Title {...titles} />
         ),
         options?.chrono && options?.chronoPosition?.includes(position) && (
-            <Chrono reverse={options.chronoDirection === "desc"} />
+            <Chrono
+                reverse={options.chronoDirection === "desc"}
+                fontSize={"4.5rem"}
+            />
         ),
     ];
 

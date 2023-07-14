@@ -90,7 +90,7 @@ const BigscreenLayout = ({
     }, [globals?.externalHeatId]);
 
     useEffect(() => {
-        restrievePreviousHeatWodStationInfo();
+        restrievePreviousHeatWodStationInfo().then();
     }, [restrievePreviousHeatWodStationInfo]);
 
     return (
@@ -135,54 +135,54 @@ const BigscreenLayout = ({
                         <Grid2 lg={12} position="relative">
                             {children}
                         </Grid2>
-                        <Grid2
-                            hidden
-                            lg={3}
-                            height={1}
-                            maxHeight={1}
-                            display="flex"
-                            flexDirection={"column"}
-                            alignItems="center"
-                            overflow={"hidden"}
-                            // justifyContent={"center"}
-                            sx={{ borderLeft: "1px solid gray" }}
-                            p={2}
-                        >
-                            {/* <Typography
-                                fontSize="1.35rem"
-                                lineHeight={1.1}
-                                color="white"
-                                textAlign={"center"}
-                                dangerouslySetInnerHTML={{
-                                    __html:
-                                        platformWorkout?.description ||
-                                        "no workout description",
-                                }}  
-                            /> */}
-                            {previousHeats.slice(0, 21).map((station) => (
-                                <Box
-                                    key={`${station.participant}${station.scores?.[0].repCount}`}
-                                >
-                                    <Typography
-                                        fontSize="2.2rem"
-                                        lineHeight={1.2}
-                                        color="white"
-                                        noWrap
-                                        component="div"
-                                        sx={{
-                                            ml: 2,
-                                            overflow: "hidden",
-                                            textOverflow: "ellipsis",
-                                            fontFamily: "BebasNeue",
-                                        }}
-                                        // fontSize={"2.7rem"}
-                                        // textAlign={"center"}
-                                    >
-                                        {`${station.participant}: ${station.scores?.[0].repCount} reps `}
-                                    </Typography>
-                                </Box>
-                            ))}
-                        </Grid2>
+                        {/*<Grid2*/}
+                        {/*    hidden*/}
+                        {/*    lg={3}*/}
+                        {/*    height={1}*/}
+                        {/*    maxHeight={1}*/}
+                        {/*    display="flex"*/}
+                        {/*    flexDirection={"column"}*/}
+                        {/*    alignItems="center"*/}
+                        {/*    overflow={"hidden"}*/}
+                        {/*    // justifyContent={"center"}*/}
+                        {/*    sx={{ borderLeft: "1px solid gray" }}*/}
+                        {/*    p={2}*/}
+                        {/*>*/}
+                        {/*    /!* <Typography*/}
+                        {/*        fontSize="1.35rem"*/}
+                        {/*        lineHeight={1.1}*/}
+                        {/*        color="white"*/}
+                        {/*        textAlign={"center"}*/}
+                        {/*        dangerouslySetInnerHTML={{*/}
+                        {/*            __html:*/}
+                        {/*                platformWorkout?.description ||*/}
+                        {/*                "no workout description",*/}
+                        {/*        }}  */}
+                        {/*    /> *!/*/}
+                        {/*    {previousHeats.slice(0, 21).map((station) => (*/}
+                        {/*        <Box*/}
+                        {/*            key={`${station.participant}${station.scores?.[0].repCount}`}*/}
+                        {/*        >*/}
+                        {/*            <Typography*/}
+                        {/*                fontSize="2.2rem"*/}
+                        {/*                lineHeight={1.2}*/}
+                        {/*                color="white"*/}
+                        {/*                noWrap*/}
+                        {/*                component="div"*/}
+                        {/*                sx={{*/}
+                        {/*                    ml: 2,*/}
+                        {/*                    overflow: "hidden",*/}
+                        {/*                    textOverflow: "ellipsis",*/}
+                        {/*                    fontFamily: "BebasNeue",*/}
+                        {/*                }}*/}
+                        {/*                // fontSize={"2.7rem"}*/}
+                        {/*                // textAlign={"center"}*/}
+                        {/*            >*/}
+                        {/*                {`${station.participant}: ${station.scores?.[0].repCount} reps `}*/}
+                        {/*            </Typography>*/}
+                        {/*        </Box>*/}
+                        {/*    ))}*/}
+                        {/*</Grid2>*/}
                     </Grid2>
                 </Box>
                 <Box mt={"auto"} mb={0}>

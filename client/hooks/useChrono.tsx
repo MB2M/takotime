@@ -18,7 +18,7 @@ const useChrono = (
             return null;
         }
         const diff = ts.now() - Date.parse(startTime || "");
-        setPlainTimer(diff);
+        setPlainTimer(Math.min((duration || 0) * 60000, diff));
         if (diff < 0) {
             return Math.floor(diff / 1000);
         } else {

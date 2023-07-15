@@ -1,6 +1,6 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { ReactNode, useMemo } from "react";
 import { useCompetitionContext } from "../../context/competition";
 import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../../context/liveData/livedata";
@@ -20,12 +20,12 @@ const BigscreenLayout = ({
     const competition = useCompetitionContext();
     const { heats } = useCompetitionCornerContext();
     // const CCWorkouts = useWorkouts(competition?.platform, competition?.eventId);
-    const [previousHeats, setPreviousHeats] = useState<
-        {
-            participant?: string;
-            scores?: BaseScore[];
-        }[]
-    >([]);
+    // const [previousHeats, setPreviousHeats] = useState<
+    //     {
+    //         participant?: string;
+    //         scores?: BaseScore[];
+    //     }[]
+    // >([]);
 
     const workout = useMemo(
         () =>
@@ -50,48 +50,48 @@ const BigscreenLayout = ({
         [heats, globals]
     );
 
-    const restrievePreviousHeatWodStationInfo = useCallback(async () => {
-        if (!globals?.externalHeatId) return setPreviousHeats([]);
-        const previousHeats: BaseStation[] = [];
-        for (let i = 0; i < globals.externalHeatId; i++) {
-            try {
-                const response = await fetch(
-                    `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station?heatId=${i}`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                if (response.ok) {
-                    const json = await response.json();
-                    previousHeats.push(json);
-                    // setStationsInfo(json);
-                }
-            } catch (err) {
-                console.log(err);
-                // setStationsInfo([]);
-            }
-        }
-        setPreviousHeats(
-            previousHeats
-                .flat()
-                .map((heat) => ({
-                    participant: heat.participant,
-                    scores: heat.scores,
-                }))
-                .sort(
-                    (a, b) =>
-                        (b.scores?.[0].repCount || 0) -
-                        (a.scores?.[0].repCount || 0)
-                )
-        );
-    }, [globals?.externalHeatId]);
+    // const restrievePreviousHeatWodStationInfo = useCallback(async () => {
+    //     if (!globals?.externalHeatId) return setPreviousHeats([]);
+    //     const previousHeats: BaseStation[] = [];
+    //     for (let i = 0; i < globals.externalHeatId; i++) {
+    //         try {
+    //             const response = await fetch(
+    //                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station?heatId=${i}`,
+    //                 {
+    //                     method: "GET",
+    //                     headers: {
+    //                         "Content-Type": "application/json",
+    //                     },
+    //                 }
+    //             );
+    //             if (response.ok) {
+    //                 const json = await response.json();
+    //                 previousHeats.push(json);
+    //                 // setStationsInfo(json);
+    //             }
+    //         } catch (err) {
+    //             console.log(err);
+    //             // setStationsInfo([]);
+    //         }
+    //     }
+    //     setPreviousHeats(
+    //         previousHeats
+    //             .flat()
+    //             .map((heat) => ({
+    //                 participant: heat.participant,
+    //                 scores: heat.scores,
+    //             }))
+    //             .sort(
+    //                 (a, b) =>
+    //                     (b.scores?.[0].repCount || 0) -
+    //                     (a.scores?.[0].repCount || 0)
+    //             )
+    //     );
+    // }, [globals?.externalHeatId]);
 
-    useEffect(() => {
-        restrievePreviousHeatWodStationInfo().then();
-    }, [restrievePreviousHeatWodStationInfo]);
+    // useEffect(() => {
+    //     restrievePreviousHeatWodStationInfo().then();
+    // }, [restrievePreviousHeatWodStationInfo]);
 
     return (
         <Box

@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
-import splitMTscore from "../../utils/splitMTscore";
+import { splitMTscore } from "../../utils/splitMTscore";
 
 interface Props {
     workout: Workout;

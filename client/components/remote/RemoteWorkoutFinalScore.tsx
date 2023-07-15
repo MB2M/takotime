@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import useWebappWorkout from "../../hooks/useWebappWorkout";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import splitMTscore from "../../utils/splitMTscore";
+import { splitMTscore } from "../../utils/splitMTscore";
 
 interface Props {
     workout: Workout;

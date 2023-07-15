@@ -6,10 +6,7 @@ import useChrono from "../useChrono";
 const useStationWs = () => {
     const competition = useCompetitionContext();
     const { globals, stations, registerListener } = useLiveDataContext();
-    const { timer, plainTimer } = useChrono(
-        globals?.startTime,
-        globals?.duration
-    );
+    const { plainTimer } = useChrono(globals?.startTime, globals?.duration);
 
     const [stationInfo, setStationInfo] = useState<BaseStation2[]>([]);
 
@@ -38,7 +35,6 @@ const useStationWs = () => {
             `station`,
             (data) => {
                 if (!data) return;
-                console.log(data);
                 if (Array.isArray(data)) {
                     setStationInfo(data);
                 } else {

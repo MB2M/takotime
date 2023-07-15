@@ -54,7 +54,7 @@ export default class WebsocketScoringService {
     sendToRegistered(topic: string, data: any) {
         const registered = this.listeners.get(topic) || [];
 
-        const baseLevel = topic.split("/")[0]!;
+        const baseLevel = topic?.split("/")[0]!;
         const topLevelRegistered = this.listeners.get(baseLevel) || [];
 
         registered?.forEach((client) => {

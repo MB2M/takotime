@@ -190,8 +190,6 @@ export const addTimerScore = async (
         })
         .filter((score): score is { time: string; index: string } => !!score);
 
-    console.log(timeScores);
-
     const station = await Station.findOneAndUpdate(
         {
             heatId,

@@ -25,8 +25,8 @@ const useStationWs = () => {
     );
     const workout =
         workouts
-            .sort((a, b) => a.wodIndexSwitchMinute - b.wodIndexSwitchMinute)
-            .findLast(
+            .sort((a, b) => b.wodIndexSwitchMinute - a.wodIndexSwitchMinute)
+            .find(
                 (workout) => workout.wodIndexSwitchMinute * 10000 <= plainTimer
             ) || workouts[0];
 

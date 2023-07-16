@@ -9,7 +9,7 @@ const TimerForm = ({
     chrono: string | number | null;
 }) => {
     const [duration, setDuration] = useState(1);
-    const [countdown, setCountdown] = useState(0);
+    const [countdown, setCountdown] = useState(10);
     const [saveResult, setSaveResult] = useState(true);
     const [resetOnStart, setResetOnStart] = useState(false);
 

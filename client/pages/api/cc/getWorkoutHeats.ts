@@ -10,7 +10,6 @@ export default async function handler(
 ) {
     const { eventId, workoutId } = req.query;
 
-    console.log(eventId, workoutId);
     // if (response.ok) {
     // const { access_token: accessToken } = await response.json();
     try {

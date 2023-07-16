@@ -1,42 +1,24 @@
 import {
     Button,
     Container,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
     SelectChangeEvent,
     TextField,
-    ToggleButton,
-    ToggleButtonGroup,
     Typography,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import {
-    ChangeEvent,
-    useState,
-    MouseEvent,
-    useEffect,
-    FormEvent,
-    useMemo,
-} from "react";
+import { ChangeEvent, MouseEvent, useEffect, useMemo, useState } from "react";
 import { useCompetitionContext } from "../context/competition";
 import useWorkouts from "../hooks/useCCWorkouts";
 import { useLiveDataContext } from "../context/liveData/livedata";
 import useChrono from "../hooks/useChrono";
 import { formatChrono } from "../utils/timeConverter";
 
-const BASE_COUNTDOWN_BTN = [0, 1, 3, 5, 10, 15, 20];
-
-const isNumberOrEmpty = (data: any): boolean => {
-    const regexp = /(^[0-9]+$|^$)/;
-    return regexp.test(data);
-};
-
-const Launcher = () => {
+const TimerLauncher = () => {
     const competition = useCompetitionContext();
-    const CCWorkouts = useWorkouts(competition?.platform, competition?.eventId);
-    const [selectedWorkoutId, setSelectedWorkoutId] = useState<string>("");
     const [timerSetting, setTimerSetting] = useState<TimerSetting>({
         countdown: 10,
         duration: 0,
@@ -44,16 +26,7 @@ const Launcher = () => {
     });
     const { globals } = useLiveDataContext();
     const { timer } = useChrono(globals?.startTime, globals?.duration);
-
-    const getWorkoutCCInfo = (workoutId: string) => {
-        return CCWorkouts.find(
-            (workout) => workout.id.toString() === workoutId
-        );
-    };
-
-    const handleWorkoutSelect = (event: SelectChangeEvent<string>) => {
-        setSelectedWorkoutId(event.target.value);
-    };
+    const [resetOpen, setResetOpen] = useState(false);
 
     const workout = useMemo(
         () =>
@@ -77,13 +50,6 @@ const Launcher = () => {
             }));
         };
 
-    const handleCountdownChange = (value: number) => {
-        setTimerSetting((current) => ({
-            ...current,
-            countdown: value,
-        }));
-    };
-
     useEffect(() => {
         if (workout) {
             setTimerSetting({
@@ -98,7 +64,13 @@ const Launcher = () => {
         if (!timerSetting.duration) return;
         try {
             await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=start&duration=${timerSetting.duration}&countdown=${timerSetting.countdown}`
+                `http://${
+                    process.env.NEXT_PUBLIC_LIVE_API
+                }/live/api/switchStart?action=start&duration=${
+                    timerSetting.duration
+                }&countdown=${
+                    timerSetting.countdown
+                }&save=${true}&reset=${true}`
             );
         } catch (error) {
             console.error(error);
@@ -113,14 +85,32 @@ const Launcher = () => {
         } catch (error) {
             console.error(error);
         }
+        handleCloseResetDialog();
+    };
+
+    const handleCloseResetDialog = () => {
+        setResetOpen(false);
     };
 
     return (
-        <Container sx={{ p: 2 }}>
-            <Box textAlign={"center"}>
+        <Container sx={{ p: 2, minHeight: "100vh", height: "100vh" }}>
+            <Dialog open={resetOpen}>
+                <DialogContent>
+                    <DialogContentText>Confirm Reset?</DialogContentText>
+                    <DialogActions>
+                        <Button onClick={handleReset}>Yes</Button>
+                        <Button onClick={handleCloseResetDialog}>No</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
+            <Stack
+                textAlign={"center"}
+                justifyContent={"space-around"}
+                height={1}
+            >
                 <Typography variant="h3">Wod launcher</Typography>
 
-                <Stack spacing={2}>
+                <Stack spacing={5} my={"auto"}>
                     {timer ? (
                         <h1>
                             {formatChrono(
@@ -131,7 +121,9 @@ const Launcher = () => {
                     ) : (
                         <>
                             <Box>
-                                <Typography>Countdown:</Typography>
+                                <Typography fontSize={"2rem"}>
+                                    Countdown:
+                                </Typography>
                                 <TextField
                                     variant="outlined"
                                     type={"number"}
@@ -142,7 +134,9 @@ const Launcher = () => {
                                 />
                             </Box>
                             <Box>
-                                <Typography>Duration:</Typography>
+                                <Typography fontSize={"2rem"}>
+                                    Duration:
+                                </Typography>
                                 <TextField
                                     variant="outlined"
                                     type={"number"}
@@ -174,16 +168,16 @@ const Launcher = () => {
                             <Button
                                 variant="contained"
                                 color="error"
-                                onClick={handleReset}
+                                onClick={() => setResetOpen(true)}
                             >
                                 Reset
                             </Button>
                         )}
                     </Box>
                 </Stack>
-            </Box>
+            </Stack>
         </Container>
     );
 };
 
-export default Launcher;
+export default TimerLauncher;

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import DefaultAthletes from "./DefaultAthletes";
 import { getTotalClassicReps } from "../../../../utils/scoring";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useLiveDataContext } from "../../../../context/liveData/livedata";
 
 interface Props {
     workout: Workout;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const DefaultLayout = ({ workout, stations }: Props) => {
+    const { globals } = useLiveDataContext();
     const [parent] = useAutoAnimate({
         duration: 200,
         easing: "ease-in-out",
@@ -109,6 +111,7 @@ const DefaultLayout = ({ workout, stations }: Props) => {
                             workout={workout}
                             repsOfFirst={repsOfFirst}
                             allTotalReps={allScores}
+                            wodState={globals?.state}
                         />
                     ))}
                 </Box>

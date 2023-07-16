@@ -12,6 +12,7 @@ interface Props {
     allTotalReps: (number | string)[];
     firstScore?: string;
     participantTextRows?: number;
+    wodState?: number;
 }
 
 const BG_COLOR = "#312F2F";
@@ -26,6 +27,7 @@ const DefaultAthletes = ({
     allTotalReps,
     firstScore,
     participantTextRows = 2,
+    wodState = 2,
 }: Props) => {
     const competition = useCompetitionContext();
 
@@ -179,7 +181,7 @@ const DefaultAthletes = ({
                             {endTime}
                         </Typography>
                     </Box>
-                ) : (
+                ) : wodState < 3 ? (
                     workout.options?.viewMovement !== "none" && (
                         <>
                             <Box
@@ -250,6 +252,24 @@ const DefaultAthletes = ({
                             </Box>
                         </>
                     )
+                ) : (
+                    <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                    >
+                        <Typography
+                            px={1}
+                            pt={0.5}
+                            color={"white"}
+                            fontSize={"4.5rem"}
+                            fontFamily={"bebasNeue"}
+                            borderRadius={"10px"}
+                            sx={{ textShadow: "0px 0px 15px black" }}
+                        >
+                            {repsCompleted} reps
+                        </Typography>
+                    </Box>
                 )}
             </Box>
         </Box>

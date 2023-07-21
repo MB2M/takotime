@@ -1,9 +1,9 @@
-import { Box } from "@mui/system";
-import { useEffect, useMemo, useState } from "react";
-import DefaultAthletes from "./DefaultAthletes";
-import { getTotalClassicReps } from "../../../../utils/scoring";
+import { useLiveDataContext } from "../../context/liveData/livedata";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useLiveDataContext } from "../../../../context/liveData/livedata";
+import { useEffect, useMemo, useState } from "react";
+import { getTotalClassicReps } from "../../utils/scoring";
+import { Box } from "@mui/system";
+import DefaultAthletes from "./DefaultAthletes";
 
 interface Props {
     workout: Workout;
@@ -17,16 +17,14 @@ const DefaultLayout = ({ workout, stations }: Props) => {
         easing: "ease-in-out",
         disrespectUserMotionPreference: true,
     });
-    const colNumber = workout.options?.columnDisplayNumber || 1;
-    const rowNumber = Math.ceil(stations.length / colNumber);
 
-    const [splitStations, setSplitStations] = useState<DisplayFullStation[][]>(
+    const [splitStations, setSplitStations] = useState<DisplayFullStation[]>(
         []
     );
 
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
-        switch (workout.options?.rankBy) {
+        switch (workout?.options?.rankBy) {
             case "laneNumber":
                 sortedStations = stations.sort(
                     (a, b) => a.laneNumber - b.laneNumber
@@ -46,21 +44,7 @@ const DefaultLayout = ({ workout, stations }: Props) => {
                     });
                 break;
         }
-        setSplitStations(
-            sortedStations.reduce<DisplayFullStation[][]>(
-                (resultArray, item, index) => {
-                    const chunkIndex = Math.floor(index / rowNumber);
-
-                    if (!resultArray[chunkIndex]) {
-                        resultArray[chunkIndex] = [];
-                    }
-                    resultArray[chunkIndex].push(item);
-
-                    return resultArray;
-                },
-                []
-            )
-        );
+        setSplitStations(sortedStations);
     }, [stations, workout]);
 
     const allScores = useMemo(() => {
@@ -83,42 +67,27 @@ const DefaultLayout = ({ workout, stations }: Props) => {
         return scores;
     }, [splitStations]);
 
-    // const repsOfFirst = allScores.filter(
-    //     (score): score is number => typeof score === "number"
-    // )[0];
-
-    const repsOfFirst = stations.map((station) =>
-        getTotalClassicReps(station)
+    const repsOfFirst = allScores.filter(
+        (score): score is number => typeof score === "number"
     )[0];
 
     return (
         <Box
             display={"flex"}
-            justifyContent={"space-between"}
-            height={1}
-            gap={1}
+            justifyContent={"flex-start"}
+            width={1}
+            gap={2}
+            ref={parent}
         >
-            {splitStations.map((stations, colIndex) => (
-                <Box
-                    key={colIndex}
-                    width={1}
-                    display={"flex"}
-                    flexDirection={"column"}
-                    gap={1}
-                    ref={parent}
-                >
-                    {stations.map((station) => (
-                        <DefaultAthletes
-                            key={station.laneNumber}
-                            station={station}
-                            height={1 / rowNumber}
-                            workout={workout}
-                            repsOfFirst={repsOfFirst}
-                            allTotalReps={allScores}
-                            wodState={globals?.state}
-                        />
-                    ))}
-                </Box>
+            {splitStations.slice(0, 6).map((station) => (
+                <DefaultAthletes
+                    key={station.laneNumber}
+                    station={station}
+                    workout={workout}
+                    repsOfFirst={repsOfFirst}
+                    allTotalReps={allScores}
+                    wodState={globals?.state}
+                />
             ))}
         </Box>
     );

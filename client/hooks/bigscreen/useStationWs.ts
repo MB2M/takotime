@@ -14,16 +14,26 @@ const useStationWs = () => {
         []
     );
 
+    const categories = [
+        ...new Set(stations.map((station) => station.category)),
+    ];
+
     const workouts = useMemo(
         () =>
             competition?.workouts?.filter(
                 (workout) =>
                     workout.linkedWorkoutId ===
-                    globals?.externalWorkoutId.toString()
+                        globals?.externalWorkoutId.toString() &&
+                    (!workout.categories ||
+                        workout.categories.length === 0 ||
+                        workout.categories.some((cat) =>
+                            categories.includes(cat)
+                        ))
             ) || [],
-        [competition?.workouts, globals?.externalWorkoutId]
+        [competition?.workouts, globals?.externalWorkoutId, categories]
     );
-    const workout =
+
+    const activeWorkout =
         workouts
             .sort((a, b) => b.wodIndexSwitchMinute - a.wodIndexSwitchMinute)
             .find(
@@ -67,7 +77,7 @@ const useStationWs = () => {
         setFullStations(fullStations);
     }, [stationInfo, stations]);
 
-    return { fullStations, workout, workouts };
+    return { fullStations, activeWorkout, workouts, categories };
 };
 
 export default useStationWs;

@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Stack } from "@mui/system";
 import { useMemo } from "react";
 import { useCompetitionContext } from "../../../../context/competition";
 import {
@@ -22,7 +22,7 @@ interface Props {
 const BG_COLOR = "#312F2F";
 const BAR_COLOR = "#BBB3BB";
 
-const SplitMTAthlete = ({
+const SplitMTAthlete2 = ({
     station,
     height,
     workout,
@@ -100,110 +100,117 @@ const SplitMTAthlete = ({
             }}
         >
             <Box
-                width={0.05}
-                p={1}
+                // width={0.05}
+                px={1}
                 borderRight={`2px solid ${BG_COLOR}`}
                 position={"relative"}
                 display={"flex"}
                 alignItems={"center"}
                 justifyContent={"center"}
             >
-                <Typography fontSize={50} fontFamily={"bebasNeue"}>
+                <Typography fontSize={40} fontFamily={"bebasNeue"}>
                     {rank}
                 </Typography>
             </Box>
-            <Box
-                width={1}
-                display={"flex"}
-                flexDirection={"column"}
-                justifyContent={"space-around"}
-            >
-                <Box display={"flex"} width={1} height={0.5}>
-                    <Box
-                        p={1}
-                        position={"relative"}
-                        display={"flex"}
-                        gap={1.3}
-                        alignItems={"center"}
+
+            <Box display={"flex"} width={1} alignItems={"center"}>
+                <Box
+                    px={1}
+                    position={"relative"}
+                    display={"flex"}
+                    gap={1.3}
+                    alignItems={"center"}
+                    minWidth={0.45}
+                    maxWidth={0.45}
+                >
+                    <Typography
+                        lineHeight={"2.5rem"}
+                        maxHeight={"6rem"}
+                        fontSize={"2rem"}
+                        fontFamily={"bebasNeue"}
                     >
-                        <Typography
-                            lineHeight={"2.5rem"}
-                            maxHeight={"6rem"}
-                            fontSize={"2rem"}
-                            fontFamily={"bebasNeue"}
-                        >
-                            #{station.laneNumber}
-                        </Typography>
+                        #{station.laneNumber}
+                    </Typography>
+                    <Typography
+                        lineHeight={0.9}
+                        maxHeight={"6rem"}
+                        fontSize={50}
+                        fontFamily={"bebasNeue"}
+                        textOverflow={"ellipsis"}
+                        overflow={"hidden"}
+                        noWrap
+                    >
+                        {station.participant.slice(0, 40)}
+                    </Typography>
+                    {!rest && (
                         <Typography
                             lineHeight={0.9}
                             maxHeight={"6rem"}
-                            fontSize={50}
+                            fontSize={25}
                             fontFamily={"bebasNeue"}
-                            textOverflow={"ellipsis"}
-                            overflow={"hidden"}
-                            noWrap
+                            sx={{ textShadow: "0px 0px 15px black" }}
                         >
-                            {station.participant.slice(0, 40)}
+                            {!!currentRoundReps?.get(0) &&
+                                currentRoundReps?.get(4) ===
+                                    currentRoundReps?.get(0) &&
+                                "✅"}
                         </Typography>
-                        {!rest && (
-                            <Typography
-                                lineHeight={0.9}
-                                maxHeight={"6rem"}
-                                fontSize={25}
-                                fontFamily={"bebasNeue"}
-                                sx={{ textShadow: "0px 0px 15px black" }}
-                            >
-                                {!!currentRoundReps?.get(0) &&
-                                    currentRoundReps?.get(4) ===
-                                        currentRoundReps?.get(0) &&
-                                    "✅"}
-                            </Typography>
-                        )}
-                    </Box>
-                    <Box ml={"auto"} px={2} py={0.8}>
-                        <Typography
-                            p={1}
-                            color={"white"}
-                            fontSize={"3rem"}
-                            lineHeight={"2.4rem"}
-                            fontFamily={"bebasNeue"}
-                            borderRadius={"10px"}
-                            sx={{ backgroundColor: BG_COLOR }}
-                        >
-                            {repsCompleted}
-                        </Typography>
-                    </Box>
+                    )}
                 </Box>
                 <Box
                     width={1}
                     display={"flex"}
                     justifyContent={"space-between"}
-                    px={8}
+                    alignItems={"center"}
                 >
                     {rest
                         ? [0, 1, 2].map((round) => (
                               <Box
                                   display={"flex"}
-                                  alignItems={"baseline"}
-                                  width={0.3}
+                                  width={0.33}
                                   ref={parent}
-                                  my={-2}
+                                  // my={-2}
                               >
                                   {!!scoreOfRounds[round] && (
-                                      <>
-                                          <Typography
-                                              lineHeight={1}
-                                              px={1}
-                                              color={"black"}
-                                              fontSize={"2.5rem"}
-                                              fontFamily={"bebasNeue"}
-                                              // sx={{ textShadow: "0px 0px 15px black" }}
+                                      <Box
+                                          display={"flex"}
+                                          alignItems={"center"}
+                                      >
+                                          <Stack
+                                              alignItems={"center"}
+                                              position={"relative"}
                                           >
-                                              R{round + 1}:
-                                          </Typography>
+                                              <Typography
+                                                  lineHeight={1}
+                                                  px={1}
+                                                  color={"black"}
+                                                  fontSize={"2.5rem"}
+                                                  fontFamily={"bebasNeue"}
+                                                  position={"relative"}
+                                                  // sx={{ textShadow: "0px 0px 15px black" }}
+                                              >
+                                                  R{round + 1}:
+                                              </Typography>
+                                              <Typography
+                                                  position={"absolute"}
+                                                  top={-12}
+                                                  left={-5}
+                                                  fontSize={15}
+                                                  fontFamily={"bebasNeue"}
+                                                  sx={{
+                                                      textShadow:
+                                                          "0px 0px 15px black",
+                                                  }}
+                                                  my={"auto"}
+                                              >
+                                                  {allRoundSuccess[round]
+                                                      ? "✅"
+                                                      : "❌"}
+                                              </Typography>
+                                          </Stack>
                                           <Typography
                                               lineHeight={1}
-                                              px={1}
+                                              px={0.7}
                                               color={"white"}
                                               fontSize={"3.5rem"}
                                               fontFamily={"bebasNeue"}
@@ -214,21 +221,7 @@ const SplitMTAthlete = ({
                                           >
                                               {scoreOfRounds[round]}
                                           </Typography>
-
-                                          <Typography
-                                              fontSize={25}
-                                              fontFamily={"bebasNeue"}
-                                              sx={{
-                                                  textShadow:
-                                                      "0px 0px 15px black",
-                                              }}
-                                              my={"auto"}
-                                          >
-                                              {allRoundSuccess[round]
-                                                  ? "✅"
-                                                  : "❌"}
-                                          </Typography>
-                                      </>
+                                      </Box>
                                   )}
                               </Box>
                           ))
@@ -243,7 +236,6 @@ const SplitMTAthlete = ({
                                       <>
                                           <Typography
                                               lineHeight={1}
-                                              px={1}
                                               color={"black"}
                                               fontSize={"2.5rem"}
                                               fontFamily={"bebasNeue"}
@@ -269,9 +261,22 @@ const SplitMTAthlete = ({
                               </Box>
                           ))}
                 </Box>
+                <Box ml={"auto"} px={2} py={0.8}>
+                    <Typography
+                        p={1}
+                        color={"white"}
+                        fontSize={"3rem"}
+                        lineHeight={"2.4rem"}
+                        fontFamily={"bebasNeue"}
+                        borderRadius={"10px"}
+                        sx={{ backgroundColor: BG_COLOR }}
+                    >
+                        {repsCompleted}
+                    </Typography>
+                </Box>
             </Box>
         </Box>
     );
 };
 
-export default SplitMTAthlete;
+export default SplitMTAthlete2;

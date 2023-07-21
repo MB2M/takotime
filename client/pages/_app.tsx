@@ -10,6 +10,7 @@ import { LiveDataProvider } from "../context/liveData/livedata";
 import { CompetitionCornerProvider } from "../context/competitionCorner/data/competitionCorner";
 import CompetitionProvider from "../context/competition/provider";
 import Head from "next/head";
+import MuiThemeProvider from "../context/MuiThemeProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
     React.useEffect(() => {
@@ -31,15 +32,18 @@ function MyApp({ Component, pageProps }: AppProps) {
             </LiveDataProvider>
         );
     }
+
     return (
         <LiveDataProvider>
             <CompetitionProvider>
                 <CompetitionCornerProvider>
-                    <Head>
-                        <title>Takotime App</title>
-                        {/* <link rel="icon" href="/favicon.ico" /> */}
-                    </Head>
-                    <Component {...pageProps} />
+                    <MuiThemeProvider>
+                        <Head>
+                            <title>Takotime App</title>
+                            {/* <link rel="icon" href="/favicon.ico" /> */}
+                        </Head>
+                        <Component {...pageProps} />
+                    </MuiThemeProvider>
                 </CompetitionCornerProvider>
             </CompetitionProvider>
         </LiveDataProvider>

@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import useWebappWorkout from "../../hooks/useWebappWorkout";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Props {
     workout: Workout;
@@ -8,6 +8,7 @@ interface Props {
     laneNumber: number;
     station?: BaseStation2 | null;
     participantId: string;
+    category: string;
 }
 
 const RemoteClassic = ({
@@ -16,8 +17,11 @@ const RemoteClassic = ({
     laneNumber,
     station,
     participantId,
+    category,
 }: Props) => {
     const selectedWorkoutId = workout.workoutId;
+    const [multiplier, setMultiplier] = useState(1);
+
     const handleRepsClick = (value: number) => () => {
         sendMessage(
             JSON.stringify({
@@ -27,6 +31,7 @@ const RemoteClassic = ({
                     value: value,
                     wodIndex: selectedWorkoutId,
                     participantId,
+                    category,
                 },
             })
         );
@@ -54,6 +59,36 @@ const RemoteClassic = ({
         wodType: workoutType,
     } = useWebappWorkout(workout, repsCompleted);
 
+    // const showMultiplier = [
+    //     "DU",
+    //     "DOUBLE UNDERS",
+    //     "ROW",
+    //     "ROWS",
+    //     "CAL",
+    //     "ERG",
+    //     "ASSAULT",
+    // ].some((text) => currentMovement.toUpperCase().includes(text));
+
+    const showMultiplier = currentMovementTotalReps > 50;
+
+    const handleMutliplierClick = (value: number) => () => {
+        setMultiplier(value);
+    };
+
+    const upMultiplier = Math.max(
+        Math.min(multiplier, currentMovementTotalReps - currentMovementReps),
+        1
+    );
+
+    const downMultiplier = Math.max(
+        Math.min(multiplier, currentMovementReps),
+        1
+    );
+
+    useEffect(() => {
+        if (!showMultiplier) setMultiplier(1);
+    }, [showMultiplier]);
+
     return (
         <>
             <Box my={"auto"}>
@@ -80,31 +115,95 @@ const RemoteClassic = ({
                     {`/ ${currentMovementTotalReps} ${currentMovement}`}
                 </Typography>
             </Box>
-            <Box display="flex" justifyContent={"center"} mt={"auto"}>
-                <Stack gap={5} alignItems={"center"}>
-                    <Button
-                        variant={"contained"}
-                        color="success"
-                        sx={{
-                            height: "60vw",
-                            width: "60vw",
-                            fontSize: "80px",
-                            borderRadius: "50%",
-                        }}
-                        onClick={handleRepsClick(1)}
+            {/*<Box display="flex" justifyContent={"center"} mt={"auto"}>*/}
+            <Stack gap={5} alignItems={"center"} pb={5}>
+                <Button
+                    variant={"contained"}
+                    color="primary"
+                    sx={{
+                        height: "60vw",
+                        width: "60vw",
+                        fontSize: "70px",
+                        borderRadius: "50%",
+                    }}
+                    onClick={handleRepsClick(upMultiplier)}
+                >
+                    + {upMultiplier !== 1 && upMultiplier}
+                </Button>
+                <Button
+                    variant={"contained"}
+                    color="secondary"
+                    sx={{ width: "70vw", fontSize: "20px" }}
+                    onClick={handleRepsClick(-downMultiplier)}
+                >
+                    - {downMultiplier !== 1 && downMultiplier}
+                </Button>
+            </Stack>
+            {/*</Box>*/}
+            {showMultiplier && (
+                <Paper
+                    sx={{
+                        position: "fixed",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                    }}
+                    elevation={12}
+                >
+                    <Box
+                        overflow={"hidden"}
+                        width={1}
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                        boxShadow={"0px 1px 1px rgba(0, 0, 0,)"}
                     >
-                        +
-                    </Button>
-                    <Button
-                        variant={"contained"}
-                        color="error"
-                        sx={{ width: "70vw", fontSize: "20px" }}
-                        onClick={handleRepsClick(-1)}
-                    >
-                        -
-                    </Button>
-                </Stack>
-            </Box>
+                        <Button
+                            variant={
+                                multiplier === 1 ? "contained" : "outlined"
+                            }
+                            sx={{
+                                width: "100%",
+                                border: "none",
+                                borderRadius: 0,
+                                fontSize: "1rem",
+                            }}
+                            onClick={handleMutliplierClick(1)}
+                        >
+                            x1
+                        </Button>
+                        <Button
+                            variant={
+                                multiplier === 10 ? "contained" : "outlined"
+                            }
+                            sx={{
+                                width: "100%",
+                                border: "none",
+                                borderRadius: 0,
+                                fontSize: "1rem",
+                            }}
+                            onClick={handleMutliplierClick(10)}
+                        >
+                            x10
+                        </Button>
+                        <Button
+                            variant={
+                                multiplier === 50 ? "contained" : "outlined"
+                            }
+                            sx={{
+                                width: "100%",
+                                // backgroundColor:
+                                //     multiplier === 50 ? "gray" : "lightgray",
+                                border: "none",
+                                borderRadius: 0,
+                                fontSize: "1rem",
+                            }}
+                            onClick={handleMutliplierClick(50)}
+                        >
+                            x50
+                        </Button>
+                    </Box>
+                </Paper>
+            )}
         </>
     );
 };

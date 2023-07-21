@@ -34,6 +34,7 @@ interface baseWorkoutMovement {
 interface IWorkout extends Subdocument {
     workoutId: string;
     linkedWorkoutId: string;
+    categories: string[];
     layout: string;
     duration: number;
     dataSource?: "web" | "iot";

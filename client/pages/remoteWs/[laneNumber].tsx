@@ -10,7 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import RemoteWeight from "../../components/remote/RemoteWeight";
 import { useCompetitionContext } from "../../context/competition";
@@ -36,21 +36,33 @@ const LaneRemote = () => {
     }>({ message: "", severity: "error" });
     const [panelOpen, setPanelOpen] = useState(false);
 
+    const laneNumber = router.query.laneNumber as string;
+    const stationData = useMemo(() => {
+        return stations.find(
+            (station) => station.laneNumber === Number(laneNumber)
+        );
+    }, [laneNumber, stations]);
+
+    const category = stationData?.category || "";
+
     const workouts = useMemo(
         () =>
             competition?.workouts?.filter(
                 (workout) =>
                     workout.linkedWorkoutId ===
-                    globals?.externalWorkoutId.toString()
+                        globals?.externalWorkoutId.toString() &&
+                    (!workout.categories ||
+                        workout.categories.length === 0 ||
+                        workout.categories.includes(category))
             ) || [],
-        [competition?.workouts, globals?.externalWorkoutId]
+        [competition?.workouts, globals?.externalWorkoutId, category]
     );
 
     const [selectedWorkoutId, setSelectedWorkoutId] = useState<string>(
         () => workouts[0]?.workoutId || ""
     );
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!workouts[0]?.workoutId) return;
         setSelectedWorkoutId(workouts[0].workoutId);
     }, [workouts[0]?.workoutId]);
@@ -60,9 +72,9 @@ const LaneRemote = () => {
         [selectedWorkoutId, workouts]
     );
 
-    const layout = workout?.layout;
+    console.log(workout);
 
-    const laneNumber = router.query.laneNumber as string;
+    const layout = workout?.layout;
 
     useEffect(() => {
         if (!laneNumber) return;
@@ -92,12 +104,6 @@ const LaneRemote = () => {
     }, [laneNumber]);
 
     const wodCount = workouts.length;
-
-    const stationData = useMemo(() => {
-        return stations.find(
-            (station) => station.laneNumber === Number(laneNumber)
-        );
-    }, [laneNumber, stations]);
 
     const handleWorkoutSelect = (id?: string) => {
         if (!id) return;
@@ -240,6 +246,7 @@ const LaneRemote = () => {
                                         station={stationInfo}
                                         workout={workout}
                                         participantId={stationData.externalId.toString()}
+                                        category={category}
                                     />
                                 )}
                                 {layout.includes("default") && (
@@ -249,6 +256,7 @@ const LaneRemote = () => {
                                         station={stationInfo}
                                         workout={workout}
                                         participantId={stationData.externalId.toString()}
+                                        category={category}
                                     />
                                 )}
                                 {workout && layout.includes("split") && (
@@ -258,6 +266,7 @@ const LaneRemote = () => {
                                         station={stationInfo}
                                         workout={workout}
                                         participantId={stationData.externalId.toString()}
+                                        category={category}
                                     />
                                 )}
                                 {layout === "maxWeight" && (
@@ -265,6 +274,7 @@ const LaneRemote = () => {
                                         heatId={globals?.externalHeatId}
                                         laneNumber={laneNumber as string}
                                         numberOfPartner={2}
+                                        category={category}
                                     />
                                 )}
                             </AccordionDetails>

@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { splitMTscore } from "../../utils/splitMTscore";
+import { Stack } from "@mui/system";
 
 interface Props {
     workout: Workout;
@@ -8,6 +9,7 @@ interface Props {
     laneNumber: number;
     station?: BaseStation2 | null;
     participantId: string;
+    category: string;
 }
 
 const RemoteSplit = ({
@@ -16,6 +18,7 @@ const RemoteSplit = ({
     laneNumber,
     station,
     participantId,
+    category,
 }: Props) => {
     const selectedWorkoutId = workout.workoutId;
     const rounds = workout.options?.rounds || 1;
@@ -32,14 +35,15 @@ const RemoteSplit = ({
                     participantId,
                     movementIndex,
                     round: selectedRoundIndex,
+                    category,
                 },
             })
         );
     };
 
     const roundScore = useMemo(() => {
-        switch (workout.layout) {
-            case "splitMT":
+        switch (true) {
+            case workout.layout?.includes("splitMT"):
                 return splitMTscore(
                     station?.scores.wodSplit.filter(
                         (rep) =>
@@ -84,14 +88,7 @@ const RemoteSplit = ({
 
     return (
         <>
-            <Typography
-                textAlign="center"
-                fontSize={"4.5rem"}
-                fontFamily={"CantoraOne"}
-            >
-                {roundScore}
-            </Typography>
-            <Box>
+            <Box display={"flex"} justifyContent={"space-around"}>
                 {rounds > 1 &&
                     Array.from({ length: rounds }).map((_, index) => (
                         <Button
@@ -107,57 +104,86 @@ const RemoteSplit = ({
                         </Button>
                     ))}
             </Box>
-            <Box
-                display={"flex"}
-                flexDirection={"column"}
-                gap={1}
+            <Typography
+                textAlign="center"
+                fontSize={"4.5rem"}
+                fontFamily={"CantoraOne"}
+            >
+                {roundScore}
+            </Typography>
+            <Stack
+                gap={2}
                 justifyContent={"center"}
                 mt={"auto"}
+                alignItems={"center"}
             >
                 {movements.map((movement, index) => (
                     <Box
                         key={index}
                         display={"flex"}
-                        gap={2}
-                        alignItems={"center"}
-                        justifyContent={"center"}
+                        justifyContent={"space-between"}
+                        borderRadius={50}
+                        overflow={"hidden"}
+                        width={0.95}
                     >
-                        <Button
-                            onClick={handleRepsClick(-1, index)}
-                            variant="contained"
-                            color="primary"
-                            sx={{
-                                width: "10px",
-                                height: "30px",
-                                borderRadius: "5px",
-                                backgroundColor: "white",
-                                color: "black",
-                                fontWeight: "bold",
-                            }}
+                        <Box display={"flex"}>
+                            <Button
+                                onClick={handleRepsClick(-1, index)}
+                                variant="contained"
+                                color="secondary"
+                                sx={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    borderRadius: 0,
+                                    border: "none",
+                                    fontSize: "1.5rem",
+                                }}
+                            >
+                                -
+                            </Button>
+                        </Box>
+                        <Box
+                            display={"flex"}
+                            justifyContent={"space-between"}
+                            width={1}
+                            alignItems={"center"}
+                            p={1}
+                            borderTop={"1px solid #ccc"}
+                            borderBottom={"1px solid #ccc"}
                         >
-                            -
-                        </Button>
-                        <Typography textAlign="center">
-                            {repsCompleted?.get(index)} {movement}
-                        </Typography>
+                            <Typography
+                                textAlign="center"
+                                width={0.2}
+                                fontFamily={"BebasNeue"}
+                                fontSize={"1.4rem"}
+                            >
+                                {repsCompleted?.get(index) || 0}
+                            </Typography>
+                            <Typography
+                                textAlign="start"
+                                fontFamily={"BebasNeue"}
+                                fontSize={"1.4rem"}
+                                flexGrow={1}
+                            >
+                                {movement}
+                            </Typography>
+                        </Box>
                         <Button
                             onClick={handleRepsClick(1, index)}
-                            variant="contained"
-                            color="primary"
+                            variant={"contained"}
                             sx={{
-                                width: "10%",
-                                height: "10%",
-                                borderRadius: "5px",
-                                backgroundColor: "white",
-                                color: "black",
+                                color: "white",
                                 fontWeight: "bold",
+                                borderRadius: 0,
+                                border: "none",
+                                fontSize: "1.5rem",
                             }}
                         >
                             +
                         </Button>
                     </Box>
                 ))}
-            </Box>
+            </Stack>
         </>
     );
 };

@@ -92,6 +92,7 @@ const workoutOptionSchema = new mongoose.Schema<IWorkoutOption>({
 const workoutSchema = new mongoose.Schema<IWorkout, Model<IWorkout>>({
     workoutId: { type: String, unique: true },
     linkedWorkoutId: { type: String },
+    categories: [String],
     layout: {
         type: String,
         default: "default",

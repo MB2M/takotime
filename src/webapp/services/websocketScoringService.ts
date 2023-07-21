@@ -108,7 +108,6 @@ export default class WebsocketScoringService {
 
         if (data.topic === "station") {
             const stations = await getAllStationsInfo();
-            console.log(stations);
             return ws.send(
                 JSON.stringify({ topic: "station", data: stations })
             );
@@ -142,12 +141,14 @@ export default class WebsocketScoringService {
         const participantId = data.participantId;
         const movementIndex = data.movementIndex;
         const round = data.round;
+        const category = data.category;
 
         try {
             const newRep = await addScore(value, index, laneNumber, undefined, {
                 participantId,
                 movementIndex,
                 round,
+                category,
             });
 
             if (newRep) this.sendToRegistered(`station/${laneNumber}`, newRep);
@@ -185,7 +186,15 @@ export default class WebsocketScoringService {
         const laneNumber = data.laneNumber;
 
         if (!laneNumber) return;
-        const { error, success } = await saveCC(laneNumber);
+        const station = (await liveApp.manager.getAllStations()).find(
+            (station) => station.laneNumber === +laneNumber
+        );
+
+        const { error, success } = await saveCC(
+            laneNumber,
+            undefined,
+            station?.category
+        );
 
         if (error)
             ws.send(

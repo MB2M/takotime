@@ -131,6 +131,12 @@ const WorkoutCard = ({
         handleUpdateWorkout({ duration: Number(event.target.value) });
     };
 
+    const handleCategoriesChange = (e: ChangeEvent<HTMLInputElement>) => {
+        handleUpdateWorkout({
+            categories: e.target.value.split(","),
+        });
+    };
+
     const handleRepsChange = (e: ChangeEvent<HTMLInputElement>) => {
         handleUpdateWorkout({
             flow: {
@@ -382,6 +388,15 @@ const WorkoutCard = ({
                                     size="small"
                                     value={workout.duration}
                                     onChange={handleDurationChange}
+                                    fullWidth
+                                />
+                            </Box>
+                            <Box>
+                                Categories
+                                <TextField
+                                    size="small"
+                                    value={workout.categories?.join(",")}
+                                    onChange={handleCategoriesChange}
                                     fullWidth
                                 />
                             </Box>

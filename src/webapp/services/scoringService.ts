@@ -41,11 +41,12 @@ export const addScore = async (
         time?: number;
         movementIndex?: number;
         round?: number;
+        category?: string;
     } = {}
 ) => {
-    const workout = await getWorkout(workoutId);
+    let { participantId, movementIndex, round, category } = options;
+    const workout = await getWorkout(workoutId, category);
     if (!workout) return;
-    let { participantId, movementIndex, round } = options;
 
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);
@@ -65,11 +66,13 @@ export const addScore = async (
                 round,
                 {
                     participantId,
+                    category,
                 }
             );
 
         default:
             return await addClassicScore(score, workoutId, laneNumber, heatId, {
+                category,
                 participantId,
             });
     }
@@ -84,9 +87,10 @@ export const addClassicScore = async (
         participantId?: string;
         time?: number;
         movementIndex?: number;
+        category?: string;
     } = {}
 ) => {
-    let { participantId } = options;
+    let { participantId, category } = options;
 
     if (
         !(await passScoreOverflow(
@@ -94,7 +98,8 @@ export const addClassicScore = async (
             heatId,
             laneNumber,
             score,
-            "wodClassic"
+            "wodClassic",
+            category
         ))
     )
         return;
@@ -120,9 +125,10 @@ export const addSplitScore = async (
     options: {
         participantId?: string;
         time?: number;
+        category?: string;
     } = {}
 ) => {
-    let { participantId } = options;
+    let { participantId, category } = options;
 
     if (
         !(await passScoreOverflow(
@@ -131,6 +137,7 @@ export const addSplitScore = async (
             laneNumber,
             score,
             "wodSplit",
+            category,
             movementIndex,
             round
         ))
@@ -258,14 +265,21 @@ const getWorkoutMaxRepsOfMovement = (
     return movements[movementIndex];
 };
 
-const getWorkout = async (workoutId: string): Promise<IWorkout | undefined> => {
+const getWorkout = async (
+    workoutId: string,
+    category?: string
+): Promise<IWorkout | undefined> => {
     const workouts = (
         await Competition.findOne({
             selected: true,
         }).exec()
     )?.workouts;
     if (!workouts) return;
-    return workouts.find((w) => w.workoutId === workoutId);
+    return workouts.find(
+        (w) =>
+            w.workoutId === workoutId &&
+            (category ? w.categories.includes(category) : true)
+    );
 };
 
 const passScoreOverflow = async (
@@ -274,10 +288,11 @@ const passScoreOverflow = async (
     laneNumber: number,
     addedValue: number,
     scoreType: "wodClassic" | "wodSplit",
+    category?: string,
     movementIndex?: number,
     round?: number
 ) => {
-    const workout = await getWorkout(workoutId);
+    const workout = await getWorkout(workoutId, category);
     if (!workout) return false;
 
     let totalReps = 0;
@@ -394,7 +409,8 @@ const calculateSplitScore = (stationInfo: IBaseStation2, workoutId: string) => {
 
 const calculateSplitMTScore = async (
     stationInfo: IBaseStation2,
-    workoutId: string
+    workoutId: string,
+    category?: string
 ) => {
     const scores = stationInfo?.scores.wodSplit;
 
@@ -416,9 +432,9 @@ const calculateSplitMTScore = async (
 
     const scoreByRound = [0, 1, 2].map((id) => getRoundScore(id));
 
-    const baseScore = (await getWorkout(workoutId))?.flow.main.reps.map(
-        (rep) => +rep
-    );
+    const baseScore = (
+        await getWorkout(workoutId, category)
+    )?.flow.main.reps.map((rep) => +rep);
 
     if (!baseScore) return { value: "0", capped: false };
 
@@ -439,15 +455,25 @@ const calculateSplitMTScore = async (
     return { value: score.toString(), capped: false };
 };
 
-export const saveCC = async (laneNumber: number, participantId?: string) => {
+export const saveCC = async (
+    laneNumber: number,
+    participantId?: string,
+    category?: string
+) => {
     participantId ??= await getParticipantId(laneNumber);
     if (!participantId) return { error: "Missing participant id" };
 
     const stationInfo = await getStationInfo(laneNumber);
     if (!stationInfo) return { error: "No participant loaded at this lane" };
 
-    const workouts = await currentWorkouts();
+    console.log(category);
+
+    const workouts = (await currentWorkouts())?.filter((workout) =>
+        category ? workout.categories.includes(category) : true
+    );
     if (!workouts) return { error: "No workout loaded" };
+
+    console.log(workouts);
 
     const { externalEventId } = await liveApp.manager.getGlobals();
 
@@ -469,10 +495,11 @@ export const saveCC = async (laneNumber: number, participantId?: string) => {
                 finalScore = { value: 0, capped: false };
                 break;
 
-            case workout.layout === "splitMT":
+            case workout.layout.includes("splitMT"):
                 finalScore = await calculateSplitMTScore(
                     stationInfo,
-                    workoutId
+                    workoutId,
+                    category
                 );
                 break;
             case workout.layout.includes("split"):
@@ -507,6 +534,8 @@ export const saveCC = async (laneNumber: number, participantId?: string) => {
             didNotFinish: false,
         };
 
+        console.log(athleteScore);
+
         const scorePayload: ScorePost[] = [athleteScore];
         const { error } = await postScore(
             externalEventId,
@@ -534,6 +563,4 @@ export const resetScores = async (workoutId: string, heatId: string) => {
         }
         // { upsert: true, new: true }
     ).exec();
-
-    console.log(await getAllStationsInfo());
 };

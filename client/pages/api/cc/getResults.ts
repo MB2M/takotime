@@ -8,7 +8,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { eventId, workoutId } = req.query;
+    const { eventId, workoutId, heatId } = req.query;
 
     // if (response.ok) {
     // const { access_token: accessToken } = await response.json();
@@ -17,9 +17,8 @@ export default async function handler(
             `http://${getBackendUrl(req)}/live/api/cc-token`
         );
         const accessToken = (await resp.json()).token;
-
         const response = await fetch(
-            `${BASE_URL}/events/${eventId}/workouts/${workoutId}/heats`,
+            `${BASE_URL}/results/event/${eventId}/workout/${workoutId}?heatId=${heatId}&preview=true&page=1&per_page=1000`,
             {
                 method: "GET",
                 headers: {

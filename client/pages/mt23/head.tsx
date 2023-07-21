@@ -1,5 +1,5 @@
-import { useCompetitionContext } from "../context/competition";
-import { useLiveDataContext } from "../context/liveData/livedata";
+import { useCompetitionContext } from "../../context/competition";
+import { useLiveDataContext } from "../../context/liveData/livedata";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import {
     Box,
@@ -13,16 +13,16 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import useStationWs from "../hooks/bigscreen/useStationWs";
-import BigscreenBar from "../components/bigscreen/BigscreenHeader";
+import useStationWs from "../../hooks/bigscreen/useStationWs";
+import BigscreenBar from "../../components/bigscreen/BigscreenBar";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 const Head = () => {
     const competition = useCompetitionContext();
 
-    const { globals, sendMessage, registerListener } = useLiveDataContext();
+    const { globals, sendMessage } = useLiveDataContext();
 
-    const { fullStations, workout, workouts } = useStationWs();
+    const { fullStations, activeWorkout } = useStationWs();
 
     const [currentCCScores, setCurrentCCScores] = useState<
         { id: number; result: string }[]
@@ -52,7 +52,7 @@ const Head = () => {
                 },
                 body: JSON.stringify({
                     eventId: competition?.eventId,
-                    workoutId: workout.workoutId,
+                    workoutId: activeWorkout.workoutId,
                     payload: [
                         {
                             score,
@@ -66,7 +66,6 @@ const Head = () => {
             });
 
             if (!response.ok) {
-                throw new Error(response.statusText);
                 alert("error posting score");
             }
 
@@ -88,11 +87,11 @@ const Head = () => {
     };
 
     const refreshCCScores = useCallback(async () => {
-        if (!competition?.eventId || !workout?.workoutId) return;
+        if (!competition?.eventId || !activeWorkout?.workoutId) return;
 
         try {
             const response = await fetch(
-                `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${workout.workoutId}`
+                `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${activeWorkout.workoutId}`
             );
             if (!response.ok) {
                 throw new Error(await response.text());
@@ -102,7 +101,7 @@ const Head = () => {
         } catch (e) {
             console.log(e);
         }
-    }, [workout?.workoutId]);
+    }, [activeWorkout?.workoutId]);
 
     useEffect(() => {
         refreshCCScores();
@@ -180,7 +179,7 @@ const Head = () => {
                     position="top"
                     height={100}
                     competition={competition}
-                    options={workout?.options}
+                    options={activeWorkout?.options}
                 />
 
                 <Stack gap={1} justifyContent={"space-between"}>

@@ -75,6 +75,7 @@ const StationSchema = new mongoose.Schema<IBaseStation2, StationModelType>({
         wodSplit: { type: [wodSplitScoreSchema], default: [] },
     },
     participantId: String,
+    category: String,
 });
 
 export default mongoose.model<IBaseStation2, StationModelType>(

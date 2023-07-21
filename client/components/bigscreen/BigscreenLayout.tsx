@@ -1,97 +1,22 @@
 import { Box, Stack } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 import { useCompetitionContext } from "../../context/competition";
-import { useCompetitionCornerContext } from "../../context/competitionCorner/data/competitionCorner";
-import { useLiveDataContext } from "../../context/liveData/livedata";
-import BigscreenBar from "./BigscreenHeader";
+import BigscreenBar from "./BigscreenBar";
 import Image from "next/image";
 
 const BigscreenLayout = ({
     children,
     headerHeight,
     customTitle,
+    workout,
 }: {
     children: ReactNode;
     headerHeight: number;
     customTitle?: string;
+    workout: Workout;
 }) => {
-    const { globals } = useLiveDataContext();
     const competition = useCompetitionContext();
-    const { heats } = useCompetitionCornerContext();
-    // const CCWorkouts = useWorkouts(competition?.platform, competition?.eventId);
-    // const [previousHeats, setPreviousHeats] = useState<
-    //     {
-    //         participant?: string;
-    //         scores?: BaseScore[];
-    //     }[]
-    // >([]);
-
-    const workout = useMemo(
-        () =>
-            competition?.workouts.find(
-                (workout) =>
-                    workout.workoutId === globals?.externalWorkoutId.toString()
-            ),
-        [competition, globals?.externalWorkoutId]
-    );
-
-    // const platformWorkout = useMemo(
-    //     () =>
-    //         CCWorkouts.find(
-    //             (platformWorkout) =>
-    //                 platformWorkout.id.toString() === workout?.workoutId
-    //         ),
-    //     [CCWorkouts, workout]
-    // );
-
-    const heat = useMemo(
-        () => heats.find((heat) => heat.id === globals?.externalHeatId),
-        [heats, globals]
-    );
-
-    // const restrievePreviousHeatWodStationInfo = useCallback(async () => {
-    //     if (!globals?.externalHeatId) return setPreviousHeats([]);
-    //     const previousHeats: BaseStation[] = [];
-    //     for (let i = 0; i < globals.externalHeatId; i++) {
-    //         try {
-    //             const response = await fetch(
-    //                 `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station?heatId=${i}`,
-    //                 {
-    //                     method: "GET",
-    //                     headers: {
-    //                         "Content-Type": "application/json",
-    //                     },
-    //                 }
-    //             );
-    //             if (response.ok) {
-    //                 const json = await response.json();
-    //                 previousHeats.push(json);
-    //                 // setStationsInfo(json);
-    //             }
-    //         } catch (err) {
-    //             console.log(err);
-    //             // setStationsInfo([]);
-    //         }
-    //     }
-    //     setPreviousHeats(
-    //         previousHeats
-    //             .flat()
-    //             .map((heat) => ({
-    //                 participant: heat.participant,
-    //                 scores: heat.scores,
-    //             }))
-    //             .sort(
-    //                 (a, b) =>
-    //                     (b.scores?.[0].repCount || 0) -
-    //                     (a.scores?.[0].repCount || 0)
-    //             )
-    //     );
-    // }, [globals?.externalHeatId]);
-
-    // useEffect(() => {
-    //     restrievePreviousHeatWodStationInfo().then();
-    // }, [restrievePreviousHeatWodStationInfo]);
 
     return (
         <Box
@@ -107,7 +32,6 @@ const BigscreenLayout = ({
                     height={headerHeight}
                     competition={competition}
                     options={workout?.options}
-                    heat={heat}
                     customTitle={customTitle}
                 />
                 <Box height={1}>
@@ -191,7 +115,6 @@ const BigscreenLayout = ({
                         height={headerHeight}
                         competition={competition}
                         options={workout?.options}
-                        heat={heat}
                         customTitle={customTitle}
                     />
                 </Box>

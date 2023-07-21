@@ -1,40 +1,56 @@
 import { Box, Typography } from "@mui/material";
 import BigscreenLayout from "../components/bigscreen/BigscreenLayout";
-import MaxTonnage from "../components/bigscreen/MaxTonnage";
-import { useLiveDataContext } from "../context/liveData/livedata";
-import useChrono from "../hooks/useChrono";
-import { useRouter } from "next/router";
 import DefaultLayout from "../components/bigscreen/Layouts/default/DefaultLayout";
-import useStationWs from "../hooks/bigscreen/useStationWs";
 import Default2ScoresLayout from "../components/bigscreen/Layouts/default/Default2ScoresLayout";
 import SplitMTLayout from "../components/bigscreen/Layouts/split/SplitMTLayout";
+import withDisplayData from "../utils/withDisplayData";
+import React from "react";
+import DefaultMultiCategoriesLayout from "../components/bigscreen/Layouts/default/DefaultMultiCategoriesLayout";
+import SplitMTMultiCategoriesLayout from "../components/bigscreen/Layouts/split/SplitMTMultiCategoriesLayout";
 
 const HEADER_HEIGHT = 100;
 
-const BigScreen = () => {
-    // const competition = useCompetitionContext();
-    const { globals } = useLiveDataContext();
-    const { timer, plainTimer } = useChrono(
-        globals?.startTime,
-        globals?.duration
-    );
+interface Props {
+    parent: React.RefCallback<Element>;
+    timer: string | number | null;
+    plainTimer: number;
+    fullStations: DisplayFullStation[];
+    workout: Workout;
+    workouts: Workout[];
+    state: number;
+    competition?: Competition;
+    categories: string[];
+}
 
-    const { fullStations, workout, workouts } = useStationWs();
-
-    const router = useRouter();
-    const title = router.query.title as string | undefined;
-
-    if (!workout) return <div>No workout loaded</div>;
+const BigScreen: React.FC<Props> = ({
+    timer,
+    plainTimer,
+    fullStations,
+    workouts,
+    workout,
+    state,
+    categories,
+}) => {
+    //
 
     const getLayoutComponent = (layoutName?: string) => {
         switch (layoutName) {
-            case "MaxTonnage":
+            // case "MaxTonnage":
+            //     return (
+            //         <MaxTonnage
+            //             heatId={globals?.externalHeatId}
+            //             stations={fullStations}
+            //         />
+            //     );
+            case "defaultMultiCategories":
                 return (
-                    <MaxTonnage
-                        heatId={globals?.externalHeatId}
+                    <DefaultMultiCategoriesLayout
+                        workouts={workouts}
                         stations={fullStations}
+                        categories={categories}
                     />
                 );
+
             case "default2ScoresLayout":
                 return (
                     <Default2ScoresLayout
@@ -52,6 +68,16 @@ const BigScreen = () => {
                     />
                 );
 
+            case "splitMTMultiCategories":
+                return (
+                    <SplitMTMultiCategoriesLayout
+                        workouts={workouts}
+                        stations={fullStations}
+                        timer={plainTimer}
+                        categories={categories}
+                    />
+                );
+
             default:
                 return (
                     <DefaultLayout workout={workout} stations={fullStations} />
@@ -59,14 +85,18 @@ const BigScreen = () => {
         }
     };
 
+    if (!workout) return <div>No workout loaded</div>;
+
     return (
         <>
-            <BigscreenLayout headerHeight={HEADER_HEIGHT} customTitle={title}>
-                {/*<Stack overflow={"hidden"} height={1}>*/}
+            <BigscreenLayout
+                headerHeight={HEADER_HEIGHT}
+                customTitle={""}
+                workout={workout}
+            >
                 {getLayoutComponent(workout?.layout)}
-                {/*</Stack>*/}
             </BigscreenLayout>
-            {globals?.state === 1 && (
+            {state === 1 && (
                 <Box
                     width={1920}
                     height={1080}
@@ -93,4 +123,4 @@ const BigScreen = () => {
     );
 };
 
-export default BigScreen;
+export default withDisplayData(BigScreen);

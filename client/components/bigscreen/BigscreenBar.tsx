@@ -1,26 +1,26 @@
-import { Stack, Box, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useMemo } from "react";
 import Chrono from "./Chrono";
 import Logo from "./Logo";
 import Title from "./Title";
+import useHeatDivisionInfo from "../../hooks/cc/useHeatDivisionInfo";
 
 const BigscreenBar = ({
     position,
     height,
     competition,
     options,
-    heat,
-    chrono,
     customTitle,
 }: {
     position: "top" | "bottom";
     height: number;
     competition?: Competition;
     options?: WorkoutOption;
-    heat?: CCHeat;
     chrono?: string;
     customTitle?: string;
 }) => {
+    const { heatName, divisions } = useHeatDivisionInfo();
+
     const showHeader = useMemo(
         () =>
             (competition &&
@@ -42,27 +42,27 @@ const BigscreenBar = ({
         switch (options?.titleType) {
             case "category":
                 return {
-                    textTop: heat?.divisions.join(" / "),
+                    textTop: divisions.join(" / "),
                 };
 
             case "heat":
-                return { textTop: heat?.title };
+                return { textTop: heatName };
 
             case "category-heat":
                 return {
-                    textTop: heat?.divisions.join(" / "),
-                    textBottom: heat?.title,
+                    textTop: divisions.join(" / "),
+                    textBottom: heatName,
                 };
 
             case "heat-category":
                 return {
-                    textTop: heat?.title,
-                    textBottom: heat?.divisions.join(" / "),
+                    textTop: heatName,
+                    textBottom: divisions.join(" / "),
                 };
             default:
                 return { textTop: "", textBottom: "" };
         }
-    }, [heat, options?.titleType, options?.title, customTitle]);
+    }, [heatName, divisions, options?.titleType, options?.title, customTitle]);
 
     if (!showHeader) return null;
 

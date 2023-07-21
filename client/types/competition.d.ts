@@ -22,6 +22,7 @@ interface baseWorkoutMovement {
 type Workout = {
     workoutId?: string;
     linkedWorkoutId?: string;
+    categories?: string[];
     layout?: string;
     duration?: number;
     dataSource: DataSource;

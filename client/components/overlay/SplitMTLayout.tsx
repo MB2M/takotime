@@ -1,8 +1,9 @@
-import { Box } from "@mui/system";
-import { useEffect, useMemo, useState } from "react";
+import { useLiveDataContext } from "../../context/liveData/livedata";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { splitMTscore } from "../../../../utils/splitMTscore";
-import SplitMTAthlete2 from "./SplitMTAthlete2";
+import { useEffect, useMemo, useState } from "react";
+import { Box } from "@mui/system";
+import { splitMTscore } from "../../utils/splitMTscore";
+import SplitMTAthletes from "./SplitMTAthletes";
 
 interface Props {
     workout: Workout;
@@ -10,23 +11,22 @@ interface Props {
     timer: number;
 }
 
-const SplitMTLayout = ({ workout, stations, timer }: Props) => {
+const DefaultLayout = ({ workout, stations, timer }: Props) => {
+    const { globals } = useLiveDataContext();
     const [parent] = useAutoAnimate({
         duration: 200,
         easing: "ease-in-out",
         disrespectUserMotionPreference: true,
     });
-    const colNumber = workout.options?.columnDisplayNumber || 1;
-    const rowNumber = Math.ceil(stations.length / colNumber);
-
-    const [splitStations, setSplitStations] = useState<DisplayFullStation[][]>(
-        []
-    );
 
     const currentRound = Math.floor(timer / (1000 * 60 * 3));
     const isRest =
         timer % (1000 * 60 * 3) === 0 ||
         timer % (1000 * 60 * 3) >= 1000 * 60 * 2;
+
+    const [splitStations, setSplitStations] = useState<DisplayFullStation[]>(
+        []
+    );
 
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
@@ -54,21 +54,7 @@ const SplitMTLayout = ({ workout, stations, timer }: Props) => {
                     });
                 break;
         }
-        setSplitStations(
-            sortedStations.reduce<DisplayFullStation[][]>(
-                (resultArray, item, index) => {
-                    const chunkIndex = Math.floor(index / rowNumber);
-
-                    if (!resultArray[chunkIndex]) {
-                        resultArray[chunkIndex] = [];
-                    }
-                    resultArray[chunkIndex].push(item);
-
-                    return resultArray;
-                },
-                []
-            )
-        );
+        setSplitStations(sortedStations);
     }, [stations, workout]);
 
     const allScores = useMemo(() => {
@@ -98,35 +84,25 @@ const SplitMTLayout = ({ workout, stations, timer }: Props) => {
     return (
         <Box
             display={"flex"}
-            justifyContent={"space-between"}
-            height={1}
-            gap={1}
+            justifyContent={"flex-start"}
+            width={1}
+            gap={2}
+            ref={parent}
         >
-            {splitStations.map((stations, colIndex) => (
-                <Box
-                    key={colIndex}
-                    width={1}
-                    display={"flex"}
-                    flexDirection={"column"}
-                    gap={1}
-                    ref={parent}
-                >
-                    {stations.map((station) => (
-                        <SplitMTAthlete2
-                            key={station.laneNumber}
-                            station={station}
-                            height={1 / rowNumber}
-                            workout={workout}
-                            repsOfFirst={repsOfFirst}
-                            allTotalReps={allScores}
-                            round={currentRound}
-                            rest={isRest}
-                        />
-                    ))}
-                </Box>
+            {splitStations.slice(0, 6).map((station) => (
+                <SplitMTAthletes
+                    key={station.laneNumber}
+                    station={station}
+                    workout={workout}
+                    repsOfFirst={repsOfFirst}
+                    allTotalReps={allScores}
+                    wodState={globals?.state}
+                    round={currentRound}
+                    rest={isRest}
+                />
             ))}
         </Box>
     );
 };
 
-export default SplitMTLayout;
+export default DefaultLayout;

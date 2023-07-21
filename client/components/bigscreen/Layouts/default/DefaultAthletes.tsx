@@ -26,7 +26,6 @@ const DefaultAthletes = ({
     repsOfFirst,
     allTotalReps,
     firstScore,
-    participantTextRows = 2,
     wodState = 2,
 }: Props) => {
     const competition = useCompetitionContext();
@@ -56,8 +55,6 @@ const DefaultAthletes = ({
         movement: currentMovement,
         movementReps: currentMovementReps,
         movementTotalReps: currentMovementTotalReps,
-        round: currentRound,
-        wodType: workoutType,
     } = useWebappWorkout(workout, repsCompleted);
 
     return (
@@ -112,7 +109,7 @@ const DefaultAthletes = ({
                 alignItems={"center"}
                 justifyContent={"center"}
             >
-                <Typography fontSize={50} fontFamily={"bebasNeue"}>
+                <Typography fontSize={40} fontFamily={"bebasNeue"}>
                     {rank}
                 </Typography>
             </Box>
@@ -170,6 +167,7 @@ const DefaultAthletes = ({
                         alignItems={"center"}
                     >
                         <Typography
+                            lineHeight={1}
                             px={1}
                             pt={0.5}
                             color={"white"}
@@ -188,15 +186,65 @@ const DefaultAthletes = ({
                                 py={1}
                                 textAlign={"center"}
                                 display={"flex"}
-                                flexDirection={"column"}
-                                justifyContent={"space-around"}
+                                // flexDirection={"column"}
+                                justifyContent={"center"}
                                 width={0.8}
+                                gap={2}
                             >
                                 <Box
                                     display={"flex"}
                                     justifyContent={"center"}
                                     alignItems={"center"}
+                                    sx={{ backgroundColor: BG_COLOR }}
+                                    borderRadius={"10px"}
+                                    px={1}
                                 >
+                                    <Typography
+                                        px={1}
+                                        pt={0.5}
+                                        color={"white"}
+                                        fontSize={"3.5rem"}
+                                        lineHeight={"3.5rem"}
+                                        fontFamily={"bebasNeue"}
+                                    >
+                                        {currentMovementReps}
+                                    </Typography>
+                                    {/*</Box>*/}
+                                    {/*<Box*/}
+                                    {/*    display={"flex"}*/}
+                                    {/*    justifyContent={"center"}*/}
+                                    {/*    alignItems={"center"}*/}
+                                    {/*>*/}
+                                    <Typography
+                                        px={1}
+                                        pt={0.5}
+                                        color={"white"}
+                                        fontSize={"2.4rem"}
+                                        lineHeight={"2.4rem"}
+                                        fontFamily={"bebasNeue"}
+                                        // borderRadius={"10px"}
+                                        sx={{ backgroundColor: BG_COLOR }}
+                                    >
+                                        /
+                                    </Typography>
+                                    {/*</Box>*/}
+                                    {/*<Box*/}
+                                    {/*    display={"flex"}*/}
+                                    {/*    justifyContent={"center"}*/}
+                                    {/*    alignItems={"center"}*/}
+                                    {/*>*/}
+                                    <Typography
+                                        px={1}
+                                        pt={0.5}
+                                        color={"white"}
+                                        fontSize={"3.5rem"}
+                                        lineHeight={"3.5rem"}
+                                        fontFamily={"bebasNeue"}
+                                        borderRadius={"10px"}
+                                        sx={{ backgroundColor: BG_COLOR }}
+                                    >
+                                        {currentMovementTotalReps}
+                                    </Typography>
                                     <Typography
                                         px={1}
                                         pt={0.5}
@@ -207,28 +255,27 @@ const DefaultAthletes = ({
                                         borderRadius={"10px"}
                                         sx={{ backgroundColor: BG_COLOR }}
                                     >
-                                        {currentMovementTotalReps}{" "}
                                         {currentMovement}
                                     </Typography>
                                 </Box>
-                                <Box
-                                    display={"flex"}
-                                    justifyContent={"center"}
-                                    alignItems={"center"}
-                                >
-                                    <Typography
-                                        px={1}
-                                        pt={0.5}
-                                        color={"white"}
-                                        fontSize={"2.4rem"}
-                                        lineHeight={"2.4rem"}
-                                        fontFamily={"bebasNeue"}
-                                        borderRadius={"10px"}
-                                        sx={{ backgroundColor: BG_COLOR }}
-                                    >
-                                        {currentMovementReps}
-                                    </Typography>
-                                </Box>
+                                {/*<Box*/}
+                                {/*    display={"flex"}*/}
+                                {/*    justifyContent={"center"}*/}
+                                {/*    alignItems={"center"}*/}
+                                {/*>*/}
+                                {/*    <Typography*/}
+                                {/*        px={1}*/}
+                                {/*        pt={0.5}*/}
+                                {/*        color={"white"}*/}
+                                {/*        fontSize={"2.4rem"}*/}
+                                {/*        lineHeight={"2.4rem"}*/}
+                                {/*        fontFamily={"bebasNeue"}*/}
+                                {/*        borderRadius={"10px"}*/}
+                                {/*        sx={{ backgroundColor: BG_COLOR }}*/}
+                                {/*    >*/}
+                                {/*        {currentMovementReps}*/}
+                                {/*    </Typography>*/}
+                                {/*</Box>*/}
                             </Box>
                             <Box
                                 display={"flex"}
@@ -259,6 +306,7 @@ const DefaultAthletes = ({
                         alignItems={"center"}
                     >
                         <Typography
+                            lineHeight={1}
                             px={1}
                             pt={0.5}
                             color={"white"}

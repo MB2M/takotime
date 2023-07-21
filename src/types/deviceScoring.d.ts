@@ -57,6 +57,7 @@ interface IBaseStation2 extends Document {
         wodSplit: IWodSplitScore[];
     };
     participantId?: string;
+    category?: string;
 
     times?: { rep: number; time: number; index: number }[];
 }

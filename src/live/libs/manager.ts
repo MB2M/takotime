@@ -15,6 +15,7 @@ import Result from "../models/Result";
 // import pigpio from "pigpio";
 import { updateResult } from "../services/firebase/results";
 import player from "play-sound";
+import { exec } from "child_process";
 
 class Manager extends EventEmitter {
     topics = [
@@ -71,7 +72,11 @@ class Manager extends EventEmitter {
     }
 
     buzz() {
-        console.log("buzz");
+        exec("cvlc buzzer.wav", (error, stdout, stderr) => {
+            if (error) {
+                console.log(`error: ${error.message}`);
+            }
+        });
         // @ts-ignore
         player({ player: "cvlc" }).play("buzzer.wav", function (err) {
             if (err) console.log(err);

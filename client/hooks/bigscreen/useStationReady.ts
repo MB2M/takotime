@@ -6,7 +6,7 @@ import useStationPayload from "../useStationPayload";
 
 const useStationReady = (
     dataSource: DataSource = "iot",
-    rankingMethod: WorkoutOption["rankBy"] = "lineNumber",
+    rankingMethod: WorkoutOption["rankBy"] = "laneNumber",
     currentIndex: number
 ) => {
     const { globals, stations, ranks } = useLiveDataContext();
@@ -19,14 +19,14 @@ const useStationReady = (
             stationsInfo
                 .map(
                     (station) =>
-                        station.scores?.find((score) => score.index === 0)
+                        station.scores?.find((score) => +score.index === 0)
                             ?.repCount || 0
                 )
                 .sort((a, b) => (b || 0) - (a || 0)),
             stationsInfo
                 .map(
                     (station) =>
-                        station.scores?.find((score) => score.index === 1)
+                        station.scores?.find((score) => +score.index === 1)
                             ?.repCount || 0
                 )
                 .sort((a, b) => (b || 0) - (a || 0)),
@@ -43,21 +43,21 @@ const useStationReady = (
                                 (station) =>
                                     station.laneNumber === stationUp.laneNumber
                             )
-                            ?.scores?.find((score) => score.index === 0)
+                            ?.scores?.find((score) => +score.index === 0)
                             ?.repCount || 0,
                         stationsInfo
                             ?.find(
                                 (station) =>
                                     station.laneNumber === stationUp.laneNumber
                             )
-                            ?.scores?.find((score) => score.index === 1)
+                            ?.scores?.find((score) => +score.index === 1)
                             ?.repCount || 0,
                         stationsInfo
                             ?.find(
                                 (station) =>
                                     station.laneNumber === stationUp.laneNumber
                             )
-                            ?.scores?.find((score) => score.index === 2)
+                            ?.scores?.find((score) => +score.index === 2)
                             ?.repCount || 0,
                     ],
                     times: [
@@ -90,8 +90,9 @@ const useStationReady = (
                                             station.laneNumber ===
                                             stationUp.laneNumber
                                     )
-                                    ?.scores?.find((score) => score.index === i)
-                                    ?.repCount
+                                    ?.scores?.find(
+                                        (score) => +score.index === i
+                                    )?.repCount
                             );
                         }) === -1
                             ? scoreIndex.length + 1
@@ -105,7 +106,7 @@ const useStationReady = (
                                                   stationUp.laneNumber
                                           )
                                           ?.scores?.find(
-                                              (score) => score.index === i
+                                              (score) => +score.index === i
                                           )?.repCount
                                   );
                               }) + 1

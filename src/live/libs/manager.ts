@@ -71,7 +71,7 @@ class Manager extends EventEmitter {
     }
 
     buzz() {
-        player().play("foo.mp3", function (err) {
+        player().play("buzzer.wav", function (err) {
             if (err) throw err;
         });
     }

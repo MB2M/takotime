@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useCompetitionContext } from "./competition";
 import { blue, purple } from "@mui/material/colors";
-import { PaletteOptions } from "@mui/material";
+import { PaletteOptions, responsiveFontSizes } from "@mui/material";
 
 declare module "@mui/material/styles" {
     interface Theme {
@@ -32,7 +32,11 @@ const MuiThemeProvider: React.FC<PropsWithChildren<any>> = ({ children }) => {
 
     if (!theme) return <>{children}</>;
 
-    return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+    return (
+        <ThemeProvider theme={responsiveFontSizes(theme)}>
+            {children}
+        </ThemeProvider>
+    );
 };
 
 export default MuiThemeProvider;

@@ -57,6 +57,7 @@ export const useCompetitionCorner = (
                         workoutId,
                     }),
                 });
+
                 if (response.ok) {
                     const EPHeat: CCEPParticipant[] = await response.json();
                     setEpHeat(EPHeat.filter((ep) => ep.heatId === heatId));

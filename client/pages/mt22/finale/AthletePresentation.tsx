@@ -1,14 +1,11 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import mtLogo from "../../../public/img/logo.png";
 import styles from "../../../styles/AthletePresentation.module.css";
 import ReactPlayer from "react-player";
 import { useLiveDataContext } from "../../../context/liveData/livedata";
 
 import Image from "next/image";
-
-const BASE_URL =
-    "https://competitioncorner.net/api2/v1/events/1989/workouts/11352/eligible-participants";
 
 const BASE_VIDEO_URL = "/mp4/";
 
@@ -154,11 +151,7 @@ function AthletePresentation2() {
                             direction={"row"}
                             justifyContent={"space-between"}
                         >
-                            <Box
-                                width={400}
-                                position="relative"
-                                top={"-185px"}
-                            >
+                            <Box width={400} position="relative" top={"-185px"}>
                                 <Image src={mtLogo} layout="responsive"></Image>
                             </Box>
                             <Stack marginRight={5}>

@@ -10,7 +10,7 @@ export function usePlanning(
     const [planning, setPlanning] = useState<PlanningHeat[]>([]);
 
     async function loadData() {
-        if (!globals?.externalEventId) return
+        if (!globals?.externalEventId) return;
         try {
             const response = await fetch(
                 `https://competitioncorner.net/api2/v1/schedule/events/${globals?.externalEventId}/workouts`
@@ -37,8 +37,6 @@ export function usePlanning(
 
         return () => clearInterval(timer);
     }, [globals]);
-
-    console.log(planning)
 
     return planning;
 }

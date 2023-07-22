@@ -1,14 +1,12 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
-import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
 import { useLiveDataContext } from "../context/liveData/livedata";
 import { getFlagEmoji } from "../utils/flagEmoji";
 import useHeatDivisionInfo from "../hooks/cc/useHeatDivisionInfo";
 
 const Speaker = () => {
     const { globals } = useLiveDataContext();
-    const EPInfo = useCompetitionCornerContext();
     const [stations, setStations] = useState<
         {
             station: number;
@@ -55,9 +53,6 @@ const Speaker = () => {
             >
                 <Typography variant="h4">
                     {heatName} ({divisions.join("/")})
-                </Typography>
-                <Typography variant="h5">
-                    {EPInfo?.epHeat?.[0]?.heatTime}
                 </Typography>
             </Box>
 

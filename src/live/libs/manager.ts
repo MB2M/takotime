@@ -14,6 +14,7 @@ import Device from "../models/Device";
 import Result from "../models/Result";
 // import pigpio from "pigpio";
 import { updateResult } from "../services/firebase/results";
+import player from "play-sound";
 
 class Manager extends EventEmitter {
     topics = [
@@ -67,6 +68,12 @@ class Manager extends EventEmitter {
     async wodTimerEventSubscription() {
         const subscription = new WodTimerSubscription(this.wodTimerServices);
         subscription.load();
+    }
+
+    buzz() {
+        player().play("foo.mp3", function (err) {
+            if (err) throw err;
+        });
     }
 
     // buzz() {

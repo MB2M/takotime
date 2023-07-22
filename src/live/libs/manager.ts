@@ -72,6 +72,7 @@ class Manager extends EventEmitter {
 
     buzz() {
         // @ts-ignore
+        console.log("buzz");
         player({ player: "cvlc" }).play("buzzer.wav", function (err) {
             if (err) console.log(err);
         });

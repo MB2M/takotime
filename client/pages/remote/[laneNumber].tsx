@@ -12,7 +12,6 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import RemoteWeight from "../../components/remote/RemoteWeight";
 import { useCompetitionContext } from "../../context/competition";
 import Chrono from "../../components/bigscreen/Chrono";
 import RemoteClassic from "../../components/remote/RemoteClassic";
@@ -269,14 +268,14 @@ const LaneRemote = () => {
                                         category={category}
                                     />
                                 )}
-                                {layout === "maxWeight" && (
-                                    <RemoteWeight
-                                        heatId={globals?.externalHeatId}
-                                        laneNumber={laneNumber as string}
-                                        numberOfPartner={2}
-                                        category={category}
-                                    />
-                                )}
+                                {/*{layout === "maxWeight" && (*/}
+                                {/*    <RemoteWeight*/}
+                                {/*        heatId={globals?.externalHeatId}*/}
+                                {/*        laneNumber={laneNumber as string}*/}
+                                {/*        numberOfPartner={2}*/}
+                                {/*        category={category}*/}
+                                {/*    />*/}
+                                {/*)}*/}
                             </AccordionDetails>
                         </Accordion>
                     )}

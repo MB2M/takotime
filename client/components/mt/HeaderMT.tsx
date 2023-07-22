@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 const HeaderMT = ({
     logo,
@@ -13,7 +13,7 @@ const HeaderMT = ({
     chronoFontSize = "6rem",
     backgroundColor = "ffffff00",
 }: {
-    logo?: StaticImageData | string ;
+    logo?: StaticImageData | string;
     imageWidth?: string;
     textTop?: string;
     textTopFontSize?: string;
@@ -47,7 +47,11 @@ const HeaderMT = ({
                 >
                     {textTop}
                 </Typography>
-                <Typography fontSize={textBottomFontSize} fontFamily={"CantoraOne"} lineHeight={1}>
+                <Typography
+                    fontSize={textBottomFontSize}
+                    fontFamily={"CantoraOne"}
+                    lineHeight={1}
+                >
                     {textBottom}
                 </Typography>
             </Stack>

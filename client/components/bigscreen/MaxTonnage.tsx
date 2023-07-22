@@ -120,23 +120,23 @@ function MaxTonnage({
 
     return (
         <>
-            {fullStations
-                ?.sort((a, b) => a.laneNumber - b.laneNumber)
-                ?.sort((a, b) => b.total - a.total)
-                ?.map((station) => (
-                    <WodTonnageRunningAthlete
-                        key={station.laneNumber}
-                        station={station}
-                        primaryColor={competition?.primaryColor || "white"} //commun
-                        secondaryColor={competition?.secondaryColor || "white"} //commun
-                        // wodWeightData={wodWeightInfo?.find(
-                        //     (station) =>
-                        //         station.laneNumber === station.laneNumber
-                        // )}
-                        height={1 / fullStations.length} //commun
-                        scoreOfFirst={fullStations[0].total}
-                    />
-                ))}
+            {/*{fullStations*/}
+            {/*    ?.sort((a, b) => a.laneNumber - b.laneNumber)*/}
+            {/*    ?.sort((a, b) => b.total - a.total)*/}
+            {/*    ?.map((station) => (*/}
+            {/*        <WodTonnageRunningAthlete*/}
+            {/*            key={station.laneNumber}*/}
+            {/*            station={station}*/}
+            {/*            primaryColor={competition?.primaryColor || "white"} //commun*/}
+            {/*            secondaryColor={competition?.secondaryColor || "white"} //commun*/}
+            {/*            // wodWeightData={wodWeightInfo?.find(*/}
+            {/*            //     (station) =>*/}
+            {/*            //         station.laneNumber === station.laneNumber*/}
+            {/*            // )}*/}
+            {/*            height={1 / fullStations.length} //commun*/}
+            {/*            scoreOfFirst={fullStations[0].total}*/}
+            {/*        />*/}
+            {/*    ))}*/}
         </>
     );
 }

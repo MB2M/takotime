@@ -1,238 +1,288 @@
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Box,
+    Button,
+    Container,
+    Snackbar,
+    Stack,
+    Typography,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import { workouts } from "../../eventConfig/MT23Qualif/config";
-import useWorkout from "../../hooks/useWorkout";
 import RemoteWeight from "../../components/remote/RemoteWeight";
-import useChrono from "../../hooks/useChrono";
-import useWorkoutData from "../../hooks/useWorkoutData";
+import { useCompetitionContext } from "../../context/competition";
+import Chrono from "../../components/bigscreen/Chrono";
+import RemoteClassic from "../../components/remote/RemoteClassic";
+import RemoteHeader from "../../components/remote/RemoteHeader";
+import RemoteConfirmScore from "../../components/remote/RemoteConfirmScore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RemoteSplit from "../../components/remote/RemoteSplit";
 
 const LaneRemote = () => {
-    const { globals, stations } = useLiveDataContext();
+    const competition = useCompetitionContext();
+    const { globals, stations, sendMessage, registerListener } =
+        useLiveDataContext();
+
     const router = useRouter();
-    const [stationInfo, setStationInfo] = useState<BaseStation | null>(null);
-    const [scoreIndex, setScoreIndex] = useState<number>(0);
-    const [wodCount, setWodCount] = useState<number>(0);
-    const { ts } = useChrono(globals?.startTime, globals?.duration);
+    const [stationInfo, setStationInfo] = useState<BaseStation2 | null>(null);
 
-    const { laneNumber }: any = useMemo(() => router.query, [router]);
+    const [openSnack, setOpenSnack] = useState(false);
+    const [snackMessage, setSnackMessage] = useState<{
+        message: string;
+        severity: string;
+    }>({ message: "", severity: "error" });
+    const [panelOpen, setPanelOpen] = useState(false);
 
-    const repsCompleted = useMemo(
-        () =>
-            stationInfo?.scores?.find((score) => score.index === scoreIndex)
-                ?.repCount || 0,
-        [stationInfo, scoreIndex]
-    );
-
-    const workout = useMemo(
-        () =>
-            workouts.find(
-                (workout) =>
-                    workout.workoutIds.includes(
-                        globals?.externalWorkoutId.toString() || ""
-                    ) && scoreIndex === workout.index
-            ),
-        [workouts, globals?.externalWorkoutId, scoreIndex]
-    );
-
-    useEffect(() => {
-        const count = workouts.filter((workout) =>
-            workout.workoutIds.includes(
-                globals?.externalWorkoutId.toString() || ""
-            )
-        ).length;
-        setWodCount(count);
-    }, [workouts, globals?.externalWorkoutId]);
-
-    const {
-        totalRepetitions: totalReps,
-        movement: currentMovement,
-        movementReps: currentMovementReps,
-        movementTotalReps: currentMovementTotalReps,
-        round: currentRound,
-        wodType: workoutType,
-    } = useWorkout(workout, repsCompleted);
-
+    const laneNumber = router.query.laneNumber as string;
     const stationData = useMemo(() => {
         return stations.find(
             (station) => station.laneNumber === Number(laneNumber)
         );
     }, [laneNumber, stations]);
 
-    const restrieveStationInfo = async () => {
-        try {
-            const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station/${laneNumber}?heatId=${globals?.externalHeatId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            if (response.ok) {
-                const json = await response.json();
-                json?.scores?.reverse();
-                setStationInfo(json);
-            } else {
-                setStationInfo(null);
-            }
-        } catch (err) {
-            console.log(err);
-            setStationInfo(null);
-        }
+    const category = stationData?.category || "";
+
+    const workouts = useMemo(
+        () =>
+            competition?.workouts?.filter(
+                (workout) =>
+                    workout.linkedWorkoutId ===
+                        globals?.externalWorkoutId.toString() &&
+                    (!workout.categories ||
+                        workout.categories.length === 0 ||
+                        workout.categories.includes(category))
+            ) || [],
+        [competition?.workouts, globals?.externalWorkoutId, category]
+    );
+
+    const [selectedWorkoutId, setSelectedWorkoutId] = useState<string>(
+        () => workouts[0]?.workoutId || ""
+    );
+
+    useEffect(() => {
+        if (!workouts[0]?.workoutId) return;
+        setSelectedWorkoutId(workouts[0].workoutId);
+    }, [workouts[0]?.workoutId]);
+
+    const workout = useMemo(
+        () => workouts.find((wod) => wod.workoutId === selectedWorkoutId),
+        [selectedWorkoutId, workouts]
+    );
+
+    console.log(workout);
+
+    const layout = workout?.layout;
+
+    useEffect(() => {
+        if (!laneNumber) return;
+        const unregister = registerListener(
+            `station/${laneNumber}`,
+            (data) => {
+                setStationInfo(data);
+            },
+            true
+        );
+
+        const unregister2 = registerListener(
+            `postScore/${laneNumber}`,
+            (data) => {
+                setSnackMessage({
+                    message: data,
+                    severity: data === "error" ? "error" : "success",
+                });
+                setOpenSnack(true);
+            },
+            false
+        );
+        return () => {
+            unregister();
+            unregister2();
+        };
+    }, [laneNumber]);
+
+    const wodCount = workouts.length;
+
+    const handleWorkoutSelect = (id?: string) => {
+        if (!id) return;
+        setSelectedWorkoutId(id);
+    };
+
+    const handleCloseSnack = () => {
+        setOpenSnack(false);
+    };
+
+    const handleChangePanel = () => {
+        setPanelOpen((current) => !current);
     };
 
     useEffect(() => {
-        if (!laneNumber || !globals?.externalHeatId) return;
-        restrieveStationInfo();
-    }, [globals?.externalHeatId, laneNumber]);
+        if (!globals?.state) return;
 
-    const handleRepsClick = async (value: number) => {
-        if (!globals?.externalHeatId) return;
-        const payload = {
-            participant: stationData?.participant,
-            heatId: globals.externalHeatId.toString(),
-            laneNumber,
-            score: Math.min(
-                Math.max(repsCompleted + value, 0),
-                workoutType === "forTime" ? totalReps : 10000000
-            ),
-            time:
-                globals && ts
-                    ? Math.min(
-                          ts.now() - Date.parse(globals.startTime),
-                          globals.duration * 60 * 1000
-                      )
-                    : undefined,
-        };
+        if (globals.state <= 2) setPanelOpen(true);
 
-        try {
-            const response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/mandelieu/station/${laneNumber}?heatId=${globals?.externalHeatId}&scoreIndex=${scoreIndex}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                }
-            );
-            if (response.ok) {
-                restrieveStationInfo();
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
+        if (globals.state === 3) setPanelOpen(false);
+    }, [globals?.state]);
 
-    const handleVariantSelect = (index: number) => {
-        setScoreIndex(index);
-    };
+    if (!stationData || !globals || !layout) return null;
 
     return (
-        <Container sx={{ height: "100vh" }}>
-            <Stack height="100%" gap={3} py={5}>
-                <Box
-                    display="flex"
-                    justifyContent={"flex-start"}
-                    textAlign="center"
-                    // paddingTop="20px"
-                >
-                    <Typography variant="h4" fontFamily={"CantoraOne"}>
-                        {stationData?.laneNumber}
-                    </Typography>
-                    <Typography variant="h4" fontFamily={"CantoraOne"} ml={4}>
-                        {stationData?.participant}
-                    </Typography>
-                </Box>
-                <Box
-                    // my={3}
-                    display="flex"
-                    justifyContent={"center"}
-                >
-                    {wodCount > 1 &&
-                        [...Array(wodCount + 1).keys()]
-                            .splice(1)
-                            .map((_, index) => (
-                                <Button
-                                    key={index}
-                                    variant={
-                                        scoreIndex === index
-                                            ? "contained"
-                                            : "outlined"
-                                    }
-                                    size={"large"}
-                                    onClick={() => handleVariantSelect(index)}
-                                >
-                                    variant {index + 1}
-                                </Button>
-                            ))}
-                </Box>
-                {workoutType && ["amrap", "forTime"].includes(workoutType) && (
-                    <>
-                        <Box my={"auto"}>
-                            {workoutType === "amrap" && currentRound > 0 && (
-                                <Typography
-                                    textAlign="center"
-                                    fontFamily={"CantoraOne"}
-                                >
-                                    Round n° {currentRound}
-                                </Typography>
-                            )}
-                            <Typography
-                                textAlign="center"
-                                variant="h1"
-                                fontFamily={"CantoraOne"}
-                            >
-                                {currentMovementReps}
-                            </Typography>
-                            <Typography variant="h5" textAlign="center">
-                                {`/ ${currentMovementTotalReps} ${currentMovement}`}
-                            </Typography>
-                        </Box>
-                        <Box
-                            display="flex"
-                            justifyContent={"center"}
-                            mt={"auto"}
-                        >
-                            <Stack gap={5} alignItems={"center"}>
-                                <Button
-                                    variant={"contained"}
-                                    color="success"
-                                    fullWidth
-                                    sx={{
-                                        height: "70vw",
-                                        width: "70vw",
-                                        fontSize: "80px",
-                                        borderRadius: "50%",
-                                    }}
-                                    onClick={() => handleRepsClick(1)}
-                                >
-                                    +
-                                </Button>
-                                <Button
-                                    variant={"contained"}
-                                    color="error"
-                                    sx={{ width: "70vw", fontSize: "20px" }}
-                                    onClick={() => handleRepsClick(-1)}
-                                >
-                                    -
-                                </Button>
-                            </Stack>
-                        </Box>
-                    </>
-                )}
-                {workoutType && ["maxWeight"].includes(workoutType) && (
-                    <RemoteWeight
-                        heatId={globals?.externalHeatId}
+        <Box sx={{ height: "100vh" }}>
+            <Snackbar
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                open={openSnack}
+                onClose={handleCloseSnack}
+                autoHideDuration={4000}
+                message={snackMessage.message}
+                ContentProps={{
+                    sx: {
+                        backgroundColor:
+                            snackMessage.severity === "error"
+                                ? "indianred"
+                                : "darkgreen",
+                        p: "10px",
+                        fontSize: "1rem",
+                    },
+                }}
+            />
+
+            <Stack gap={1} justifyContent={"space-between"} height={1}>
+                <Box position={"fixed"} top={0} width={1} zIndex={10}>
+                    <RemoteHeader
+                        participant={stationData.participant}
                         laneNumber={laneNumber}
-                        numberOfPartner={2}
+                        chronoDirection={workout?.options?.chronoDirection}
+                        state={globals.state}
                     />
-                )}
+                </Box>
+                <Container sx={{ height: "100vh", pt: "120px" }}>
+                    {globals.state === 0 && (
+                        <Box textAlign={"center"}>
+                            <Stack>
+                                <Typography variant={"h5"} color={"red"}>
+                                    Workout not started
+                                </Typography>
+                            </Stack>
+                            <p>
+                                As soon as the timer start, you will be able to
+                                score the workout.
+                            </p>
+                            <p>
+                                Please take time to review the workout
+                                description below:
+                            </p>
+                        </Box>
+                    )}
+
+                    {globals.state === 1 && (
+                        <Box
+                            display={"flex"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                            height={1}
+                        >
+                            <Chrono fontSize={"12rem"} />
+                        </Box>
+                    )}
+
+                    {stationInfo && globals.state > 2 && (
+                        <RemoteConfirmScore
+                            scores={stationInfo.scores}
+                            workouts={workouts}
+                            laneNumber={laneNumber}
+                        />
+                    )}
+
+                    {globals?.state >= 2 && (
+                        <Accordion
+                            elevation={0}
+                            sx={{ "MuiAccordion-root": { boxShadow: "none" } }}
+                            onChange={handleChangePanel}
+                            expanded={panelOpen}
+                        >
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>
+                                    {globals?.state === 3 ? "Update Score" : ""}
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Box
+                                    // my={3}
+                                    display="flex"
+                                    justifyContent={"center"}
+                                    gap={2}
+                                    my={2}
+                                >
+                                    {wodCount > 1 &&
+                                        workouts.map((workout, index) => (
+                                            <Button
+                                                key={workout.workoutId}
+                                                variant={
+                                                    selectedWorkoutId ===
+                                                    workout.workoutId
+                                                        ? "contained"
+                                                        : "outlined"
+                                                }
+                                                onClick={() =>
+                                                    handleWorkoutSelect(
+                                                        workout.workoutId
+                                                    )
+                                                }
+                                            >
+                                                score {index + 1}
+                                            </Button>
+                                        ))}
+                                </Box>
+                                {layout === "MTSprintLadder" && (
+                                    <RemoteClassic
+                                        laneNumber={+laneNumber}
+                                        sendMessage={sendMessage}
+                                        station={stationInfo}
+                                        workout={workout}
+                                        participantId={stationData.externalId.toString()}
+                                        category={category}
+                                    />
+                                )}
+                                {layout.includes("default") && (
+                                    <RemoteClassic
+                                        laneNumber={+laneNumber}
+                                        sendMessage={sendMessage}
+                                        station={stationInfo}
+                                        workout={workout}
+                                        participantId={stationData.externalId.toString()}
+                                        category={category}
+                                    />
+                                )}
+                                {workout && layout.includes("split") && (
+                                    <RemoteSplit
+                                        laneNumber={+laneNumber}
+                                        sendMessage={sendMessage}
+                                        station={stationInfo}
+                                        workout={workout}
+                                        participantId={stationData.externalId.toString()}
+                                        category={category}
+                                    />
+                                )}
+                                {layout === "maxWeight" && (
+                                    <RemoteWeight
+                                        heatId={globals?.externalHeatId}
+                                        laneNumber={laneNumber as string}
+                                        numberOfPartner={2}
+                                        category={category}
+                                    />
+                                )}
+                            </AccordionDetails>
+                        </Accordion>
+                    )}
+                </Container>
             </Stack>
-        </Container>
+        </Box>
     );
 };
 

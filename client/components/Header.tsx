@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 const Header = ({
     headerHeight = "155px",

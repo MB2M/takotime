@@ -19,7 +19,7 @@ export default async function handler(
         const accessToken = (await resp.json()).token;
 
         const response = await fetch(
-            `${BASE_URL}/events/${eventId}/workouts/${workoutId}/heats`,
+            `${BASE_URL}/events/${eventId}/workouts/${workoutId}/heats?per_page=999`,
             {
                 method: "GET",
                 headers: {

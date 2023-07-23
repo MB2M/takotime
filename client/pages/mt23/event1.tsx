@@ -67,6 +67,16 @@ const finaleHeats = [
         ],
     },
     {
+        level: "finale",
+        division: 67854,
+        heats: [372207, 372208, 372209],
+    },
+    {
+        level: "finale",
+        division: 67855,
+        heats: [372213, 372214, 372215],
+    },
+    {
         level: "semi",
         division: 66923,
         heats: [

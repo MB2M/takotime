@@ -72,15 +72,15 @@ class Manager extends EventEmitter {
     }
 
     buzz() {
-        exec("cvlc ~/buzzer.wav", (error, stdout, stderr) => {
+        exec("sudo cvlc ~/buzzer.wav", (error, stdout, stderr) => {
             if (error) {
                 console.log(`error: ${error.message}`);
             }
         });
         // @ts-ignore
-        player({ player: "cvlc" }).play("~/buzzer.wav", function (err) {
-            if (err) console.log(err);
-        });
+        // player({ player: "cvlc" }).play("~/buzzer.wav", function (err) {
+        //     if (err) console.log(err);
+        // });
     }
 
     // buzz() {

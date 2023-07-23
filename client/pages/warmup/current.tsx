@@ -9,7 +9,7 @@ import { useCompetitionContext } from "../../context/competition";
 const WarmupCurrent = () => {
     const competition = useCompetitionContext();
     const { globals } = useLiveDataContext();
-    const planning = usePlanning(45000);
+    const planning = usePlanning(10000);
     const [allowedHeats, setAllowedHeats] = useState<PlanningHeat[]>([]);
     const liveData = useLiveDataContext();
     const { timer } = useChrono(

@@ -2,8 +2,7 @@ export async function loadHeats(workoutId: number) {
     let response = await fetch(
         "https://competitioncorner.net/api2/v1/schedule/workout/" + workoutId
     );
-    let json = await response.json();
-    return json;
+    return await response.json();
 }
 
 export async function loadPlanning(
@@ -15,16 +14,19 @@ export async function loadPlanning(
             if (workoutNameExcludeFilter?.includes(workout.name)) return;
 
             let heats = await loadHeats(workout.id);
-            const planningHeats = heats.map((heat: CCHeat) => ({
+            return heats.map((heat: CCHeat) => ({
                 ...heat,
                 day: new Date(workout.date).toDateString(),
                 time: heat.time,
                 workoutId: workout.id,
                 workoutName: workout.name,
             }));
-
-            return planningHeats.sort((a: { time: number; }, b: { time: number; }) => a.time - b.time);
         })
     );
-    return heats.flat();
+
+    return heats
+        .flat()
+        .sort((a: { time: number }, b: { time: number }) =>
+            a.time < b.time ? -1 : 1
+        );
 }

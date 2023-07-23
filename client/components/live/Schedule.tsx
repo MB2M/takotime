@@ -1,26 +1,15 @@
 import Head from "next/head";
 import Script from "next/script";
 import {
-    useState,
-    useEffect,
     ReactChild,
     ReactFragment,
     ReactPortal,
+    useEffect,
+    useState,
 } from "react";
 import { usePlanning } from "../../utils/mt/usePlanning";
 
-const Schedule = ({
-    workoutIds,
-    loadedWorkouts,
-    stationDevices,
-    stationStatics,
-    stationDynamics,
-    brokerClients,
-    ranks,
-    globals,
-    sendMessage,
-}: any) => {
-    console.log(globals);
+const Schedule = ({ globals }: any) => {
     const planning = usePlanning(300000);
     const [heatPositionPlanning, setHeatPositionPLanning] = useState(0);
     const [viewPastHeat, setViewPastHeat] = useState(false);
@@ -122,8 +111,8 @@ const Schedule = ({
                                         aria-expanded="true"
                                         aria-controls={"collapse" + i}
                                     >
-                                        {h.time} |{" "}
-                                        {h.workoutName} | {h.title} - {h.id}
+                                        {h.time} | {h.workoutName} | {h.title} -{" "}
+                                        {h.id}
                                     </button>
                                 </h2>
                                 <div

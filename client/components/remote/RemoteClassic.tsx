@@ -1,6 +1,7 @@
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import useWebappWorkout from "../../hooks/useWebappWorkout";
 import { useEffect, useMemo, useState } from "react";
+import RemoteConfirmScore from "./RemoteConfirmScore";
 
 interface Props {
     workout: Workout;
@@ -91,6 +92,13 @@ const RemoteClassic = ({
 
     return (
         <>
+            {endTimeScore && station && (
+                <RemoteConfirmScore
+                    scores={station.scores}
+                    workouts={[workout]}
+                    laneNumber={laneNumber.toString()}
+                />
+            )}
             <Box my={"auto"}>
                 {workoutType === "amrap" && currentRound > 0 && (
                     <Typography textAlign="center" fontFamily={"CantoraOne"}>

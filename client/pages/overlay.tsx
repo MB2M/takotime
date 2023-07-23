@@ -24,7 +24,7 @@ interface Props {
     categories: string[];
 }
 
-const OverlayWs: React.FC<Props> = ({
+const Overlay: React.FC<Props> = ({
     plainTimer,
     fullStations,
     workouts,
@@ -208,4 +208,4 @@ const OverlayWs: React.FC<Props> = ({
     );
 };
 
-export default withDisplayData(OverlayWs);
+export default withDisplayData(Overlay);

@@ -71,8 +71,6 @@ const LaneRemote = () => {
         [selectedWorkoutId, workouts]
     );
 
-    console.log(workout);
-
     const layout = workout?.layout;
 
     useEffect(() => {

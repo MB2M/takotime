@@ -62,8 +62,8 @@ const finaleHeats = [
         level: "finale",
         division: 66923,
         heats: [
-            366702, 366703, 366704, 366705, 366706, 366707, 366708, 366709,
-            366710,
+            372231, 372232, 372233, 372234, 372235, 372236, 372237, 372238,
+            372239,
         ],
     },
     {
@@ -152,7 +152,15 @@ const generateSemiHeats = (
             .sort((a, b) => a.qualifs.expectedLane - b.qualifs.expectedLane)
             .map((athlete) => ({ id: athlete.id }));
 
-        return { id: heat, heatName: `Heat ${index + 1}`, stations };
+        return {
+            id: heat,
+            heatName: `(V${index + 1}) Elite - ${level
+                .slice(0, 1)
+                .toUpperCase()}${level.slice(1)} - ${
+                heats.length > 3 ? 3 - Math.floor(index / 3) : 3 - (index % 3)
+            }${heats.length > 3 ? ` - ${3 - (index % 3)}` : ""}`,
+            stations,
+        };
     });
 };
 
@@ -173,7 +181,13 @@ const generateEliteMenFinaleHeats = (
             )
             .map((athlete) => ({ id: athlete.id }));
 
-        return { id: heat, heatName: `Heat ${index + 1}`, stations };
+        return {
+            id: heat,
+            heatName: `(V${index + 1}) Elite - Finale - ${
+                3 - Math.floor(index / 3)
+            }${heats.length > 3 ? ` - ${3 - (index % 3)}` : ""}`,
+            stations,
+        };
     });
 };
 

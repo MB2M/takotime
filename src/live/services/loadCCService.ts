@@ -9,7 +9,7 @@ const loadFromCC = async (
 ) => {
     try {
         const response = await fetch(
-            `https://competitioncorner.net/api2/v1/events/${externalEventId}/workouts/${externalWorkoutId}/heats`,
+            `https://competitioncorner.net/api2/v1/events/${externalEventId}/workouts/${externalWorkoutId}/heats?per_page=999`,
             {
                 method: "GET",
                 headers: {

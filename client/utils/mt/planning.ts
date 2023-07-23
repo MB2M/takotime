@@ -26,7 +26,16 @@ export async function loadPlanning(
 
     return heats
         .flat()
-        .sort((a: { time: number }, b: { time: number }) =>
-            a.time < b.time ? -1 : 1
+        .sort(
+            (
+                a: { time: number; day: string },
+                b: { time: number; day: string }
+            ) => {
+                return Date.parse(a.day) === Date.parse(b.day)
+                    ? a.time < b.time
+                        ? -1
+                        : 1
+                    : Date.parse(a.day) - Date.parse(b.day);
+            }
         );
 }

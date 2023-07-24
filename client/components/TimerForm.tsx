@@ -22,8 +22,8 @@ interface Props {
 }
 
 const TimerForm = ({
-    showSave = true,
-    showReset = true,
+    showSave = false,
+    showReset = false,
     row = false,
 }: Props) => {
     const competition = useCompetitionContext();

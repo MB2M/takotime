@@ -84,9 +84,9 @@ const DefaultMultiCategoriesLayout = ({
                     return 1;
                 });
 
-                const repsOfFirst = scores.filter(
-                    (score): score is number => typeof score === "number"
-                )[0];
+                const repsOfFirst = stations
+                    .map((station) => getTotalClassicReps(station))
+                    .sort((a, b) => b - a)[0];
 
                 const workout =
                     workouts.find((workout) =>

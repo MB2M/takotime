@@ -74,9 +74,9 @@ const DefaultLayout = ({ workout, stations }: Props) => {
         return scores;
     }, [splitStations]);
 
-    const repsOfFirst = allScores.filter(
-        (score): score is number => typeof score === "number"
-    )[0];
+    const repsOfFirst = stations
+        .map((station) => getTotalClassicReps(station))
+        .sort((a, b) => b - a)[0];
 
     return (
         <Box

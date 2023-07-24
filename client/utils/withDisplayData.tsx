@@ -21,6 +21,8 @@ const withData = (Component: React.FC<any>) => {
         const { fullStations, activeWorkout, workouts, categories } =
             useStationWs();
 
+        console.log(fullStations);
+
         const competition = useCompetitionContext();
 
         return (

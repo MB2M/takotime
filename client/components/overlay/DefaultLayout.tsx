@@ -24,7 +24,13 @@ const DefaultLayout = ({ workout, stations }: Props) => {
 
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
-        const copiedStations = [...stations];
+        const copiedStations = [
+            ...stations.filter(
+                (station) =>
+                    !station.scores?.endTimer ||
+                    station.scores.endTimer.length === 0
+            ),
+        ];
         switch (workout?.options?.rankBy) {
             case "laneNumber":
                 sortedStations = copiedStations.sort(

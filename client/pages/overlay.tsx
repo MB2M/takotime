@@ -1,6 +1,5 @@
 import { Box, Theme, Typography } from "@mui/material";
 import React, { useMemo } from "react";
-
 import withDisplayData from "../utils/withDisplayData";
 import Image from "next/future/image";
 import useHeatDivisionInfo from "../hooks/cc/useHeatDivisionInfo";
@@ -93,6 +92,10 @@ const Overlay: React.FC<Props> = ({
         [workout?.options?.logo]
     );
 
+    const finishedStations = fullStations.filter(
+        (station) => !!station.scores?.endTimer.at(-1)?.time
+    );
+
     return (
         <Stack
             p={4}
@@ -104,6 +107,58 @@ const Overlay: React.FC<Props> = ({
             overflow={"hidden"}
             justifyContent={"space-between"}
         >
+            <Box
+                position={"absolute"}
+                top={180}
+                left={32}
+                p={2}
+                sx={{ backgroundColor: "#aaaaaa70" }}
+                borderRadius={1}
+                display={"flex"}
+                flexDirection={"column"}
+                gap={1}
+            >
+                {finishedStations
+                    .sort((a, b) =>
+                        a.scores?.endTimer.at(-1)?.time! <
+                        b.scores?.endTimer.at(-1)?.time!
+                            ? -1
+                            : 1
+                    )
+                    .map((station, index) => (
+                        <Box display={"flex"} gap={1} alignItems={"center"}>
+                            <Typography
+                                px={0.7}
+                                fontFamily={"bebasneue"}
+                                fontSize={"1.5rem"}
+                                sx={{ backgroundColor: "#ffffff90" }}
+                            >
+                                {index + 1}
+                            </Typography>
+                            <Box
+                                display={"flex"}
+                                justifyContent={"space-between"}
+                                width={1}
+                                gap={1}
+                            >
+                                <Typography
+                                    fontFamily={"bebasneue"}
+                                    fontSize={"1.5rem"}
+                                >
+                                    {station.participant}
+                                </Typography>
+                                <Typography
+                                    fontFamily={"bebasneue"}
+                                    fontSize={"1.5rem"}
+                                    sx={{ backgroundColor: "#ffffff90" }}
+                                    px={1}
+                                >
+                                    {station.scores?.endTimer.at(-1)?.time}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    ))}
+            </Box>
             <Box
                 display={"flex"}
                 justifyContent={"space-between"}
@@ -155,7 +210,6 @@ const Overlay: React.FC<Props> = ({
                             fontSize={"1.6rem"}
                         >
                             {heatName}
-                            {/*({divisions.join("/")})*/}
                         </Typography>
                     </Box>
                     {/*</Box>*/}

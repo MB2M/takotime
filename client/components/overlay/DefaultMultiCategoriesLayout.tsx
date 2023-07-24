@@ -30,7 +30,13 @@ const DefaultMultiCategoriesLayout = ({
 
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
-        const copiedStations = [...stations];
+        const copiedStations = [
+            ...stations.filter(
+                (station) =>
+                    !station.scores?.endTimer ||
+                    station.scores.endTimer.length === 0
+            ),
+        ];
         switch (workouts.at(-1)?.options?.rankBy) {
             case "laneNumber":
                 sortedStations = copiedStations.sort(
@@ -38,7 +44,7 @@ const DefaultMultiCategoriesLayout = ({
                 );
                 break;
             case "repsCount":
-                sortedStations = stations
+                sortedStations = copiedStations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
                     .sort((a, b) => {
                         return a.scores?.endTimer[workouts.length - 1]?.time ===
@@ -60,15 +66,13 @@ const DefaultMultiCategoriesLayout = ({
     return (
         <>
             {categories.map((category) => {
-                const stations = sortedStations.filter(
-                    (station) => station.category === category
-                );
-
-                const scores = stations.map(
-                    (station) =>
-                        station.scores?.endTimer[workouts.length - 1]?.time ||
-                        getTotalClassicReps(station)
-                );
+                const scores = stations
+                    .filter((station) => station.category === category)
+                    .map(
+                        (station) =>
+                            station.scores?.endTimer[workouts.length - 1]
+                                ?.time || getTotalClassicReps(station)
+                    );
 
                 scores.sort((a, b) => {
                     if (typeof a === "number" && typeof b === "number") {
@@ -81,6 +85,8 @@ const DefaultMultiCategoriesLayout = ({
                     return 1;
                 });
 
+                console.log(scores);
+
                 const repsOfFirst = stations
                     .map((station) => getTotalClassicReps(station))
                     .sort((a, b) => b - a)[0];
@@ -90,6 +96,10 @@ const DefaultMultiCategoriesLayout = ({
                         workout.categories?.includes(category)
                     ) || workouts[0];
 
+                const stationsOfCategory = sortedStations.filter(
+                    (station) => station.category === category
+                );
+
                 return (
                     <Box width={1}>
                         <Box
@@ -98,15 +108,17 @@ const DefaultMultiCategoriesLayout = ({
                             gap={2}
                             ref={parent}
                         >
-                            {stations.slice(0, 3).map((station) => (
-                                <DefaultAthletes
-                                    key={station.laneNumber}
-                                    station={station}
-                                    workout={workout}
-                                    repsOfFirst={repsOfFirst}
-                                    allTotalReps={scores}
-                                    wodState={globals?.state}
-                                />
+                            {stationsOfCategory.slice(0, 3).map((station) => (
+                                <Box maxWidth={1 / 3} width={1}>
+                                    <DefaultAthletes
+                                        key={station.laneNumber}
+                                        station={station}
+                                        workout={workout}
+                                        repsOfFirst={repsOfFirst}
+                                        allTotalReps={scores}
+                                        wodState={globals?.state}
+                                    />
+                                </Box>
                             ))}
                         </Box>
                         <Typography

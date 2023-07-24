@@ -87,14 +87,16 @@ const DefaultLayout = ({ workout, stations }: Props) => {
             ref={parent}
         >
             {splitStations.slice(0, 6).map((station) => (
-                <DefaultAthletes
-                    key={station.laneNumber}
-                    station={station}
-                    workout={workout}
-                    repsOfFirst={repsOfFirst}
-                    allTotalReps={allScores}
-                    wodState={globals?.state}
-                />
+                <Box maxWidth={1 / 6} width={1}>
+                    <DefaultAthletes
+                        key={station.laneNumber}
+                        station={station}
+                        workout={workout}
+                        repsOfFirst={repsOfFirst}
+                        allTotalReps={allScores}
+                        wodState={globals?.state}
+                    />
+                </Box>
             ))}
         </Box>
     );

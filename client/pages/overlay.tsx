@@ -92,9 +92,20 @@ const Overlay: React.FC<Props> = ({
         [workout?.options?.logo]
     );
 
-    const finishedStations = fullStations.filter(
-        (station) => !!station.scores?.endTimer.at(-1)?.time
-    );
+    const finishedStations =
+        categories.length === 0
+            ? [
+                  fullStations.filter(
+                      (station) => !!station.scores?.endTimer.at(-1)?.time
+                  ),
+              ]
+            : categories.map((category) =>
+                  fullStations.filter(
+                      (station) =>
+                          !!station.scores?.endTimer.at(-1)?.time &&
+                          station.category === category
+                  )
+              );
 
     return (
         <Stack
@@ -107,58 +118,114 @@ const Overlay: React.FC<Props> = ({
             overflow={"hidden"}
             justifyContent={"space-between"}
         >
-            <Box
-                position={"absolute"}
-                top={180}
-                left={32}
-                p={2}
-                sx={{ backgroundColor: "#aaaaaa70" }}
-                borderRadius={1}
-                display={"flex"}
-                flexDirection={"column"}
-                gap={1}
-            >
-                {finishedStations
-                    .sort((a, b) =>
-                        a.scores?.endTimer.at(-1)?.time! <
-                        b.scores?.endTimer.at(-1)?.time!
-                            ? -1
-                            : 1
-                    )
-                    .map((station, index) => (
-                        <Box display={"flex"} gap={1} alignItems={"center"}>
-                            <Typography
-                                px={0.7}
-                                fontFamily={"bebasneue"}
-                                fontSize={"1.5rem"}
-                                sx={{ backgroundColor: "#ffffff90" }}
-                            >
-                                {index + 1}
-                            </Typography>
-                            <Box
-                                display={"flex"}
-                                justifyContent={"space-between"}
-                                width={1}
-                                gap={1}
-                            >
+            {finishedStations[0]?.length > 0 && (
+                <Box
+                    position={"absolute"}
+                    top={180}
+                    left={32}
+                    p={2}
+                    sx={{ backgroundColor: "#aaaaaa70" }}
+                    borderRadius={1}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    gap={1}
+                >
+                    {finishedStations[0]
+                        ?.sort((a, b) =>
+                            a.scores?.endTimer.at(-1)?.time! <
+                            b.scores?.endTimer.at(-1)?.time!
+                                ? -1
+                                : 1
+                        )
+                        .map((station, index) => (
+                            <Box display={"flex"} gap={1} alignItems={"center"}>
                                 <Typography
-                                    fontFamily={"bebasneue"}
-                                    fontSize={"1.5rem"}
-                                >
-                                    {station.participant}
-                                </Typography>
-                                <Typography
+                                    px={0.7}
                                     fontFamily={"bebasneue"}
                                     fontSize={"1.5rem"}
                                     sx={{ backgroundColor: "#ffffff90" }}
-                                    px={1}
                                 >
-                                    {station.scores?.endTimer.at(-1)?.time}
+                                    {index + 1}
                                 </Typography>
+                                <Box
+                                    display={"flex"}
+                                    justifyContent={"space-between"}
+                                    width={1}
+                                    gap={1}
+                                >
+                                    <Typography
+                                        fontFamily={"bebasneue"}
+                                        fontSize={"1.5rem"}
+                                    >
+                                        {station.participant}
+                                    </Typography>
+                                    <Typography
+                                        fontFamily={"bebasneue"}
+                                        fontSize={"1.5rem"}
+                                        sx={{ backgroundColor: "#ffffff90" }}
+                                        px={1}
+                                    >
+                                        {station.scores?.endTimer.at(-1)?.time}
+                                    </Typography>
+                                </Box>
                             </Box>
-                        </Box>
-                    ))}
-            </Box>
+                        ))}
+                </Box>
+            )}
+            {finishedStations[1]?.length > 0 && (
+                <Box
+                    position={"absolute"}
+                    top={180}
+                    right={32}
+                    p={2}
+                    sx={{ backgroundColor: "#aaaaaa70" }}
+                    borderRadius={1}
+                    display={"flex"}
+                    flexDirection={"column"}
+                    gap={1}
+                >
+                    {finishedStations[1]
+                        ?.sort((a, b) =>
+                            a.scores?.endTimer.at(-1)?.time! <
+                            b.scores?.endTimer.at(-1)?.time!
+                                ? -1
+                                : 1
+                        )
+                        .map((station, index) => (
+                            <Box display={"flex"} gap={1} alignItems={"center"}>
+                                <Typography
+                                    px={0.7}
+                                    fontFamily={"bebasneue"}
+                                    fontSize={"1.5rem"}
+                                    sx={{ backgroundColor: "#ffffff90" }}
+                                >
+                                    {index + 1}
+                                </Typography>
+                                <Box
+                                    display={"flex"}
+                                    justifyContent={"space-between"}
+                                    width={1}
+                                    gap={1}
+                                >
+                                    <Typography
+                                        fontFamily={"bebasneue"}
+                                        fontSize={"1.5rem"}
+                                    >
+                                        {station.participant}
+                                    </Typography>
+                                    <Typography
+                                        fontFamily={"bebasneue"}
+                                        fontSize={"1.5rem"}
+                                        sx={{ backgroundColor: "#ffffff90" }}
+                                        px={1}
+                                    >
+                                        {station.scores?.endTimer.at(-1)?.time}
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        ))}
+                </Box>
+            )}
             <Box
                 display={"flex"}
                 justifyContent={"space-between"}

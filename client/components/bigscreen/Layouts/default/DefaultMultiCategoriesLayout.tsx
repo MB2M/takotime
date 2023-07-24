@@ -39,13 +39,11 @@ const DefaultMultiCategoriesLayout = ({
                 sortedStations = copiedStations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
                     .sort((a, b) => {
-                        return a.scores?.endTimer[workouts.length - 1]?.time ===
-                            b.scores?.endTimer[workouts.length - 1]?.time
+                        return a.scores?.endTimer.at(-1)?.time ===
+                            b.scores?.endTimer.at(-1)?.time
                             ? getTotalClassicReps(b) - getTotalClassicReps(a)
-                            : (a.scores?.endTimer[workouts.length - 1]?.time ||
-                                  "999999") <
-                              (b.scores?.endTimer[workouts.length - 1]?.time ||
-                                  "999999")
+                            : (a.scores?.endTimer.at(-1)?.time || "999999") <
+                              (b.scores?.endTimer.at(-1)?.time || "999999")
                             ? -1
                             : 1;
                     });
@@ -69,7 +67,7 @@ const DefaultMultiCategoriesLayout = ({
 
                 const scores = stations.map(
                     (station) =>
-                        station.scores?.endTimer[workouts.length - 1]?.time ||
+                        station.scores?.endTimer.at(-1)?.time ||
                         getTotalClassicReps(station)
                 );
 

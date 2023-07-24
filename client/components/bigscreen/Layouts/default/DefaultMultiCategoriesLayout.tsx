@@ -27,15 +27,16 @@ const DefaultMultiCategoriesLayout = ({
     );
 
     useEffect(() => {
+        const copiedStations = [...stations];
         let sortedStations: DisplayFullStation[] = [];
         switch (workouts.at(-1)?.options?.rankBy) {
             case "laneNumber":
-                sortedStations = stations.sort(
+                sortedStations = copiedStations.sort(
                     (a, b) => a.laneNumber - b.laneNumber
                 );
                 break;
             case "repsCount":
-                sortedStations = stations
+                sortedStations = copiedStations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
                     .sort((a, b) => {
                         return a.scores?.endTimer[workouts.length - 1]?.time ===

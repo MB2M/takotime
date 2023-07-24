@@ -33,15 +33,16 @@ const SplitMTMultiCategoriesLayout = ({
         timer % (1000 * 60 * 3) >= 1000 * 60 * 2;
 
     useEffect(() => {
+        const copiedStations = [...stations];
         let sortedStations: DisplayFullStation[] = [];
         switch (workouts.at(-1)?.options?.rankBy) {
             case "laneNumber":
-                sortedStations = stations.sort(
+                sortedStations = copiedStations.sort(
                     (a, b) => a.laneNumber - b.laneNumber
                 );
                 break;
             case "repsCount":
-                sortedStations = stations
+                sortedStations = copiedStations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
                     .sort((a, b) => {
                         return a.scores?.endTimer.at(-1)?.time ===

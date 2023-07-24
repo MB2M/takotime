@@ -26,14 +26,15 @@ const DefaultLayout = ({ workout, stations }: Props) => {
 
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
+        const copiedStations = [...stations];
         switch (workout.options?.rankBy) {
             case "laneNumber":
-                sortedStations = stations.sort(
+                sortedStations = copiedStations.sort(
                     (a, b) => a.laneNumber - b.laneNumber
                 );
                 break;
             case "repsCount":
-                sortedStations = stations
+                sortedStations = copiedStations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
                     .sort((a, b) => {
                         return a.scores?.endTimer.at(-1)?.time ===
@@ -83,13 +84,13 @@ const DefaultLayout = ({ workout, stations }: Props) => {
         return scores;
     }, [splitStations]);
 
-    // const repsOfFirst = allScores.filter(
-    //     (score): score is number => typeof score === "number"
-    // )[0];
-
-    const repsOfFirst = stations.map((station) =>
-        getTotalClassicReps(station)
+    const repsOfFirst = allScores.filter(
+        (score): score is number => typeof score === "number"
     )[0];
+
+    useEffect(() => {
+        console.log(repsOfFirst);
+    }, [repsOfFirst]);
 
     return (
         <Box

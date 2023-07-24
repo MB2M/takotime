@@ -30,9 +30,10 @@ const DefaultMultiCategoriesLayout = ({
 
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
+        const copiedStations = [...stations];
         switch (workouts.at(-1)?.options?.rankBy) {
             case "laneNumber":
-                sortedStations = stations.sort(
+                sortedStations = copiedStations.sort(
                     (a, b) => a.laneNumber - b.laneNumber
                 );
                 break;

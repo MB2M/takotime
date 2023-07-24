@@ -24,14 +24,15 @@ const DefaultLayout = ({ workout, stations }: Props) => {
 
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
+        const copiedStations = [...stations];
         switch (workout?.options?.rankBy) {
             case "laneNumber":
-                sortedStations = stations.sort(
+                sortedStations = copiedStations.sort(
                     (a, b) => a.laneNumber - b.laneNumber
                 );
                 break;
             case "repsCount":
-                sortedStations = stations
+                sortedStations = copiedStations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
                     .sort((a, b) => {
                         return a.scores?.endTimer.at(-1)?.time ===

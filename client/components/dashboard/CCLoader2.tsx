@@ -1,6 +1,13 @@
-import { Button, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {
+    Button,
+    InputLabel,
+    MenuItem,
+    Select,
+    Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useCompetitionContext } from "../../context/competition";
+import { loadHeat } from "../../utils/cc/loadHeat";
 
 type NameIdObject = {
     name: string;
@@ -14,7 +21,6 @@ const CCLoader = ({
     onLoad?: (heatId: string, workoutId: string) => any;
 }) => {
     const competition = useCompetitionContext();
-    const [event, setEvent] = useState<NameIdObject>();
     const [workouts, setWorkouts] = useState<Array<NameIdObject>>([]);
     const [selectedWorkout, setSelectedWorkout] = useState<number>();
     const [heats, setHeats] = useState<Array<NameIdObject>>([]);
@@ -67,26 +73,8 @@ const CCLoader = ({
     }, [selectedWorkout]);
 
     const load = async () => {
-        const payload = {
-            event: competition?.eventId,
-            workout: selectedWorkout,
-            heat: selectedHeat,
-        };
-
-        try {
-            await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/loadCC`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                }
-            );
-        } catch (err) {
-            console.log(err);
-        }
+        if (!competition?.eventId || !selectedHeat || !selectedWorkout) return;
+        await loadHeat(competition.eventId, selectedWorkout, selectedHeat);
     };
 
     const handleWorkoutChange = async (event: any) => {
@@ -99,7 +87,7 @@ const CCLoader = ({
 
     return (
         <>
-            <h3>Load from CC</h3>
+            <Typography fontWeight={"bold"}>Load from CC</Typography>
             {workouts.length > 0 && (
                 <>
                     <InputLabel id="workout">Wod</InputLabel>

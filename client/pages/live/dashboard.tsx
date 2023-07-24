@@ -18,9 +18,8 @@ import { useLiveDataContext } from "../../context/liveData/livedata";
 import useChrono from "../../hooks/useChrono";
 import StationUpdate from "../../components/StaticsUpdate";
 import DevicesUpdate from "../../components/DevicesUpdate";
-import TimerForm from "../../components/TimerForm";
+import TimerFormOld from "../../components/TimerFormOld";
 import LiveWorkoutSelector from "../../components/LiveWorkoutSelector";
-import CCLoader from "../../components/dashboard/CCLoader";
 import LocalLoader from "../../components/dashboard/LocalLoader";
 import LoadedWorkouts from "../../components/LoadedWorkouts";
 import CCLoader2 from "../../components/dashboard/CCLoader2";
@@ -224,7 +223,7 @@ any) => {
             <Container maxWidth="xl">
                 <Grid container spacing={2}>
                     <Grid item xs={12} lg={2}>
-                        <TimerForm
+                        <TimerFormOld
                             startTime={globals?.startTime}
                             chrono={timer}
                         />

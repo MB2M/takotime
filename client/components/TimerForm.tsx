@@ -1,35 +1,86 @@
-import { Button, Box, TextField, Checkbox } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { formatChrono } from "../utils/timeConverter";
+import { Box, Stack } from "@mui/system";
+import {
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    TextField,
+    Typography,
+} from "@mui/material";
+import { useCompetitionContext } from "../context/competition";
+import { ChangeEvent, MouseEvent, useEffect, useMemo, useState } from "react";
+import { useLiveDataContext } from "../context/liveData/livedata";
+import useChrono from "../hooks/useChrono";
+
+interface Props {
+    showReset?: boolean;
+    showSave?: boolean;
+    row?: boolean;
+}
 
 const TimerForm = ({
-    startTime,
-    chrono,
-}: {
-    startTime: string | undefined;
-    chrono: string | number | null;
-}) => {
-    const [duration, setDuration] = useState(1);
-    const [countdown, setCountdown] = useState(10);
-    const [saveResult, setSaveResult] = useState(true);
-    const [resetOnStart, setResetOnStart] = useState(false);
+    showSave = true,
+    showReset = true,
+    row = false,
+}: Props) => {
+    const competition = useCompetitionContext();
+    const [timerSetting, setTimerSetting] = useState<TimerSetting>({
+        countdown: 10,
+        duration: 0,
+        direction: "asc",
+    });
+    const { globals } = useLiveDataContext();
+    const { timer } = useChrono(globals?.startTime, globals?.duration);
+    const [resetOpen, setResetOpen] = useState(false);
+    const [resetData, setResetData] = useState(true);
+    const [save, setSave] = useState(true);
 
-    const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (isNumberOrEmpty(e.target.value)) setDuration(+e.target.value);
-    };
+    const workout = useMemo(
+        () =>
+            competition?.workouts?.find(
+                (workout) =>
+                    workout.workoutId?.toString() ===
+                    globals?.externalWorkoutId.toString()
+            ),
+        [competition?.workouts, globals?.externalWorkoutId]
+    );
 
-    const handleCountdownChange = (e: any) => {
-        if (isNumberOrEmpty(e.target.value)) setCountdown(+e.target.value);
-    };
+    const handleTimerChange =
+        (settingKey: keyof TimerSetting) =>
+        (event: ChangeEvent | MouseEvent, newVal?: string) => {
+            const targetEvent = event.target as any;
+            const eventValue = targetEvent.value ?? "";
 
-    const isNumberOrEmpty = (data: any): boolean => {
-        const regexp = /(^[0-9]+$|^$)/;
-        return regexp.test(data);
-    };
+            setTimerSetting((current) => ({
+                ...current,
+                [settingKey]: newVal || eventValue,
+            }));
+        };
+
+    useEffect(() => {
+        if (workout) {
+            setTimerSetting({
+                duration: workout.duration || 0,
+                direction: workout.options?.chronoDirection || "asc",
+                countdown: 10,
+            });
+        }
+    }, [workout]);
 
     const handleStart = async () => {
+        if (!timerSetting.duration) return;
         try {
             await fetch(
-                `http://${process.env.NEXT_PUBLIC_LIVE_API}/live/api/switchStart?action=start&duration=${duration}&countdown=${countdown}&save=${saveResult}&reset=${resetOnStart}`
+                `http://${
+                    process.env.NEXT_PUBLIC_LIVE_API
+                }/live/api/switchStart?action=start&duration=${
+                    timerSetting.duration
+                }&countdown=${
+                    timerSetting.countdown
+                }&save=${true}&reset=${true}`
             );
         } catch (error) {
             console.error(error);
@@ -44,61 +95,118 @@ const TimerForm = ({
         } catch (error) {
             console.error(error);
         }
+        handleCloseResetDialog();
+    };
+
+    const handleCloseResetDialog = () => {
+        setResetOpen(false);
     };
 
     return (
-        <Box
-            component="form"
-            sx={{ "& .MuiTextField-root": { display: "flex", m: 2 } }}
-        >
-            {!startTime && (
-                <>
-                    <h3> Launch: </h3>
-                    <TextField
-                        label="Duration"
-                        id="outlined-size-small"
-                        size="small"
-                        type="number"
-                        value={duration}
-                        onChange={handleDurationChange}
-                    />
-                    <TextField
-                        label="Countdown"
-                        id="outlined-size-small"
-                        size="small"
-                        type="number"
-                        onChange={handleCountdownChange}
-                        value={countdown}
-                    />
-                    <Button
-                        variant="outlined"
-                        onClick={handleStart}
-                        sx={{ mx: 2 }}
+        <>
+            <Dialog open={resetOpen}>
+                <DialogContent>
+                    <DialogContentText>Confirm Reset?</DialogContentText>
+                    <DialogActions>
+                        <Button onClick={handleReset}>Yes</Button>
+                        <Button onClick={handleCloseResetDialog}>No</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
+            <Stack spacing={5} my={"auto"}>
+                {timer ? (
+                    <h1>
+                        {formatChrono(
+                            timer,
+                            workout?.options?.chronoDirection === "desc"
+                        )}
+                    </h1>
+                ) : (
+                    <Box
+                        display={"flex"}
+                        flexDirection={row ? "row" : "column"}
+                        gap={2}
                     >
-                        Start
-                    </Button>
-                </>
-            )}
-            <h1>{chrono}</h1>
-            <Button
-                color="error"
-                variant="outlined"
-                onClick={handleReset}
-                sx={{ mx: 2 }}
-            >
-                Reset
-            </Button>
-            <Checkbox
-                checked={saveResult}
-                onClick={() => setSaveResult((current) => !current)}
-            />{" "}
-            save results
-            <Checkbox
-                checked={resetOnStart}
-                onClick={() => setResetOnStart((current) => !current)}
-            />{" "}
-            reset
-        </Box>
+                        <Box>
+                            <Typography fontSize={"inherit"}>
+                                Countdown:
+                            </Typography>
+                            <TextField
+                                variant="outlined"
+                                type={"number"}
+                                value={timerSetting.countdown}
+                                onChange={handleTimerChange("countdown")}
+                                size={"small"}
+                                sx={{ maxWidth: 80 }}
+                            />
+                        </Box>
+                        <Box>
+                            <Typography fontSize={"inherit"}>
+                                Duration:
+                            </Typography>
+                            <TextField
+                                variant="outlined"
+                                type={"number"}
+                                value={timerSetting.duration}
+                                onChange={handleTimerChange("duration")}
+                                size={"small"}
+                                sx={{ maxWidth: 80 }}
+                            />
+                        </Box>
+                    </Box>
+                )}
+                <Box
+                    mt={2}
+                    gap={1}
+                    display="flex"
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                >
+                    {!timer ? (
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={handleStart}
+                        >
+                            Start
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => setResetOpen(true)}
+                        >
+                            Reset
+                        </Button>
+                    )}
+                </Box>
+                <Box
+                    component="form"
+                    sx={{ "& .MuiTextField-root": { display: "flex", m: 2 } }}
+                >
+                    {showSave && (
+                        <Box display={"flex"} alignItems={"center"}>
+                            <Checkbox
+                                checked={save}
+                                onClick={() => setSave((current) => !current)}
+                            />
+                            <Typography>save results</Typography>
+                        </Box>
+                    )}
+                    {showReset && (
+                        <Box display={"flex"} alignItems={"center"}>
+                            <Checkbox
+                                checked={resetData}
+                                onClick={() =>
+                                    setResetData((current) => !current)
+                                }
+                            />
+                            <Typography>reset data</Typography>
+                        </Box>
+                    )}
+                </Box>
+            </Stack>
+        </>
     );
 };
 

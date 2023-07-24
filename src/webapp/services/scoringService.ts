@@ -466,14 +466,10 @@ export const saveCC = async (
     const stationInfo = await getStationInfo(laneNumber);
     if (!stationInfo) return { error: "No participant loaded at this lane" };
 
-    console.log(category);
-
     const workouts = (await currentWorkouts())?.filter((workout) =>
         category ? workout.categories.includes(category) : true
     );
     if (!workouts) return { error: "No workout loaded" };
-
-    console.log(workouts);
 
     const { externalEventId } = await liveApp.manager.getGlobals();
 
@@ -533,8 +529,6 @@ export const saveCC = async (
             scaled: false,
             didNotFinish: false,
         };
-
-        console.log(athleteScore);
 
         const scorePayload: ScorePost[] = [athleteScore];
         const { error } = await postScore(

@@ -6,6 +6,14 @@ const addZero = (x: number, n: number) => {
     return y;
 };
 
+const addZeroAfter = (x: number, n: number) => {
+    let y = x.toString();
+    while (y.length < n) {
+        y = y + "0";
+    }
+    return y;
+};
+
 export const toReadableTime = (
     timestamp: string | number | Date,
     showMs: boolean = true
@@ -22,6 +30,6 @@ export const toReadableTime = (
     // const milli = addZero(asDate.getUTCMilliseconds(), 3);
 
     return `${hours !== "00" ? hours + ":" : ""}${minutes}:${seconds}${
-        showMs ? `.${milli}` : ""
+        showMs ? `.${addZeroAfter(+milli, 3)}` : ""
     }`;
 };

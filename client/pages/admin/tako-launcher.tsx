@@ -101,9 +101,9 @@ const TakoLauncher = () => {
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
+                            <CCLoader2 />
                             {nextHeat && (
                                 <Box p={2} textAlign={"center"}>
-                                    <CCLoader2 />
                                     <Typography fontWeight={"bold"}>
                                         or load next heat
                                     </Typography>

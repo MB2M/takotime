@@ -85,9 +85,8 @@ const DefaultMultiCategoriesLayout = ({
                     return 1;
                 });
 
-                console.log(scores);
-
                 const repsOfFirst = stations
+                    .filter((station) => station.category === category)
                     .map((station) => getTotalClassicReps(station))
                     .sort((a, b) => b - a)[0];
 

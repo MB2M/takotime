@@ -7,7 +7,6 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    Paper,
     Typography,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
@@ -62,16 +61,14 @@ const TakoLauncher = () => {
             </Dialog>
             <Stack alignItems={"center"}>
                 <Box width={1} textAlign={"center"}>
-                    <Box width={1} textAlign={"center"}>
-                        <Paper
-                            elevation={3}
-                            sx={{ backgroundColor: "#121212" }}
-                        >
-                            <Image
-                                src={`/api/images/${competition?.logoUrl}`}
-                                width={120}
-                            />
-                        </Paper>
+                    <Box width={1} textAlign={"center"} py={2}>
+                        <Image
+                            src={`/api/images/${competition?.logoUrl}`}
+                            width={120}
+                            style={{
+                                filter: `drop-shadow(0px 0px 4px black)`,
+                            }}
+                        />
                     </Box>
                     <Box>
                         <Typography

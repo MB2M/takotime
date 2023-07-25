@@ -118,45 +118,51 @@ function AthletePresentation2() {
                             {athlete.division}
                         </Typography>
                         <Box display={"flex"} ml={"auto"} gap={10}>
-                            <Box
-                                display={"flex"}
-                                gap={1}
-                                alignItems={"baseline"}
-                            >
-                                <Typography
-                                    fontFamily={"bebasNeue"}
-                                    fontSize={"4rem"}
-                                >
-                                    Points:
-                                </Typography>
+                            {athlete.points?.length &&
+                                athlete.points.length > 0 && (
+                                    <Box
+                                        display={"flex"}
+                                        gap={1}
+                                        alignItems={"baseline"}
+                                    >
+                                        <Typography
+                                            fontFamily={"bebasNeue"}
+                                            fontSize={"4rem"}
+                                        >
+                                            Points:
+                                        </Typography>
 
-                                <Typography
-                                    fontFamily={"bebasNeue"}
-                                    fontSize={"6rem"}
-                                    color={"white"}
-                                >
-                                    {athlete.points}
-                                </Typography>
-                            </Box>
-                            <Box
-                                display={"flex"}
-                                gap={1}
-                                alignItems={"baseline"}
-                            >
-                                <Typography
-                                    fontFamily={"bebasNeue"}
-                                    fontSize={"4rem"}
-                                >
-                                    Rank:
-                                </Typography>
-                                <Typography
-                                    fontFamily={"bebasNeue"}
-                                    fontSize={"6rem"}
-                                    color={"white"}
-                                >
-                                    {athlete.rank}
-                                </Typography>
-                            </Box>
+                                        <Typography
+                                            fontFamily={"bebasNeue"}
+                                            fontSize={"6rem"}
+                                            color={"white"}
+                                        >
+                                            {athlete.points}
+                                        </Typography>
+                                    </Box>
+                                )}
+                            {athlete.rank?.length &&
+                                athlete.rank?.length > 0 && (
+                                    <Box
+                                        display={"flex"}
+                                        gap={1}
+                                        alignItems={"baseline"}
+                                    >
+                                        <Typography
+                                            fontFamily={"bebasNeue"}
+                                            fontSize={"4rem"}
+                                        >
+                                            Rank:
+                                        </Typography>
+                                        <Typography
+                                            fontFamily={"bebasNeue"}
+                                            fontSize={"6rem"}
+                                            color={"white"}
+                                        >
+                                            {athlete.rank}
+                                        </Typography>
+                                    </Box>
+                                )}
                         </Box>
                     </Box>
                     <Box

@@ -19,6 +19,11 @@
 }
 
 @font-face {
+    font-family: "Strasua";
+    src: url('/fonts/strasua.ttf');
+}
+
+@font-face {
     font-family: "wwDigital";
     src: url("/fonts/wwDigital.ttf");
 }

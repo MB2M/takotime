@@ -412,6 +412,7 @@ class Station {
                 throw err;
             }
 
+            console.log(Date.now());
             const now = Date.now();
             if (now < this.lastPush + 20000) return;
             if (this.db.getData("/stations/dynamics/state") === 2) {

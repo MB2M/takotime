@@ -31,8 +31,8 @@ class Station {
         this.timer = new WodTimer();
         this.buzzer = new onoff.Gpio(
             GPIO_PIN,
-            "in"
-            // "none",
+            "in",
+            "falling"
             // { debounceTimeout: 10 }
         );
         this.lastPush = 0;

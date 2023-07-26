@@ -14,12 +14,14 @@ import {
     Typography,
 } from "@mui/material";
 import useStationWs from "../../hooks/bigscreen/useStationWs";
-import BigscreenBar from "../../components/bigscreen/BigscreenBar";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import Image from "next/future/image";
+import Chrono from "../../components/bigscreen/Chrono";
+import useHeatDivisionInfo from "../../hooks/cc/useHeatDivisionInfo";
 
 const Head = () => {
     const competition = useCompetitionContext();
-
+    const { heatName } = useHeatDivisionInfo();
     const { globals, sendMessage } = useLiveDataContext();
 
     const { fullStations, activeWorkout } = useStationWs();
@@ -175,12 +177,24 @@ const Head = () => {
                 }}
                 px={2}
             >
-                <BigscreenBar
-                    position="top"
-                    height={100}
-                    competition={competition}
-                    options={activeWorkout?.options}
-                />
+                <Box
+                    display={"flex"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                >
+                    <Image
+                        src={`/api/images/${competition?.logoUrl}`}
+                        width={50}
+                    />
+                    <Typography
+                        color={"white"}
+                        fontFamily={"bebasNeue"}
+                        fontSize={"2rem"}
+                    >
+                        {heatName}
+                    </Typography>
+                    <Chrono fontSize={"2rem"} fontFamily={"ChivoMono"} />
+                </Box>
 
                 <Stack gap={1} justifyContent={"space-between"}>
                     {fullStations
@@ -188,9 +202,12 @@ const Head = () => {
                         .map((station) => {
                             const endTime =
                                 station.scores?.endTimer.at(-1)?.time;
-                            const currentCCScore = currentCCScores.find(
-                                (score) => score.id === station.externalId
-                            )?.result;
+                            const currentCCScore = currentCCScores
+                                .find(
+                                    (score) => score.id === station.externalId
+                                )
+                                ?.result.replaceAll("0<span> + ", "")
+                                .replaceAll("</span>", "");
 
                             const isUpToDate = currentCCScore === endTime;
 

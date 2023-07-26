@@ -21,8 +21,6 @@ export default async function handler(
     //     },
     // });
 
-    console.log(eventId, workoutId, payload);
-
     // if (response.ok) {
     // const { access_token: accessToken } = await response.json();
     try {

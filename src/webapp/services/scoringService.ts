@@ -461,13 +461,18 @@ export const saveCC = async (
     category?: string
 ) => {
     participantId ??= await getParticipantId(laneNumber);
+
     if (!participantId) return { error: "Missing participant id" };
 
     const stationInfo = await getStationInfo(laneNumber);
     if (!stationInfo) return { error: "No participant loaded at this lane" };
 
     const workouts = (await currentWorkouts())?.filter((workout) =>
-        category ? workout.categories.includes(category) : true
+        category
+            ? workout.categories.length === 0
+                ? true
+                : workout.categories.includes(category)
+            : true
     );
     if (!workouts) return { error: "No workout loaded" };
 

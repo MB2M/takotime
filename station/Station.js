@@ -29,9 +29,14 @@ class Station {
         // this.bleServices = new BLEServices();
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();
-        this.buzzer = new onoff.Gpio(GPIO_PIN, "in", "rising", {
-            debounceTimeout: 3,
-        });
+        this.buzzer = new onoff.Gpio(
+            GPIO_PIN,
+            "in",
+            "rising"
+            //     {
+            //     debounceTimeout: 3,
+            // }
+        );
         this.lastPush = 0;
         this.stationNumberSubscribe = 0;
         this.devicesSubscribe = [0, 0];
@@ -247,7 +252,6 @@ class Station {
                     if (now < this.lastPush + 20000) return;
 
                     this.lastPush = now;
-                    console.log(now);
 
                     this.wodInterpreter.pressBuzzer(
                         now,
@@ -409,9 +413,8 @@ class Station {
             }
 
             const now = Date.now();
+            if (now < this.lastPush + 20000) return;
             if (this.db.getData("/stations/dynamics/state") === 2) {
-                if (now < this.lastPush + 20000) return;
-
                 this.lastPush = now;
 
                 this.wodInterpreter.pressBuzzer(

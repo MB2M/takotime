@@ -29,12 +29,9 @@ class Station {
         // this.bleServices = new BLEServices();
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();
-        this.buzzer = new onoff.Gpio(
-            GPIO_PIN,
-            "in",
-            "rising"
-            // { debounceTimeout: 10 }
-        );
+        this.buzzer = new onoff.Gpio(GPIO_PIN, "in", "rising", {
+            debounceTimeout: 50,
+        });
         this.lastPush = 0;
         this.stationNumberSubscribe = 0;
         this.devicesSubscribe = [0, 0];

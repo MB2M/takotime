@@ -301,7 +301,7 @@ class Station {
 
         this.timer.on("wodStarted", () => {
             console.log("WOD STARTED TIMER");
-            this.lastPush = Date.now();
+            this.lastPush = 0;
             this.changeState(2);
         });
 

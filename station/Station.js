@@ -30,7 +30,7 @@ class Station {
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();
         this.buzzer = new onoff.Gpio(GPIO_PIN, "in", "rising", {
-            debounceTimeout: 50,
+            debounceTimeout: 3,
         });
         this.lastPush = 0;
         this.stationNumberSubscribe = 0;

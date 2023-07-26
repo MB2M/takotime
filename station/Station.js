@@ -408,13 +408,11 @@ class Station {
                 throw err;
             }
 
+            const now = Date.now();
             if (this.db.getData("/stations/dynamics/state") === 2) {
-                const now = Date.now();
-
                 if (now < this.lastPush + 20000) return;
 
                 this.lastPush = now;
-                console.log(now);
 
                 this.wodInterpreter.pressBuzzer(
                     now,

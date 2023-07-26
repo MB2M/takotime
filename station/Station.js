@@ -32,7 +32,7 @@ class Station {
         this.buzzer = new onoff.Gpio(
             GPIO_PIN,
             "in",
-            "falling"
+            "rising"
             // { debounceTimeout: 10 }
         );
         this.lastPush = 0;

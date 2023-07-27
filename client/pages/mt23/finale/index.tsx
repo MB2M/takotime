@@ -58,8 +58,6 @@ function AthletePresentation2() {
         };
     }, [globals?.remoteFinaleAthlete, eligibleParticipants]);
 
-    console.log(athlete);
-
     return (
         <Box
             maxWidth={1920}
@@ -68,7 +66,6 @@ function AthletePresentation2() {
             maxHeight={1080}
             overflow={"hidden"}
             position={"relative"}
-            sx={{ backgroundColor: "black" }}
             ref={parent}
         >
             {athlete.station && (

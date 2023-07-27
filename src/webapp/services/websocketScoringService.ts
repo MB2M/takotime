@@ -33,7 +33,7 @@ export default class WebsocketScoringService {
         );
 
         liveApp.manager.on("startWod", async (workoutId, heatId, reset) => {
-            if (reset) await this.onReset(workoutId, heatId);
+            if (reset) await this.onReset();
             this.sendStationDataToAll();
         });
 
@@ -217,7 +217,7 @@ export default class WebsocketScoringService {
             );
     }
 
-    async onReset(workoutId: string, heatId: string) {
-        await resetScores(workoutId, heatId);
+    async onReset() {
+        await resetScores();
     }
 }

@@ -108,16 +108,16 @@ export const addClassicScore = async (
     )
         return;
 
+    console.log(heatId, laneNumber);
+
     let station =
-        state.find(
-            (station) =>
-                station.heatId === heatId &&
-                laneNumber === laneNumber &&
-                participantId === participantId
-        ) || (await createStation(heatId, laneNumber, participantId))!;
+        (await viewStation(heatId, laneNumber, participantId)) ||
+        (await createStation(heatId, laneNumber, participantId))!;
+
+    console.log(station);
 
     station.scores.wodClassic.push({ rep: score, index: wodIndex });
-
+    console.log(state);
     return station;
 
     // return Station.findOneAndUpdate(
@@ -161,12 +161,8 @@ export const addSplitScore = async (
         return;
 
     let station =
-        state.find(
-            (station) =>
-                station.heatId === heatId &&
-                laneNumber === laneNumber &&
-                participantId === participantId
-        ) || (await createStation(heatId, laneNumber, participantId))!;
+        (await viewStation(heatId, laneNumber, participantId)) ||
+        (await createStation(heatId, laneNumber, participantId))!;
 
     station.scores.wodSplit.push({
         rep: score,
@@ -231,12 +227,8 @@ export const addTimerScore = async (
         .filter((score): score is { time: string; index: string } => !!score);
 
     let station =
-        state.find(
-            (station) =>
-                station.heatId === heatId &&
-                laneNumber === laneNumber &&
-                participantId === participantId
-        ) || (await createStation(heatId, laneNumber, participantId))!;
+        (await viewStation(heatId, laneNumber, participantId)) ||
+        (await createStation(heatId, laneNumber, participantId))!;
 
     station.scores.endTimer = timeScores;
 
@@ -248,6 +240,7 @@ const createStation = (
     laneNumber: number,
     participantId?: string
 ) => {
+    console.log("CREATE STATION");
     state.push({
         heatId,
         laneNumber,
@@ -268,8 +261,8 @@ const viewStation = async (
     return state.find(
         (station) =>
             station.heatId === heatId &&
-            laneNumber === laneNumber &&
-            participantId === participantId
+            station.laneNumber === laneNumber &&
+            station.participantId === participantId
     );
     // return Station.findOne({ heatId, laneNumber, participantId }).exec();
 };
@@ -607,21 +600,6 @@ export const saveCC = async (
     return { success: "ok" };
 };
 
-export const resetScores = async (workoutId: string, heatId: string) => {
+export const resetScores = async () => {
     state = [];
-
-    // await Station.deleteMany(
-    //     {
-    //         heatId,
-    //     },
-    //     {
-    //         $set: {
-    //             "scores.wodClassic": [],
-    //             "scores.wodWeight": [],
-    //             "scores.endTimer": [],
-    //             "scores.wodSplit": [],
-    //         },
-    //     }
-    //     // { upsert: true, new: true }
-    // ).exec();
 };

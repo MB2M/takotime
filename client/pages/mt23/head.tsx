@@ -306,13 +306,7 @@ const Head = () => {
                                             textAlign={"center"}
                                             py={0.3}
                                         >
-                                            {
-                                                currentCCScores.find(
-                                                    (score) =>
-                                                        score.id ===
-                                                        station.externalId
-                                                )?.result
-                                            }
+                                            {currentCCScore}
                                         </Typography>
                                     </Box>
                                 </Box>

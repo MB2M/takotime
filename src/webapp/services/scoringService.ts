@@ -44,12 +44,15 @@ export const addScore = async (
         category?: string;
     } = {}
 ) => {
+    const startRead = Date.now();
     let { participantId, movementIndex, round, category } = options;
     const workout = await getWorkout(workoutId, category);
     if (!workout) return;
 
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);
+
+    console.log("S1 - read duration", (Date.now() - startRead) / 1000);
 
     switch (true) {
         case workout.layout.includes("split"):

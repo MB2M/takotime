@@ -47,6 +47,17 @@ const Head = () => {
             : inputValue;
 
         try {
+            let payload: any[];
+            let id = fullStations.find(
+                (station) => station.laneNumber === selectedLane
+            )?.externalId;
+
+            if (activeWorkout.layout === "MTSprintLadder") {
+                payload = [{ score: 0, tiebreakerScore: score, id }];
+            } else {
+                payload = [{ score: score, id }];
+            }
+
             const response = await fetch("/api/updateResults", {
                 method: "POST",
                 headers: {
@@ -55,15 +66,7 @@ const Head = () => {
                 body: JSON.stringify({
                     eventId: competition?.eventId,
                     workoutId: activeWorkout.workoutId,
-                    payload: [
-                        {
-                            score,
-                            // isCapped: false,
-                            id: fullStations.find(
-                                (station) => station.laneNumber === selectedLane
-                            )?.externalId,
-                        },
-                    ],
+                    payload,
                 }),
             });
 

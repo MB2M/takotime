@@ -151,11 +151,11 @@ export default class WebsocketScoringService {
                 round,
                 category,
             });
-            console.log("duration S1:", (Date.now() - s1) / 1000);
+            // console.log("duration S1:", (Date.now() - s1) / 1000);
 
             const s2 = Date.now();
             if (newRep) this.sendToRegistered(`station/${laneNumber}`, newRep);
-            console.log("duration S2:", (Date.now() - s2) / 1000);
+            // console.log("duration S2:", (Date.now() - s2) / 1000);
         } catch (err: any) {
             console.log(err.message);
         }

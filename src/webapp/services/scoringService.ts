@@ -53,7 +53,7 @@ export const addScore = async (
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);
 
-    console.log("S1 - read duration", (Date.now() - startRead) / 1000);
+    // console.log("S1 - read duration", (Date.now() - startRead) / 1000);
 
     switch (true) {
         case workout.layout.includes("split"):
@@ -108,16 +108,12 @@ export const addClassicScore = async (
     )
         return;
 
-    console.log(heatId, laneNumber);
-
     let station =
         (await viewStation(heatId, laneNumber, participantId)) ||
         (await createStation(heatId, laneNumber, participantId))!;
 
-    console.log(station);
-
     station.scores.wodClassic.push({ rep: score, index: wodIndex });
-    console.log(state);
+
     return station;
 
     // return Station.findOneAndUpdate(
@@ -240,7 +236,6 @@ const createStation = (
     laneNumber: number,
     participantId?: string
 ) => {
-    console.log("CREATE STATION");
     state.push({
         heatId,
         laneNumber,

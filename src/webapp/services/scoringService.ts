@@ -1,15 +1,16 @@
-import {
-    IBaseStation2,
-    IWodClassicScore,
-    IWodSplitScore,
-} from "../../types/deviceScoring";
+// import {
+//     IBaseStation2,
+//     IWodClassicScore,
+//     IWodSplitScore,
+// } from "../../types/deviceScoring";
 import LiveStation from "../../live/models/Station";
-import Station from "../models/Station";
 import liveApp from "../../live";
 import Competition from "../models/Competition";
 import { postScore, ScorePost } from "../../live/services/CCTokenService";
 import { IWorkout } from "../../types/competition";
 import { toReadableTime } from "../utils/toReadableTime";
+
+let state: IBaseStation2RAM[] = [];
 
 const loadedWorkout = async () => {
     return (await liveApp.manager.getGlobals()).externalWorkoutId;
@@ -107,15 +108,27 @@ export const addClassicScore = async (
     )
         return;
 
-    return Station.findOneAndUpdate(
-        {
-            heatId,
-            laneNumber,
-            participantId,
-        },
-        { $push: { "scores.wodClassic": { rep: score, index: wodIndex } } },
-        { upsert: true, new: true }
-    );
+    let station =
+        state.find(
+            (station) =>
+                station.heatId === heatId &&
+                laneNumber === laneNumber &&
+                participantId === participantId
+        ) || (await createStation(heatId, laneNumber, participantId))!;
+
+    station.scores.wodClassic.push({ rep: score, index: wodIndex });
+
+    return station;
+
+    // return Station.findOneAndUpdate(
+    //     {
+    //         heatId,
+    //         laneNumber,
+    //         participantId,
+    //     },
+    //     { $push: { "scores.wodClassic": { rep: score, index: wodIndex } } },
+    //     { upsert: true, new: true }
+    // );
 };
 
 export const addSplitScore = async (
@@ -147,24 +160,41 @@ export const addSplitScore = async (
     )
         return;
 
-    return Station.findOneAndUpdate(
-        {
-            heatId,
-            laneNumber,
-            participantId,
-        },
-        {
-            $push: {
-                "scores.wodSplit": {
-                    rep: score,
-                    index: wodIndex,
-                    repIndex: movementIndex,
-                    round: round,
-                },
-            },
-        },
-        { upsert: true, new: true }
-    );
+    let station =
+        state.find(
+            (station) =>
+                station.heatId === heatId &&
+                laneNumber === laneNumber &&
+                participantId === participantId
+        ) || (await createStation(heatId, laneNumber, participantId))!;
+
+    station.scores.wodSplit.push({
+        rep: score,
+        index: wodIndex,
+        repIndex: movementIndex,
+        round: round,
+    });
+
+    return station;
+
+    // return Station.findOneAndUpdate(
+    //     {
+    //         heatId,
+    //         laneNumber,
+    //         participantId,
+    //     },
+    //     {
+    //         $push: {
+    //             "scores.wodSplit": {
+    //                 rep: score,
+    //                 index: wodIndex,
+    //                 repIndex: movementIndex,
+    //                 round: round,
+    //             },
+    //         },
+    //     },
+    //     { upsert: true, new: true }
+    // );
 };
 
 export const addTimerScore = async (
@@ -200,20 +230,32 @@ export const addTimerScore = async (
         })
         .filter((score): score is { time: string; index: string } => !!score);
 
-    const station = await Station.findOneAndUpdate(
-        {
-            heatId,
-            laneNumber,
-            participantId,
-        },
-        {
-            $set: {
-                "scores.endTimer": timeScores,
-            },
-        },
-        { upsert: true, new: true }
-    ).exec();
+    let station =
+        state.find(
+            (station) =>
+                station.heatId === heatId &&
+                laneNumber === laneNumber &&
+                participantId === participantId
+        ) || (await createStation(heatId, laneNumber, participantId))!;
+
+    station.scores.endTimer = timeScores;
+
     return station.scores;
+};
+
+const createStation = (
+    heatId: string,
+    laneNumber: number,
+    participantId?: string
+) => {
+    state.push({
+        heatId,
+        laneNumber,
+        participantId,
+        scores: { endTimer: [], wodClassic: [], wodSplit: [], wodWeight: [] },
+    });
+
+    return viewStation(heatId, laneNumber, participantId);
 };
 
 const viewStation = async (
@@ -222,7 +264,14 @@ const viewStation = async (
     participantId?: string
 ) => {
     participantId ??= await getParticipantId(laneNumber);
-    return Station.findOne({ heatId, laneNumber, participantId }).exec();
+
+    return state.find(
+        (station) =>
+            station.heatId === heatId &&
+            laneNumber === laneNumber &&
+            participantId === participantId
+    );
+    // return Station.findOne({ heatId, laneNumber, participantId }).exec();
 };
 
 export const getHeatId = async () => {
@@ -241,7 +290,9 @@ export const getStationInfo = async (
 
 export const getAllStationsInfo = async () => {
     const heatId = await getHeatId();
-    return Station.find({ heatId }).exec();
+    return state.filter((station) => station.heatId === heatId);
+
+    // return Station.find({ heatId }).exec();
 };
 
 const getWorkoutMaxReps = (workout: IWorkout) => {
@@ -354,7 +405,7 @@ const getParticipantId = async (laneNumber: number) => {
 };
 
 const calculateForTimeScore = (
-    stationInfo: IBaseStation2,
+    stationInfo: IBaseStation2RAM,
     workoutId: string
 ) => {
     const endTimers = stationInfo?.scores.endTimer;
@@ -386,7 +437,10 @@ const calculateForTimeScore = (
     return { value: score.toString(), capped };
 };
 
-const calculateAmrapScore = (stationInfo: IBaseStation2, workoutId: string) => {
+const calculateAmrapScore = (
+    stationInfo: IBaseStation2RAM,
+    workoutId: string
+) => {
     const classicScores = stationInfo?.scores.wodClassic;
 
     if (classicScores.length === 0) return { value: "0", capped: false };
@@ -398,7 +452,10 @@ const calculateAmrapScore = (stationInfo: IBaseStation2, workoutId: string) => {
     return { value: score.toString(), capped: false };
 };
 
-const calculateSplitScore = (stationInfo: IBaseStation2, workoutId: string) => {
+const calculateSplitScore = (
+    stationInfo: IBaseStation2RAM,
+    workoutId: string
+) => {
     const scores = stationInfo?.scores.wodSplit;
 
     if (scores.length === 0) return { value: "0", capped: false };
@@ -411,7 +468,7 @@ const calculateSplitScore = (stationInfo: IBaseStation2, workoutId: string) => {
 };
 
 const calculateSplitMTScore = async (
-    stationInfo: IBaseStation2,
+    stationInfo: IBaseStation2RAM,
     workoutId: string,
     category?: string
 ) => {
@@ -551,18 +608,20 @@ export const saveCC = async (
 };
 
 export const resetScores = async (workoutId: string, heatId: string) => {
-    await Station.deleteMany(
-        {
-            heatId,
-        },
-        {
-            $set: {
-                "scores.wodClassic": [],
-                "scores.wodWeight": [],
-                "scores.endTimer": [],
-                "scores.wodSplit": [],
-            },
-        }
-        // { upsert: true, new: true }
-    ).exec();
+    state = [];
+
+    // await Station.deleteMany(
+    //     {
+    //         heatId,
+    //     },
+    //     {
+    //         $set: {
+    //             "scores.wodClassic": [],
+    //             "scores.wodWeight": [],
+    //             "scores.endTimer": [],
+    //             "scores.wodSplit": [],
+    //         },
+    //     }
+    //     // { upsert: true, new: true }
+    // ).exec();
 };

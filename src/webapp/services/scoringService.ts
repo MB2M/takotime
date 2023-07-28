@@ -53,32 +53,42 @@ export const addScore = async (
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);
 
-    // console.log("S1 - read duration", (Date.now() - startRead) / 1000);
+    console.log("S1 - read duration", (Date.now() - startRead) / 1000);
 
+    const startWrite = Date.now();
     switch (true) {
         case workout.layout.includes("split"):
             if (movementIndex === undefined)
                 throw new Error("movementIndex is missing");
             round ??= 1;
 
-            return await addSplitScore(
+            const station = await addSplitScore(
                 score,
                 workoutId,
                 laneNumber,
                 heatId,
                 movementIndex,
                 round,
-                {
-                    participantId,
-                    category,
-                }
+                { participantId, category }
             );
 
+            console.log("writing", Date.now() - startWrite);
+            return station;
+
         default:
-            return await addClassicScore(score, workoutId, laneNumber, heatId, {
-                category,
-                participantId,
-            });
+            const stationn = await addClassicScore(
+                score,
+                workoutId,
+                laneNumber,
+                heatId,
+                { category, participantId }
+            );
+            console.log("writing", Date.now() - startWrite);
+            // return await addClassicScore(score, workoutId, laneNumber, heatId, {
+            //     category,
+            //     participantId,
+            // });
+            return stationn;
     }
 };
 

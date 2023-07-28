@@ -151,7 +151,7 @@ export default class WebsocketScoringService {
                 round,
                 category,
             });
-            console.log("durée ajout reps S1:", (Date.now() - s1) / 1000);
+            console.log("durée ajout reps S1:", Date.now() - s1);
 
             // const s2 = Date.now();
             if (newRep) this.sendToRegistered(`station/${laneNumber}`, newRep);

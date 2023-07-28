@@ -144,14 +144,14 @@ export default class WebsocketScoringService {
         const category = data.category;
 
         try {
-            // const s1 = Date.now();
+            const s1 = Date.now();
             const newRep = await addScore(value, index, laneNumber, undefined, {
                 participantId,
                 movementIndex,
                 round,
                 category,
             });
-            // console.log("duration S1:", (Date.now() - s1) / 1000);
+            console.log("durée ajout reps S1:", (Date.now() - s1) / 1000);
 
             // const s2 = Date.now();
             if (newRep) this.sendToRegistered(`station/${laneNumber}`, newRep);

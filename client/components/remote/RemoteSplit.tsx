@@ -22,9 +22,11 @@ const RemoteSplit = ({
 }: Props) => {
     const selectedWorkoutId = workout.workoutId;
     const rounds = workout.options?.rounds || 1;
+    const [lastPress, setLastPress] = useState(0);
 
     const [selectedRoundIndex, setSelectedRoundIndex] = useState(0);
     const handleRepsClick = (value: number, movementIndex: number) => () => {
+        if (Date.now() - lastPress < 200) return;
         sendMessage(
             JSON.stringify({
                 topic: "newRep",
@@ -39,6 +41,7 @@ const RemoteSplit = ({
                 },
             })
         );
+        setLastPress(Date.now());
     };
 
     const roundScore = useMemo(() => {

@@ -96,7 +96,7 @@ const BigScreen: React.FC<Props> = ({
             >
                 {getLayoutComponent(workout?.layout)}
             </BigscreenLayout>
-            {state === 1 && (
+            {state === 1 && !timer?.toString().includes(":") && (
                 <Box
                     width={1920}
                     height={1080}

@@ -68,7 +68,6 @@ function AthletePresentation2() {
             maxHeight={1080}
             overflow={"hidden"}
             position={"relative"}
-            sx={{ backgroundColor: "black" }}
             ref={parent}
         >
             {athlete.station && (

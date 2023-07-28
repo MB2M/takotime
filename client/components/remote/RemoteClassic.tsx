@@ -22,8 +22,9 @@ const RemoteClassic = ({
 }: Props) => {
     const selectedWorkoutId = workout.workoutId;
     const [multiplier, setMultiplier] = useState(1);
-
+    const [lastPress, setLastPress] = useState(0);
     const handleRepsClick = (value: number) => () => {
+        if (Date.now() - lastPress < 200) return;
         sendMessage(
             JSON.stringify({
                 topic: "newRep",
@@ -36,6 +37,7 @@ const RemoteClassic = ({
                 },
             })
         );
+        setLastPress(Date.now());
     };
 
     const endTimeScore = useMemo(() => {

@@ -138,7 +138,7 @@ export default class WebsocketScoringService {
         const laneNumber = data.station;
         const value = data.value;
         const index = data.wodIndex;
-        const participantId = data.participantId;
+        const participantId = data.participantId.toString();
         const movementIndex = data.movementIndex;
         const round = data.round;
         const category = data.category;

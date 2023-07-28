@@ -59,7 +59,7 @@ const HeadTako = () => {
     }: {
         station: number;
         value: number;
-        participantId: number;
+        participantId: string;
         category: string;
     }) => {
         sendMessage(

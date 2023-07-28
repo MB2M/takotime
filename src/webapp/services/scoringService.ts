@@ -252,7 +252,6 @@ const viewStation = async (
     participantId?: string
 ) => {
     participantId ??= await getParticipantId(laneNumber);
-
     return state.find(
         (station) =>
             station.heatId === heatId &&
@@ -512,7 +511,7 @@ export const saveCC = async (
 
     if (!participantId) return { error: "Missing participant id" };
 
-    const stationInfo = await getStationInfo(laneNumber);
+    const stationInfo = await getStationInfo(+laneNumber);
     if (!stationInfo) return { error: "No participant loaded at this lane" };
 
     const workouts = (await currentWorkouts())?.filter((workout) =>

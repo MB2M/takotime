@@ -144,7 +144,7 @@ export default class WebsocketScoringService {
         const category = data.category;
 
         try {
-            const s1 = Date.now();
+            // const s1 = Date.now();
             const newRep = await addScore(value, index, laneNumber, undefined, {
                 participantId,
                 movementIndex,
@@ -153,7 +153,7 @@ export default class WebsocketScoringService {
             });
             // console.log("duration S1:", (Date.now() - s1) / 1000);
 
-            const s2 = Date.now();
+            // const s2 = Date.now();
             if (newRep) this.sendToRegistered(`station/${laneNumber}`, newRep);
             // console.log("duration S2:", (Date.now() - s2) / 1000);
         } catch (err: any) {
@@ -195,7 +195,7 @@ export default class WebsocketScoringService {
         );
 
         const { error, success } = await saveCC(
-            laneNumber,
+            +laneNumber,
             undefined,
             station?.category
         );

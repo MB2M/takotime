@@ -15,7 +15,7 @@ interface Props {
     }: {
         station: number;
         value: number;
-        participantId: number;
+        participantId: string;
         category: string;
     }) => void;
 }
@@ -52,7 +52,7 @@ const HeadTakoStation = ({
         onRepClick?.({
             station: station.laneNumber,
             value: value,
-            participantId: station.externalId,
+            participantId: station.externalId.toString(),
             category: station.category,
         });
     };

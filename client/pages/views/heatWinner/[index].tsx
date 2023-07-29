@@ -103,11 +103,12 @@ const HeatWinner: React.FC<Props> = ({
                 overflow={"hidden"}
                 boxShadow={"0px 0px 20px 0px black"}
             >
-                <Box height={1}>
+                <Box height={1} sx={{ backgroundColor: "#101010" }}>
                     <Image
-                        src={"/mt23/photoCall/test.jpg"}
+                        src={`/mt23/photoCall/${winner.externalId}.jpg`}
                         height={2000}
                         style={{ height: "100%", width: "auto" }}
+                        alt={""}
                     />
                 </Box>
                 <Box

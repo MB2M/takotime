@@ -21,6 +21,7 @@ const RemoteClassic = ({
     category,
 }: Props) => {
     const selectedWorkoutId = workout.workoutId;
+
     const [multiplier, setMultiplier] = useState(1);
     const [lastPress, setLastPress] = useState(0);
 
@@ -35,6 +36,7 @@ const RemoteClassic = ({
                     wodIndex: selectedWorkoutId,
                     participantId,
                     category,
+                    heatId: station?.heatId,
                 },
             })
         );
@@ -218,5 +220,4 @@ const RemoteClassic = ({
         </>
     );
 };
-
 export default RemoteClassic;

@@ -64,7 +64,7 @@ export const addScore = async (
 
             const station = await addSplitScore(
                 score,
-                workoutId,
+                workout,
                 laneNumber,
                 heatId,
                 movementIndex,
@@ -78,7 +78,7 @@ export const addScore = async (
         default:
             const stationn = await addClassicScore(
                 score,
-                workoutId,
+                workout,
                 laneNumber,
                 heatId,
                 { category, participantId }
@@ -94,7 +94,7 @@ export const addScore = async (
 
 export const addClassicScore = async (
     score: number,
-    wodIndex: string,
+    workout: IWorkout,
     laneNumber: number,
     heatId: string,
     options: {
@@ -108,7 +108,7 @@ export const addClassicScore = async (
 
     if (
         !(await passScoreOverflow(
-            wodIndex,
+            workout,
             heatId,
             laneNumber,
             score,
@@ -122,7 +122,7 @@ export const addClassicScore = async (
         (await viewStation(heatId, laneNumber, participantId)) ||
         (await createStation(heatId, laneNumber, participantId))!;
 
-    station.scores.wodClassic.push({ rep: score, index: wodIndex });
+    station.scores.wodClassic.push({ rep: score, index: workout.workoutId });
 
     return station;
 
@@ -139,7 +139,7 @@ export const addClassicScore = async (
 
 export const addSplitScore = async (
     score: number,
-    wodIndex: string,
+    workout: IWorkout,
     laneNumber: number,
     heatId: string,
     movementIndex: number,
@@ -154,7 +154,7 @@ export const addSplitScore = async (
 
     if (
         !(await passScoreOverflow(
-            wodIndex,
+            workout,
             heatId,
             laneNumber,
             score,
@@ -172,7 +172,7 @@ export const addSplitScore = async (
 
     station.scores.wodSplit.push({
         rep: score,
-        index: wodIndex,
+        index: workout.workoutId,
         repIndex: movementIndex,
         round: round,
     });
@@ -334,7 +334,7 @@ const getWorkout = async (
 };
 
 const passScoreOverflow = async (
-    workoutId: string,
+    workout: IWorkout,
     heatId: string,
     laneNumber: number,
     addedValue: number,
@@ -343,7 +343,6 @@ const passScoreOverflow = async (
     movementIndex?: number,
     round?: number
 ) => {
-    const workout = await getWorkout(workoutId, category);
     if (!workout) return false;
 
     let totalReps = 0;
@@ -357,7 +356,7 @@ const passScoreOverflow = async (
             ] as IWodClassicScore[];
             totalReps =
                 scores
-                    ?.filter((score) => score.index === workoutId)
+                    ?.filter((score) => score.index === workout.workoutId)
                     .reduce((total, current) => total + +current.rep, 0) || 0;
             maxReps = getWorkoutMaxReps(workout);
             break;
@@ -371,7 +370,7 @@ const passScoreOverflow = async (
                 scores
                     ?.filter(
                         (score) =>
-                            score.index === workoutId &&
+                            score.index === workout.workoutId &&
                             score.repIndex === movementIndex &&
                             score.round === round
                     )

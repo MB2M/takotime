@@ -142,10 +142,11 @@ export default class WebsocketScoringService {
         const movementIndex = data.movementIndex;
         const round = data.round;
         const category = data.category;
+        const heatId = data.heatId;
 
         try {
             const s1 = Date.now();
-            const newRep = await addScore(value, index, laneNumber, undefined, {
+            const newRep = await addScore(value, index, laneNumber, heatId, {
                 participantId,
                 movementIndex,
                 round,

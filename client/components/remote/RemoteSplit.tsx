@@ -38,6 +38,7 @@ const RemoteSplit = ({
                     movementIndex,
                     round: selectedRoundIndex,
                     category,
+                    heatId: station?.heatId,
                 },
             })
         );

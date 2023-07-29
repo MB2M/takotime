@@ -10,13 +10,18 @@ import {
 import liveApp from "../../live";
 import Competition from "../models/Competition";
 import { IWorkout } from "../../types/competition";
-import { Types } from "mongoose";
 
 interface RegisterData {
     topic: string;
 }
 
 let currentWorkouts: IWorkout[] = [];
+const refreshCurrentWorkouts = async () => {
+    currentWorkouts = (await Competition.findOne({ selected: true }).exec())
+        ?.workouts as IWorkout[];
+};
+
+refreshCurrentWorkouts().then();
 
 export default class WebsocketScoringService {
     wss: WebSocketServer;
@@ -39,12 +44,7 @@ export default class WebsocketScoringService {
 
         liveApp.manager.on("startWod", async (workoutId, heatId, reset) => {
             if (reset) await this.onReset();
-            currentWorkouts = (
-                await Competition.findOne({
-                    selected: true,
-                }).exec()
-            )?.workouts as IWorkout[];
-            this.sendStationDataToAll();
+            await refreshCurrentWorkouts();
         });
 
         liveApp.manager.on("stationUpdate", async () => {

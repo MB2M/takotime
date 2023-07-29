@@ -11,6 +11,7 @@ import Chrono from "../components/bigscreen/Chrono";
 
 const HeadTako = () => {
     const competition = useCompetitionContext();
+    const { globals } = useLiveDataContext();
     const { sendMessage } = useLiveDataContext();
     const { heatName } = useHeatDivisionInfo();
 
@@ -71,6 +72,7 @@ const HeadTako = () => {
                     wodIndex: workouts[0].workoutId,
                     participantId,
                     category,
+                    heatId: globals?.externalHeatId,
                 },
             })
         );

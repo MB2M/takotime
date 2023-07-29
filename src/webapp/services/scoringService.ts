@@ -36,6 +36,7 @@ export const addScore = async (
     score: number,
     workoutId: string,
     laneNumber: number,
+    workout: IWorkout,
     heatId?: string,
     options: {
         participantId?: string;
@@ -47,12 +48,14 @@ export const addScore = async (
 ) => {
     const startRead = Date.now();
     let { participantId, movementIndex, round, category } = options;
-    const workout = await getWorkout(workoutId, category);
+    // const workout = await getWorkout(workoutId, category);
+    // const workout = currentWorkouts.filter(
+    //     (workout) => workout.linkedWorkoutId === loadedWorkout().toString()
+    // );
     if (!workout) return;
 
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);
-
     console.log("S1 - read duration", (Date.now() - startRead) / 1000);
 
     const startWrite = Date.now();

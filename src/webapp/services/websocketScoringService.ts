@@ -8,10 +8,15 @@ import {
     saveCC,
 } from "./scoringService";
 import liveApp from "../../live";
+import Competition from "../models/Competition";
+import { IWorkout } from "../../types/competition";
+import { Types } from "mongoose";
 
 interface RegisterData {
     topic: string;
 }
+
+let currentWorkouts: IWorkout[] = [];
 
 export default class WebsocketScoringService {
     wss: WebSocketServer;
@@ -34,6 +39,11 @@ export default class WebsocketScoringService {
 
         liveApp.manager.on("startWod", async (workoutId, heatId, reset) => {
             if (reset) await this.onReset();
+            currentWorkouts = (
+                await Competition.findOne({
+                    selected: true,
+                }).exec()
+            )?.workouts as IWorkout[];
             this.sendStationDataToAll();
         });
 
@@ -144,14 +154,29 @@ export default class WebsocketScoringService {
         const category = data.category;
         const heatId = data.heatId;
 
+        const workout = currentWorkouts.find(
+            (w) =>
+                w.workoutId === index &&
+                (category ? w.categories.includes(category) : true)
+        );
+
+        if (!workout) return;
+
         try {
             const s1 = Date.now();
-            const newRep = await addScore(value, index, laneNumber, heatId, {
-                participantId,
-                movementIndex,
-                round,
-                category,
-            });
+            const newRep = await addScore(
+                value,
+                index,
+                laneNumber,
+                workout,
+                heatId,
+                {
+                    participantId,
+                    movementIndex,
+                    round,
+                    category,
+                }
+            );
             console.log("durée ajout reps S1:", Date.now() - s1);
 
             // const s2 = Date.now();

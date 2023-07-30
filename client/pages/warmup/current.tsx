@@ -20,13 +20,15 @@ const WarmupCurrent = () => {
     useEffect(() => {
         if (planning && globals?.externalHeatId) {
             let allowedHeats = [];
-
-            for (let i = 0; i < planning.length; i++) {
-                let heat = planning[i];
+            const filteredPlanning = planning.filter(
+                (p) => p.workoutName !== "E5"
+            );
+            for (let i = 0; i < filteredPlanning.length; i++) {
+                let heat = filteredPlanning[i];
                 if (heat.id === globals.externalHeatId) {
-                    allowedHeats.push(planning[i]);
-                    if (i + 1 < planning.length) {
-                        allowedHeats.push(planning[i + 1]);
+                    allowedHeats.push(filteredPlanning[i]);
+                    if (i + 1 < filteredPlanning.length) {
+                        allowedHeats.push(filteredPlanning[i + 1]);
                     }
                 }
             }

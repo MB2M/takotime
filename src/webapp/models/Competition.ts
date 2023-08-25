@@ -104,8 +104,8 @@ const workoutSchema = new mongoose.Schema<IWorkout, Model<IWorkout>>({
         default: "iot",
     },
     wodIndexSwitchMinute: {
-        type: Number,
-        default: 0,
+        type: String,
+        default: "0",
     },
     options: workoutOptionSchema,
     flow: {
@@ -151,7 +151,7 @@ const competitionSchema = new mongoose.Schema<
     logoDarkUrl: String,
     // workouts
     workouts: [workoutSchema],
-    //font
+    customFont: String,
     //colors
     primaryColor: String,
     secondaryColor: String,

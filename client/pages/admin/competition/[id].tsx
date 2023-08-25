@@ -5,6 +5,7 @@ import {
     Box,
     Button,
     Container,
+    Input,
     List,
     ListItem,
     Stack,
@@ -24,7 +25,7 @@ const DEFAUT_WORKOUT: Workout = {
     dataSource: "web",
     layout: "default",
     duration: 0,
-    wodIndexSwitchMinute: 0,
+    wodIndexSwitchMinute: "0",
     flow: {
         buyIn: { reps: [], movements: [] },
         main: { reps: [], movements: [] },
@@ -61,6 +62,7 @@ const CompetitionDetail = () => {
         useState<MuiColorInputValue>("#ffffff");
     const [secondaryColor, setSecondaryColor] =
         useState<MuiColorInputValue>("#ffffff");
+    const [customFont, setCustomFont] = useState<string>("bebasNeue");
     const [newData, dispatch] = useReducer(reducer, {});
     const ExternalWorkouts = useWorkouts(
         competition?.platform,
@@ -157,6 +159,11 @@ const CompetitionDetail = () => {
         dispatch({ key: "secondaryColor", value: newValue });
     };
 
+    const handleCustomFontChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setCustomFont(e.target.value);
+        dispatch({ key: "customFont", value: e.target.value });
+    };
+
     const handleAddWorkout = () => {
         const newWorkouts = [...workouts, DEFAUT_WORKOUT];
         setWorkouts(newWorkouts);
@@ -228,6 +235,13 @@ const CompetitionDetail = () => {
                                 value={secondaryColor}
                                 onChange={handleSecondaryColorChange}
                                 format={"hex8"}
+                            />
+                        </Box>
+                        <Box>
+                            <Typography>Custom font :</Typography>
+                            <Input
+                                value={customFont}
+                                onChange={handleCustomFontChange}
                             />
                         </Box>
                     </Stack>

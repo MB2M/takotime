@@ -216,7 +216,11 @@ export const addTimerScore = async (
         .filter((workout) => {
             return workout.options.wodtype === "forTime";
         })
-        .sort((a, b) => a.wodIndexSwitchMinute - b.wodIndexSwitchMinute);
+        .sort(
+            (a, b) =>
+                +(a.wodIndexSwitchMinute.split(",")[0] || 0) -
+                +(b.wodIndexSwitchMinute.split(",")[0] || 0)
+        );
 
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);

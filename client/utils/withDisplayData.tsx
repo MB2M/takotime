@@ -18,7 +18,7 @@ const withData = (Component: React.FC<any>) => {
             globals?.duration
         );
 
-        const { fullStations, activeWorkout, workouts, categories } =
+        const { fullStations, activeWorkout, workouts, categories, results } =
             useStationWs();
 
         const competition = useCompetitionContext();
@@ -35,6 +35,7 @@ const withData = (Component: React.FC<any>) => {
                 competition={competition}
                 state={globals?.state}
                 categories={categories}
+                results={results}
             />
         );
     };

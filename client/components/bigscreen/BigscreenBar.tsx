@@ -46,7 +46,11 @@ const BigscreenBar = ({
                 };
 
             case "heat":
-                return { textTop: heatName };
+                return {
+                    textTop: heatName,
+                    fontFamily: competition?.customFont,
+                    textTopFontsize: "4rem",
+                };
 
             case "category-heat":
                 return {
@@ -68,7 +72,7 @@ const BigscreenBar = ({
 
     const headerNodes = [
         options?.logo && options?.logoPosition?.includes(position) && (
-            <Logo logo={logoUrl} logoWidth="200px" />
+            <Logo logo={logoUrl} logoWidth="90px" />
         ),
         options?.title && options?.titlePosition?.includes(position) && (
             <Title {...titles} />
@@ -89,7 +93,7 @@ const BigscreenBar = ({
             ).map((node, index) => (
                 <Box
                     key={index}
-                    ml={index === 2 ? "auto" : ""}
+                    ml={index === 2 ? "auto" : index === 1 ? "auto" : "20px"}
                     mr={index === 2 ? "30px" : ""}
                 >
                     {node}

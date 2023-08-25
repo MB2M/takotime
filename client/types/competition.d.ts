@@ -10,6 +10,7 @@ type Competition = {
     primaryColor?: string;
     secondaryColor?: string;
     workouts: Workout[];
+    customFont: string;
 };
 
 type DataSource = "web" | "iot";
@@ -26,7 +27,7 @@ type Workout = {
     layout?: string;
     duration?: number;
     dataSource: DataSource;
-    wodIndexSwitchMinute: number;
+    wodIndexSwitchMinute: string;
     options?: WorkoutOption;
     flow: {
         buyIn: baseWorkoutMovement;

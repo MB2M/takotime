@@ -189,7 +189,7 @@ const WorkoutCard = ({
         event: ChangeEvent<HTMLInputElement>
     ) => {
         handleUpdateWorkout({
-            wodIndexSwitchMinute: Number(event.target.value),
+            wodIndexSwitchMinute: event.target.value,
         });
     };
 
@@ -423,7 +423,6 @@ const WorkoutCard = ({
                             <Box>
                                 Switch Index Minute
                                 <TextField
-                                    type="number"
                                     size="small"
                                     value={workout.wodIndexSwitchMinute}
                                     onChange={handleWodSwitchIndexMinuteChange}

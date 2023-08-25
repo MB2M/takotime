@@ -43,6 +43,7 @@ export default class WebsocketScoringService {
         );
 
         liveApp.manager.on("startWod", async (workoutId, heatId, reset) => {
+            console.log("RESET", reset);
             if (reset) await this.onReset();
             await refreshCurrentWorkouts();
         });
@@ -177,7 +178,7 @@ export default class WebsocketScoringService {
                     category,
                 }
             );
-            console.log("durée ajout reps S1:", Date.now() - s1);
+            // console.log("durée ajout reps S1:", Date.now() - s1);
 
             // const s2 = Date.now();
             if (newRep) this.sendToRegistered(`station/${laneNumber}`, newRep);
@@ -245,5 +246,6 @@ export default class WebsocketScoringService {
 
     async onReset() {
         await resetScores();
+        this.sendStationDataToAll();
     }
 }

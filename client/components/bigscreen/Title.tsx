@@ -2,27 +2,29 @@ import { Stack, Typography } from "@mui/material";
 
 const Title = ({
     textTop = "",
-    textTopFontSize = "6rem",
+    textTopFontSize = "5rem",
     textBottom = "",
     textBottomFontSize = "4.5rem",
+    fontFamily = "bebasNeue",
 }: {
     textTop?: string;
     textTopFontSize?: string;
     textBottom?: string;
     textBottomFontSize?: string;
+    fontFamily?: string;
 }) => {
     return (
-        <Stack justifyContent={"center"} height={1} ml={5}>
+        <Stack justifyContent={"center"} height={1}>
             <Typography
                 fontSize={textTopFontSize}
-                fontFamily={"Montserrat"}
+                fontFamily={fontFamily}
                 lineHeight={0.9}
             >
                 {textTop}
             </Typography>
             <Typography
                 fontSize={textBottomFontSize}
-                fontFamily={"Montserrat"}
+                fontFamily={fontFamily}
                 lineHeight={0.9}
             >
                 {textBottom}

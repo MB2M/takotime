@@ -7,6 +7,9 @@ import withDisplayData from "../utils/withDisplayData";
 import React from "react";
 import DefaultMultiCategoriesLayout from "../components/bigscreen/Layouts/default/DefaultMultiCategoriesLayout";
 import SplitMTMultiCategoriesLayout from "../components/bigscreen/Layouts/split/SplitMTMultiCategoriesLayout";
+import SplitLayout from "../components/bigscreen/Layouts/split/SplitLayout";
+import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
+import { useCompetitionContext } from "../context/competition";
 
 const HEADER_HEIGHT = 100;
 
@@ -20,6 +23,7 @@ interface Props {
     state: number;
     competition?: Competition;
     categories: string[];
+    results: CCSimpleResult[];
 }
 
 const BigScreen: React.FC<Props> = ({
@@ -30,9 +34,9 @@ const BigScreen: React.FC<Props> = ({
     workout,
     state,
     categories,
+    results,
 }) => {
-    //
-
+    const competition = useCompetitionContext();
     const getLayoutComponent = (layoutName?: string) => {
         switch (layoutName) {
             // case "MaxTonnage":
@@ -59,6 +63,16 @@ const BigScreen: React.FC<Props> = ({
                     />
                 );
 
+            case "split":
+                return (
+                    <SplitLayout
+                        workout={workout}
+                        stations={fullStations}
+                        timer={plainTimer}
+                        results={results}
+                    />
+                );
+
             case "splitMT":
                 return (
                     <SplitMTLayout
@@ -80,7 +94,12 @@ const BigScreen: React.FC<Props> = ({
 
             default:
                 return (
-                    <DefaultLayout workout={workout} stations={fullStations} />
+                    <DefaultLayout
+                        workout={workout}
+                        stations={fullStations}
+                        results={results}
+                        // workouts={workouts}
+                    />
                 );
         }
     };
@@ -111,9 +130,12 @@ const BigScreen: React.FC<Props> = ({
                     justifyContent="center"
                 >
                     <Typography
-                        color={"white"}
+                        color={competition?.secondaryColor}
+                        sx={{
+                            textShadow: `10px 10px 5px ${competition?.primaryColor}`,
+                        }}
                         fontSize={"45rem"}
-                        fontFamily={"ChivoMono"}
+                        fontFamily={competition?.customFont || "bebasNeue"}
                     >
                         {timer?.toString().slice(1) || ""}
                     </Typography>

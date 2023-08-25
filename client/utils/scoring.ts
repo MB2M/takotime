@@ -1,6 +1,12 @@
-export const getTotalClassicReps = (station: DisplayFullStation) => {
+export const getTotalClassicReps = (
+    station: DisplayFullStation,
+    workoutId?: string
+) => {
     return (
-        station.scores?.wodClassic.reduce((total, rep) => total + rep.rep, 0) ||
-        0
+        station.scores?.wodClassic
+            .filter((aaa) => {
+                return aaa.index === workoutId;
+            })
+            .reduce((total, rep) => total + rep.rep, 0) || 0
     );
 };

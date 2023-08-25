@@ -1,22 +1,22 @@
 import { Box } from "@mui/system";
 import { useEffect, useMemo, useState } from "react";
-import DefaultAthletes from "./DefaultAthletes";
-import { getTotalClassicReps } from "../../../../utils/scoring";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useLiveDataContext } from "../../../../context/liveData/livedata";
-import { Typography } from "@mui/material";
+import { splitMTscore } from "../../../../utils/splitMTscore";
+import SplitMTAthlete2 from "./SplitMTAthlete2";
+import SplitAthlete from "./SplitAthlete";
 import { getTopScore } from "../../../../utils/topScores";
+import { Typography } from "@mui/material";
 import { useCompetitionContext } from "../../../../context/competition";
 
 interface Props {
     workout: Workout;
     stations: Array<DisplayFullStation>;
+    timer: number;
     results: CCSimpleResult[];
 }
 
-const DefaultLayout = ({ workout, stations, results }: Props) => {
+const SplitLayout = ({ workout, stations, timer, results }: Props) => {
     const competition = useCompetitionContext();
-    const { globals } = useLiveDataContext();
     const [parent] = useAutoAnimate({
         duration: 200,
         easing: "ease-in-out",
@@ -29,9 +29,12 @@ const DefaultLayout = ({ workout, stations, results }: Props) => {
         []
     );
 
+    const currentRound = Math.floor(timer / (1000 * 60 * 3));
+
     useEffect(() => {
         let sortedStations: DisplayFullStation[] = [];
         const copiedStations = [...stations];
+
         switch (workout.options?.rankBy) {
             case "laneNumber":
                 sortedStations = copiedStations.sort(
@@ -42,10 +45,28 @@ const DefaultLayout = ({ workout, stations, results }: Props) => {
                 sortedStations = copiedStations
                     .sort((a, b) => a.laneNumber - b.laneNumber)
                     .sort((a, b) => {
+                        const scoreA =
+                            a?.scores?.wodSplit
+                                .filter(
+                                    (rep) => rep.index === workout.workoutId
+                                )
+                                .reduce(
+                                    (total, score) => total + +score.rep,
+                                    0
+                                ) || 0;
+                        const scoreB =
+                            b?.scores?.wodSplit
+                                .filter(
+                                    (rep) => rep.index === workout.workoutId
+                                )
+                                .reduce(
+                                    (total, score) => total + +score.rep,
+                                    0
+                                ) || 0;
+
                         return a.scores?.endTimer.at(-1)?.time ===
                             b.scores?.endTimer.at(-1)?.time
-                            ? getTotalClassicReps(b, workout.workoutId) -
-                                  getTotalClassicReps(a, workout.workoutId)
+                            ? scoreB - scoreA
                             : (a.scores?.endTimer.at(-1)?.time || "999999") <
                               (b.scores?.endTimer.at(-1)?.time || "999999")
                             ? -1
@@ -74,7 +95,10 @@ const DefaultLayout = ({ workout, stations, results }: Props) => {
         const scores = stations.map(
             (station) =>
                 station.scores?.endTimer.at(-1)?.time ||
-                getTotalClassicReps(station, workout.workoutId)
+                station.scores?.wodSplit
+                    .filter((rep) => rep.index === workout.workoutId)
+                    .reduce((total, score) => total + +score.rep, 0) ||
+                0
         );
 
         scores.sort((a, b) => {
@@ -90,9 +114,9 @@ const DefaultLayout = ({ workout, stations, results }: Props) => {
         return scores;
     }, [splitStations]);
 
-    const repsOfFirst = stations
-        .map((station) => getTotalClassicReps(station, workout.workoutId))
-        .sort((a, b) => b - a)[0];
+    const repsOfFirst = allScores.filter(
+        (score): score is number => typeof score === "number"
+    )[0];
 
     return (
         <Box display={"flex"} height={1} gap={1} flexDirection={"column"}>
@@ -112,14 +136,13 @@ const DefaultLayout = ({ workout, stations, results }: Props) => {
                         ref={parent}
                     >
                         {stations.map((station) => (
-                            <DefaultAthletes
+                            <SplitAthlete
                                 key={station.laneNumber}
                                 station={station}
                                 height={1 / rowNumber}
                                 workout={workout}
-                                repsOfFirst={repsOfFirst}
                                 allTotalReps={allScores}
-                                wodState={globals?.state}
+                                round={currentRound}
                             />
                         ))}
                     </Box>
@@ -165,4 +188,4 @@ const DefaultLayout = ({ workout, stations, results }: Props) => {
     );
 };
 
-export default DefaultLayout;
+export default SplitLayout;

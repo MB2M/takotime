@@ -30,6 +30,8 @@ const DefaultAthletes = ({
 }: Props) => {
     const competition = useCompetitionContext();
 
+    const workoutType = workout.options?.wodtype;
+
     const repsCompleted = useMemo(() => {
         return (
             station?.scores?.["wodClassic"]
@@ -38,9 +40,13 @@ const DefaultAthletes = ({
         );
     }, [station?.scores, workout.workoutId]);
 
-    const endTime = firstScore
-        ? station.scores?.endTimer[1]?.time
-        : station.scores?.endTimer.at(-1)?.time;
+    const endTime = station?.scores?.endTimer.find(
+        (score) => score.index === workout.workoutId
+    )?.time;
+
+    // const endTime = firstScore
+    //     ? station.scores?.endTimer[1]?.time
+    //     : station.scores?.endTimer.at(-1)?.time;
 
     const rank = useMemo(
         () =>
@@ -55,6 +61,7 @@ const DefaultAthletes = ({
         movement: currentMovement,
         movementReps: currentMovementReps,
         movementTotalReps: currentMovementTotalReps,
+        round,
     } = useWebappWorkout(workout, repsCompleted);
 
     return (
@@ -71,32 +78,48 @@ const DefaultAthletes = ({
                     rank === 1
                         ? `linear-gradient(90deg, ${
                               competition?.primaryColor
-                          } 0%, ${competition?.secondaryColor} ${
-                              BASE_WIDTH * 100 +
-                              (endTime
-                                  ? 100
-                                  : ((100 * repsCompleted) / totalRepetitions) *
-                                    (1 - BASE_WIDTH)) -
-                              (repsCompleted / totalRepetitions === 1 ? 0 : 0.5)
-                          }%, ${BG_COLOR} ${
-                              endTime
-                                  ? 100
-                                  : (100 * repsCompleted) / totalRepetitions
-                          }%)`
-                        : `linear-gradient(90deg, ${
-                              rank === 1 ? competition?.primaryColor : BAR_COLOR
-                          } ${BASE_WIDTH * 100}%, ${BAR_COLOR} ${
-                              BASE_WIDTH * 100 +
-                              (endTime
-                                  ? 100
-                                  : ((100 * repsCompleted) / totalRepetitions) *
-                                    (1 - BASE_WIDTH)) -
-                              (repsCompleted / totalRepetitions === 1 ? 0 : 0.5)
-                          }%, ${BG_COLOR} ${
-                              endTime
-                                  ? 100
-                                  : (100 * repsCompleted) / totalRepetitions
-                          }%)`
+                          } 0%, ${
+                              workoutType === "amrap"
+                                  ? `${competition?.secondaryColor} 100%)`
+                                  : `${competition?.secondaryColor} ${
+                                        BASE_WIDTH * 100 +
+                                        (endTime
+                                            ? 100
+                                            : ((100 * repsCompleted) /
+                                                  totalRepetitions) *
+                                              (1 - BASE_WIDTH)) -
+                                        (repsCompleted / totalRepetitions === 1
+                                            ? 0
+                                            : 0.5)
+                                    }%, ${BG_COLOR} ${
+                                        endTime
+                                            ? 100
+                                            : (100 * repsCompleted) /
+                                              totalRepetitions
+                                    }%)`
+                          }`
+                        : `linear-gradient(90deg, ${BAR_COLOR} ${
+                              BASE_WIDTH * 100
+                          }%, ${
+                              workoutType === "amrap"
+                                  ? `${BAR_COLOR} 100%)`
+                                  : `${BAR_COLOR} ${
+                                        BASE_WIDTH * 100 +
+                                        (endTime
+                                            ? 100
+                                            : ((100 * repsCompleted) /
+                                                  totalRepetitions) *
+                                              (1 - BASE_WIDTH)) -
+                                        (repsCompleted / totalRepetitions === 1
+                                            ? 0
+                                            : 0.5)
+                                    }%, ${BG_COLOR} ${
+                                        endTime
+                                            ? 100
+                                            : (100 * repsCompleted) /
+                                              totalRepetitions
+                                    }%)`
+                          }`
                 }`,
             }}
         >
@@ -109,7 +132,7 @@ const DefaultAthletes = ({
                 alignItems={"center"}
                 justifyContent={"center"}
             >
-                <Typography fontSize={40} fontFamily={"bebasNeue"}>
+                <Typography fontSize={"3rem"} fontFamily={"bebasNeue"}>
                     {rank}
                 </Typography>
             </Box>
@@ -123,7 +146,7 @@ const DefaultAthletes = ({
                 <Typography
                     lineHeight={"2.5rem"}
                     maxHeight={"6rem"}
-                    fontSize={"2rem"}
+                    fontSize={"3rem"}
                     fontFamily={"bebasNeue"}
                 >
                     #{station.laneNumber}
@@ -136,7 +159,9 @@ const DefaultAthletes = ({
                     <Typography
                         lineHeight={0.9}
                         maxHeight={"6rem"}
-                        fontSize={50}
+                        fontSize={
+                            station.participant.length > 34 ? "2.3rem" : "3rem"
+                        }
                         fontFamily={"bebasNeue"}
                         textOverflow={"ellipsis"}
                         overflow={"hidden"}
@@ -144,7 +169,7 @@ const DefaultAthletes = ({
                         maxWidth={"100%"}
                         noWrap={!!firstScore}
                     >
-                        {station.participant.slice(0, 40)}
+                        {station.participant.slice(0, 50)}
                     </Typography>
                     {firstScore && (
                         <Typography
@@ -183,14 +208,39 @@ const DefaultAthletes = ({
                     workout.options?.viewMovement !== "none" && (
                         <>
                             <Box
-                                py={1}
+                                // py={1}
                                 textAlign={"center"}
                                 display={"flex"}
-                                // flexDirection={"column"}
+                                flexDirection={"column"}
                                 justifyContent={"center"}
+                                alignItems={"start"}
                                 width={0.8}
                                 gap={2}
                             >
+                                {workoutType === "amrap" && (
+                                    <Box
+                                        display={"flex"}
+                                        justifyContent={"center"}
+                                        alignItems={"center"}
+                                        sx={{ backgroundColor: BG_COLOR }}
+                                        borderRadius={"10px"}
+                                        px={1}
+                                        maxHeight={"5rem"}
+                                    >
+                                        <Typography
+                                            px={1}
+                                            pt={0.5}
+                                            color={"white"}
+                                            fontSize={"2.4rem"}
+                                            lineHeight={"2.1rem"}
+                                            fontFamily={"bebasNeue"}
+                                            borderRadius={"10px"}
+                                            sx={{ backgroundColor: BG_COLOR }}
+                                        >
+                                            R: {round}
+                                        </Typography>
+                                    </Box>
+                                )}
                                 <Box
                                     display={"flex"}
                                     justifyContent={"center"}
@@ -198,6 +248,7 @@ const DefaultAthletes = ({
                                     sx={{ backgroundColor: BG_COLOR }}
                                     borderRadius={"10px"}
                                     px={1}
+                                    maxHeight={"5rem"}
                                 >
                                     <Typography
                                         px={1}
@@ -258,6 +309,7 @@ const DefaultAthletes = ({
                                         {currentMovement}
                                     </Typography>
                                 </Box>
+
                                 {/*<Box*/}
                                 {/*    display={"flex"}*/}
                                 {/*    justifyContent={"center"}*/}
@@ -281,20 +333,26 @@ const DefaultAthletes = ({
                                 display={"flex"}
                                 justifyContent={"center"}
                                 alignItems={"center"}
-                                width={0.2}
                             >
                                 {rank !== 1 && !endTime && (
-                                    <Typography
-                                        px={1}
-                                        color={"white"}
-                                        fontSize={"3rem"}
-                                        lineHeight={"2.4rem"}
-                                        fontFamily={"bebasNeue"}
-                                        borderRadius={"10px"}
+                                    <Box
                                         sx={{ backgroundColor: BG_COLOR }}
+                                        borderRadius={"10px"}
+                                        px={1}
+                                        maxHeight={"5rem"}
                                     >
-                                        {repsCompleted - repsOfFirst}
-                                    </Typography>
+                                        <Typography
+                                            px={1}
+                                            py={1}
+                                            color={"white"}
+                                            fontSize={"3rem"}
+                                            lineHeight={"2.4rem"}
+                                            fontFamily={"bebasNeue"}
+                                            borderRadius={"10px"}
+                                        >
+                                            {repsCompleted - repsOfFirst}
+                                        </Typography>
+                                    </Box>
                                 )}
                             </Box>
                         </>

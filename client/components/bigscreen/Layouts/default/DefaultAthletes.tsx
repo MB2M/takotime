@@ -9,24 +9,35 @@ interface Props {
     height: number;
     workout: Workout;
     repsOfFirst: number;
-    allTotalReps: (number | string)[];
+    // allTotalReps: (number | string)[];
     firstScore?: string;
     participantTextRows?: number;
     wodState?: number;
+    results: {
+        workoutId: string;
+        result:
+            | {
+                  rank: number;
+                  finalScore: string | number;
+                  finished: boolean;
+                  participantId: number;
+              }
+            | undefined;
+    }[];
 }
 
 const BG_COLOR = "#312F2F";
 const BAR_COLOR = "#BBB3BB";
-const BASE_WIDTH = 0.45;
+const BASE_WIDTH = 0.47;
 
 const DefaultAthletes = ({
     station,
     height,
     workout,
     repsOfFirst,
-    allTotalReps,
     firstScore,
     wodState = 2,
+    results,
 }: Props) => {
     const competition = useCompetitionContext();
 
@@ -44,16 +55,13 @@ const DefaultAthletes = ({
         (score) => score.index === workout.workoutId
     )?.time;
 
-    // const endTime = firstScore
-    //     ? station.scores?.endTimer[1]?.time
-    //     : station.scores?.endTimer.at(-1)?.time;
+    const rank = results.find((r) => r.workoutId === workout.workoutId)?.result
+        ?.rank;
 
-    const rank = useMemo(
-        () =>
-            allTotalReps.findIndex((reps) =>
-                endTime ? reps === endTime : reps === repsCompleted
-            ) + 1,
-        [allTotalReps, endTime, repsCompleted]
+    const otherResults = results.filter(
+        (r) =>
+            r.workoutId !== workout.workoutId &&
+            +(r.result?.finalScore || 0) > 0
     );
 
     const {
@@ -124,20 +132,24 @@ const DefaultAthletes = ({
             }}
         >
             <Box
-                width={0.05}
-                p={1}
-                borderRight={`2px solid ${BG_COLOR}`}
+                width={0.075}
+                px={1}
+                borderRight={`4px solid ${BG_COLOR}`}
                 position={"relative"}
                 display={"flex"}
                 alignItems={"center"}
                 justifyContent={"center"}
             >
-                <Typography fontSize={"3rem"} fontFamily={"bebasNeue"}>
+                <Typography
+                    fontSize={"3.6rem"}
+                    fontFamily={"bebasNeue"}
+                    fontWeight={800}
+                >
                     {rank}
                 </Typography>
             </Box>
             <Box
-                width={0.4}
+                width={BASE_WIDTH}
                 p={1}
                 position={"relative"}
                 display={"flex"}
@@ -148,6 +160,7 @@ const DefaultAthletes = ({
                     maxHeight={"6rem"}
                     fontSize={"3rem"}
                     fontFamily={"bebasNeue"}
+                    width={0.14}
                 >
                     #{station.laneNumber}
                 </Typography>
@@ -155,33 +168,62 @@ const DefaultAthletes = ({
                     display={"flex"}
                     flexDirection={"column"}
                     justifyContent={"space-between"}
+                    height={1}
                 >
                     <Typography
                         lineHeight={0.9}
                         maxHeight={"6rem"}
                         fontSize={
-                            station.participant.length > 34 ? "2.3rem" : "3rem"
+                            station.participant.length > 26
+                                ? "2.3rem"
+                                : "2.3rem"
                         }
                         fontFamily={"bebasNeue"}
                         textOverflow={"ellipsis"}
                         overflow={"hidden"}
                         my={"auto"}
                         maxWidth={"100%"}
-                        noWrap={!!firstScore}
+                        noWrap={otherResults.length > 0}
                     >
                         {station.participant.slice(0, 50)}
                     </Typography>
-                    {firstScore && (
-                        <Typography
-                            lineHeight={0.7}
-                            fontSize={"3rem"}
-                            fontFamily={"bebasNeue"}
-                            color={"white"}
-                            sx={{ textShadow: "0px 0px 15px black" }}
-                        >
-                            {firstScore}
-                        </Typography>
-                    )}
+                    <Box display={"flex"} gap={8}>
+                        {otherResults.length > 0 &&
+                            otherResults.map((result, index) => (
+                                <Box
+                                    display={"flex"}
+                                    gap={2}
+                                    alignItems={"baseline"}
+                                >
+                                    <Typography
+                                        lineHeight={0.75}
+                                        fontSize={"2rem"}
+                                        fontFamily={"bebasNeue"}
+                                        color={"gray"}
+                                        fontWeight={900}
+                                        sx={{
+                                            textShadow:
+                                                "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",
+                                        }}
+                                    >
+                                        rank {index + 1}:
+                                    </Typography>
+                                    <Typography
+                                        lineHeight={0.75}
+                                        fontSize={"2.5rem"}
+                                        fontFamily={"bebasNeue"}
+                                        color={"white"}
+                                        fontWeight={900}
+                                        sx={{
+                                            textShadow:
+                                                "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",
+                                        }}
+                                    >
+                                        {result.result?.rank}
+                                    </Typography>
+                                </Box>
+                            ))}
+                    </Box>
                 </Box>
             </Box>
             <Box display={"flex"} justifyContent={"space-evenly"} flexGrow={2}>
@@ -215,7 +257,7 @@ const DefaultAthletes = ({
                                 justifyContent={"center"}
                                 alignItems={"start"}
                                 width={0.8}
-                                gap={2}
+                                // gap={1}
                             >
                                 {workoutType === "amrap" && (
                                     <Box
@@ -248,14 +290,14 @@ const DefaultAthletes = ({
                                     sx={{ backgroundColor: BG_COLOR }}
                                     borderRadius={"10px"}
                                     px={1}
-                                    maxHeight={"5rem"}
+                                    maxHeight={"4rem"}
                                 >
                                     <Typography
                                         px={1}
                                         pt={0.5}
                                         color={"white"}
-                                        fontSize={"3.5rem"}
-                                        lineHeight={"3.5rem"}
+                                        fontSize={"3.2rem"}
+                                        lineHeight={"2.8rem"}
                                         fontFamily={"bebasNeue"}
                                     >
                                         {currentMovementReps}
@@ -288,8 +330,8 @@ const DefaultAthletes = ({
                                         px={1}
                                         pt={0.5}
                                         color={"white"}
-                                        fontSize={"3.5rem"}
-                                        lineHeight={"3.5rem"}
+                                        fontSize={"3.2rem"}
+                                        lineHeight={"2.8rem"}
                                         fontFamily={"bebasNeue"}
                                         borderRadius={"10px"}
                                         sx={{ backgroundColor: BG_COLOR }}
@@ -370,8 +412,11 @@ const DefaultAthletes = ({
                             color={"white"}
                             fontSize={"4.5rem"}
                             fontFamily={"bebasNeue"}
-                            borderRadius={"10px"}
-                            sx={{ textShadow: "0px 0px 15px black" }}
+                            fontWeight={900}
+                            sx={{
+                                textShadow:
+                                    "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",
+                            }}
                         >
                             {repsCompleted} reps
                         </Typography>

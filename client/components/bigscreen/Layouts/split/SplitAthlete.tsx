@@ -13,8 +13,19 @@ interface Props {
     station: DisplayFullStation;
     height: number;
     workout: Workout;
-    allTotalReps: (number | string)[];
     round: number;
+    // rank: number;
+    results: {
+        workoutId: string;
+        result:
+            | {
+                  rank: number;
+                  finalScore: string | number;
+                  finished: boolean;
+                  participantId: number;
+              }
+            | undefined;
+    }[];
 }
 
 const BG_COLOR = "#312F2F";
@@ -24,18 +35,15 @@ const SplitAthlete = ({
     station,
     height,
     workout,
-    allTotalReps,
     round,
+    // rank,
+    results,
 }: Props) => {
     const [parent] = useAutoAnimate({
         duration: 200,
         easing: "ease-in-out",
     });
     const competition = useCompetitionContext();
-
-    const allScores = station?.scores?.wodSplit
-        .sort((a, b) => a.repIndex - b.repIndex)
-        .map((score) => score.rep);
 
     const repsCompleted = useMemo(
         () =>
@@ -45,10 +53,8 @@ const SplitAthlete = ({
         [station?.scores, workout.workoutId]
     );
 
-    const rank = useMemo(
-        () => allTotalReps.findIndex((reps) => reps === repsCompleted) + 1,
-        [allTotalReps, repsCompleted]
-    );
+    const rank = results.find((r) => r.workoutId === workout.workoutId)?.result
+        ?.rank;
 
     const currentRoundReps = useMemo(
         () =>
@@ -85,8 +91,8 @@ const SplitAthlete = ({
         >
             <Box
                 width={0.075}
-                p={1}
-                borderRight={`2px solid ${BG_COLOR}`}
+                px={1}
+                borderRight={`4px solid ${BG_COLOR}`}
                 position={"relative"}
                 display={"flex"}
                 alignItems={"center"}
@@ -127,7 +133,9 @@ const SplitAthlete = ({
                         lineHeight={0.9}
                         maxHeight={"6rem"}
                         fontSize={
-                            station.participant.length > 34 ? "2.3rem" : "3rem"
+                            station.participant.length > 26
+                                ? "2.3rem"
+                                : "2.3rem"
                         }
                         fontFamily={"bebasNeue"}
                         textOverflow={"ellipsis"}
@@ -140,16 +148,16 @@ const SplitAthlete = ({
                 </Box>
                 <Box
                     width={0.55}
-                    flexShrink={1}
+                    // flexShrink={1}
                     display={"flex"}
-                    justifyContent={"flex-end"}
+                    // justifyContent={"flex-end"}
                     alignItems={"center"}
                     gap={2}
                 >
                     {workout.flow.main.movements?.map((movement, index) => (
                         <Box
                             display={"flex"}
-                            alignItems={"top"}
+                            alignItems={"center"}
                             width={0.3}
                             ref={parent}
                             flexDirection={"column"}
@@ -160,11 +168,11 @@ const SplitAthlete = ({
                                 <Box
                                     display={"flex"}
                                     flexDirection={"column"}
-                                    justifyContent={"space-between"}
-                                    // alignItems={"center"}
+                                    // justifyContent={"space-between"}
+                                    alignItems={"center"}
                                     textAlign={"center"}
                                     height={1}
-                                    gap={1}
+                                    gap={0}
                                 >
                                     <Typography
                                         lineHeight={1}
@@ -174,7 +182,7 @@ const SplitAthlete = ({
                                         mt={"auto"}
                                         // sx={{ textShadow: "0px 0px 15px black" }}
                                     >
-                                        {movement}
+                                        {movement.slice(0, 3)}
                                     </Typography>
                                     <Typography
                                         lineHeight={1}
@@ -183,12 +191,10 @@ const SplitAthlete = ({
                                         fontSize={"3rem"}
                                         fontFamily={"bebasNeue"}
                                         fontWeight={900}
+                                        mb={"auto"}
                                         sx={{
                                             textShadow:
                                                 "2.8px 2.8px black, 2.8px -2.8px black, -2.8px 2.8px black, -2.8px -2.8px black",
-                                            // "-webkit-text-stroke-width": "3px",
-                                            // "-webkit-text-stroke-color":
-                                            //     "black",
                                         }}
                                     >
                                         {currentRoundReps?.get(index)}

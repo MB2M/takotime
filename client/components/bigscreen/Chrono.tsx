@@ -9,7 +9,7 @@ const Chrono = ({
     reverse = false,
     timeLeft = 10,
     timeLeftColor = "red",
-    fontFamily = "CantoraOne",
+    fontFamily = "ChivoMono",
 }: {
     fontSize?: string;
     reverse?: boolean;

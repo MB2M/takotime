@@ -18,8 +18,14 @@ const withData = (Component: React.FC<any>) => {
             globals?.duration
         );
 
-        const { fullStations, activeWorkout, workouts, categories, results } =
-            useStationWs();
+        const {
+            fullStations,
+            activeWorkout,
+            workouts,
+            categories,
+            CCResults,
+            results,
+        } = useStationWs();
 
         const competition = useCompetitionContext();
 
@@ -30,11 +36,12 @@ const withData = (Component: React.FC<any>) => {
                 timer={timer}
                 plainTimer={plainTimer}
                 fullStations={fullStations}
-                workout={activeWorkout}
+                activeWorkouts={activeWorkout}
                 workouts={workouts}
                 competition={competition}
                 state={globals?.state}
                 categories={categories}
+                CCResults={CCResults}
                 results={results}
             />
         );

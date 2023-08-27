@@ -86,7 +86,7 @@ const BigscreenBar = ({
     ];
 
     return (
-        <Stack direction="row" color={"white"} height={height}>
+        <Stack direction="row" color={"white"} height={height} fontWeight={600}>
             {(options?.logoPosition?.includes("Left")
                 ? headerNodes
                 : headerNodes.reverse()

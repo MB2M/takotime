@@ -18,12 +18,13 @@ interface Props {
     timer: string | number | null;
     plainTimer: number;
     fullStations: DisplayFullStation[];
-    workout: Workout;
+    activeWorkouts: Workout[];
     workouts: Workout[];
     state: number;
     competition?: Competition;
     categories: string[];
-    results: CCSimpleResult[];
+    CCResults: CCSimpleResult[];
+    results: WodResult[];
 }
 
 const BigScreen: React.FC<Props> = ({
@@ -31,9 +32,10 @@ const BigScreen: React.FC<Props> = ({
     plainTimer,
     fullStations,
     workouts,
-    workout,
+    activeWorkouts,
     state,
     categories,
+    CCResults,
     results,
 }) => {
     const competition = useCompetitionContext();
@@ -66,21 +68,24 @@ const BigScreen: React.FC<Props> = ({
             case "split":
                 return (
                     <SplitLayout
-                        workout={workout}
+                        activeWorkouts={activeWorkouts}
                         stations={fullStations}
                         timer={plainTimer}
+                        CCResults={CCResults}
                         results={results}
+                        categories={categories}
+                        workouts={workouts}
                     />
                 );
 
-            case "splitMT":
-                return (
-                    <SplitMTLayout
-                        workout={workout}
-                        stations={fullStations}
-                        timer={plainTimer}
-                    />
-                );
+            // case "splitMT":
+            //     return (
+            //         <SplitMTLayout
+            //             workout={activeWorkouts}
+            //             stations={fullStations}
+            //             timer={plainTimer}
+            //         />
+            //     );
 
             case "splitMTMultiCategories":
                 return (
@@ -95,25 +100,27 @@ const BigScreen: React.FC<Props> = ({
             default:
                 return (
                     <DefaultLayout
-                        workout={workout}
+                        activeWorkouts={activeWorkouts}
                         stations={fullStations}
+                        CCResults={CCResults}
                         results={results}
-                        // workouts={workouts}
+                        categories={categories}
+                        workouts={workouts}
                     />
                 );
         }
     };
 
-    if (!workout) return <div>No workout loaded</div>;
+    if (!activeWorkouts) return <div>No workout loaded</div>;
 
     return (
         <>
             <BigscreenLayout
                 headerHeight={HEADER_HEIGHT}
                 customTitle={""}
-                workout={workout}
+                workout={activeWorkouts[0]}
             >
-                {getLayoutComponent(workout?.layout)}
+                {getLayoutComponent(activeWorkouts[0]?.layout)}
             </BigscreenLayout>
             {state === 1 && !timer?.toString().includes(":") && (
                 <Box

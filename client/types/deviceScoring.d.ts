@@ -54,3 +54,13 @@ type DisplayFullStation = Pick<
 > & {
     scores?: BaseStation2["scores"];
 };
+
+type WodResult = {
+    workoutId: string;
+    results: {
+        rank: number;
+        finalScore: string | number;
+        finished: boolean;
+        participantId: number;
+    }[];
+};

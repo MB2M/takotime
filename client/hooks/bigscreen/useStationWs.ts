@@ -2,12 +2,13 @@ import { useLiveDataContext } from "../../context/liveData/livedata";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useCompetitionContext } from "../../context/competition";
 import useChrono from "../useChrono";
+import { sortedResult } from "../../utils/scoring";
 
 const useStationWs = () => {
     const competition = useCompetitionContext();
     const { globals, stations, registerListener } = useLiveDataContext();
     const { plainTimer } = useChrono(globals?.startTime, globals?.duration);
-    const [results, setResults] = useState<CCSimpleResult[]>([]);
+    const [CCResults, setCCResults] = useState<CCSimpleResult[]>([]);
 
     const [stationInfo, setStationInfo] = useState<BaseStation2[]>([]);
 
@@ -55,7 +56,7 @@ const useStationWs = () => {
 
     const activeWorkout = useMemo(
         () =>
-            workouts.find((workout) => {
+            workouts.filter((workout) => {
                 return workout.wodIndexSwitchMinute
                     .split(",")
                     .includes(splitMinute);
@@ -63,14 +64,24 @@ const useStationWs = () => {
         [workouts, splitMinute]
     );
 
-    const getWorkoutResults = useCallback(async () => {
+    const results = useMemo(() => {
+        return workouts
+            .map((workout) => {
+                if (!workout.workoutId) return null;
+                const results = sortedResult(fullStations, workout.workoutId);
+                return { workoutId: workout.workoutId, results };
+            })
+            .filter((result) => result) as WodResult[];
+    }, [workouts, fullStations]);
+
+    const getCCWorkoutResults = useCallback(async () => {
         try {
             const response = await fetch(`/api/results`, {
                 method: "POST",
 
                 body: JSON.stringify({
                     eventId: competition?.eventId,
-                    workoutId: activeWorkout?.workoutId,
+                    workoutId: activeWorkout[0]?.workoutId,
                 }),
             });
             if (response.ok) {
@@ -98,11 +109,10 @@ const useStationWs = () => {
 
     useEffect(() => {
         (async () => {
-            const res = await getWorkoutResults();
-            console.log(res);
-            setResults(res || []);
+            const res = await getCCWorkoutResults();
+            setCCResults(res || []);
         })();
-    }, [getWorkoutResults]);
+    }, [getCCWorkoutResults]);
 
     // console.log(activeWorkout);
     // workouts
@@ -154,6 +164,7 @@ const useStationWs = () => {
         activeWorkout,
         workouts,
         categories,
+        CCResults,
         results,
     };
 };

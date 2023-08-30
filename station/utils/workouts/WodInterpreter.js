@@ -311,7 +311,7 @@ class WodInterpreter extends EventEmitter {
             expectTieBreak = false;
         }
 
-        console.log("EXPECTED MEASUREMENT:", expectNewMeasurement);
+        console.log("EXPECTED MEASUREMENT:", expectedMeasurement);
 
         // const expectedMeasurement = this.measurements.find(
         //     (m) => m.id === wodMeasurements.length

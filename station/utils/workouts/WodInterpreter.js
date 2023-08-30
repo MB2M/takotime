@@ -292,7 +292,8 @@ class WodInterpreter extends EventEmitter {
         if (wodMeasurements.length === 0) {
             expectNewMeasurement = true;
         } else {
-            expectNewMeasurement = wodMeasurements.at(-1)?.value ? true : false;
+            expectNewMeasurement =
+                wodMeasurements.at(-1)?.value >= 0 ? true : false;
         }
 
         let currentMeasurementId = wodMeasurements.at(-1)
@@ -320,7 +321,7 @@ class WodInterpreter extends EventEmitter {
         //     (m) => m.id === wodMeasurements.length
         // );
 
-        if (expectedMeasurement === undefined) return;
+        if (!expectedMeasurement) return;
 
         let isFinal = false;
         let measurement = {};

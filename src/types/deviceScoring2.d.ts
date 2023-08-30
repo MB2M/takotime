@@ -1,8 +1,9 @@
 interface IWodWeightScore {
     _id: string;
-    weight?: number;
-    state?: string;
+    weight: number;
+    state: string;
     partnerId?: number;
+    index: string;
 }
 
 interface IWodClassicScore {

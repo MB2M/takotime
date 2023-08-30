@@ -29,12 +29,20 @@ type WorkoutMovements = {
     reps: number[];
 };
 
+type LiftState = "Cancel" | "Success" | "Fail" | "Try";
+
 type BaseStation2 = {
     _id: string;
     heatId?: string;
     laneNumber?: number;
     scores: {
-        wodWeight: {}[];
+        wodWeight: {
+            _id: string;
+            partnerId: number;
+            weight: number;
+            state: LiftState;
+            index: string;
+        }[];
         wodClassic: { _id: string; rep: number; index: string }[];
         endTimer: { _id: string; time: string; index: string }[];
         wodSplit: {

@@ -35,33 +35,32 @@ const DefaultAthletes = ({
     height,
     workout,
     repsOfFirst,
-    firstScore,
     wodState = 2,
     results,
 }: Props) => {
     const competition = useCompetitionContext();
 
-    const workoutType = workout.options?.wodtype;
+    const workoutType = workout?.options?.wodtype;
 
     const repsCompleted = useMemo(() => {
         return (
             station?.scores?.["wodClassic"]
-                ?.filter((score) => score.index === workout.workoutId)
+                ?.filter((score) => score.index === workout?.workoutId)
                 .reduce((total, rep) => total + rep.rep, 0) || 0
         );
-    }, [station?.scores, workout.workoutId]);
+    }, [station?.scores, workout?.workoutId]);
 
     const endTime = station?.scores?.endTimer.find(
-        (score) => score.index === workout.workoutId
+        (score) => score.index === workout?.workoutId
     )?.time;
 
-    const rank = results.find((r) => r.workoutId === workout.workoutId)?.result
+    const rank = results.find((r) => r.workoutId === workout?.workoutId)?.result
         ?.rank;
 
     const otherResults = results.filter(
         (r) =>
-            r.workoutId !== workout.workoutId &&
-            +(r.result?.finalScore || 0) > 0
+            r.workoutId !== workout?.workoutId &&
+            (r.result?.finished || +(r.result?.finalScore || 0) > 0)
     );
 
     const {
@@ -241,13 +240,17 @@ const DefaultAthletes = ({
                             fontSize={"4.5rem"}
                             fontFamily={"bebasNeue"}
                             borderRadius={"10px"}
-                            sx={{ textShadow: "0px 0px 15px black" }}
+                            fontWeight={900}
+                            sx={{
+                                textShadow:
+                                    "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",
+                            }}
                         >
                             {endTime}
                         </Typography>
                     </Box>
                 ) : wodState < 3 ? (
-                    workout.options?.viewMovement !== "none" && (
+                    workout?.options?.viewMovement !== "none" && (
                         <>
                             <Box
                                 // py={1}

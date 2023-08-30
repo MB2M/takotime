@@ -1,25 +1,12 @@
 import { Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import { useEffect, useMemo, useState } from "react";
-import { useLiveDataContext } from "../../context/liveData/livedata";
-import { getFlagEmoji } from "../../utils/flagEmoji";
 import useHeatDivisionInfo from "../../hooks/cc/useHeatDivisionInfo";
 import { useCompetitionContext } from "../../context/competition";
 import Logo from "../../components/bigscreen/Logo";
 import useStationWs from "../../hooks/bigscreen/useStationWs";
 
-type Results = {
-    category: string;
-    results: {
-        workout: string;
-        scores: { participant: string; score: string; rank: number }[];
-    }[];
-}[];
-
 const Speaker = () => {
     const competition = useCompetitionContext();
-    const { globals } = useLiveDataContext();
-
     const { fullStations, results } = useStationWs();
 
     const { heatName, divisions } = useHeatDivisionInfo();
@@ -48,8 +35,6 @@ const Speaker = () => {
     const firstHalf = stationWithResults.slice().splice(0, middleIndex);
 
     const secondHalf = stationWithResults.slice().splice(-middleIndex);
-
-    console.log(firstHalf);
 
     return (
         <Box

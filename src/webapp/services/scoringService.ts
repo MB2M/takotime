@@ -7,10 +7,11 @@ import LiveStation from "../../live/models/Station";
 import liveApp from "../../live";
 import Competition from "../models/Competition";
 import { postScore, ScorePost } from "../../live/services/CCTokenService";
-import { IWorkout } from "../../types/competition";
+import { IWorkout, LiftState } from "../../types/competition";
 import { toReadableTime } from "../utils/toReadableTime";
 
 let state: IBaseStation2RAM[] = [];
+let maxWeigthId = 0;
 
 const loadedWorkout = async () => {
     return (await liveApp.manager.getGlobals()).externalWorkoutId;
@@ -30,6 +31,54 @@ const currentWorkouts = async () => {
     return workouts.filter(
         (workout) => workout.linkedWorkoutId === loadedWorkoutId.toString()
     );
+};
+
+export const addMaxWeight = async ({
+    laneNumber,
+    weight,
+    workoutId,
+    participantId,
+    heatId,
+    partnerId,
+}: {
+    laneNumber: number;
+    workoutId: string;
+    weight: number;
+    participantId: string;
+    heatId: string;
+    partnerId: number;
+}) => {
+    let station =
+        (await viewStation(heatId, laneNumber, participantId)) ||
+        (await createStation(heatId, laneNumber, participantId))!;
+
+    station.scores.wodWeight.push({
+        index: workoutId,
+        weight,
+        partnerId,
+        state: "Try",
+        _id: (maxWeigthId++).toString(),
+    });
+
+    return station;
+};
+
+export const updateMaxWeight = ({
+    newState,
+    id,
+}: {
+    id: string;
+    newState: LiftState;
+}) => {
+    const station = state.find((station) =>
+        station.scores.wodWeight.find((lift) => lift._id === id)
+    );
+
+    const lift = station?.scores.wodWeight.find((lift) => lift._id === id);
+
+    if (lift) lift.state = newState;
+
+    return station;
 };
 
 export const addScore = async (
@@ -203,6 +252,7 @@ export const addSplitScore = async (
 };
 
 export const addTimerScore = async (
+    scoreId: number[],
     scores: number[],
     laneNumber: number,
     heatId?: string,
@@ -470,6 +520,34 @@ const calculateSplitScore = (
     return { value: score.toString(), capped: false };
 };
 
+const calculateMaxWeightScore = (
+    stationInfo: IBaseStation2RAM,
+    workoutId: string
+) => {
+    const scores = stationInfo?.scores.wodWeight.filter(
+        (score) => score.index === workoutId
+    );
+
+    if (scores.length === 0) return { value: "0", capped: false };
+
+    const partners = [...new Set(scores.map((score) => score.partnerId))];
+
+    const score = partners
+        .map(
+            (partnerId) =>
+                scores
+                    .sort((a, b) => b.weight - a.weight)
+                    .find(
+                        (score) =>
+                            score.state === "Success" &&
+                            score.partnerId === partnerId
+                    )?.weight || 0
+        )
+        .reduce((total, score) => total + score, 0);
+
+    return { value: score.toString(), capped: false };
+};
+
 const calculateSplitMTScore = async (
     stationInfo: IBaseStation2RAM,
     workoutId: string,
@@ -569,6 +647,11 @@ export const saveCC = async (
             case workout.layout.includes("split"):
                 finalScore = calculateSplitScore(stationInfo, workoutId);
                 break;
+
+            case workout.layout.includes("maxWeight"):
+                finalScore = calculateMaxWeightScore(stationInfo, workoutId);
+                break;
+
             default:
                 switch (workout.options.wodtype) {
                     case "forTime":

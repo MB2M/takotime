@@ -29,6 +29,10 @@ const wodWeightScoreSchema = new mongoose.Schema<IWodWeightScore>({
         enum: ["Cancel", "Success", "Fail", "Try"],
         default: "Try",
     },
+    index: {
+        type: String,
+        required: true,
+    },
 });
 
 const wodClassicScoreSchema = new mongoose.Schema<IWodClassicScore>({

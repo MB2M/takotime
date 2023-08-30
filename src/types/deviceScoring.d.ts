@@ -27,6 +27,7 @@ interface IWodWeightScore extends Subdocument {
     weight?: number;
     state?: string;
     partnerId?: number;
+    index: string;
 }
 
 interface IWodClassicScore extends Subdocument {

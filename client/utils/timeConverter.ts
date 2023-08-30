@@ -56,4 +56,17 @@ export const formatChrono = (
     return timer?.toString().slice(0, 5);
 };
 
+export const deltaMinutes = (
+    hours: string,
+    minutes: string,
+    deltaMinute: number
+) => {
+    const totalMinutes = +hours * 60 + +minutes + deltaMinute;
+
+    const newHours = Math.floor(totalMinutes / 60);
+    const newMinutes = totalMinutes % 60;
+
+    return `${addZero(newHours, 2)}:${addZero(newMinutes, 2)}`;
+};
+
 export default toReadableTime;

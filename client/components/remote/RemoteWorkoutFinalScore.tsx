@@ -24,6 +24,26 @@ const RemoteWorkoutFinalScore = ({ workout, scores }: Props) => {
                         .reduce((total, rep) => total + rep.rep, 0) || 0
                 );
 
+            case layout?.includes("maxWeight"):
+                const partners = [
+                    ...new Set(
+                        scores.wodWeight.map((score) => score.partnerId)
+                    ),
+                ];
+
+                return partners
+                    .map(
+                        (partnerId) =>
+                            scores.wodWeight
+                                .sort((a, b) => b.weight - a.weight)
+                                .find(
+                                    (score) =>
+                                        score.state === "Success" &&
+                                        score.partnerId === partnerId
+                                )?.weight || 0
+                    )
+                    .reduce((total, score) => total + score, 0);
+
             default:
                 return (
                     scores["wodClassic"]
@@ -50,6 +70,9 @@ const RemoteWorkoutFinalScore = ({ workout, scores }: Props) => {
         switch (true) {
             case layout?.includes("split"):
                 return `${repsCompleted} reps`;
+            case layout?.includes("maxWeight"):
+                return `${repsCompleted} kg`;
+
             default:
                 return `${repsCompleted} reps (${
                     workout.options?.wodtype === "amrap"

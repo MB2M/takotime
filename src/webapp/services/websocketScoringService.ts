@@ -1,11 +1,14 @@
 import { WebSocket, WebSocketServer } from "ws";
 import {
+    addMaxWeight,
     addScore,
     addTimerScore,
     getAllStationsInfo,
+    getHeatId,
     getStationInfo,
     resetScores,
     saveCC,
+    updateMaxWeight,
 } from "./scoringService";
 import liveApp from "../../live";
 import Competition from "../models/Competition";
@@ -35,9 +38,19 @@ export default class WebsocketScoringService {
                 await this.onClose(ws);
             });
         });
+
+        this.wss.on("error", (err) => {
+            console.log(err);
+        });
+
+        this.wss.on("close", async () => {
+            console.log("Websocket closed");
+        });
+
         liveApp.manager.on(
             "updateResults",
             async (heatId, laneNumber, participantId, result) => {
+                console.log(heatId, laneNumber, participantId, result);
                 await this.onResult(heatId, laneNumber, participantId, result);
             }
         );
@@ -97,19 +110,23 @@ export default class WebsocketScoringService {
         });
     }
 
-    onMessage(ws: WebSocket, topic: string, data: any) {
+    async onMessage(ws: WebSocket, topic: string, data: any) {
         this.sendToRegistered(topic, data);
 
         if (topic === "register") {
-            this.onRegister(ws, data).then();
+            await this.onRegister(ws, data);
         }
 
         if (topic === "newRep") {
-            this.onNewRep(data).then();
+            await this.onNewRep(data);
+        }
+
+        if (topic === "maxWeight") {
+            await this.onMaxWeight(data);
         }
 
         if (topic === "save") {
-            this.onSave(ws, data).then();
+            await this.onSave(ws, data);
         }
     }
 
@@ -145,6 +162,34 @@ export default class WebsocketScoringService {
         });
     }
 
+    async onMaxWeight(data: any) {
+        const laneNumber = data.station;
+        const weight = data.weight;
+        const index = data.wodIndex;
+        const participantId = data.participantId;
+        let heatId = data.heatId;
+        const partnerId = data.partnerId;
+        const state = data.state;
+        const scoreId = data.scoreId;
+
+        heatId ??= await getHeatId();
+
+        let station: IBaseStation2RAM | undefined;
+        if (scoreId) {
+            station = updateMaxWeight({ id: scoreId, newState: state });
+        } else {
+            station = await addMaxWeight({
+                laneNumber,
+                weight,
+                workoutId: index,
+                participantId,
+                partnerId,
+                heatId,
+            });
+        }
+        this.sendToRegistered(`station/${station?.laneNumber}`, station);
+    }
+
     async onNewRep(data: any) {
         const laneNumber = data.station;
         const value = data.value;
@@ -164,7 +209,7 @@ export default class WebsocketScoringService {
         if (!workout) return;
 
         try {
-            const s1 = Date.now();
+            // const s1 = Date.now();
             const newRep = await addScore(
                 value,
                 index,
@@ -204,6 +249,7 @@ export default class WebsocketScoringService {
         }[]
     ) {
         await addTimerScore(
+            results.map((result) => result.id),
             results.map((result) => result.value),
             laneNumber
         );

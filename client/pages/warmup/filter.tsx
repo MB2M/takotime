@@ -4,6 +4,7 @@ import Clock from "react-live-clock";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import { useLiveDataContext } from "../../context/liveData/livedata";
 import { useCompetitionContext } from "../../context/competition";
+import { deltaMinutes } from "../../utils/timeConverter";
 
 const Warmup = () => {
     const { globals } = useLiveDataContext();
@@ -102,11 +103,25 @@ const Warmup = () => {
                                     variant="h3"
                                     textAlign={"center"}
                                     fontFamily={"BebasNeue"}
-                                    marginBottom={5}
                                     color={"inherit"}
-                                    height={100}
+                                    height={50}
                                 >
                                     {`${allowedHeat.title} @ ${allowedHeat.time}`}
+                                </Typography>
+                                <Typography
+                                    variant="h3"
+                                    textAlign={"center"}
+                                    fontFamily={"BebasNeue"}
+                                    marginBottom={5}
+                                    // color={"inherit"}
+                                    height={100}
+                                    color={"#fd0c0c"}
+                                >
+                                    {`Chambre d'appel @ ${deltaMinutes(
+                                        allowedHeat.time?.split(":")[0] || "0",
+                                        allowedHeat.time?.split(":")[1] || "0",
+                                        -11
+                                    )}`}
                                 </Typography>
                                 <Grid container spacing={1}>
                                     {allowedHeat.stations

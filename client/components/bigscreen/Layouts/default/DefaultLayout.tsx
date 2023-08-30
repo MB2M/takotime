@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import DefaultAthletes from "./DefaultAthletes";
 import { getTotalClassicReps } from "../../../../utils/scoring";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -7,6 +7,7 @@ import { useLiveDataContext } from "../../../../context/liveData/livedata";
 import { Typography } from "@mui/material";
 import { getTopScore } from "../../../../utils/topScores";
 import { useCompetitionContext } from "../../../../context/competition";
+import useWebappWorkout from "../../../../hooks/useWebappWorkout";
 
 interface Props {
     activeWorkouts: Workout[];
@@ -32,6 +33,7 @@ const DefaultLayout = ({
         easing: "ease-in-out",
         disrespectUserMotionPreference: true,
     });
+    const { totalRepetitions } = useWebappWorkout(activeWorkouts[0], 0);
     const colNumber = activeWorkouts[0]?.options?.columnDisplayNumber || 1;
     const rowNumber = Math.ceil(stations.length / colNumber);
 
@@ -95,11 +97,19 @@ const DefaultLayout = ({
         );
     }, [stations, activeWorkouts[0], results]);
 
-    const repsOfFirst = stations
-        .map((station) =>
-            getTotalClassicReps(station, activeWorkouts[0]?.workoutId)
-        )
-        .sort((a, b) => b - a)[0];
+    const topScore = results
+        .find((r) => r.workoutId === activeWorkouts[0].workoutId)
+        ?.results?.find((r) => r.rank === 1);
+
+    const repsOfFirst = topScore?.finished
+        ? totalRepetitions
+        : (topScore?.finalScore as number);
+
+    // const repsOfFirst = stations
+    //     .map((station) =>
+    //         getTotalClassicReps(station, activeWorkouts[0]?.workoutId)
+    //     )
+    //     .sort((a, b) => b - a)[0];
 
     return (
         <Box display={"flex"} height={1} gap={1} flexDirection={"column"}>

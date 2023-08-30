@@ -76,3 +76,5 @@ interface IWorkoutOption extends Subdocument {
     showRounds: boolean;
     columnDisplayNumber: number;
 }
+
+type LiftState = "Cancel" | "Success" | "Fail" | "Try";

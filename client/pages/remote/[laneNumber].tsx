@@ -12,18 +12,20 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import { useCompetitionContext } from "../../context/competition";
 import Chrono from "../../components/bigscreen/Chrono";
 import RemoteClassic from "../../components/remote/RemoteClassic";
 import RemoteHeader from "../../components/remote/RemoteHeader";
 import RemoteConfirmScore from "../../components/remote/RemoteConfirmScore";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoteSplit from "../../components/remote/RemoteSplit";
+import RemoteMaxWeight from "../../components/remote/RemoteMaxWeight";
+import useStationWs from "../../hooks/bigscreen/useStationWs";
 
 const LaneRemote = () => {
-    const competition = useCompetitionContext();
     const { globals, stations, sendMessage, registerListener } =
         useLiveDataContext();
+
+    const { workouts } = useStationWs();
 
     const router = useRouter();
     const [stationInfo, setStationInfo] = useState<BaseStation2 | null>(null);
@@ -43,19 +45,6 @@ const LaneRemote = () => {
     }, [laneNumber, stations]);
 
     const category = stationData?.category || "";
-
-    const workouts = useMemo(
-        () =>
-            competition?.workouts?.filter(
-                (workout) =>
-                    workout.linkedWorkoutId ===
-                        globals?.externalWorkoutId.toString() &&
-                    (!workout.categories ||
-                        workout.categories.length === 0 ||
-                        workout.categories.includes(category))
-            ) || [],
-        [competition?.workouts, globals?.externalWorkoutId, category]
-    );
 
     const [selectedWorkoutId, setSelectedWorkoutId] = useState<string>(
         () => workouts[0]?.workoutId || ""
@@ -266,14 +255,16 @@ const LaneRemote = () => {
                                         category={category}
                                     />
                                 )}
-                                {/*{layout === "maxWeight" && (*/}
-                                {/*    <RemoteWeight*/}
-                                {/*        heatId={globals?.externalHeatId}*/}
-                                {/*        laneNumber={laneNumber as string}*/}
-                                {/*        numberOfPartner={2}*/}
-                                {/*        category={category}*/}
-                                {/*    />*/}
-                                {/*)}*/}
+                                {layout.includes("maxWeight") && (
+                                    <RemoteMaxWeight
+                                        laneNumber={+laneNumber}
+                                        sendMessage={sendMessage}
+                                        station={stationInfo}
+                                        workout={workout}
+                                        participantId={stationData.externalId.toString()}
+                                        category={category}
+                                    />
+                                )}
                             </AccordionDetails>
                         </Accordion>
                     )}

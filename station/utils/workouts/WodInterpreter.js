@@ -278,6 +278,15 @@ class WodInterpreter extends EventEmitter {
         let expectedMeasurement;
         let expectTieBreak;
 
+        console.log(
+            "ARGUMENTS",
+            source,
+            wodMeasurements,
+            startTime,
+            timestamp,
+            currentWodPosition
+        );
+
         if (wodMeasurements.length === 0) {
             expectNewMeasurement = true;
         } else {

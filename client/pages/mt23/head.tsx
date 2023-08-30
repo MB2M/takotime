@@ -52,7 +52,7 @@ const Head = () => {
                 (station) => station.laneNumber === selectedLane
             )?.externalId;
 
-            if (activeWorkout.layout === "MTSprintLadder") {
+            if (activeWorkout[0].layout === "MTSprintLadder") {
                 payload = [{ score: 0, tiebreakerScore: score, id }];
             } else {
                 payload = [{ score: score, id }];
@@ -65,7 +65,7 @@ const Head = () => {
                 },
                 body: JSON.stringify({
                     eventId: competition?.eventId,
-                    workoutId: activeWorkout.workoutId,
+                    workoutId: activeWorkout[0].workoutId,
                     payload,
                 }),
             });
@@ -92,11 +92,11 @@ const Head = () => {
     };
 
     const refreshCCScores = useCallback(async () => {
-        if (!competition?.eventId || !activeWorkout?.workoutId) return;
+        if (!competition?.eventId || !activeWorkout[0]?.workoutId) return;
 
         try {
             const response = await fetch(
-                `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${activeWorkout.workoutId}`
+                `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${activeWorkout[0].workoutId}`
             );
             if (!response.ok) {
                 throw new Error(await response.text());
@@ -106,7 +106,7 @@ const Head = () => {
         } catch (e) {
             console.log(e);
         }
-    }, [activeWorkout?.workoutId]);
+    }, [activeWorkout[0]?.workoutId]);
 
     useEffect(() => {
         refreshCCScores();

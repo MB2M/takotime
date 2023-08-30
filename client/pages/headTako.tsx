@@ -22,11 +22,11 @@ const HeadTako = () => {
     >([]);
 
     const refreshCCScores = useCallback(async () => {
-        if (!competition?.eventId || !activeWorkout?.workoutId) return;
+        if (!competition?.eventId || !activeWorkout[0]?.workoutId) return;
 
         try {
             const response = await fetch(
-                `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${activeWorkout.workoutId}`
+                `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${activeWorkout[0].workoutId}`
             );
             if (!response.ok) {
                 throw new Error(await response.text());
@@ -36,7 +36,7 @@ const HeadTako = () => {
         } catch (e) {
             console.log(e);
         }
-    }, [activeWorkout?.workoutId]);
+    }, [activeWorkout[0]?.workoutId]);
 
     useEffect(() => {
         refreshCCScores();

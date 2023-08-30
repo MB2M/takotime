@@ -1,5 +1,5 @@
 import { Box, Grow, Stack, Typography } from "@mui/material";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCompetitionContext } from "../context/competition";
 import { useLiveDataContext } from "../context/liveData/livedata";
 import { workouts } from "../eventConfig/FTD23Qualif/config";
@@ -55,8 +55,8 @@ const Overlay = () => {
 
     const currentIndex = useMemo(() => {
         if (!workout?.wodIndexSwitchMinute) return 0;
-        if (workout.wodIndexSwitchMinute === 0) return 0;
-        if (plainTimer < workout.wodIndexSwitchMinute * 60 * 1000) return 0;
+        if (+workout.wodIndexSwitchMinute === 0) return 0;
+        if (plainTimer < +workout.wodIndexSwitchMinute * 60 * 1000) return 0;
 
         //ALERT: ONLY FOR WOD 3 QUALIFS FTD
         if (workout.workoutId === "wod3" && plainTimer > 13 * 60 * 1000)
@@ -450,7 +450,7 @@ const Overlay = () => {
                                             currentIndex={currentIndex}
                                             dataSource={workout?.dataSource}
                                             switchTime={
-                                                workout.wodIndexSwitchMinute
+                                                +workout.wodIndexSwitchMinute
                                             }
                                             timer={plainTimer}
                                             station={
@@ -474,7 +474,7 @@ const Overlay = () => {
                                             currentIndex={currentIndex}
                                             dataSource={workout?.dataSource}
                                             switchTime={
-                                                workout.wodIndexSwitchMinute
+                                                +workout.wodIndexSwitchMinute
                                             }
                                             timer={plainTimer}
                                             station={

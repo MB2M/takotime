@@ -1,5 +1,5 @@
-import { Box, Grow, Stack, Typography } from "@mui/material";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Typography } from "@mui/material";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCompetitionContext } from "../context/competition";
 import { useLiveDataContext } from "../context/liveData/livedata";
 import { workouts } from "../eventConfig/MT23Qualif/config";
@@ -8,12 +8,8 @@ import useChrono from "../hooks/useChrono";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Chrono from "../components/bigscreen/Chrono";
-import { AthleteDuel } from "../components/overlayDuel/AthleteDuel";
-import toReadableTime from "../utils/timeConverter";
 import { cumulativeTable } from "../utils/cumulativeTable";
 import useInterval from "../hooks/useInterval";
-
-import MT23Header from "/img/MT23-Qualif-duel-header.png";
 import { AthleteDuelMT } from "../components/overlayDuel/AthleteDuelMT";
 import useWorkoutData from "../hooks/useWorkoutData";
 
@@ -61,8 +57,8 @@ const Overlay = () => {
 
     const currentIndex = useMemo(() => {
         if (!workout?.wodIndexSwitchMinute) return 0;
-        if (workout.wodIndexSwitchMinute === 0) return 0;
-        if (plainTimer < workout.wodIndexSwitchMinute * 60 * 1000) return 0;
+        if (workout.wodIndexSwitchMinute === "0") return 0;
+        if (plainTimer < +workout.wodIndexSwitchMinute * 60 * 1000) return 0;
 
         //ALERT: ONLY FOR WOD 2 QUALIFS MT23
         if (plainTimer > 17 * 60 * 1000) return 2;
@@ -445,7 +441,7 @@ const Overlay = () => {
                                         currentIndex={currentIndex}
                                         dataSource={workout?.dataSource}
                                         switchTime={
-                                            workout.wodIndexSwitchMinute
+                                            +workout.wodIndexSwitchMinute
                                         }
                                         timer={plainTimer}
                                         station={
@@ -469,7 +465,7 @@ const Overlay = () => {
                                         currentIndex={currentIndex}
                                         dataSource={workout?.dataSource}
                                         switchTime={
-                                            workout.wodIndexSwitchMinute
+                                            +workout.wodIndexSwitchMinute
                                         }
                                         timer={plainTimer}
                                         station={

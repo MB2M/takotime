@@ -27,10 +27,10 @@ const SpeakerLight = () => {
 
     const currentIndex = useMemo(
         () =>
-            workout?.wodIndexSwitchMinute === 0
+            workout?.wodIndexSwitchMinute === "0"
                 ? 0
                 : Number(timer?.toString().replaceAll(":", "")) <
-                  (workout?.wodIndexSwitchMinute || 0) * 100000
+                  +(workout?.wodIndexSwitchMinute || 0) * 100000
                 ? 0
                 : 1,
         [timer, workout?.wodIndexSwitchMinute]

@@ -315,7 +315,7 @@ class WodInterpreter extends EventEmitter {
         //     (m) => m.id === wodMeasurements.length
         // );
 
-        if (!expectedMeasurement) return;
+        if (expectedMeasurement === undefined) return;
 
         let isFinal = false;
         let measurement = {};

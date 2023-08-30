@@ -371,7 +371,7 @@ class WodInterpreter extends EventEmitter {
                     timestamp,
                     currentWodPosition
                 );
-
+                console.log(measurement);
                 this.emit("checkpoint", measurement, isFinal, shortcut);
             }
         }

@@ -186,7 +186,7 @@ const DefaultAthletes = ({
                     >
                         {station.participant.slice(0, 50)}
                     </Typography>
-                    <Box display={"flex"} gap={8}>
+                    <Box display={"flex"} gap={4}>
                         {otherResults.length > 0 &&
                             otherResults.map((result, index) => (
                                 <Box
@@ -205,7 +205,7 @@ const DefaultAthletes = ({
                                                 "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",
                                         }}
                                     >
-                                        rank {index + 1}:
+                                        rank {index + 1} :
                                     </Typography>
                                     <Typography
                                         lineHeight={0.75}

@@ -110,7 +110,6 @@ const DefaultLayout = ({
     //         getTotalClassicReps(station, activeWorkouts[0]?.workoutId)
     //     )
     //     .sort((a, b) => b - a)[0];
-
     return (
         <Box display={"flex"} height={1} gap={1} flexDirection={"column"}>
             <Box

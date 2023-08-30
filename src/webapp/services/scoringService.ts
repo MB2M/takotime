@@ -262,15 +262,22 @@ export const addTimerScore = async (
 
     if (!workouts) return;
 
-    const forTimeWorkouts = workouts
-        .filter((workout) => {
-            return workout.options.wodtype === "forTime";
-        })
-        .sort(
-            (a, b) =>
-                +(a.wodIndexSwitchMinute.split(",")[0] || 0) -
-                +(b.wodIndexSwitchMinute.split(",")[0] || 0)
-        );
+    const forTimeWorkouts = [
+        ...new Set(
+            workouts
+                .filter((workout) => {
+                    return workout.options.wodtype === "forTime";
+                })
+                .sort(
+                    (a, b) =>
+                        +(a.wodIndexSwitchMinute.split(",")[0] || 0) -
+                        +(b.wodIndexSwitchMinute.split(",")[0] || 0)
+                )
+                .map((w) => w.workoutId)
+        ),
+    ];
+
+    console.log(forTimeWorkouts);
 
     heatId ??= await getHeatId();
     participantId ??= await getParticipantId(laneNumber);
@@ -279,7 +286,7 @@ export const addTimerScore = async (
         .map((score, index) => {
             if (score === 0 || !score) return;
 
-            const workoutId = forTimeWorkouts[index]?.workoutId;
+            const workoutId = forTimeWorkouts[index];
             if (workoutId) {
                 return {
                     time: toReadableTime(score),

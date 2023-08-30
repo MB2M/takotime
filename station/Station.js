@@ -40,7 +40,7 @@ class Station {
             mqttUrl,
             {
                 ...mqttOptions,
-                clientId: ip,
+                clientId: this.ip,
             },
             mqttTopics
         );

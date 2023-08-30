@@ -38,8 +38,6 @@ class WodInterpreter extends EventEmitter {
     deltaWodPosition(currentWodPosition, delta) {
         if (delta < -1 || delta > 1) throw "bad delta value";
 
-        // console.log(currentWodPosition);
-
         const currentBlock = currentWodPosition.block;
         const currentRound = currentWodPosition.round;
         const currentMovement = currentWodPosition.movement;
@@ -278,17 +276,6 @@ class WodInterpreter extends EventEmitter {
         let expectedMeasurement;
         let expectTieBreak;
 
-        console.log(
-            "ARGUMENTS",
-            source,
-            wodMeasurements,
-            startTime,
-            timestamp,
-            currentWodPosition
-        );
-
-        console.log("WOD MEASUREMENT", wodMeasurements);
-
         if (wodMeasurements.length === 0) {
             expectNewMeasurement = true;
         } else {
@@ -299,9 +286,6 @@ class WodInterpreter extends EventEmitter {
         let currentMeasurementId = wodMeasurements.at(-1)
             ? wodMeasurements.at(-1).id
             : -1;
-
-        console.log("CURRENT MEASUREMENT ID", currentMeasurementId);
-        console.log("THIS MEASURMEENT:", this.measurements);
 
         if (expectNewMeasurement) {
             expectedMeasurement = this.measurements.find(
@@ -314,8 +298,6 @@ class WodInterpreter extends EventEmitter {
             );
             expectTieBreak = false;
         }
-
-        console.log("EXPECTED MEASUREMENT:", expectedMeasurement);
 
         // const expectedMeasurement = this.measurements.find(
         //     (m) => m.id === wodMeasurements.length
@@ -388,7 +370,6 @@ class WodInterpreter extends EventEmitter {
                     timestamp,
                     currentWodPosition
                 );
-                console.log(measurement);
                 this.emit("checkpoint", measurement, isFinal, shortcut);
             }
         }
@@ -415,12 +396,9 @@ class WodInterpreter extends EventEmitter {
 
             case "timer":
                 let reps = 0;
-                console.log("BLOCKS:", expectedMeasurement.blocksId);
                 expectedMeasurement.blocksId.forEach((blockId) => {
                     reps += currentWodPosition.repsPerBlock[blockId] || 0;
                 });
-                console.log("REPS:", reps);
-
                 reps -= expectedMeasurement.repsFrom;
 
                 let method = "reps";

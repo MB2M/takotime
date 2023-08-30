@@ -300,6 +300,7 @@ class WodInterpreter extends EventEmitter {
             : -1;
 
         console.log("CURRENT MEASUREMENT ID", currentMeasurementId);
+        console.log("THIS MEASURMEENT:", this.measurements);
 
         if (expectNewMeasurement) {
             expectedMeasurement = this.measurements.find(

@@ -287,6 +287,8 @@ class WodInterpreter extends EventEmitter {
             currentWodPosition
         );
 
+        console.log("WOD MEASUREMENT", wodMeasurements);
+
         if (wodMeasurements.length === 0) {
             expectNewMeasurement = true;
         } else {

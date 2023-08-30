@@ -1,14 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import BigscreenLayout from "../components/bigscreen/BigscreenLayout";
 import DefaultLayout from "../components/bigscreen/Layouts/default/DefaultLayout";
-import Default2ScoresLayout from "../components/bigscreen/Layouts/default/Default2ScoresLayout";
-import SplitMTLayout from "../components/bigscreen/Layouts/split/SplitMTLayout";
 import withDisplayData from "../utils/withDisplayData";
 import React from "react";
 import DefaultMultiCategoriesLayout from "../components/bigscreen/Layouts/default/DefaultMultiCategoriesLayout";
 import SplitMTMultiCategoriesLayout from "../components/bigscreen/Layouts/split/SplitMTMultiCategoriesLayout";
 import SplitLayout from "../components/bigscreen/Layouts/split/SplitLayout";
-import { useCompetitionCornerContext } from "../context/competitionCorner/data/competitionCorner";
 import { useCompetitionContext } from "../context/competition";
 
 const HEADER_HEIGHT = 100;
@@ -54,14 +51,6 @@ const BigScreen: React.FC<Props> = ({
                         workouts={workouts}
                         stations={fullStations}
                         categories={categories}
-                    />
-                );
-
-            case "default2ScoresLayout":
-                return (
-                    <Default2ScoresLayout
-                        workouts={workouts}
-                        stations={fullStations}
                     />
                 );
 

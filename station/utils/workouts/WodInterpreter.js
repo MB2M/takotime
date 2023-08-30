@@ -409,9 +409,11 @@ class WodInterpreter extends EventEmitter {
 
             case "timer":
                 let reps = 0;
+                console.log("BLOCKS:", expectedMeasurement.blocksId);
                 expectedMeasurement.blocksId.forEach((blockId) => {
                     reps += currentWodPosition.repsPerBlock[blockId];
                 });
+                console.log("REPS:", reps);
 
                 reps -= expectedMeasurement.repsFrom;
 

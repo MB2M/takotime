@@ -14,18 +14,11 @@ dotenv.config();
 const GPIO_PIN = process.env.GPIO_PIN || 18;
 
 class Station {
-    constructor(ip, mqttUrl, mqttOptions, mqttTopics) {
+    constructor(ip) {
         this.ip = ip;
         this.db = new JsonDB(new Config("./livestation", true, false, "/"));
         this.db.push("/", {});
-        this.mqttClient = new MqttClient(
-            mqttUrl,
-            {
-                ...mqttOptions,
-                clientId: ip,
-            },
-            mqttTopics
-        );
+
         // this.bleServices = new BLEServices();
         this.wodInterpreter = new WodInterpreter();
         this.timer = new WodTimer();
@@ -42,8 +35,20 @@ class Station {
         this.devicesSubscribe = [0, 0];
     }
 
-    async initProcess() {
+    initMQTT(mqttUrl, mqttOptions, mqttTopics) {
+        this.mqttClient = new MqttClient(
+            mqttUrl,
+            {
+                ...mqttOptions,
+                clientId: ip,
+            },
+            mqttTopics
+        );
+    }
+
+    async initProcess(mqttUrl, mqttOptions, mqttTopics) {
         this.initWodInterpreterEventLister();
+        this.initMQTT(mqttUrl, mqttOptions, mqttTopics);
         // this.initBLEEventListener();
         this.initTimerEventListener();
         this.initButtons();

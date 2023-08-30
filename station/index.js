@@ -31,8 +31,8 @@ const main = async () => {
                 "error deleting livestation.json, file probably doesn't exist... if so ignore this error "
             );
         }
-        const station = new Station(
-            ip,
+        const station = new Station(ip);
+        await station.initProcess(
             MQTT_URL,
             {
                 ...mqttOptions,
@@ -50,7 +50,6 @@ const main = async () => {
                 `buzzer/${ip.split(".")[3]}`,
             ]
         );
-        station.initProcess();
     });
 };
 

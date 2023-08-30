@@ -60,68 +60,68 @@ const DefaultMultiCategoriesLayout = ({
             height={1}
             gap={1}
         >
-            {categories.map((category) => {
-                const stations = sortedStations.filter(
-                    (station) => station.category === category
-                );
+            {/*{categories.map((category) => {*/}
+            {/*    const stations = sortedStations.filter(*/}
+            {/*        (station) => station.category === category*/}
+            {/*    );*/}
 
-                const scores = stations.map(
-                    (station) =>
-                        station.scores?.endTimer.at(-1)?.time ||
-                        getTotalClassicReps(station)
-                );
+            {/*    const scores = stations.map(*/}
+            {/*        (station) =>*/}
+            {/*            station.scores?.endTimer.at(-1)?.time ||*/}
+            {/*            getTotalClassicReps(station)*/}
+            {/*    );*/}
 
-                scores.sort((a, b) => {
-                    if (typeof a === "number" && typeof b === "number") {
-                        return b - a;
-                    }
-                    if (typeof a === "string" && typeof b === "string")
-                        return a < b ? -1 : 1;
+            {/*    scores.sort((a, b) => {*/}
+            {/*        if (typeof a === "number" && typeof b === "number") {*/}
+            {/*            return b - a;*/}
+            {/*        }*/}
+            {/*        if (typeof a === "string" && typeof b === "string")*/}
+            {/*            return a < b ? -1 : 1;*/}
 
-                    if (typeof a === "string") return -1;
-                    return 1;
-                });
+            {/*        if (typeof a === "string") return -1;*/}
+            {/*        return 1;*/}
+            {/*    });*/}
 
-                const repsOfFirst = stations
-                    .map((station) => getTotalClassicReps(station))
-                    .sort((a, b) => b - a)[0];
+            {/*    const repsOfFirst = stations*/}
+            {/*        .map((station) => getTotalClassicReps(station))*/}
+            {/*        .sort((a, b) => b - a)[0];*/}
 
-                const workout =
-                    workouts.find((workout) =>
-                        workout.categories?.includes(category)
-                    ) || workouts[0];
+            {/*    const workout =*/}
+            {/*        workouts.find((workout) =>*/}
+            {/*            workout.categories?.includes(category)*/}
+            {/*        ) || workouts[0];*/}
 
-                return (
-                    <Box
-                        key={category}
-                        width={1}
-                        display={"flex"}
-                        flexDirection={"column"}
-                        gap={1}
-                        ref={parent}
-                    >
-                        {stations.map((station) => (
-                            <DefaultAthletes
-                                key={station.laneNumber}
-                                station={station}
-                                height={1 / stations.length}
-                                workout={workout}
-                                repsOfFirst={repsOfFirst}
-                                allTotalReps={scores}
-                            />
-                        ))}
-                        <Typography
-                            fontFamily={"BebasNeue"}
-                            fontSize={"4rem"}
-                            color={"white"}
-                            textAlign={"center"}
-                            lineHeight={0.8}
-                        >
-                            {category}
-                        </Typography>
-                    </Box>
-                );
-            })}
+            {/*    return (*/}
+            {/*        <Box*/}
+            {/*            key={category}*/}
+            {/*            width={1}*/}
+            {/*            display={"flex"}*/}
+            {/*            flexDirection={"column"}*/}
+            {/*            gap={1}*/}
+            {/*            ref={parent}*/}
+            {/*        >*/}
+            {/*            {stations.map((station) => (*/}
+            {/*                <DefaultAthletes*/}
+            {/*                    key={station.laneNumber}*/}
+            {/*                    station={station}*/}
+            {/*                    height={1 / stations.length}*/}
+            {/*                    workout={workout}*/}
+            {/*                    repsOfFirst={repsOfFirst}*/}
+            {/*                    allTotalReps={scores}*/}
+            {/*                />*/}
+            {/*            ))}*/}
+            {/*            <Typography*/}
+            {/*                fontFamily={"BebasNeue"}*/}
+            {/*                fontSize={"4rem"}*/}
+            {/*                color={"white"}*/}
+            {/*                textAlign={"center"}*/}
+            {/*                lineHeight={0.8}*/}
+            {/*            >*/}
+            {/*                {category}*/}
+            {/*            </Typography>*/}
+            {/*        </Box>*/}
+            {/*    );*/}
+            {/*})}*/}
         </Box>
     );
 };

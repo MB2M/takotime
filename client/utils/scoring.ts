@@ -24,6 +24,33 @@ export const getTotalSplitReps = (
     );
 };
 
+const getTotalMaxWeightScore = (
+    station: DisplayFullStation,
+    workoutId?: string
+) => {
+    const partners = [
+        ...new Set(station.scores?.wodWeight.map((score) => score.partnerId)),
+    ];
+
+    const scores = partners.map((partnerId) => {
+        const partnerScore = station?.scores?.wodWeight
+            .filter((aaa) => {
+                return aaa.index === workoutId;
+            })
+            .filter((score) => score.partnerId === partnerId);
+        if (!partnerScore || partnerScore.length === 0) return 0;
+        return (
+            partnerScore
+                .filter((score) => score.state === "Success")
+                .sort((a, b) => b.weight - a.weight)[0]?.weight || 0
+        );
+    });
+
+    console.log(station.laneNumber, scores);
+
+    return scores.reduce((total, score) => total + score, 0);
+};
+
 // export const getWodWeightScore = (
 //     station: DisplayFullStation,
 //     workoutId?: string
@@ -69,7 +96,8 @@ export const sortedResult = (
                     (score) => score.index === workoutId
                 )?.time ||
                 getTotalClassicReps(station, workoutId) +
-                    getTotalSplitReps(station, workoutId);
+                    getTotalSplitReps(station, workoutId) +
+                    getTotalMaxWeightScore(station, workoutId);
 
             const finished = typeof finalScore === "string";
 

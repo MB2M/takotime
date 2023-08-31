@@ -122,7 +122,7 @@ class Manager extends EventEmitter {
     }
 
     addOnWebsocketMessageListener() {
-        this.websocketServices.addOnMessage((data) => {
+        this.websocketServices.addOnMessage(async (data) => {
             const json = JSON.parse(data.toString());
             const topic = json.topic;
             const message = json.message;
@@ -134,12 +134,12 @@ class Manager extends EventEmitter {
                 this.mqttServices.send("server/restartUpdate", message);
             }
             if (topic === "client/remoteWarmupHeat") {
-                this.keyv.set("remoteWarmupHeat", message);
-                this.websocketMessages.sendGlobalsToAllClients();
+                await this.keyv.set("remoteWarmupHeat", message);
+                await this.websocketMessages.sendGlobalsToAllClients();
             }
             if (topic === "client/remoteFinaleAthlete") {
-                this.keyv.set("remoteFinaleAthlete", message);
-                this.websocketMessages.sendGlobalsToAllClients();
+                await this.keyv.set("remoteFinaleAthlete", message);
+                await this.websocketMessages.sendGlobalsToAllClients();
             }
         });
     }

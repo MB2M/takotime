@@ -7,6 +7,7 @@ import DefaultMultiCategoriesLayout from "../components/bigscreen/Layouts/defaul
 import SplitMTMultiCategoriesLayout from "../components/bigscreen/Layouts/split/SplitMTMultiCategoriesLayout";
 import SplitLayout from "../components/bigscreen/Layouts/split/SplitLayout";
 import { useCompetitionContext } from "../context/competition";
+import MaxWeightLayout from "../components/bigscreen/Layouts/maxWeight/MaxWeightLayout";
 
 const HEADER_HEIGHT = 100;
 
@@ -38,13 +39,18 @@ const BigScreen: React.FC<Props> = ({
     const competition = useCompetitionContext();
     const getLayoutComponent = (layoutName?: string) => {
         switch (layoutName) {
-            // case "MaxTonnage":
-            //     return (
-            //         <MaxTonnage
-            //             heatId={globals?.externalHeatId}
-            //             stations={fullStations}
-            //         />
-            //     );
+            case "maxWeight":
+                return (
+                    <MaxWeightLayout
+                        activeWorkouts={activeWorkouts}
+                        stations={fullStations}
+                        CCResults={CCResults}
+                        results={results}
+                        categories={categories}
+                        workouts={workouts}
+                    />
+                );
+
             case "defaultMultiCategories":
                 return (
                     <DefaultMultiCategoriesLayout

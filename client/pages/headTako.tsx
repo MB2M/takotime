@@ -1,6 +1,6 @@
 import useStationWs from "../hooks/bigscreen/useStationWs";
 import { Box } from "@mui/system";
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { useCompetitionContext } from "../context/competition";
 import { useCallback, useEffect, useState } from "react";
 import { useLiveDataContext } from "../context/liveData/livedata";
@@ -15,28 +15,35 @@ const HeadTako = () => {
     const { sendMessage } = useLiveDataContext();
     const { heatName } = useHeatDivisionInfo();
 
-    const { fullStations, activeWorkout, workouts } = useStationWs();
+    const { fullStations, workouts, results } = useStationWs();
 
     const [currentCCScores, setCurrentCCScores] = useState<
-        { id: number; result: string }[]
+        { id: number; result: string }[][]
     >([]);
 
     const refreshCCScores = useCallback(async () => {
-        if (!competition?.eventId || !activeWorkout[0]?.workoutId) return;
+        if (!competition?.eventId || !workouts) return;
 
-        try {
-            const response = await fetch(
-                `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${activeWorkout[0].workoutId}`
-            );
-            if (!response.ok) {
-                throw new Error(await response.text());
-            }
+        // const scores: { id: number; result: string }[][] = [];
 
-            setCurrentCCScores(await response.json());
-        } catch (e) {
-            console.log(e);
-        }
-    }, [activeWorkout[0]?.workoutId]);
+        const scores = await Promise.all(
+            workouts.map(async (workout) => {
+                try {
+                    const response = await fetch(
+                        `/api/results/byWorkout?eventId=${competition.eventId}&workoutId=${workout.workoutId}`
+                    );
+                    // console.log(await response.json());
+                    if (!response.ok) {
+                        throw new Error(await response.text());
+                    }
+                    return await response.json();
+                } catch (e) {
+                    console.log(e);
+                }
+            })
+        );
+        setCurrentCCScores(scores.filter((score) => !!score));
+    }, [workouts, competition?.eventId]);
 
     useEffect(() => {
         refreshCCScores();
@@ -46,6 +53,18 @@ const HeadTako = () => {
 
         return () => clearInterval(interval);
     }, [refreshCCScores]);
+
+    const postAllScores = () => {
+        fullStations.forEach((station) => {
+            sendMessage(
+                JSON.stringify({
+                    topic: "save",
+                    data: { laneNumber: station.laneNumber },
+                })
+            );
+        });
+        setTimeout(() => refreshCCScores(), 2000);
+    };
 
     const onPostScore = (laneNumber: number) => {
         sendMessage(JSON.stringify({ topic: "save", data: { laneNumber } }));
@@ -100,6 +119,7 @@ const HeadTako = () => {
                     {heatName}
                 </Typography>
                 <Chrono fontSize={"2rem"} fontFamily={"ChivoMono"} />
+                <Button onClick={postAllScores}>Post all scores</Button>
             </Box>
 
             <Stack gap={1} justifyContent={"space-between"}>
@@ -109,12 +129,20 @@ const HeadTako = () => {
                         <HeadTakoStation
                             key={station.laneNumber}
                             station={station}
-                            currentCCScore={
-                                currentCCScores.find(
-                                    (score) => score.id === station.externalId
-                                )?.result || "-"
-                            }
-                            workout={workouts[0]}
+                            currentCCScore={currentCCScores.map(
+                                (scoreList) =>
+                                    scoreList.find(
+                                        (score) =>
+                                            score.id === station.externalId
+                                    )?.result || "-"
+                            )}
+                            results={results.map((r) =>
+                                r.results.filter(
+                                    (rr) =>
+                                        rr.participantId === station.externalId
+                                )
+                            )}
+                            workouts={workouts}
                             onPostScore={onPostScore}
                             onRepClick={onRepClick}
                         />

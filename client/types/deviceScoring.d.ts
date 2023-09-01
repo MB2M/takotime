@@ -66,6 +66,7 @@ type DisplayFullStation = Pick<
 type WodResult = {
     workoutId: string;
     results: {
+        units: string;
         rank: number;
         finalScore: string | number;
         finished: boolean;

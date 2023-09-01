@@ -1,14 +1,10 @@
 import { Box } from "@mui/system";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { splitMTscore } from "../../../../utils/splitMTscore";
-import SplitMTAthlete2 from "./SplitMTAthlete2";
 import SplitAthlete from "./SplitAthlete";
 import { getTopScore } from "../../../../utils/topScores";
 import { Typography } from "@mui/material";
 import { useCompetitionContext } from "../../../../context/competition";
-import { getTotalClassicReps } from "../../../../utils/scoring";
-import DefaultAthletes from "../default/DefaultAthletes";
 
 interface Props {
     activeWorkouts: Workout[];
@@ -202,8 +198,7 @@ const SplitLayout = ({
                                 color={competition?.primaryColor}
                                 fontSize={"3rem"}
                             >
-                                {score.scores[0]}{" "}
-                                {!score.scores[0].includes(":") && "reps"}
+                                {score.scores[0]}
                             </Typography>
                             <Typography
                                 fontFamily={

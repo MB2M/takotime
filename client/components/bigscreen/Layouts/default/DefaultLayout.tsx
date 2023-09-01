@@ -262,8 +262,7 @@ const DefaultLayout = ({
                                 color={competition?.primaryColor}
                                 fontSize={"3rem"}
                             >
-                                {score.scores[0]}{" "}
-                                {!score.scores[0].includes(":") && "reps"}
+                                {score.scores[0]}
                             </Typography>
                             <Typography
                                 fontFamily={

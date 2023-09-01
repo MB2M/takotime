@@ -175,9 +175,11 @@ const Speaker = () => {
                                                         }
                                                         fontSize={"1.7rem"}
                                                     >
-                                                        {!result.score
-                                                            ?.finished &&
-                                                            "reps"}
+                                                        {
+                                                            !result.score
+                                                                ?.finished
+                                                        }
+                                                        {result.score?.units}
                                                     </Typography>
                                                     {array.length > 1 && (
                                                         <Typography

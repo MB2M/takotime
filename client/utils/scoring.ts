@@ -46,8 +46,6 @@ const getTotalMaxWeightScore = (
         );
     });
 
-    console.log(station.laneNumber, scores);
-
     return scores.reduce((total, score) => total + score, 0);
 };
 
@@ -67,19 +65,10 @@ const getTotalMaxWeightScore = (
 //     );
 // };
 
-export const getStationScore = (
-    station: DisplayFullStation,
-    workout: Workout
-) => {};
-
-export const getWorkoutRank = (
-    stations: DisplayFullStation[],
-    workout: Workout
-) => {};
-
 export const sortedResult = (
     stations: DisplayFullStation[],
-    workoutId: string
+    workoutId: string,
+    wodLayout?: string
 ) => {
     // const reps = stations
     //     .map(
@@ -106,6 +95,9 @@ export const sortedResult = (
                 finished,
                 participantId: station.externalId,
                 category: station.category,
+                units: wodLayout?.toLowerCase().includes("weight")
+                    ? "kg"
+                    : "reps",
             };
         })
         .sort((a, b) => {

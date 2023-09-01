@@ -68,7 +68,11 @@ const useStationWs = () => {
         return workouts
             .map((workout) => {
                 if (!workout.workoutId) return null;
-                const results = sortedResult(fullStations, workout.workoutId);
+                const results = sortedResult(
+                    fullStations,
+                    workout.workoutId,
+                    workout?.layout
+                );
                 return { workoutId: workout.workoutId, results };
             })
             .filter((result) => result) as WodResult[];
@@ -96,7 +100,16 @@ const useStationWs = () => {
                         scores: participant.result[0].scores.map((score) =>
                             score.timeCapCompletedReps
                                 ? `Cap+ ${score.timeCapCompletedReps}`
-                                : score.value
+                                : !score.value
+                                ? score.value
+                                : score.value.includes(":")
+                                ? score.value
+                                : `${score.value} ${
+                                      participant.result[0].workoutType ===
+                                      "repmax"
+                                          ? "kg"
+                                          : "reps"
+                                  }`
                         ),
                     })
                 );

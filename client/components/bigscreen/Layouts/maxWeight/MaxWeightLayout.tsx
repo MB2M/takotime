@@ -1,13 +1,10 @@
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import MaxWeightAthletes from "./MaxWeightAthletes";
-import { getTotalClassicReps } from "../../../../utils/scoring";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useLiveDataContext } from "../../../../context/liveData/livedata";
 import { Typography } from "@mui/material";
 import { getTopScore } from "../../../../utils/topScores";
 import { useCompetitionContext } from "../../../../context/competition";
-import useWebappWorkout from "../../../../hooks/useWebappWorkout";
 
 interface Props {
     activeWorkouts: Workout[];
@@ -27,7 +24,6 @@ const MaxWeightLayout = ({
     workouts,
 }: Props) => {
     const competition = useCompetitionContext();
-    const { globals } = useLiveDataContext();
     const [parent] = useAutoAnimate({
         duration: 200,
         easing: "ease-in-out",
@@ -96,15 +92,6 @@ const MaxWeightLayout = ({
         );
     }, [stations, activeWorkouts[0], results]);
 
-    const topScore = results
-        .find((r) => r.workoutId === activeWorkouts[0].workoutId)
-        ?.results?.find((r) => r.rank === 1);
-
-    // const repsOfFirst = stations
-    //     .map((station) =>
-    //         getTotalClassicReps(station, activeWorkouts[0]?.workoutId)
-    //     )
-    //     .sort((a, b) => b - a)[0];
     return (
         <Box display={"flex"} height={1} gap={1} flexDirection={"column"}>
             <Box
@@ -226,39 +213,10 @@ const MaxWeightLayout = ({
                             .flat()
                             .filter((station) => station.category === category);
 
-                        // const scores = stations.map(
-                        //     (station) =>
-                        //         station.scores?.endTimer.at(-1)?.time ||
-                        //         getTotalClassicReps(station)
-                        // );
-                        //
-                        // scores.sort((a, b) => {
-                        //     if (
-                        //         typeof a === "number" &&
-                        //         typeof b === "number"
-                        //     ) {
-                        //         return b - a;
-                        //     }
-                        //     if (
-                        //         typeof a === "string" &&
-                        //         typeof b === "string"
-                        //     )
-                        //         return a < b ? -1 : 1;
-                        //
-                        //     if (typeof a === "string") return -1;
-                        //     return 1;
-                        // });
-
                         const workout =
                             activeWorkouts.find((workout) =>
                                 workout.categories?.includes(category)
                             ) || workouts[1];
-
-                        const repsOfFirst = stations
-                            .map((station) =>
-                                getTotalClassicReps(station, workout.workoutId)
-                            )
-                            .sort((a, b) => b - a)[0];
 
                         return (
                             <Box
@@ -328,8 +286,7 @@ const MaxWeightLayout = ({
                                 color={competition?.primaryColor}
                                 fontSize={"3rem"}
                             >
-                                {score.scores[0]}{" "}
-                                {!score.scores[0].includes(":") && "reps"}
+                                {score.scores[0]}
                             </Typography>
                             <Typography
                                 fontFamily={

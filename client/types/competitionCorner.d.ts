@@ -89,6 +89,7 @@ interface CCResultParticipant {
 }
 
 interface CCResultParticipantResult {
+    workoutType: string;
     scores: CCResultParticipantScore[];
 }
 

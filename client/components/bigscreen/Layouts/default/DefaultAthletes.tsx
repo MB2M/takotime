@@ -148,11 +148,12 @@ const DefaultAthletes = ({
                 </Typography>
             </Box>
             <Box
-                width={BASE_WIDTH}
+                width={BASE_WIDTH - 0.075}
                 p={1}
                 position={"relative"}
                 display={"flex"}
                 gap={1.3}
+                overflow={"hidden"}
             >
                 <Typography
                     lineHeight={"2.5rem"}
@@ -168,14 +169,13 @@ const DefaultAthletes = ({
                     flexDirection={"column"}
                     justifyContent={"space-between"}
                     height={1}
+                    px={0.5}
                 >
                     <Typography
                         lineHeight={0.9}
                         maxHeight={"6rem"}
                         fontSize={
-                            station.participant.length > 26
-                                ? "2.3rem"
-                                : "2.3rem"
+                            station.participant.length > 19 ? "2rem" : "2.3rem"
                         }
                         fontFamily={"bebasNeue"}
                         textOverflow={"ellipsis"}

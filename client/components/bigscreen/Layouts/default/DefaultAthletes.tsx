@@ -293,14 +293,15 @@ const DefaultAthletes = ({
                                     sx={{ backgroundColor: BG_COLOR }}
                                     borderRadius={"10px"}
                                     px={1}
-                                    maxHeight={"4rem"}
+                                    maxHeight={"4.2rem"}
+                                    overflow={"hidden"}
                                 >
                                     <Typography
                                         px={1}
                                         pt={0.5}
                                         color={"white"}
                                         fontSize={"3.2rem"}
-                                        lineHeight={"2.8rem"}
+                                        lineHeight={"4.2rem"}
                                         fontFamily={"bebasNeue"}
                                     >
                                         {currentMovementReps}
@@ -316,7 +317,7 @@ const DefaultAthletes = ({
                                         pt={0.5}
                                         color={"white"}
                                         fontSize={"2.4rem"}
-                                        lineHeight={"2.4rem"}
+                                        lineHeight={"4.2rem"}
                                         fontFamily={"bebasNeue"}
                                         // borderRadius={"10px"}
                                         sx={{ backgroundColor: BG_COLOR }}
@@ -334,7 +335,7 @@ const DefaultAthletes = ({
                                         pt={0.5}
                                         color={"white"}
                                         fontSize={"3.2rem"}
-                                        lineHeight={"2.8rem"}
+                                        lineHeight={"4.2rem"}
                                         fontFamily={"bebasNeue"}
                                         borderRadius={"10px"}
                                         sx={{ backgroundColor: BG_COLOR }}

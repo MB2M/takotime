@@ -97,20 +97,22 @@ const useStationWs = () => {
                         participantId: participant.id,
                         division: participant.divisionName,
                         participant: participant.displayName,
-                        scores: participant.result[0].scores.map((score) =>
-                            score.timeCapCompletedReps
-                                ? `Cap+ ${score.timeCapCompletedReps}`
-                                : !score.value
-                                ? score.value
-                                : score.value.includes(":")
-                                ? score.value
-                                : `${score.value} ${
-                                      participant.result[0].workoutType ===
-                                      "repmax"
-                                          ? "kg"
-                                          : "reps"
-                                  }`
-                        ),
+                        scores: participant.result[0].scores
+                            .filter((score) => score.value !== "WD")
+                            .map((score) =>
+                                score.timeCapCompletedReps
+                                    ? `Cap+ ${score.timeCapCompletedReps}`
+                                    : !score.value
+                                    ? score.value
+                                    : score.value.includes(":")
+                                    ? score.value
+                                    : `${score.value} ${
+                                          participant.result[0].workoutType ===
+                                          "repmax"
+                                              ? "kg"
+                                              : "reps"
+                                      }`
+                            ),
                     })
                 );
                 return results;

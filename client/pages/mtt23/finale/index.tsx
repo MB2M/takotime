@@ -205,15 +205,15 @@ function AthletePresentation2() {
                         position={"relative"}
                         width={1}
                         overflow={"hidden"}
-                        borderRadius={"10px"}
+                        borderRadius={"8px"}
                     >
                         <Image
                             src={`/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`}
                             alt={"mt23"}
                             // width={200}
                             style={{
-                                width: "100%",
-                                // height: "100%",
+                                // width: "100%",
+                                height: "100%",
                                 // objectFit: "contain",
                                 // height: "100%",
                                 // border: `10px solid black`,

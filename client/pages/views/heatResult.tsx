@@ -30,8 +30,8 @@ const HeatResult = () => {
                 (a.results.at(-1)?.score?.rank || 0) -
                 (b.results.at(-1)?.score?.rank || 0)
             );
-        })
-        .sort((a, b) => (a.category < b.category ? 1 : -1));
+        });
+    // .sort((a, b) => (a.category < b.category ? 1 : -1));
 
     const firstHalf = stationWithResults.slice().splice(0, middleIndex);
 

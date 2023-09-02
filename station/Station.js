@@ -389,6 +389,7 @@ class Station {
         // const devices = this.getRequiredDevices();
         // this.bleServices.connectTo(devices);
 
+        console.log("DATA SENT BY SERVER", data);
         try {
             this.wodInterpreter.load(this.db.getData("/workouts"));
             if (data.stations.dynamics.state < 2) {

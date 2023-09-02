@@ -1,13 +1,12 @@
 import { Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLiveDataContext } from "../../context/liveData/livedata";
-import { getFlagEmoji } from "../../utils/flagEmoji";
 import useHeatDivisionInfo from "../../hooks/cc/useHeatDivisionInfo";
 import { useCompetitionContext } from "../../context/competition";
 import Logo from "../../components/bigscreen/Logo";
 
-const Speaker = () => {
+const HeatSummary = () => {
     const competition = useCompetitionContext();
     const { globals } = useLiveDataContext();
     const [stations, setStations] = useState<
@@ -95,7 +94,7 @@ const Speaker = () => {
             >
                 {[firstHalf, secondHalf].map((part, index) => (
                     <Box
-                        width={0.4}
+                        width={0.46}
                         key={index}
                         // px={2}
                         display={"flex"}
@@ -111,7 +110,7 @@ const Speaker = () => {
                                     maxWidth={1250}
                                     width={1}
                                     borderRadius={4}
-                                    border={`2px solid ${competition?.primaryColor}`}
+                                    border={`2px solid ${competition?.secondaryColor}`}
                                     display={"flex"}
                                     gap={3}
                                     overflow={"hidden"}
@@ -120,7 +119,7 @@ const Speaker = () => {
                                     <Box
                                         sx={{
                                             backgroundColor:
-                                                competition?.primaryColor,
+                                                competition?.secondaryColor,
                                         }}
                                         py={0.5}
                                         display={"flex"}
@@ -129,11 +128,11 @@ const Speaker = () => {
                                     >
                                         <Typography
                                             sx={{ color: "black" }}
-                                            fontSize={"2.5rem"}
+                                            fontSize={"3.2rem"}
                                             fontFamily={"BebasNeue"}
                                             my={"auto"}
                                             px={1}
-                                            width={45}
+                                            width={55}
                                             textAlign={"center"}
                                         >
                                             {station.station}
@@ -148,17 +147,17 @@ const Speaker = () => {
                                         <Typography
                                             fontFamily={"BebasNeue"}
                                             sx={{ color: "white" }}
-                                            fontSize={"2.5rem"}
+                                            fontSize={"3.2rem"}
                                             lineHeight={"2rem"}
                                             pt={2}
                                         >
-                                            {station.competitor}{" "}
-                                            {getFlagEmoji(station.countryCode)}
+                                            {station.competitor}
+                                            {/*{getFlagEmoji(station.countryCode)}*/}
                                         </Typography>
                                         <Typography
                                             fontFamily={competition?.customFont}
-                                            color={competition?.secondaryColor}
-                                            fontSize={"2.2rem"}
+                                            color={competition?.primaryColor}
+                                            fontSize={"2.8rem"}
                                             // color={"gray"}
                                             // ml={"auto"}
                                         >
@@ -174,4 +173,4 @@ const Speaker = () => {
     );
 };
 
-export default Speaker;
+export default HeatSummary;

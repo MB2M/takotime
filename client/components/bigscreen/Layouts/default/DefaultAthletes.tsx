@@ -153,7 +153,7 @@ const DefaultAthletes = ({
                 position={"relative"}
                 display={"flex"}
                 gap={1.3}
-                overflow={"hidden"}
+                // overflow={"hidden"}
             >
                 <Typography
                     lineHeight={"2.5rem"}
@@ -168,61 +168,68 @@ const DefaultAthletes = ({
                     display={"flex"}
                     flexDirection={"column"}
                     justifyContent={"space-between"}
-                    height={1}
                     px={0.5}
+                    // overflow={"hidden"}
                 >
                     <Typography
                         lineHeight={0.9}
                         maxHeight={"6rem"}
+                        // height={otherResults.length > 0 ? 0.65 : "200%"}
                         fontSize={
-                            station.participant.length > 19 ? "2rem" : "2.3rem"
+                            station.participant.length > 19
+                                ? "3.1rem"
+                                : "3.6rem"
                         }
                         fontFamily={"bebasNeue"}
                         textOverflow={"ellipsis"}
-                        overflow={"hidden"}
+                        // overflow={
+                        //     otherResults.length > 0 ? "hidden" : "visible"
+                        // }
                         my={"auto"}
                         maxWidth={"100%"}
-                        noWrap={otherResults.length > 0}
+                        // noWrap={otherResults.length > 0}
                     >
-                        {station.participant.slice(0, 50)}
+                        {station.participant.length > 26
+                            ? `${station.participant.slice(0, 23)}...`
+                            : station.participant}
                     </Typography>
-                    <Box display={"flex"} gap={4}>
-                        {otherResults.length > 0 &&
-                            otherResults.map((result, index) => (
-                                <Box
-                                    display={"flex"}
-                                    gap={2}
-                                    alignItems={"baseline"}
-                                >
-                                    <Typography
-                                        lineHeight={0.75}
-                                        fontSize={"2rem"}
-                                        fontFamily={"bebasNeue"}
-                                        color={"gray"}
-                                        fontWeight={900}
-                                        sx={{
-                                            textShadow:
-                                                "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",
-                                        }}
-                                    >
-                                        rank {index + 1} :
-                                    </Typography>
-                                    <Typography
-                                        lineHeight={0.75}
-                                        fontSize={"2.5rem"}
-                                        fontFamily={"bebasNeue"}
-                                        color={"white"}
-                                        fontWeight={900}
-                                        sx={{
-                                            textShadow:
-                                                "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",
-                                        }}
-                                    >
-                                        {result.result?.rank}
-                                    </Typography>
-                                </Box>
-                            ))}
-                    </Box>
+                    {/*<Box display={"flex"} gap={4}>*/}
+                    {/*    {otherResults.length > 0 &&*/}
+                    {/*        otherResults.map((result, index) => (*/}
+                    {/*            <Box*/}
+                    {/*                display={"flex"}*/}
+                    {/*                gap={2}*/}
+                    {/*                alignItems={"baseline"}*/}
+                    {/*            >*/}
+                    {/*                <Typography*/}
+                    {/*                    lineHeight={0.75}*/}
+                    {/*                    fontSize={"2rem"}*/}
+                    {/*                    fontFamily={"bebasNeue"}*/}
+                    {/*                    color={"gray"}*/}
+                    {/*                    fontWeight={900}*/}
+                    {/*                    sx={{*/}
+                    {/*                        textShadow:*/}
+                    {/*                            "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",*/}
+                    {/*                    }}*/}
+                    {/*                >*/}
+                    {/*                    rank {index + 1} :*/}
+                    {/*                </Typography>*/}
+                    {/*                <Typography*/}
+                    {/*                    lineHeight={0.75}*/}
+                    {/*                    fontSize={"2.5rem"}*/}
+                    {/*                    fontFamily={"bebasNeue"}*/}
+                    {/*                    color={"white"}*/}
+                    {/*                    fontWeight={900}*/}
+                    {/*                    sx={{*/}
+                    {/*                        textShadow:*/}
+                    {/*                            "2.8px 0px black, -2.8px 0px black, 0px -2.8px black, 0px 2.8px black,2.8px 2.8px black, -2.8px -2.8px black,2.8px -2.8px black, -2.8px 2.8px black",*/}
+                    {/*                    }}*/}
+                    {/*                >*/}
+                    {/*                    {result.result?.rank}*/}
+                    {/*                </Typography>*/}
+                    {/*            </Box>*/}
+                    {/*        ))}*/}
+                    {/*</Box>*/}
                 </Box>
             </Box>
             <Box display={"flex"} justifyContent={"space-evenly"} flexGrow={2}>
@@ -391,7 +398,7 @@ const DefaultAthletes = ({
                                             px={1}
                                             py={1}
                                             color={"white"}
-                                            fontSize={"3rem"}
+                                            fontSize={"3.6rem"}
                                             lineHeight={"2.4rem"}
                                             fontFamily={"bebasNeue"}
                                             borderRadius={"10px"}

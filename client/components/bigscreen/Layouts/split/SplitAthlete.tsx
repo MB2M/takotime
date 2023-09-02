@@ -1,12 +1,8 @@
 import { Typography } from "@mui/material";
-import { Box, Stack } from "@mui/system";
+import { Box } from "@mui/system";
 import { useMemo } from "react";
 import { useCompetitionContext } from "../../../../context/competition";
-import {
-    getRoundScores,
-    roundsScores,
-    splitMTscore,
-} from "../../../../utils/splitMTscore";
+import { getRoundScores } from "../../../../utils/splitMTscore";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 interface Props {
@@ -30,6 +26,7 @@ interface Props {
 
 const BG_COLOR = "#312F2F";
 const BAR_COLOR = "#BBB3BB";
+const BASE_WIDTH = 0.47;
 
 const SplitAthlete = ({
     station,
@@ -91,7 +88,7 @@ const SplitAthlete = ({
         >
             <Box
                 width={0.075}
-                px={1}
+                p={1}
                 borderRight={`4px solid ${BG_COLOR}`}
                 position={"relative"}
                 display={"flex"}
@@ -114,12 +111,12 @@ const SplitAthlete = ({
 
             <Box display={"flex"} width={1}>
                 <Box
-                    minWidth={0.4}
-                    width={0.4}
+                    width={0.6 - 0.075}
                     p={1}
                     position={"relative"}
                     display={"flex"}
                     gap={1.3}
+                    overflow={"hidden"}
                 >
                     <Typography
                         lineHeight={"2.5rem"}
@@ -133,17 +130,22 @@ const SplitAthlete = ({
                         lineHeight={0.9}
                         maxHeight={"6rem"}
                         fontSize={
-                            station.participant.length > 26
-                                ? "2.3rem"
-                                : "2.3rem"
+                            station.participant.length > 19
+                                ? "3.1rem"
+                                : "3.6rem"
                         }
                         fontFamily={"bebasNeue"}
                         textOverflow={"ellipsis"}
-                        overflow={"hidden"}
+                        // overflow={
+                        //     otherResults.length > 0 ? "hidden" : "visible"
+                        // }
                         my={"auto"}
                         maxWidth={"100%"}
+                        // noWrap={otherResults.length > 0}
                     >
-                        {station.participant.slice(0, 50)}
+                        {station.participant.length > 26
+                            ? `${station.participant.slice(0, 23)}...`
+                            : station.participant}
                     </Typography>
                 </Box>
                 <Box
@@ -188,7 +190,7 @@ const SplitAthlete = ({
                                         lineHeight={1}
                                         px={1}
                                         color={"white"}
-                                        fontSize={"3rem"}
+                                        fontSize={"3.6rem"}
                                         fontFamily={"bebasNeue"}
                                         fontWeight={900}
                                         mb={"auto"}
@@ -208,7 +210,7 @@ const SplitAthlete = ({
                     <Typography
                         p={1}
                         color={"white"}
-                        fontSize={"3.5rem"}
+                        fontSize={"3.6rem"}
                         lineHeight={"2.4rem"}
                         fontFamily={"bebasNeue"}
                         borderRadius={"10px"}

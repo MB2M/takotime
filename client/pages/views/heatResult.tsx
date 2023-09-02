@@ -5,7 +5,7 @@ import { useCompetitionContext } from "../../context/competition";
 import Logo from "../../components/bigscreen/Logo";
 import useStationWs from "../../hooks/bigscreen/useStationWs";
 
-const Speaker = () => {
+const HeatResult = () => {
     const competition = useCompetitionContext();
     const { fullStations, results } = useStationWs();
 
@@ -30,11 +30,14 @@ const Speaker = () => {
                 (a.results.at(-1)?.score?.rank || 0) -
                 (b.results.at(-1)?.score?.rank || 0)
             );
-        });
+        })
+        .sort((a, b) => (a.category < b.category ? 1 : -1));
 
     const firstHalf = stationWithResults.slice().splice(0, middleIndex);
 
     const secondHalf = stationWithResults.slice().splice(-middleIndex);
+
+    const categories = [...new Set(fullStations.map((s) => s.category))];
 
     return (
         <Box
@@ -84,28 +87,35 @@ const Speaker = () => {
             >
                 {[firstHalf, secondHalf].map((part, index) => (
                     <Box
-                        width={0.4}
+                        width={0.46}
                         key={index}
                         display={"flex"}
                         flexDirection={"column"}
                         alignItems="center"
-                        gap={2.5}
+                        gap={2}
                     >
                         {part.map((station) => (
                             <Box
                                 key={station.laneNumber}
-                                maxWidth={1250}
+                                // maxWidth={1250}
                                 width={1}
                                 borderRadius={4}
-                                border={`2px solid ${competition?.primaryColor}`}
+                                border={`2px solid ${
+                                    categories.indexOf(station.category)
+                                        ? competition?.primaryColor
+                                        : competition?.secondaryColor
+                                }`}
                                 display={"flex"}
                                 gap={3}
                                 overflow={"hidden"}
                             >
                                 <Box
                                     sx={{
-                                        backgroundColor:
-                                            competition?.primaryColor,
+                                        backgroundColor: categories.indexOf(
+                                            station.category
+                                        )
+                                            ? competition?.primaryColor
+                                            : competition?.secondaryColor,
                                     }}
                                     py={0.5}
                                     display={"flex"}
@@ -113,7 +123,7 @@ const Speaker = () => {
                                 >
                                     <Typography
                                         sx={{ color: "black" }}
-                                        fontSize={"2.5rem"}
+                                        fontSize={"3.2rem"}
                                         fontFamily={"BebasNeue"}
                                         my={"auto"}
                                         px={1}
@@ -129,13 +139,13 @@ const Speaker = () => {
                                     justifyContent={"center"}
                                     alignItems={"start"}
                                     width={1}
+                                    pt={1.8}
                                 >
                                     <Typography
                                         fontFamily={"BebasNeue"}
                                         sx={{ color: "white" }}
-                                        fontSize={"2.5rem"}
+                                        fontSize={"3.2rem"}
                                         lineHeight={"2rem"}
-                                        pt={2}
                                     >
                                         {station.participant}
                                     </Typography>
@@ -157,9 +167,10 @@ const Speaker = () => {
                                                             competition?.customFont
                                                         }
                                                         color={
-                                                            competition?.primaryColor
+                                                            competition?.secondaryColor
                                                         }
-                                                        fontSize={"2.2rem"}
+                                                        fontSize={"3.2rem"}
+                                                        lineHeight={"1.5rem"}
                                                     >
                                                         {
                                                             result.score
@@ -171,9 +182,10 @@ const Speaker = () => {
                                                             competition?.customFont
                                                         }
                                                         color={
-                                                            competition?.primaryColor
+                                                            competition?.secondaryColor
                                                         }
                                                         fontSize={"1.7rem"}
+                                                        lineHeight={"1.5rem"}
                                                     >
                                                         {
                                                             !result.score
@@ -187,9 +199,10 @@ const Speaker = () => {
                                                                 competition?.customFont
                                                             }
                                                             color={
-                                                                competition?.secondaryColor
+                                                                competition?.primaryColor
                                                             }
-                                                            fontSize={"2.2rem"}
+                                                            fontSize={"2.8rem"}
+                                                            lineHeight={"4rem"}
                                                         >
                                                             (
                                                             {result.score?.rank}
@@ -210,4 +223,4 @@ const Speaker = () => {
     );
 };
 
-export default Speaker;
+export default HeatResult;

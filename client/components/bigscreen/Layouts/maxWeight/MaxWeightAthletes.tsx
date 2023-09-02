@@ -1,9 +1,7 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import useWebappWorkout from "../../../../hooks/useWebappWorkout";
-import { useMemo } from "react";
-import { useCompetitionContext } from "../../../../context/competition";
 import React from "react";
+import { useCompetitionContext } from "../../../../context/competition";
 
 interface Props {
     station: DisplayFullStation;
@@ -41,12 +39,6 @@ const MaxWeightAthletes = ({
 
     const rank = results.find((r) => r.workoutId === workout?.workoutId)?.result
         ?.rank;
-
-    const otherResults = results.filter(
-        (r) =>
-            r.workoutId !== workout?.workoutId &&
-            (r.result?.finished || +(r.result?.finalScore || 0) > 0)
-    );
 
     const scores = [...Array(numberOfPartner).keys()].map((partnerId) => {
         const partnerScore = station?.scores?.wodWeight.filter(
@@ -120,19 +112,19 @@ const MaxWeightAthletes = ({
                     flexDirection={"column"}
                     justifyContent={"space-between"}
                     height={1}
+                    overflow={"hidden"}
                 >
                     <Typography
                         lineHeight={0.85}
                         maxHeight={"6rem"}
                         fontSize={
-                            station.participant.length > 23 ? "2rem" : "2.7rem"
+                            station.participant.length > 23 ? "3rem" : "3rem"
                         }
                         fontFamily={"bebasNeue"}
                         textOverflow={"ellipsis"}
-                        overflow={"hidden"}
                         my={"auto"}
                         maxWidth={"100%"}
-                        noWrap={otherResults.length > 0}
+                        noWrap
                     >
                         {station.participant.slice(0, 50)}
                     </Typography>
@@ -207,7 +199,7 @@ const MaxWeightAthletes = ({
                                 >
                                     <Typography
                                         fontFamily={"bebasNeue"}
-                                        fontSize={"2.7rem"}
+                                        fontSize={"3rem"}
                                         lineHeight={"2.2rem"}
                                         // fontWeight={900}
                                         pt={1}
@@ -243,7 +235,7 @@ const MaxWeightAthletes = ({
                                 >
                                     <Typography
                                         fontFamily={"bebasNeue"}
-                                        fontSize={"2.7rem"}
+                                        fontSize={"3rem"}
                                         lineHeight={"2rem"}
                                         color={"white"}
                                         fontWeight={800}

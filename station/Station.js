@@ -361,6 +361,7 @@ class Station {
                 data.stations.dynamics.measurements = [];
             }
         }
+
         this.updateDB(data);
 
         const newCounterMac = data.stations?.configs?.devices?.find(
@@ -389,9 +390,10 @@ class Station {
         // const devices = this.getRequiredDevices();
         // this.bleServices.connectTo(devices);
 
-        console.log("DATA SENT BY SERVER", data);
         try {
-            this.wodInterpreter.load(this.db.getData("/workouts"));
+            const loadedWorkout = this.db.getData("/workouts");
+            console.log("LOADED WORKOUT", loadedWorkout);
+            this.wodInterpreter.load(loadedWorkout);
             if (data.stations.dynamics.state < 2) {
                 this.wodInterpreter.getRepsInfo(
                     data.stations.dynamics.currentWodPosition
@@ -409,7 +411,8 @@ class Station {
                 this.updateBoard();
             }
         } catch (err) {
-            console.log("No workout to load");
+            console.error("No workout to load");
+            console.error(err);
         }
     }
 

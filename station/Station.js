@@ -402,7 +402,8 @@ class Station {
                 this.db.save();
             }
             if (
-                data.globals.duration !== 0
+                data.globals.duration !== 0 &&
+                json.globals
                 // && data.stations.dynamics.result === ""
             ) {
                 this.initTimer(json.globals);

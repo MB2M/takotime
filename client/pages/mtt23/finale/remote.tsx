@@ -73,7 +73,7 @@ function FinaleRemote() {
                             onClick={() =>
                                 handleHeatClick(athlete.participantId)
                             }
-                            color={"secondary"}
+                            color={"primary"}
                             variant={
                                 globals?.remoteFinaleAthlete ===
                                 athlete.participantId

@@ -402,11 +402,10 @@ class Station {
                 this.db.save();
             }
             if (
-                data.globals.duration !== 0 &&
-                json
+                data.globals.duration !== 0
                 // && data.stations.dynamics.result === ""
             ) {
-                this.initTimer(json.globals);
+                this.initTimer(data.globals);
             } else {
                 this.timer && this.timer.stopTimer();
                 this.updateBoard();

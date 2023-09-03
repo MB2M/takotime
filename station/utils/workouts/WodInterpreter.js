@@ -12,7 +12,7 @@ class WodInterpreter extends EventEmitter {
         this.measurements = [];
         const checkpointsTime = new Set();
 
-        for (let block of this.workout.blocks) {
+        for (let block of this.workout?.blocks) {
             if (block.measurements) {
                 this.measurements.push(block.measurements);
                 if (block.measurements.forSave) {
@@ -22,8 +22,8 @@ class WodInterpreter extends EventEmitter {
         }
 
         this.checkpointTime = [...checkpointsTime];
-        this.scores = this.workout.scoring;
-        this.shortcut = this.workout.shortcut;
+        this.scores = this.workout?.scoring;
+        this.shortcut = this.workout?.shortcut;
     }
 
     updateRepsOfBlock(repsPerBlock, currentBlock, delta) {

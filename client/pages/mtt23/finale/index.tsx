@@ -6,7 +6,6 @@ import Image from "next/future/image";
 import { useCompetitionContext } from "../../../context/competition";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { getFlagEmoji } from "../../../utils/flagEmoji";
 
 function AthletePresentation2() {
     const [parent] = useAutoAnimate({
@@ -77,31 +76,7 @@ function AthletePresentation2() {
             );
             setImgList(array);
         })();
-
-        // (async () => {
-        //     const array = await Promise.all(
-        //         epHeat?.map((eligibleParticipant) => eligibleParticipant.id)
-
-        // {
-        // const img = await import(
-        //     `../../../public/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`
-        // );
-        // return { image: img, id: eligibleParticipant.id };
-        // })
-        // );
-        // })();
     }, [globals]);
-
-    // const imgFiles = useMemo(
-    //     () =>
-    //         epHeat?.map((eligibleParticipant) => {
-    //             const img = await import(
-    //                 `../../../public/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`
-    //             );
-    //             return { image: img, id: eligibleParticipant.id };
-    //         }),
-    //     [globals]
-    // );
 
     useEffect(() => {
         console.log(globals?.remoteFinaleAthlete);

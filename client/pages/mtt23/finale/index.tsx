@@ -6,7 +6,6 @@ import Image from "next/future/image";
 import { useCompetitionContext } from "../../../context/competition";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { getFlagEmoji } from "../../../utils/flagEmoji";
 
 function AthletePresentation2() {
     const [parent] = useAutoAnimate({

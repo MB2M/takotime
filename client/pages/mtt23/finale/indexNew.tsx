@@ -7,7 +7,7 @@ import { useCompetitionContext } from "../../../context/competition";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-import vierge from "../../../public/mtt23/photoCall/vierge.jpg";
+// import vierge from "../../../public/mtt23/photoCall/vierge.jpg";
 
 function AthletePresentation2() {
     const [parent] = useAutoAnimate({
@@ -241,7 +241,7 @@ function AthletePresentation2() {
                         {
                             <Image
                                 // src={`/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`}
-                                src={viewImg || vierge}
+                                src={viewImg}
                                 alt={"mt23"}
                                 // width={200}
                                 style={{

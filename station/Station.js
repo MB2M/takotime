@@ -394,7 +394,7 @@ class Station {
             const loadedWorkout = this.db.getData("/workouts");
             console.log("LOADED WORKOUT", loadedWorkout);
             this.wodInterpreter.load(loadedWorkout);
-            if (data.stations.dynamics.state < 2) {
+            if (data.stations?.dynamics.state < 2) {
                 this.wodInterpreter.getRepsInfo(
                     data.stations.dynamics.currentWodPosition
                 );
@@ -403,7 +403,7 @@ class Station {
             }
             if (
                 data.globals.duration !== 0 &&
-                json?.globals
+                json
                 // && data.stations.dynamics.result === ""
             ) {
                 this.initTimer(json.globals);

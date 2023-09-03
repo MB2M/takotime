@@ -249,12 +249,15 @@ class WodInterpreter extends EventEmitter {
         const currentMovement = repPosition.movement;
         const currentRep = repPosition.reps;
         const currentRound = repPosition.round;
+
         const movementName =
-            this.workout.blocks[currentBlock].movements[currentMovement].name;
+            this.workout?.blocks[currentBlock].movements[currentMovement]
+                .name || "";
         const maxRepsOfMovement =
-            this.workout.blocks[currentBlock].movements[currentMovement].reps +
+            (this.workout?.blocks[currentBlock].movements[currentMovement]
+                .reps || 0) +
             currentRound *
-                (this.workout.blocks[currentBlock].movements[currentMovement]
+                (this.workout?.blocks[currentBlock].movements[currentMovement]
                     .varEachRounds || 0);
         const nextMovement = this.getNextMovement(repPosition);
 

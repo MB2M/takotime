@@ -11,12 +11,13 @@ class WodInterpreter extends EventEmitter {
         this.shortcut = {};
         this.measurements = [];
         const checkpointsTime = new Set();
-
-        for (let block of this.workout?.blocks) {
-            if (block.measurements) {
-                this.measurements.push(block.measurements);
-                if (block.measurements.forSave) {
-                    checkpointsTime.add(block.measurements.at);
+        if (this.workout?.blocks) {
+            for (let block of this.workout.blocks) {
+                if (block.measurements) {
+                    this.measurements.push(block.measurements);
+                    if (block.measurements.forSave) {
+                        checkpointsTime.add(block.measurements.at);
+                    }
                 }
             }
         }

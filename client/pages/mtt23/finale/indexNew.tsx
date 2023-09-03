@@ -6,7 +6,8 @@ import Image from "next/future/image";
 import { useCompetitionContext } from "../../../context/competition";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { getFlagEmoji } from "../../../utils/flagEmoji";
+
+import vierge from "../../../public/mtt23/photoCall/vierge.jpg";
 
 function AthletePresentation2() {
     const [parent] = useAutoAnimate({
@@ -26,6 +27,8 @@ function AthletePresentation2() {
     >([]);
     const { epHeat } = useCompetitionCornerContext();
 
+    const [imgList, setImgList] = useState<any[]>([]);
+
     useEffect(() => {
         (async () => {
             try {
@@ -41,7 +44,7 @@ function AthletePresentation2() {
                 console.error(err);
             }
         })();
-    }, [globals]);
+    }, [epHeat]);
 
     const athlete = useMemo(() => {
         const selectedEp = epHeat?.find(
@@ -56,7 +59,35 @@ function AthletePresentation2() {
             ...selectedEp,
             ["countryCode"]: selectedResult?.countryCode,
         };
-    }, [globals?.remoteFinaleAthlete, eligibleParticipants]);
+    }, [globals?.remoteFinaleAthlete]);
+
+    useEffect(() => {
+        (async () => {
+            if (!epHeat) return;
+            const array = await Promise.all(
+                epHeat?.map(async (eligibleParticipant) => {
+                    try {
+                        const img = await import(
+                            `../../../public/mtt23/photoCall/${eligibleParticipant.id}.jpg`
+                        );
+                        return { image: img, id: eligibleParticipant.id };
+                    } catch (err) {
+                        return { image: null, id: eligibleParticipant.id };
+                    }
+                })
+            );
+            setImgList(array);
+        })();
+    }, [eligibleParticipants]);
+
+    useEffect(() => {
+        console.log(globals?.remoteFinaleAthlete);
+    }, [globals?.remoteFinaleAthlete]);
+
+    const viewImg = useMemo(() => {
+        return imgList?.find((img) => img.id === globals?.remoteFinaleAthlete)
+            ?.image;
+    }, [globals?.remoteFinaleAthlete, imgList]);
 
     return (
         <Box
@@ -209,8 +240,9 @@ function AthletePresentation2() {
                     >
                         {
                             <Image
-                                src={`/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`}
-                                alt={"mtt23"}
+                                // src={`/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`}
+                                src={viewImg || vierge}
+                                alt={"mt23"}
                                 // width={200}
                                 style={{
                                     // width: "100%",

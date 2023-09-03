@@ -7,6 +7,8 @@ import { useCompetitionContext } from "../../../context/competition";
 import { useCompetitionCornerContext } from "../../../context/competitionCorner/data/competitionCorner";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
+import vierge from "../../../public/mtt23/photoCall/vierge.jpg";
+
 function AthletePresentation2() {
     const [parent] = useAutoAnimate({
         duration: 200,
@@ -42,7 +44,7 @@ function AthletePresentation2() {
                 console.error(err);
             }
         })();
-    }, [globals]);
+    }, [epHeat]);
 
     const athlete = useMemo(() => {
         const selectedEp = epHeat?.find(
@@ -57,7 +59,7 @@ function AthletePresentation2() {
             ...selectedEp,
             ["countryCode"]: selectedResult?.countryCode,
         };
-    }, [globals?.remoteFinaleAthlete, eligibleParticipants]);
+    }, [globals?.remoteFinaleAthlete]);
 
     useEffect(() => {
         (async () => {
@@ -66,7 +68,7 @@ function AthletePresentation2() {
                 epHeat?.map(async (eligibleParticipant) => {
                     try {
                         const img = await import(
-                            `../../../public/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`
+                            `../../../public/mtt23/photoCall/${eligibleParticipant.id}.jpg`
                         );
                         return { image: img, id: eligibleParticipant.id };
                     } catch (err) {
@@ -76,7 +78,7 @@ function AthletePresentation2() {
             );
             setImgList(array);
         })();
-    }, [globals]);
+    }, [eligibleParticipants]);
 
     useEffect(() => {
         console.log(globals?.remoteFinaleAthlete);
@@ -236,10 +238,10 @@ function AthletePresentation2() {
                         overflow={"hidden"}
                         borderRadius={"8px"}
                     >
-                        {viewImg && (
+                        {
                             <Image
                                 // src={`/mtt23/photoCall/${globals?.remoteFinaleAthlete}.jpg`}
-                                src={viewImg}
+                                src={viewImg || vierge}
                                 alt={"mt23"}
                                 // width={200}
                                 style={{
@@ -251,7 +253,7 @@ function AthletePresentation2() {
                                     // borderRadius: "10px",
                                 }}
                             />
-                        )}
+                        }
                     </Box>
                 </Box>
                 <Box

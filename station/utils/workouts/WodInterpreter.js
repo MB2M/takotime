@@ -295,7 +295,7 @@ class WodInterpreter extends EventEmitter {
             expectedMeasurement = this.measurements.find(
                 (m) => m.id === currentMeasurementId + 1
             );
-            expectTieBreak = expectedMeasurement.tieBreakSource ? true : false;
+            expectTieBreak = expectedMeasurement?.tieBreakSource ? true : false;
         } else {
             expectedMeasurement = this.measurements.find(
                 (m) => m.id === currentMeasurementId

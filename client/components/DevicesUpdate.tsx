@@ -1,5 +1,5 @@
-import { Button, Grid, Box, TextField, Typography } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { Button, Grid, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
 type Row = {
@@ -19,7 +19,7 @@ const columns = [
     },
     {
         field: "ip",
-        headerName: "Station IP",
+        headerName: "Station Ip",
         width: 150,
         editable: true,
     },

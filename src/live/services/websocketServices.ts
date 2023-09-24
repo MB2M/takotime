@@ -1,6 +1,5 @@
 import { WebSocket, WebSocketServer } from "ws";
-import { Server } from "http";
-import liveApp from "..";
+import { liveApp } from "../../app";
 
 class WebsocketServices {
     wss: WebSocketServer;
@@ -22,29 +21,28 @@ class WebsocketServices {
                 ws.on("message", f);
             });
 
-            const stations = await liveApp.manager.getAllStations();
+            const stations = await liveApp.getAllStations();
             this.sendToClient(ws, "stationUpdate", stations);
 
-            const globals = await liveApp.manager.getGlobals();
+            const globals = await liveApp.getGlobals();
             this.sendToClient(ws, "globalsUpdate", globals);
 
-            const stationDevicesList =
-                await liveApp.manager.getAllStationDevices();
+            const stationDevicesList = await liveApp.getAllStationDevices();
             this.sendToClient(ws, "devicesConfig", stationDevicesList);
 
-            const workoutIds = await liveApp.manager.getAllWorkouts();
+            const workoutIds = await liveApp.getAllWorkouts();
             this.sendToClient(ws, "activeWorkoutList", workoutIds);
 
-            const workouts = await liveApp.manager.getLoadedWorkouts();
+            const workouts = await liveApp.getLoadedWorkouts();
             this.sendToClient(ws, "loadedWorkouts", workouts);
 
-            const devices = await liveApp.manager.getAllDevices();
+            const devices = await liveApp.getAllDevices();
             this.sendToClient(ws, "devices", devices);
 
-            // const clients = await liveApp.manager.getAllBrokerClient();
+            // const clients = await liveApp.getAllBrokerClient();
             // this.sendToClient(ws, "brokerUpdate", clients);
 
-            liveApp.manager.publishRank();
+            liveApp.publishRank();
         });
     }
 

@@ -94,3 +94,9 @@ interface IDevice {
     role: string;
     state: Number;
 }
+
+interface IIpConfig extends Document {
+    id: string;
+    laneNumber: number;
+    floor: string;
+}

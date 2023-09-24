@@ -1,7 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import liveApp from "../..";
-import Workout from "../../models/Workout";
+import { liveApp } from "../../../app";
 
 export const createWorkout: RequestHandler = async (
     req: Request,
@@ -9,14 +8,8 @@ export const createWorkout: RequestHandler = async (
 ) => {
     const body = req.body;
 
-    // if (!body?.laneNumber) {
-    //     return res
-    //         .status(400)
-    //         .json({ message: "'laneNumber' parameter is missing" });
-    // }
-
     try {
-        const result = await liveApp.manager.workoutUpdate(body, "create");
+        const result = await liveApp.workoutUpdate(body, "create");
         res.status(200).json(result);
     } catch (err: any) {
         handleErrorDevice(err, res);
@@ -33,7 +26,7 @@ export const updateWorkout = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await liveApp.manager.workoutUpdate(body, "update");
+        const response = await liveApp.workoutUpdate(body, "update");
         res.status(200).json(response);
     } catch (err: any) {
         handleErrorDevice(err, res);
@@ -50,7 +43,7 @@ export const deleteWorkout = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await liveApp.manager.workoutUpdate(body, "delete");
+        const response = await liveApp.workoutUpdate(body, "delete");
         res.status(200).json(response);
     } catch (err: any) {
         handleErrorDevice(err, res);
@@ -58,7 +51,7 @@ export const deleteWorkout = async (req: Request, res: Response) => {
 };
 
 export const getAllWorkouts = async (req: Request, res: Response) => {
-    const stationStaticsList = await liveApp.manager.getAllWorkouts();
+    const stationStaticsList = await liveApp.getAllWorkouts();
     if (!stationStaticsList.length)
         return res.status(204).json({ message: "no stationDevices" });
 
@@ -72,7 +65,7 @@ export const loadWorkout = async (req: Request, res: Response) => {
         res.status(400).json({ error: "'customId' parameter is missing" });
 
     try {
-        const response = await liveApp.manager.loadWorkout(customIdList);
+        const response = await liveApp.loadWorkout(customIdList);
         // const ids = await Promise.all(
         //     customIdList.map(async (id: string) => {
         //         const workout = await Workout.findOne({ customId: id }).exec();

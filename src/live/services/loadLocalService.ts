@@ -1,7 +1,4 @@
-import fetch from "node-fetch";
-import liveApp from "..";
-import StationStatics from "../models/Station";
-import keyvInstance from "./keyvMongo";
+import { liveApp } from "../../app";
 
 const loadFromLocal = async (
     externalEventId: number,
@@ -9,14 +6,14 @@ const loadFromLocal = async (
     externalHeatId: number
 ) => {
     try {
-        await liveApp.manager.deleteAllStation();
+        await liveApp.deleteAllStation();
 
-        await liveApp.manager.keyv.set("externalEventId", externalEventId);
-        await liveApp.manager.keyv.set("externalHeatId", externalHeatId);
-        await liveApp.manager.keyv.set("externalWorkoutId", externalWorkoutId);
-        liveApp.manager.websocketMessages.sendGlobalsToAllClients();
-        liveApp.manager.websocketMessages.sendStationsToAllClients();
-        liveApp.manager.sendFullConfig("server/wodConfigUpdate");
+        await liveApp.keyv.set("externalEventId", externalEventId);
+        await liveApp.keyv.set("externalHeatId", externalHeatId);
+        await liveApp.keyv.set("externalWorkoutId", externalWorkoutId);
+        liveApp.websocketMessages.sendGlobalsToAllClients();
+        liveApp.websocketMessages.sendStationsToAllClients();
+        liveApp.sendFullConfig("server/wodConfigUpdate");
     } catch (err) {
         console.error(err);
     }

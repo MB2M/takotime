@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import liveApp from "../..";
+import { liveApp } from "../../../app";
 
 interface StationDevices {
     ip?: string;
@@ -19,7 +19,7 @@ export const createDevice: RequestHandler = async (
     }
 
     try {
-        const result = await liveApp.manager.devicesUpdate(body, "create");
+        const result = await liveApp.devicesUpdate(body, "create");
         res.status(200).json(result);
     } catch (err: any) {
         handleErrorDevice(err, res);
@@ -42,7 +42,7 @@ export const updateDevice = async (req: Request, res: Response) => {
     body.devices = devices?.filter((d: Device) => d);
 
     try {
-        const response = await liveApp.manager.devicesUpdate(body, "update");
+        const response = await liveApp.devicesUpdate(body, "update");
         res.status(200).json(response);
     } catch (err: any) {
         handleErrorDevice(err, res);
@@ -57,7 +57,7 @@ export const deleteDevice = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await liveApp.manager.devicesUpdate(body, "delete");
+        const response = await liveApp.devicesUpdate(body, "delete");
         res.status(200).json(response);
     } catch (err: any) {
         handleErrorDevice(err, res);
@@ -66,7 +66,7 @@ export const deleteDevice = async (req: Request, res: Response) => {
 
 export const getAllStationDevices = async (req: Request, res: Response) => {
     // const stationDevicesList = await StationDevices.find();
-    const stationDevicesList = await liveApp.manager.getAllStationDevices();
+    const stationDevicesList = await liveApp.getAllStationDevices();
     if (!stationDevicesList.length)
         return res.status(204).json({ message: "no stationDevices" });
 

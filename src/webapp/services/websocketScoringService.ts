@@ -10,7 +10,7 @@ import {
     saveCC,
     updateMaxWeight,
 } from "./scoringService";
-import liveApp from "../../live";
+import { liveApp } from "../../app";
 import Competition from "../models/Competition";
 import { IWorkout } from "../../types/competition";
 
@@ -47,7 +47,7 @@ export default class WebsocketScoringService {
             console.log("Websocket closed");
         });
 
-        liveApp.manager.on(
+        liveApp.on(
             "updateResults",
             async (heatId, laneNumber, participantId, result) => {
                 console.log(heatId, laneNumber, participantId, result);
@@ -55,13 +55,13 @@ export default class WebsocketScoringService {
             }
         );
 
-        liveApp.manager.on("startWod", async (workoutId, heatId, reset) => {
+        liveApp.on("startWod", async (workoutId, heatId, reset) => {
             console.log("RESET", reset);
             if (reset) await this.onReset();
             await refreshCurrentWorkouts();
         });
 
-        liveApp.manager.on("stationUpdate", async () => {
+        liveApp.on("stationUpdate", async () => {
             this.sendStationDataToAll();
         });
     }
@@ -263,7 +263,7 @@ export default class WebsocketScoringService {
         const laneNumber = data.laneNumber;
 
         if (!laneNumber) return;
-        const station = (await liveApp.manager.getAllStations()).find(
+        const station = (await liveApp.getAllStations()).find(
             (station) => station.laneNumber === +laneNumber
         );
 

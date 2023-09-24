@@ -195,7 +195,7 @@ After=network-online.target
 [Service]
 WorkingDirectory=/home/pi/takotime/station
 ExecStartPre=sudo rm -f livestation.json
-ExecStart=sudo /usr/bin/node index.js
+ExecStart=sudo /usr/bin/node index.ts
 Restart=on-failure
 User=pi
 Environment=PORT=3000
@@ -214,7 +214,7 @@ After=network-online.target
 
 [Service]
 WorkingDirectory=/home/pi/takotime/station
-ExecStart=sudo /usr/bin/node buttonRestartScript.js
+ExecStart=sudo /usr/bin/node buttonRestartScript.ts
 Restart=on-failure
 User=pi
 Environment=PORT=3000

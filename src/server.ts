@@ -1,13 +1,12 @@
-
 import { Express } from "express";
 import config from "./config";
+import { WebSocketServer } from "ws";
 
 const port = config.serverPort;
 
-function initServer(app: Express) {
+const initServer = (app: Express) => {
     const server = app.listen(port);
-
-    return server;
-}
+    return new WebSocketServer({ server });
+};
 
 export default initServer;

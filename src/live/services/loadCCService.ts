@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
-import liveApp from "..";
 import { getCCAccessToken } from "./CCTokenService";
+import { liveApp } from "../../app";
 
 const loadFromCC = async (
     externalEventId: number,
@@ -23,7 +23,7 @@ const loadFromCC = async (
         const heat = json.find((s: any) => s.id === externalHeatId);
 
         const stations = heat.stations;
-        await liveApp.manager.deleteAllStation();
+        await liveApp.deleteAllStation();
         const data = stations
             .filter((s: any) => !!s)
             .map((s: any) => ({
@@ -34,13 +34,13 @@ const loadFromCC = async (
                 externalId: s.id,
             }));
 
-        await liveApp.manager.stationUpdate(data, "create", false);
-        await liveApp.manager.keyv.set("externalEventId", externalEventId);
-        await liveApp.manager.keyv.set("externalHeatId", externalHeatId);
-        await liveApp.manager.keyv.set("externalWorkoutId", externalWorkoutId);
-        liveApp.manager.websocketMessages.sendGlobalsToAllClients();
-        liveApp.manager.websocketMessages.sendStationsToAllClients();
-        liveApp.manager.sendFullConfig("server/wodConfigUpdate");
+        await liveApp.stationUpdate(data, "create", false);
+        await liveApp.keyv.set("externalEventId", externalEventId);
+        await liveApp.keyv.set("externalHeatId", externalHeatId);
+        await liveApp.keyv.set("externalWorkoutId", externalWorkoutId);
+        liveApp.websocketMessages.sendGlobalsToAllClients();
+        liveApp.websocketMessages.sendStationsToAllClients();
+        liveApp.sendFullConfig("server/wodConfigUpdate");
     } catch (err) {
         console.error(err);
     }

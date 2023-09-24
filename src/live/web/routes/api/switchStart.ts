@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import liveApp from "../../..";
+import { liveApp } from "../../../../app";
 
 const switchStart = async (req: Request, res: Response) => {
     const action = req.query.action;
@@ -7,7 +7,7 @@ const switchStart = async (req: Request, res: Response) => {
     const countdown = parseInt(req.query.countdown as string, 10);
     const saveResults = (req.query.save as string) === "true";
     const resetData = (req.query.reset as string) === "true";
-    const liveWodManager = liveApp.manager;
+    const liveWodManager = liveApp;
 
     if (action === "start") {
         // const startTime = new Date(

@@ -1,17 +1,22 @@
 import express from "express";
-import initServer from "./server";
 import bodyParser from "body-parser";
 import cors from "cors";
-import * as timesyncServer from "timesync/server/index.js";
+// import { onConnection } from "./webapp/services/websocketService";
+// import WebsocketScoringService from "./webapp/services/websocketScoringService";
+import initServer from "./server";
 import dbConnect from "./config/dbConnect";
-import liveApp from "./live";
-import { WebSocketServer } from "ws";
+import { loadRoute } from "./routing";
+import { startLiveApp } from "./live";
+import mqttConnect from "./live/libs/mqttConnect";
+import logger from "./config/logger";
+import MqttServices from "./live/services/mqttServices";
+import { LiveSystemFactory } from "./services/LiveSystemFactory";
 
-const app = express();
+const server = express();
+export const wss = initServer(server);
+logger.info("server started");
 
-dbConnect();
-
-app.use(
+server.use(
     cors({
         methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
         // origin: process.env.CORS_ALLOWED_ORIGIN?.split(",") as string[],
@@ -19,57 +24,35 @@ app.use(
     })
 );
 
-// import path from "node:path";
-// import { fileURLToPath } from "node:url";
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: false }));
+loadRoute(server);
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+process.on("uncaughtException", (err) => {
+    logger.fatal(err, "uncaught exception detected");
+    wss.close(() => {
+        process.exit(1);
+    });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/timesync", timesyncServer.requestHandler);
+    // If a graceful shutdown is not achieved after 1 second,
+    // shut down the process completely
+    setTimeout(() => {
+        process.abort();
+    }, 1000).unref();
+    process.exit(1);
+});
 
+await dbConnect();
+
+// const liveSystems = new LiveSystemFactory({ wss, mqttClient });
+// liveSystems.get("default");
 // Start App
 
-const server = initServer(app);
-export const wss = new WebSocketServer({ server });
-try {
-    liveApp.start(app, server, wss, "/live");
-} catch (err) {
-    console.error(err);
-}
-
-// // wod 1 MT
-// import router from "./mtWod1/routes";
-// app.use("/wod1", router);
-
-// wod Max
-import routerMax from "./mtWodMax/routes";
-app.use("/wodMax", routerMax);
-
-// // vote
-// import routerVote from "./vote/routes";
-// app.use("/vote", routerVote);
-
-// // wod Gym
-// import routerGym from "./mtWodGym/routes";
-// app.use("/wodGym", routerGym);
-
-// mandelieu
-import routerGym from "./mandelieu/routes";
-app.use("/mandelieu", routerGym);
-
-// webApp
-import webappRouter from "./webapp/routes";
-import { onConnection } from "./webapp/services/websocketService";
-app.use("/webapp", webappRouter);
-onConnection();
-
-import WebsocketScoringService from "./webapp/services/websocketScoringService";
-new WebsocketScoringService(wss);
-
+export const liveApp = startLiveApp(wss);
+//
 // try {
-//     WOD1App.start(app, server, "/wod1");
+//     onConnection();
+//     new WebsocketScoringService(wss);
 // } catch (err) {
 //     console.error(err);
 // }

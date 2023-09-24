@@ -4,17 +4,17 @@
 //     IWodSplitScore,
 // } from "../../types/deviceScoring";
 import LiveStation from "../../live/models/Station";
-import liveApp from "../../live";
 import Competition from "../models/Competition";
 import { postScore, ScorePost } from "../../live/services/CCTokenService";
 import { IWorkout, LiftState } from "../../types/competition";
 import { toReadableTime } from "../utils/toReadableTime";
+import { liveApp } from "../../app";
 
 let state: IBaseStation2RAM[] = [];
 let maxWeigthId = 0;
 
 const loadedWorkout = async () => {
-    return (await liveApp.manager.getGlobals()).externalWorkoutId;
+    return (await liveApp.getGlobals()).externalWorkoutId;
 };
 
 const currentWorkouts = async () => {
@@ -336,7 +336,7 @@ const viewStation = async (
 };
 
 export const getHeatId = async () => {
-    return (await liveApp.manager.getGlobals()).externalHeatId as string;
+    return (await liveApp.getGlobals()).externalHeatId as string;
 };
 
 export const getStationInfo = async (
@@ -624,7 +624,7 @@ export const saveCC = async (
     );
     if (!workouts) return { error: "No workout loaded" };
 
-    const { externalEventId } = await liveApp.manager.getGlobals();
+    const { externalEventId } = await liveApp.getGlobals();
 
     for (let workout of workouts) {
         const workoutId = workout.workoutId;

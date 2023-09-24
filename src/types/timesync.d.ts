@@ -1,1 +1,1 @@
-declare module "timesync/server/index.js";
+declare module "timesync/server/index";

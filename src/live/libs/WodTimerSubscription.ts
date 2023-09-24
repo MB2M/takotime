@@ -1,9 +1,9 @@
-import AbstractEventsubscription from "./AbstractEventsubscription";
-import liveApp from "..";
-import WodTimerServices from "../services/WodTimerServices";
+import AbstractEventSubscription from "./AbstractEventSubscription";
+import WodTimer from "../../lib/timer/WodTimer";
+import { liveApp } from "../../app";
 
-class WodTimerSubscription extends AbstractEventsubscription {
-    constructor(eventEmitter: WodTimerServices) {
+class WodTimerSubscription extends AbstractEventSubscription {
+    constructor(eventEmitter: WodTimer) {
         super(eventEmitter);
     }
 
@@ -11,26 +11,25 @@ class WodTimerSubscription extends AbstractEventsubscription {
         this.eventEmitter.on("wodUpdate", async (topic) => {
             console.log(`wod ${topic}`);
 
-            const wodTimerservice = this.eventEmitter as WodTimerServices;
+            const wodTimerservice = this.eventEmitter as WodTimer;
 
-            await liveApp.manager.keyv.set("state", wodTimerservice.state);
-            liveApp.manager.websocketMessages.sendGlobalsToAllClients();
+            await liveApp.keyv.set("state", wodTimerservice.state);
+            liveApp.websocketMessages.sendGlobalsToAllClients();
 
             switch (topic) {
                 case "countdown":
-                    liveApp.manager.sendGlobalsToChannel();
-                    // liveApp.manager.mqttServices.send(
+                    liveApp.sendGlobalsToChannel();
+                    // liveApp.mqttServices.send(
                     //     "server/chrono",
-                    //     await liveApp.manager.chronoData()
+                    //     await liveApp.chronoData()
                     // )
-                    const { duration, startTime } =
-                        await liveApp.manager.chronoData();
+                    const { duration, startTime } = await liveApp.chronoData();
 
                     const countdown = Math.ceil(
                         (startTime - Date.now()) / 1000
                     );
 
-                    liveApp.manager.mqttServices.send(
+                    liveApp.mqttServices.send(
                         "server/chrono",
                         JSON.stringify({
                             action: "start",
@@ -40,30 +39,30 @@ class WodTimerSubscription extends AbstractEventsubscription {
                     );
                     break;
                 case "start":
-                    liveApp.manager.buzz();
-                    liveApp.manager.mqttServices.send("server/buzzer", "buzz");
-                    liveApp.manager.sendGlobalsToChannel();
+                    liveApp.buzz();
+                    liveApp.mqttServices.send("server/buzzer", "buzz");
+                    liveApp.sendGlobalsToChannel();
                     const rankInterval = setInterval(() => {
-                        liveApp.manager.publishRank();
+                        liveApp.publishRank();
                     }, 300);
-                    liveApp.manager.timeOuts?.push(rankInterval);
+                    liveApp.timeOuts?.push(rankInterval);
                     break;
                 case "finish":
-                    liveApp.manager.sendGlobalsToChannel();
-                    liveApp.manager.clearAlltimeout();
+                    liveApp.sendGlobalsToChannel();
+                    liveApp.clearAlltimeout();
                     setTimeout(() => {
-                        liveApp.manager.publishRank();
+                        liveApp.publishRank();
                     }, 4000);
                     break;
                 case "reset":
-                    liveApp.manager.clearAlltimeout();
-                    liveApp.manager.sendFullConfig("server/wodConfigUpdate");
-                    liveApp.manager.websocketMessages.sendStationsToAllClients();
-                    // liveApp.manager.mqttServices.send(
+                    liveApp.clearAlltimeout();
+                    liveApp.sendFullConfig("server/wodConfigUpdate");
+                    liveApp.websocketMessages.sendStationsToAllClients();
+                    // liveApp.mqttServices.send(
                     //     "server/chrono",
-                    //     await liveApp.manager.chronoData()
+                    //     await liveApp.chronoData()
                     // );
-                    liveApp.manager.mqttServices.send(
+                    liveApp.mqttServices.send(
                         "server/chrono",
                         JSON.stringify({
                             action: "reset",

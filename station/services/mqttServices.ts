@@ -1,5 +1,4 @@
 import type { MqttClient } from "mqtt";
-import logger from "../../config/logger";
 
 class MqttServices {
     client: MqttClient;
@@ -11,7 +10,7 @@ class MqttServices {
         this.client.on("message", (topic, message) => {
             const messageString = message.toString();
 
-            console.log(`Received message on topic ${topic}: ${messageString}`);
+            `Received message on topic ${topic}: ${messageString}`;
             let formattedMessage: string | object;
             try {
                 formattedMessage = JSON.parse(messageString);
@@ -55,7 +54,7 @@ class MqttServices {
             this.client.publish(topic, message, {
                 qos: 1,
             });
-            logger.info(`MQTT/Send: ${topic}`);
+            console.log("MQTT/Send:", topic);
         } catch (err) {
             console.error(err);
         }

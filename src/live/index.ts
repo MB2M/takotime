@@ -1,132 +1,27 @@
-import { Router, Express } from "express";
-import router from "./web/routes";
-import mqttBroker from "./libs/mqttBroker";
-import config from "../config";
 import { WebSocketServer } from "ws";
-import { Server } from "http";
-import Manager from "./libs/manager";
+import LiveSystem from "./libs/LiveSystem";
 import MqttServices from "./services/mqttServices";
-import WodTimerServices from "./services/WodTimerServices";
+import WodTimer from "../lib/timer/WodTimer";
 import keyvMongo from "./services/keyvMongo";
 import WebsocketServices from "./services/websocketServices";
-import { Aedes, Subscription } from "aedes";
+import { MqttClient } from "mqtt";
+import mqttServices from "./libs/mqttConnect";
+import IpConfigService from "./services/ipConfig.service";
+import ipConfig from "./models/IpConfig";
 
-const brokerPort = config.brokerPort;
-const brokerDatabase = config.mongopAedesUrl;
+const ipConfigService = new IpConfigService(ipConfig);
 
-class LiveApp {
-    routes: Router;
-    expressApp!: Express;
-    wss!: WebSocketServer;
-    manager!: Manager;
-
-    constructor() {
-        // this.expressApp = expressApp;
-        // this.wss = new WebSocketServer({ server });
-        this.routes = router;
-    }
-
-    async start(
-        expressApp: Express,
-        server: Server,
-        wss: WebSocketServer,
-        endpoint: string = "/live"
-    ) {
-        this.expressApp = expressApp;
-        this.expressApp.use(endpoint, this.routes);
-        // await this.initMqttBroker();
-        this.managerInit(wss);
-    }
-
-    // async initMqttBroker(): Promise<boolean> {
-    //     try {
-    //         if (!brokerPort) {
-    //             throw "Port number is missing";
-    //         }
-    //         mqttBroker.start(parseInt(brokerPort), brokerDatabase);
-
-    //         mqttBroker.socket.on("clientReady", (client) => {
-    //             this.manager.brokerClientUpdate(client);
-    //         });
-
-    //         mqttBroker.socket.on("clientDisconnect", (client) => {
-    //             this.manager.brokerClientUpdate(client);
-    //         });
-
-    //         mqttBroker.socket.on(
-    //             "subscribe",
-    //             (subscriptions: Subscription[]) => {
-    //                 if (subscriptions[0]?.topic === "server/wodConfig") {
-    //                     this.manager.sendFullConfig("server/wodConfig");
-    //                 }
-    //             }
-    //         );
-
-    //         return true;
-    //     } catch (err) {
-    //         console.log(err);
-    //         return false;
-    //     }
-    // }
-
-    async initWebsocket(server: Server) {
-        try {
-            const that = this;
-            this.wss = new WebSocketServer({ server });
-            this.wss.on("connection", function connection(ws) {
-                ws.on("message", function message(data) {
-                    const json = JSON.parse(data.toString());
-
-                    const topic = json.topic;
-                    const message = json.message;
-                    if (topic === "client/scriptReset") {
-                        global.liveWodManager.sendToChannel(
-                            "server/scriptReset",
-                            null,
-                            message
-                        );
-                    }
-                    if (topic === "client/restartUpdate") {
-                        global.liveWodManager.sendToChannel(
-                            "server/restartUpdate",
-                            null,
-                            message
-                        );
-                    }
-                    if (topic === "client/remoteWarmupHeat") {
-                        liveApp.manager.keyv.set("remoteWarmupHeat", message);
-                        liveApp.manager.websocketMessages.sendGlobalsToAllClients();
-                    }
-                });
-                // sender.sendStaticsToAllClients();
-                // sender.sendStationStatusToAllClients();
-                // sender.sendGlobalsToAllClients();
-                // sender.sendStationDevicesToAllClients();
-                // sender.sendWorkoutsToAllClients();
-                // sender.sendLoadedWorkoutsToAllClients();
-                // sender.sendDynamicsToAllClients();
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    async managerInit(wss: WebSocketServer) {
-        const wodTimerServices = new WodTimerServices();
-        const mqttServices = new MqttServices(
-            // mqttBroker.socket as AedesWithClients<Aedes>
-        );
-        const websocketServices = new WebsocketServices(wss);
-        this.manager = new Manager(
-            wodTimerServices,
+export const startLiveApp = (wss: WebSocketServer) => {
+    // const wodTimerServices = new WodTimer();
+    // const mqttServices = new MqttServices(mqttClient, mqttTopics);
+    // const websocketServices = new WebsocketServices(wss);
+    return new LiveSystem(
+        {
+            // wodTimerServices,
             mqttServices,
-            keyvMongo(),
-            websocketServices
-        );
-    }
-}
-
-const liveApp = new LiveApp();
-// liveApp.start();
-
-export default liveApp;
+            ipConfigService,
+        }
+        // keyvMongo()
+        // websocketServices
+    );
+};

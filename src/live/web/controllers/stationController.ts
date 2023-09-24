@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import mongoose from "mongoose";
-import liveApp from "../..";
+import { liveApp } from "../../../app";
 
 export const createStation: RequestHandler = async (
     req: Request,
@@ -15,7 +15,7 @@ export const createStation: RequestHandler = async (
     }
 
     try {
-        const result = await liveApp.manager.stationUpdate(body, "create");
+        const result = await liveApp.stationUpdate(body, "create");
         res.status(200).json(result);
     } catch (err: any) {
         handleErrorDevice(err, res);
@@ -30,7 +30,7 @@ export const updateStation = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await liveApp.manager.stationUpdate(body, "update");
+        const response = await liveApp.stationUpdate(body, "update");
         res.status(200).json(response);
         global.liveWodManager.stationStaticsSet();
     } catch (err: any) {
@@ -46,7 +46,7 @@ export const deleteStation = async (req: Request, res: Response) => {
     }
 
     try {
-        const response = await liveApp.manager.stationUpdate(body, "delete");
+        const response = await liveApp.stationUpdate(body, "delete");
         res.status(200).json(response);
         global.liveWodManager.stationStaticsSet();
     } catch (err: any) {
@@ -55,7 +55,7 @@ export const deleteStation = async (req: Request, res: Response) => {
 };
 
 export const getAllStation = async (req: Request, res: Response) => {
-    const stationStaticsList = await liveApp.manager.getAllStations();
+    const stationStaticsList = await liveApp.getAllStations();
     if (!stationStaticsList.length)
         return res.status(204).json({ message: "no stationDevices" });
 

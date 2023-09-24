@@ -176,9 +176,9 @@ CONFIG_G_CHECK_URL_TIMEOUT=10
 # - Any value below "1" or a non-integer value will result in the default of 2 attempts.
 CONFIG_G_CHECK_URL_ATTEMPTS=2
 # General connection and DNS testing
-# - IPv4 address to ping when checking network connectivity. Default: 9.9.9.9 (Quad9 DNS IP)
+# - IPv4 address to ping when checking network connectivity. Default: 9.9.9.9 (Quad9 DNS Ip)
 CONFIG_CHECK_CONNECTION_IP=9.9.9.9
-# - IPv6 address to ping when checking network connectivity. Default: 2620:fe::fe (Quad9 DNS IP)
+# - IPv6 address to ping when checking network connectivity. Default: 2620:fe::fe (Quad9 DNS Ip)
 CONFIG_CHECK_CONNECTION_IPV6=2620:fe::fe
 # - Domain to resolve when checking DNS resolver. Default: dns9.quad9.net (Quad9 DNS domain)
 CONFIG_CHECK_DNS_DOMAIN=dns9.quad9.net

@@ -17,7 +17,8 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "incremental": true,
-
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "rootDir": "src" /* Specify the root folder within your source files. */,
         //                             /* Allow multiple folders to be treated as one when resolving modules. */
         "typeRoots": [

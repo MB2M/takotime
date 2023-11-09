@@ -1,7 +1,7 @@
 import config from "../../config";
 import * as mqtt from "mqtt";
 import logger from "../../config/logger";
-import MqttServices from "../services/mqttServices";
+import MqttService from "../../services/mqtt.service";
 
 const options: mqtt.IClientOptions = {
     username: config.brokerUsername,
@@ -13,16 +13,6 @@ const options: mqtt.IClientOptions = {
 
 const mqttTopics = ["station/connection", "station/buzz", "connected/#"];
 
-const mqttConnect = () => {
-    const client = mqtt.connect(`${config.mqttUrl}`, options);
-    client.on("connect", () => {
-        logger.info("mqtt connected");
-        client.subscribe(mqttTopics, { qos: 1 });
-    });
-    client.on("end", () => logger.info("mqtt Disconnected"));
-    return client;
-};
-
 const client = mqtt.connect(`${config.mqttUrl}`, options);
 client.on("connect", () => {
     logger.info("mqtt connected");
@@ -30,6 +20,6 @@ client.on("connect", () => {
 });
 client.on("end", () => logger.info("mqtt Disconnected"));
 
-const mqttServices = new MqttServices(client);
+const mqttServices = new MqttService(client, logger);
 
 export default mqttServices;

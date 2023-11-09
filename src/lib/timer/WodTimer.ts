@@ -1,15 +1,18 @@
 import EventEmitter from "events";
 import { TimerState } from "../../live/libs/TimerState";
+import { Service } from "typedi";
+import logger from "../../config/logger";
 
+@Service()
 class WodTimer extends EventEmitter {
-    private startTime?: number;
+    private _startTime?: number;
     private duration = 0;
     private elapsed = 0;
     private state: TimerState = TimerState.Loaded;
     private timeOuts: NodeJS.Timeout[] = [];
 
-    constructor() {
-        super();
+    get startTime() {
+        return this._startTime;
     }
 
     private setState(state: TimerState): void {
@@ -28,7 +31,7 @@ class WodTimer extends EventEmitter {
     public start(duration: number, countdown: number) {
         this.duration = duration;
         this.resetTimeouts();
-        this.startTime = Date.now() + countdown * 1000;
+        this._startTime = Date.now() + countdown * 1000;
         if (countdown > 0) {
             this.onCountdown();
         }
@@ -44,9 +47,9 @@ class WodTimer extends EventEmitter {
     }
 
     pause() {
-        if (!this.startTime) return;
+        if (!this._startTime) return;
         this.resetTimeouts();
-        this.elapsed = Date.now() - this.startTime;
+        this.elapsed = Date.now() - this._startTime;
     }
 
     unpause() {
@@ -66,12 +69,21 @@ class WodTimer extends EventEmitter {
     }
 
     private onRunning() {
+        logger.info("running");
         this.setState(TimerState.Running);
     }
 
     private onFinish(): void {
         this.resetTimeouts();
         this.setState(TimerState.Finished);
+    }
+
+    toJSON() {
+        return {
+            startTime: this.startTime,
+            duration: this.duration,
+            state: this.state,
+        };
     }
 }
 

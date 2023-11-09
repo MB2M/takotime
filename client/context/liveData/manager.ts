@@ -19,9 +19,10 @@ export const useLiveData = () => {
     const [topicListener, setTopicListener] = useState(
         new Map<string, TopicListener[]>()
     );
-    const { sendMessage } = useWebSocket(socketUrl, {
+    const { sendMessage, readyState } = useWebSocket(socketUrl, {
         onOpen: () => console.log("opened ws connection"),
         onMessage: (message) => {
+            console.log(JSON.parse(message.data));
             handleData(JSON.parse(message.data));
         },
         onClose: () => console.log("closed ws connection"),
@@ -71,7 +72,7 @@ export const useLiveData = () => {
     );
 
     const registerListener = useCallback(
-        (topic: string, cb: (data: any) => void, notifyBackend = false) => {
+        (topic: string, cb: (data: any) => void, notifyBackend = true) => {
             setTopicListener((t) =>
                 t.set(topic, [...(t.get(topic) || []), cb])
             );
@@ -113,5 +114,6 @@ export const useLiveData = () => {
         registerListener,
         sendMessage,
         handleData,
+        readyState,
     };
 };

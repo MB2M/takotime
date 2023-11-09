@@ -16,4 +16,8 @@ export default class IpConfigService {
             { upsert: true }
         );
     };
+
+    resetStations = async () => {
+        await this.ipConfig.deleteMany();
+    };
 }

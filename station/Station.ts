@@ -45,6 +45,7 @@ class Station {
 
     private onSettings(settings: unknown) {
         try {
+            console.log("RECEIVED SETTINGS:", settings);
             this.settings = StationSettingsSchema.parse(settings);
         } catch (error: any) {
             console.error("Bad station settings:", settings);

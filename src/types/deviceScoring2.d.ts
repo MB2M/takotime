@@ -9,6 +9,7 @@ interface IWodWeightScore {
 interface IWodClassicScore {
     rep: number;
     index: string;
+    round: number;
 }
 
 interface IWodSplitScore {

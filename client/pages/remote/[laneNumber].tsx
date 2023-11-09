@@ -22,7 +22,7 @@ import RemoteMaxWeight from "../../components/remote/RemoteMaxWeight";
 import useStationWs from "../../hooks/bigscreen/useStationWs";
 
 const LaneRemote = () => {
-    const { globals, stations, sendMessage, registerListener } =
+    const { globals, stations, sendMessage, registerListener, readyState } =
         useLiveDataContext();
 
     const { workouts } = useStationWs();
@@ -87,7 +87,7 @@ const LaneRemote = () => {
             unregister();
             unregister2();
         };
-    }, [laneNumber]);
+    }, [laneNumber, readyState]);
 
     const wodCount = workouts.length;
 

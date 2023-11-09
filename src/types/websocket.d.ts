@@ -1,0 +1,3 @@
+interface WebsocketRegisterData {
+    topic: string;
+}

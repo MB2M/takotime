@@ -1,16 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-// import { onConnection } from "./webapp/services/websocketService";
-// import WebsocketScoringService from "./webapp/services/websocketScoringService";
 import initServer from "./server";
 import dbConnect from "./config/dbConnect";
 import { loadRoute } from "./routing";
 import { startLiveApp } from "./live";
-import mqttConnect from "./live/libs/mqttConnect";
 import logger from "./config/logger";
-import MqttServices from "./live/services/mqttServices";
-import { LiveSystemFactory } from "./services/LiveSystemFactory";
 
 const server = express();
 export const wss = initServer(server);
@@ -49,6 +44,26 @@ await dbConnect();
 // Start App
 
 export const liveApp = startLiveApp(wss);
+
+// this.mqttService.registerListener(
+//     "station/connection",
+//     async (message) => {
+//         await this.liveSystemService.onStationConnection(message);
+//     }
+// );
+//
+// this.mqttService.registerListener("station/buzz", async (message) => {
+//     try {
+//         await this.liveSystemService.onStationBuzz(message);
+//     } catch (error: any) {
+//         logger.error(error);
+//     }
+// });
+//
+// this.mqttService.registerConnectListener(async () => {
+//     await this.liveSystemService.onServerConnection();
+// }, true);
+
 //
 // try {
 //     onConnection();

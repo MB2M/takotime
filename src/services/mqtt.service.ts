@@ -1,13 +1,15 @@
 import type { MqttClient } from "mqtt";
-import logger from "../../config/logger";
+import { Logger } from "pino";
 
-class MqttServices {
-    client: MqttClient;
+class MqttService {
     listeners: { [topic: string]: ((message: any) => void)[] } = {};
-    connnectListeners: (() => void)[] = [];
+    connectListeners: (() => void)[] = [];
 
-    constructor(mqttClient: MqttClient, initialTopics: string[] = []) {
-        this.client = mqttClient;
+    constructor(
+        private client: MqttClient,
+        private logger: Logger,
+        initialTopics: string[] = []
+    ) {
         this.client.on("message", (topic, message) => {
             const messageString = message.toString();
 
@@ -22,7 +24,7 @@ class MqttServices {
             listeners.forEach((listener) => listener(formattedMessage));
         });
         this.client.on("connect", () => {
-            this.connnectListeners.forEach((listener) => listener());
+            this.connectListeners.forEach((listener) => listener());
         });
         this.subscribe(initialTopics);
     }
@@ -44,7 +46,7 @@ class MqttServices {
         listener: () => void,
         callImmediately: boolean = false
     ) {
-        this.connnectListeners.push(listener);
+        this.connectListeners.push(listener);
         if (callImmediately && this.connected()) {
             listener();
         }
@@ -55,11 +57,11 @@ class MqttServices {
             this.client.publish(topic, message, {
                 qos: 1,
             });
-            logger.info(`MQTT/Send: ${topic}`);
+            this.logger.info(`MQTT/Send: ${topic}`);
         } catch (err) {
             console.error(err);
         }
     }
 }
 
-export default MqttServices;
+export default MqttService;

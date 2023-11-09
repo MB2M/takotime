@@ -1,29 +1,39 @@
 import EventEmitter from "events";
-import MqttServices from "../services/mqttServices";
 import { exec } from "child_process";
-import LiveEventService from "../services/liveEvent.service";
-import IpConfigService from "../services/ipConfig.service";
-import logger from "../../config/logger";
+import EventService from "../services/event.service";
 import { baseMessageSchema, buzzMessageSchema } from "./zodSchema/buzzer";
-import WodTimer from "../../lib/timer/WodTimer";
+import type IpConfigService from "../services/ipConfig.service";
+import type { EventFactoryService } from "../services/eventFactory.service";
+import { EventConfig, EventStation } from "../../types/LiveApp";
+import logger from "../../config/logger";
+import WebsocketService from "../../services/websocket.service";
+
+const PULSE_FREQUENCY = 10000;
 
 class LiveSystem extends EventEmitter {
-    mqttServices: MqttServices;
+    // mqttServices: MqttService;
     // keyv: Keyv;
-    // websocketServices: WebsocketServices;
+    websocketService: WebsocketService;
     // websocketMessages: WebSocketMessages;
     // buzzer;
     // private id: string;
-    events: LiveEventService[] = [];
+    events: EventService[] = [];
+    pastEvents: EventService[] = [];
     private ipConfigService: IpConfigService;
+    eventFactory: EventFactoryService;
+    lastSend = 0;
 
     constructor(
         {
-            mqttServices,
+            // mqttServices,
             ipConfigService,
+            eventFactory,
+            websocketService,
         }: {
-            mqttServices: MqttServices;
+            // mqttServices: MqttService;
             ipConfigService: IpConfigService;
+            eventFactory: EventFactoryService;
+            websocketService: WebsocketService;
         } // keyv: Keyv // websocketServices: WebsocketServices
     ) {
         super();
@@ -40,26 +50,53 @@ class LiveSystem extends EventEmitter {
         //     this.buzzer.pwmFrequency(100);
         // }
         // this.timer = timer;
-        this.mqttServices = mqttServices;
+        // this.mqttServices = mqttServices;
         // this.keyv = keyv;
         // this.websocketServices = websocketServices;
         // this.websocketMessages = new WebSocketMessages(this.websocketServices);
         this.ipConfigService = ipConfigService;
-        this.init();
+        this.eventFactory = eventFactory;
+        this.websocketService = websocketService;
+
+        this._pulseState(PULSE_FREQUENCY);
 
         //TEST
-        this.createEvent("testFloor");
-        this.ipConfigService.updateStation({
-            id: "1.9",
-            floor: "testFloor",
-            laneNumber: 3,
+        this.createEvent(
+            "testFloor",
+            [
+                { id: "0001", laneNumber: 1, category: "elite" },
+                { id: "0002", laneNumber: 2, category: "elite" },
+                { id: "0003", laneNumber: 3, category: "elite" },
+            ],
+            [
+                {
+                    measurements: [
+                        {
+                            id: "1",
+                            type: "classic",
+                            config: {
+                                startTime: 0,
+                                endTime: 2 * 60 * 1000,
+                                buzzer: { active: true, quantity: 1 },
+                                minReps: 0,
+                                maxReps: 90,
+                                split: false,
+                            },
+                        },
+                    ],
+                    categories: ["elite"],
+                },
+            ]
+        );
+        this.ipConfigService.resetStations().then(async () => {
+            await this.ipConfigService.updateStation({
+                id: "1.9",
+                floor: "testFloor",
+                laneNumber: 3,
+            });
         });
-    }
 
-    async init() {
-        this.mqttInit();
-        // this.wodTimerEventSubscription();
-        // this.addOnWebsocketMessageListener();
+        this.event("testFloor").timer.start(5 * 60, 5);
     }
 
     // async wodTimerEventSubscription() {
@@ -79,56 +116,77 @@ class LiveSystem extends EventEmitter {
         // });
     }
 
-    async mqttInit() {
-        this.mqttServices.registerConnectListener(() => {
-            this.onServerConnection();
-        }, true);
-
-        this.mqttServices.registerListener(
-            "station/connection",
-            async (message) => {
-                await this.onStationConnection(message);
-            }
-        );
-
-        this.mqttServices.registerListener("station/buzz", async (message) => {
-            try {
-                await this.onStationBuzz(message);
-            } catch (error: any) {
-                logger.error(error);
-            }
-        });
+    // share the world that server is connected
+    async onServerConnection() {
+        this.emit("started", "restarted");
     }
-
-    private async onServerConnection() {
-        this.mqttServices.send(`server/started`, `restarted`);
-    }
-    private async onStationConnection(message: unknown) {
+    async onStationConnection(message: unknown) {
         const { id } = baseMessageSchema.parse(message);
         const stationConfig = await this.ipConfigService.getStation(id);
-        this.mqttServices.send(
-            `server/settings/${id}`,
-            JSON.stringify(stationConfig)
-        );
+        this.emit("settings", { id, stationConfig: stationConfig ?? {} });
     }
 
-    private async onStationBuzz(message: unknown) {
+    async onStationBuzz(message: unknown) {
         const { id, timestamp } = buzzMessageSchema.parse(message);
 
         const stationConfig = await this.ipConfigService.getStation(id);
-        if (!stationConfig) throw new Error(`Station ${id} not found`);
+        if (!stationConfig) {
+            return logger.info(
+                `Buzzer with ip ${id} pressed, but no matching station were found.`,
+                { timestamp }
+            );
+        }
 
         const { laneNumber, floor } = stationConfig;
-        if (!laneNumber || !floor)
-            throw new Error(`Station ${id} lane number and/or floor not setup`);
+        if (!laneNumber || !floor) {
+            return logger.info(
+                `Buzzer with ip ${id} pressed, but lane number and/or floor not setup for this ip.`,
+                { timestamp }
+            );
+        }
 
-        this.event(floor).buzz(laneNumber, timestamp);
+        this.event(floor).validateAndBuzz(timestamp, laneNumber);
     }
 
-    createEvent(floorId: string) {
+    async onRemoteRecord(message: unknown) {
+        //TODO validate message schema
+        const { floor, laneNumber, measurementId, ...record } = message as {
+            floor: string;
+            laneNumber: number;
+            measurementId: string;
+            record: unknown;
+        };
+
+        const event = this.event(floor);
+
+        const measurement = event
+            .station(laneNumber)
+            .measurement(measurementId);
+
+        measurement.addRecord(record);
+
+        // const measurementType = measurement._type;
+        //
+        // const parsedRecord = MeasurementRecordSchema.refine(
+        //     (data) => data.recordType === measurementType
+        // ).parse(record);
+        //
+        // event.eventInterpreter.validateRecord(measurement, parsedRecord);
+        //
+        // measurement._addRecord(parsedRecord);
+    }
+
+    createEvent(
+        floorId: string,
+        eventStations: EventStation[] = [],
+        eventConfigs: EventConfig[]
+    ) {
         this.deleteEvent(floorId);
-        const timer = new WodTimer();
-        const event = new LiveEventService(timer, floorId);
+        const event = this.eventFactory.create(
+            floorId,
+            eventStations,
+            eventConfigs
+        );
         this.events.push(event);
         return event;
     }
@@ -137,6 +195,17 @@ class LiveSystem extends EventEmitter {
         const event = this.events.find((event) => event.floorId === floorId);
         if (!event) throw new Error(`Event ${floorId} not found`);
         return event;
+    }
+
+    private _pulseState(frequency: number) {
+        setInterval(() => {
+            this.events.forEach((event) => {
+                this.websocketService.sendToAll(event);
+            });
+            const now = Date.now();
+            console.log("interval:", now - this.lastSend);
+            this.lastSend = now;
+        }, frequency);
     }
 
     private deleteEvent(floorId: string) {
@@ -514,33 +583,7 @@ class LiveSystem extends EventEmitter {
     //     return { message: "workouts loaded" };
     // }
     //
-    // async devicesUpdate(data: any, type: "create" | "update" | "delete") {
-    //     let stationDevices;
-    //     switch (type) {
-    //         case "create":
-    //             stationDevices = await StationDevices.create(data);
-    //             break;
-    //         case "update":
-    //             stationDevices = await StationDevices.findByIdAndUpdate(
-    //                 data.id,
-    //                 data,
-    //                 {
-    //                     runValidators: true,
-    //                 }
-    //             ).exec();
-    //             break;
-    //         case "delete":
-    //             stationDevices = await StationDevices.findByIdAndDelete(
-    //                 data.id
-    //             ).exec();
-    //             break;
-    //     }
-    //
-    //     this.websocketMessages.sendStationDevicesToAllClients();
-    //     this.sendFullConfig("server/wodConfigUpdate");
-    //
-    //     return stationDevices;
-    // }
+
     //
     // async workoutUpdate(data: any, type: "create" | "update" | "delete") {
     //     let workout;

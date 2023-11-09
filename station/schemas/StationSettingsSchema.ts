@@ -1,3 +1,3 @@
 import { z } from "zod";
 
-export const StationSettingsSchema = z.record(z.any());
+export const StationSettingsSchema = z.record(z.any()).nullable();

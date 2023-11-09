@@ -57,7 +57,9 @@
         "pino-pretty": "^10.2.0",
         "play-sound": "^1.1.5",
         "prettier": "^2.8.7",
+        "reflect-metadata": "^0.1.13",
         "timesync": "^1.0.10",
+        "typedi": "^0.10.0",
         "ws": "^8.5.0",
         "zod": "^3.22.2"
     }

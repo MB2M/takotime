@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useLiveData } from "./manager";
+import { ReadyState } from "react-use-websocket/dist/lib/constants";
 
 const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
     workoutIds: [],
@@ -24,6 +25,7 @@ const DEFAULT_EVENT_CONTEXT_VALUE: LiveDataState = {
     sendMessage: () => undefined,
     handleData: () => undefined,
     registerListener: () => () => undefined,
+    readyState: 0,
 };
 
 export interface LiveDataState {
@@ -42,6 +44,7 @@ export interface LiveDataState {
         callback: (data: any) => void,
         notifyBackend?: boolean
     ) => () => void;
+    readyState: ReadyState;
     // ws?: MutableRefObject<WebSocket | undefined>;
 }
 

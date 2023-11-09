@@ -23,7 +23,7 @@ class WodInterpreter extends EventEmitter {
         }
 
         this.checkpointTime = [...checkpointsTime];
-        this.scores = this.workout?.scoring;
+        this.measurements = this.workout?.scoring;
         this.shortcut = this.workout?.shortcut;
     }
 

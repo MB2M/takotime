@@ -415,7 +415,7 @@ const passScoreOverflow = async (
 
     switch (scoreType) {
         case "wodClassic":
-            scores = (await viewStation(heatId, laneNumber))?.scores[
+            scores = (await viewStation(heatId, laneNumber))?.measurements[
                 scoreType
             ] as IWodClassicScore[];
             totalReps =
@@ -427,7 +427,7 @@ const passScoreOverflow = async (
         case "wodSplit":
             if (movementIndex === undefined || round === undefined)
                 return false;
-            scores = (await viewStation(heatId, laneNumber))?.scores[
+            scores = (await viewStation(heatId, laneNumber))?.measurements[
                 scoreType
             ] as IWodSplitScore[];
             totalReps =

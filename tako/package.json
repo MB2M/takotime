@@ -1,0 +1,39 @@
+{
+  "name": "tako",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "planetscale:push": "dotenv -e .env.development.local -- npx prisma db push",
+    "planetscale:studio": "dotenv -e.env.development.local -- npx prisma studio"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^1.1.0",
+    "next": "14.0.3",
+    "next-auth": "^5.0.0-beta.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "usehooks-ts": "^2.15.1",
+    "zod": "^3.22.4",
+    "zod-validation-error": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "prisma": "^5.10.1",
+    "prisma-dbml-generator": "^0.10.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  },
+  "volta": {
+    "node": "20.11.1"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "module": "ES2022",
+    "target": "ES2022",
+    //        "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    //        "module": "esnext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+
+    "rootDir": "" /* Specify the root folder within your source files. */,
+    //                             /* Allow multiple folders to be treated as one when resolving modules. */
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ] /* Specify multiple folders that act like `./node_modules/@types`. */,
+
+    "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
+    "outDir": "build" /* Specify an output folder for all emitted files. */,
+    //        "noEmitOnError": true /* Disable emitting files if any type checking errors are reported. */,
+    "noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied `any` type.. */
+    //        "noUncheckedIndexedAccess": true /* Include 'undefined' in index signature results */,
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "files": true
+  },
+  "exclude": ["node_modules", "client", "build", "station"],
+  //    "include": ["types/**/*"]
+}

@@ -1,0 +1,152 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Account {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+  user User [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table Session {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user User [not null]
+}
+
+Table VerificationToken {
+  identifier String [not null]
+  token String [unique, not null]
+  expires DateTime [not null]
+
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
+Table User {
+  id String [pk]
+  name String
+  email String [unique]
+  emailVerified DateTime
+  image String
+  role Role [not null, default: 'USER']
+  accounts Account [not null]
+  sessions Session [not null]
+  competitions Competition [not null]
+}
+
+Table Competition {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  externalId String [not null]
+  rankingPlatform Platform [not null, default: 'CompetitionCorner']
+  userId String [not null]
+  user User [not null]
+  name String
+  primaryColor String [not null, default: '#000000', note: '@zod.number.int({ message: "error" }).gt(0, { message: "min lane is 1" }).lt(100,{message: "max lane is 99"})']
+  secondaryColor String [not null, default: '#ffffff']
+  logo String
+  categories Category [not null]
+  floors Floor [not null]
+  events Event [not null]
+}
+
+Table Floor {
+  id String [pk]
+  competition Competition [not null]
+  competitionId String [not null]
+  name String [not null]
+}
+
+Table Category {
+  id String [pk]
+  competition Competition [not null]
+  competitionId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  name String [not null]
+  participants Participant [not null]
+}
+
+Table Participant {
+  id String [pk]
+  name String [not null]
+  category Category [not null]
+  categoryId String [not null]
+  affectations Affectation [not null]
+}
+
+Table Event {
+  id String [pk]
+  name String [not null]
+  heats Heat [not null]
+  competition Competition [not null]
+  competitionId String [not null]
+}
+
+Table Heat {
+  id String [pk]
+  name String
+  timestamp DateTime [not null]
+  event Event [not null]
+  eventId String [not null]
+  affectation Affectation [not null]
+  affectationId String [not null]
+}
+
+Table Affectation {
+  id String [pk]
+  heat Heat [not null]
+  heatId String [not null]
+  lane String [not null]
+  participant Participant [not null]
+  participantId String [not null]
+}
+
+Enum Role {
+  USER
+  ADMIN
+}
+
+Enum Platform {
+  CompetitionCorner
+  ScoringFit
+}
+
+Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: Session.userId > User.id [delete: Cascade]
+
+Ref: Competition.userId > User.id
+
+Ref: Floor.competitionId > Competition.id
+
+Ref: Category.competitionId > Competition.id
+
+Ref: Participant.categoryId > Category.id
+
+Ref: Event.competitionId > Competition.id
+
+Ref: Heat.eventId > Event.id
+
+Ref: Affectation.heatId > Heat.id
+
+Ref: Affectation.participantId > Participant.id

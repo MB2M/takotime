@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "module": "ES2022",
-        "target": "ES2022",
+        "module": "ESNext",
+        "target": "ESNext",
         //        "target": "es5",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
@@ -10,7 +10,7 @@
         "forceConsistentCasingInFileNames": true,
         "allowSyntheticDefaultImports": true,
         "noEmit": true,
-        "esModuleInterop": true,
+//        "esModuleInterop": true,
         //        "module": "esnext",
         "moduleResolution": "Node",
         "resolveJsonModule": true,
@@ -34,8 +34,8 @@
     },
     "ts-node": {
         "esm": true,
-        "experimentalSpecifierResolution": "node",
-        "files": true
+        "files": true,
+        "transpileOnly": true
     },
     "exclude": ["node_modules", "client", "build", "station"],
 //    "include": ["types/**/*"]

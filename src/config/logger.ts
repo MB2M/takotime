@@ -5,7 +5,8 @@ const transport = pino.transport({
         {
             level: "trace",
             target: "pino/file",
-            options: { destination: `/var/log/tako/live.log` },
+            options: { destination: `./live.log` },
+            // options: { destination: `/var/log/tako/live.log` },
         },
         {
             level: "info",

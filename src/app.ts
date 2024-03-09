@@ -23,19 +23,19 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 loadRoute(server);
 
-process.on("uncaughtException", (err) => {
-    logger.fatal(err, "uncaught exception detected");
-    wss.close(() => {
-        process.exit(1);
-    });
-
-    // If a graceful shutdown is not achieved after 1 second,
-    // shut down the process completely
-    setTimeout(() => {
-        process.abort();
-    }, 1000).unref();
-    process.exit(1);
-});
+// process.on("uncaughtException", (err) => {
+//     logger.fatal(err, "uncaught exception detected");
+//     wss.close(() => {
+//         process.exit(1);
+//     });
+//
+//     // If a graceful shutdown is not achieved after 1 second,
+//     // shut down the process completely
+//     setTimeout(() => {
+//         process.abort();
+//     }, 1000).unref();
+//     process.exit(1);
+// });
 
 await dbConnect();
 

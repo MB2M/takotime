@@ -53,7 +53,6 @@ const useStationWs = () => {
                 ) || "0",
         [plainTimer, workouts]
     );
-
     const activeWorkout = useMemo(
         () =>
             workouts.filter((workout) => {

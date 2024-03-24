@@ -57,7 +57,7 @@ app.use("/wodMax", routerMax);
 
 // mandelieu
 import routerGym from "./mandelieu/routes";
-app.use("/mandelieu", routerGym);
+app.use("/mandelieuxx", routerGym);
 
 // webApp
 import webappRouter from "./webapp/routes";

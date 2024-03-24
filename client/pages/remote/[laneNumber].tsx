@@ -206,24 +206,26 @@ const LaneRemote = () => {
                                     my={2}
                                 >
                                     {wodCount > 1 &&
-                                        workouts.map((workout, index) => (
-                                            <Button
-                                                key={workout.workoutId}
-                                                variant={
-                                                    selectedWorkoutId ===
-                                                    workout.workoutId
-                                                        ? "contained"
-                                                        : "outlined"
-                                                }
-                                                onClick={() =>
-                                                    handleWorkoutSelect(
+                                        workouts
+                                            .filter((w) => w.layout !== "pause")
+                                            .map((workout, index) => (
+                                                <Button
+                                                    key={workout.workoutId}
+                                                    variant={
+                                                        selectedWorkoutId ===
                                                         workout.workoutId
-                                                    )
-                                                }
-                                            >
-                                                score {index + 1}
-                                            </Button>
-                                        ))}
+                                                            ? "contained"
+                                                            : "outlined"
+                                                    }
+                                                    onClick={() =>
+                                                        handleWorkoutSelect(
+                                                            workout.workoutId
+                                                        )
+                                                    }
+                                                >
+                                                    score {index + 1}
+                                                </Button>
+                                            ))}
                                 </Box>
                                 {layout === "MTSprintLadder" && (
                                     <RemoteClassic
@@ -231,7 +233,7 @@ const LaneRemote = () => {
                                         sendMessage={sendMessage}
                                         station={stationInfo}
                                         workout={workout}
-                                        participantId={stationData.externalId.toString()}
+                                        participantId={stationData.externalId?.toString()}
                                         category={category}
                                     />
                                 )}
@@ -241,7 +243,7 @@ const LaneRemote = () => {
                                         sendMessage={sendMessage}
                                         station={stationInfo}
                                         workout={workout}
-                                        participantId={stationData.externalId.toString()}
+                                        participantId={stationData.externalId?.toString()}
                                         category={category}
                                     />
                                 )}
@@ -251,7 +253,7 @@ const LaneRemote = () => {
                                         sendMessage={sendMessage}
                                         station={stationInfo}
                                         workout={workout}
-                                        participantId={stationData.externalId.toString()}
+                                        participantId={stationData.externalId?.toString()}
                                         category={category}
                                     />
                                 )}
@@ -261,7 +263,7 @@ const LaneRemote = () => {
                                         sendMessage={sendMessage}
                                         station={stationInfo}
                                         workout={workout}
-                                        participantId={stationData.externalId.toString()}
+                                        participantId={stationData.externalId?.toString()}
                                         category={category}
                                     />
                                 )}

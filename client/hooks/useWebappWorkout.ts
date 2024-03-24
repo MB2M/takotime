@@ -39,12 +39,18 @@ const useWebappWorkout = (
     const [movementReps, setMovementReps] = useState<number>(0);
     const [movementTotalReps, setMovementTotalReps] = useState<number>(0);
     const [round, setRound] = useState<number>(1);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
+    const [finishedMovements, setFinishedMovements] = useState<string[]>([]);
+    const [undoneMovements, setUndoneMovements] = useState<string[]>([]);
 
     useEffect(() => {
+        console.log(workout);
         let movement;
         let movementReps;
         let movementTotalReps: number;
         let round = 1;
+        let index = 0;
+
         switch (wodType) {
             case "forTime":
                 const allReps = [
@@ -56,7 +62,7 @@ const useWebappWorkout = (
                 const allRepsCum = runningSum(
                     JSON.parse(JSON.stringify(allReps))
                 );
-                let index = allRepsCum.findIndex(
+                index = allRepsCum.findIndex(
                     (repsCum) => repsCompleted - repsCum < 0
                 );
 
@@ -102,7 +108,7 @@ const useWebappWorkout = (
                     movementReps =
                         repsCompleted - (buyInRepsCum[index - 1] || 0);
                 } else {
-                    let index = mainRepsCum.findIndex(
+                    index = mainRepsCum.findIndex(
                         (repsCum) =>
                             ((repsCompleted - buyInReps) % mainReps) - repsCum <
                             0
@@ -130,7 +136,17 @@ const useWebappWorkout = (
         setMovementReps(movementReps);
         setMovementTotalReps(movementTotalReps);
         setRound(round);
+        setCurrentIndex(index);
     }, [repsCompleted, workout, totalRepetitions]);
+
+    useEffect(() => {
+        setFinishedMovements(
+            workout?.flow.main.movements.slice(0, currentIndex) || []
+        );
+        setUndoneMovements(
+            workout?.flow.main.movements.slice(currentIndex + 1) || []
+        );
+    }, [currentIndex, workout]);
 
     return {
         totalRepetitions,
@@ -139,6 +155,9 @@ const useWebappWorkout = (
         movementTotalReps,
         round,
         wodType,
+        currentIndex,
+        finishedMovements,
+        undoneMovements,
     };
 };
 

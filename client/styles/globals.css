@@ -47,6 +47,16 @@
     src: url("/fonts/edosz.ttf");
 }
 
+@font-face {
+    font-family: "TacticSansExtExd-BldIt";
+    src: url("/fonts/TacticSansExtExd-BldIt.otf");
+}
+
+@font-face {
+    font-family: "TacticSansExtExd-BlkIt";
+    src: url("/fonts/TacticSansExtExd-BlkIt.otf");
+}
+
 html,
 body {
     color: black;

@@ -16,19 +16,14 @@ interface Props {
     reverse?: boolean;
 }
 
-const BG_COLOR = "#312F2F";
-const BAR_COLOR = "#dedcdc";
 const DefaultAthletes = ({
     station,
     workout,
-    repsOfFirst,
-    allTotalReps,
-    firstScore,
     wodState = 2,
     reverse = false,
 }: Props) => {
     // const competition = useCompetitionContext();
-    const [parent, enableAnimations] = useAutoAnimate(/* optional config */);
+    const [parent] = useAutoAnimate(/* optional config */);
 
     const repsCompleted = useMemo(() => {
         return (
@@ -65,10 +60,6 @@ const DefaultAthletes = ({
             .sort((a, b) => (a.name < b.name ? -1 : 1));
     }, [station?.scores]);
 
-    const endTime = firstScore
-        ? station.scores?.endTimer[1]?.time
-        : station.scores?.endTimer.at(-1)?.time;
-
     const complexScore = [...Array(1).keys()].map((partnerId) => {
         const partnerScore = station?.scores?.wodWeight.filter(
             (score) => score.partnerId === partnerId
@@ -83,22 +74,10 @@ const DefaultAthletes = ({
         };
     })[0];
 
-    const rank = useMemo(
-        () =>
-            allTotalReps.findIndex((reps) =>
-                endTime ? reps === endTime : reps === repsCompleted
-            ) + 1,
-        [allTotalReps, endTime, repsCompleted]
-    );
-
     const {
-        currentIndex,
-        totalRepetitions,
         movement: currentMovement,
         movementReps: currentMovementReps,
         movementTotalReps: currentMovementTotalReps,
-        round: currentRound,
-        wodType: workoutType,
         finishedMovements,
         undoneMovements,
     } = useWebappWorkout(workout, repsCompleted);
@@ -201,7 +180,7 @@ const DefaultAthletes = ({
                                     px={2}
                                     sx={{ backgroundColor: "black" }}
                                     height={1}
-                                    width={130}
+                                    // width={130}
                                     textAlign={"center"}
                                 >
                                     <Typography
